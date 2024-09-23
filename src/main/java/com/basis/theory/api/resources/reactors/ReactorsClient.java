@@ -10,6 +10,8 @@ import com.basis.theory.api.core.IdempotentRequestOptions;
 import com.basis.theory.api.core.MediaTypes;
 import com.basis.theory.api.core.ObjectMappers;
 import com.basis.theory.api.core.RequestOptions;
+import com.basis.theory.api.core.Suppliers;
+import com.basis.theory.api.core.pagination.SyncPagingIterable;
 import com.basis.theory.api.errors.BadRequestError;
 import com.basis.theory.api.errors.ForbiddenError;
 import com.basis.theory.api.errors.NotFoundError;
@@ -18,8 +20,10 @@ import com.basis.theory.api.errors.UnprocessableEntityError;
 import com.basis.theory.api.resources.reactors.requests.CreateReactorRequest;
 import com.basis.theory.api.resources.reactors.requests.PatchReactorRequest;
 import com.basis.theory.api.resources.reactors.requests.ReactRequest;
+import com.basis.theory.api.resources.reactors.requests.ReactRequestAsync;
 import com.basis.theory.api.resources.reactors.requests.ReactorsListRequest;
 import com.basis.theory.api.resources.reactors.requests.UpdateReactorRequest;
+import com.basis.theory.api.resources.reactors.results.ResultsClient;
 import com.basis.theory.api.types.ProblemDetails;
 import com.basis.theory.api.types.ReactResponse;
 import com.basis.theory.api.types.Reactor;
@@ -27,6 +31,9 @@ import com.basis.theory.api.types.ReactorPaginatedList;
 import com.basis.theory.api.types.ValidationProblemDetails;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Supplier;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -38,19 +45,22 @@ import okhttp3.ResponseBody;
 public class ReactorsClient {
     protected final ClientOptions clientOptions;
 
+    protected final Supplier<ResultsClient> resultsClient;
+
     public ReactorsClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
+        this.resultsClient = Suppliers.memoize(() -> new ResultsClient(clientOptions));
     }
 
-    public ReactorPaginatedList list() {
+    public SyncPagingIterable<Reactor> list() {
         return list(ReactorsListRequest.builder().build());
     }
 
-    public ReactorPaginatedList list(ReactorsListRequest request) {
+    public SyncPagingIterable<Reactor> list(ReactorsListRequest request) {
         return list(request, null);
     }
 
-    public ReactorPaginatedList list(ReactorsListRequest request, RequestOptions requestOptions) {
+    public SyncPagingIterable<Reactor> list(ReactorsListRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("reactors");
@@ -82,7 +92,15 @@ public class ReactorsClient {
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ReactorPaginatedList.class);
+                ReactorPaginatedList parsedResponse =
+                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ReactorPaginatedList.class);
+                int newPageNumber = request.getPage().map(page -> page + 1).orElse(1);
+                ReactorsListRequest nextRequest = ReactorsListRequest.builder()
+                        .from(request)
+                        .page(newPageNumber)
+                        .build();
+                List<Reactor> result = parsedResponse.getData().orElse(Collections.emptyList());
+                return new SyncPagingIterable<>(true, result, () -> list(nextRequest, requestOptions));
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
@@ -448,5 +466,76 @@ public class ReactorsClient {
         } catch (IOException e) {
             throw new BasisTheoryException("Network error executing HTTP request", e);
         }
+    }
+
+    public ReactResponse reactAsync(String id) {
+        return reactAsync(id, ReactRequestAsync.builder().build());
+    }
+
+    public ReactResponse reactAsync(String id, ReactRequestAsync request) {
+        return reactAsync(id, request, null);
+    }
+
+    public ReactResponse reactAsync(String id, ReactRequestAsync request, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("reactors")
+                .addPathSegment(id)
+                .addPathSegments("react-async")
+                .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new BasisTheoryException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ReactResponse.class);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(ObjectMappers.JSON_MAPPER.readValue(
+                                responseBodyString, ValidationProblemDetails.class));
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class));
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class));
+                    case 404:
+                        throw new NotFoundError(ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
+                    case 422:
+                        throw new UnprocessableEntityError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class));
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new BasisTheoryApiApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
+        } catch (IOException e) {
+            throw new BasisTheoryException("Network error executing HTTP request", e);
+        }
+    }
+
+    public ResultsClient results() {
+        return this.resultsClient.get();
     }
 }

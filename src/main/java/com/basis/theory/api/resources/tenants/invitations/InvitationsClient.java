@@ -10,6 +10,7 @@ import com.basis.theory.api.core.IdempotentRequestOptions;
 import com.basis.theory.api.core.MediaTypes;
 import com.basis.theory.api.core.ObjectMappers;
 import com.basis.theory.api.core.RequestOptions;
+import com.basis.theory.api.core.pagination.SyncPagingIterable;
 import com.basis.theory.api.errors.BadRequestError;
 import com.basis.theory.api.errors.ForbiddenError;
 import com.basis.theory.api.errors.NotFoundError;
@@ -22,6 +23,8 @@ import com.basis.theory.api.types.TenantInvitationResponsePaginatedList;
 import com.basis.theory.api.types.ValidationProblemDetails;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -37,15 +40,16 @@ public class InvitationsClient {
         this.clientOptions = clientOptions;
     }
 
-    public TenantInvitationResponsePaginatedList list() {
+    public SyncPagingIterable<TenantInvitationResponse> list() {
         return list(InvitationsListRequest.builder().build());
     }
 
-    public TenantInvitationResponsePaginatedList list(InvitationsListRequest request) {
+    public SyncPagingIterable<TenantInvitationResponse> list(InvitationsListRequest request) {
         return list(request, null);
     }
 
-    public TenantInvitationResponsePaginatedList list(InvitationsListRequest request, RequestOptions requestOptions) {
+    public SyncPagingIterable<TenantInvitationResponse> list(
+            InvitationsListRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("tenants/self/invitations");
@@ -74,8 +78,15 @@ public class InvitationsClient {
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(
+                TenantInvitationResponsePaginatedList parsedResponse = ObjectMappers.JSON_MAPPER.readValue(
                         responseBody.string(), TenantInvitationResponsePaginatedList.class);
+                int newPageNumber = request.getPage().map(page -> page + 1).orElse(1);
+                InvitationsListRequest nextRequest = InvitationsListRequest.builder()
+                        .from(request)
+                        .page(newPageNumber)
+                        .build();
+                List<TenantInvitationResponse> result = parsedResponse.getData().orElse(Collections.emptyList());
+                return new SyncPagingIterable<>(true, result, () -> list(nextRequest, requestOptions));
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
