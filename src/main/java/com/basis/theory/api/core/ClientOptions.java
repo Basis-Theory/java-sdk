@@ -30,7 +30,7 @@ public final class ClientOptions {
             {
                 put("X-Fern-Language", "JAVA");
                 put("X-Fern-SDK-Name", "com.basis-theory.fern:api-sdk");
-                put("X-Fern-SDK-Version", "0.0.1");
+                put("X-Fern-SDK-Version", "0.0.2");
             }
         });
         this.headerSuppliers = headerSuppliers;

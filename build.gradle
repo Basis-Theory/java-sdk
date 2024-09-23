@@ -44,9 +44,9 @@ test {
 publishing {
     publications {
         maven(MavenPublication) {
-            groupId = 'dev.basis-theory'
-            artifactId = 'basis-theory-java-sdk'
-            version = '0.0.1'
+            groupId = 'dev.basistheory'
+            artifactId = 'basistheory-java-sdk'
+            version = '0.0.2'
             from components.java
             pom {
                 scm {

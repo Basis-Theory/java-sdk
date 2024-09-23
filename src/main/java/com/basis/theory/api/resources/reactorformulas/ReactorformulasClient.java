@@ -10,6 +10,7 @@ import com.basis.theory.api.core.IdempotentRequestOptions;
 import com.basis.theory.api.core.MediaTypes;
 import com.basis.theory.api.core.ObjectMappers;
 import com.basis.theory.api.core.RequestOptions;
+import com.basis.theory.api.core.pagination.SyncPagingIterable;
 import com.basis.theory.api.errors.BadRequestError;
 import com.basis.theory.api.errors.ForbiddenError;
 import com.basis.theory.api.errors.NotFoundError;
@@ -23,6 +24,8 @@ import com.basis.theory.api.types.ReactorFormulaPaginatedList;
 import com.basis.theory.api.types.ValidationProblemDetails;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -38,15 +41,15 @@ public class ReactorformulasClient {
         this.clientOptions = clientOptions;
     }
 
-    public ReactorFormulaPaginatedList list() {
+    public SyncPagingIterable<ReactorFormula> list() {
         return list(ReactorformulasListRequest.builder().build());
     }
 
-    public ReactorFormulaPaginatedList list(ReactorformulasListRequest request) {
+    public SyncPagingIterable<ReactorFormula> list(ReactorformulasListRequest request) {
         return list(request, null);
     }
 
-    public ReactorFormulaPaginatedList list(ReactorformulasListRequest request, RequestOptions requestOptions) {
+    public SyncPagingIterable<ReactorFormula> list(ReactorformulasListRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("reactor-formulas");
@@ -75,7 +78,15 @@ public class ReactorformulasClient {
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ReactorFormulaPaginatedList.class);
+                ReactorFormulaPaginatedList parsedResponse =
+                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ReactorFormulaPaginatedList.class);
+                int newPageNumber = request.getPage().map(page -> page + 1).orElse(1);
+                ReactorformulasListRequest nextRequest = ReactorformulasListRequest.builder()
+                        .from(request)
+                        .page(newPageNumber)
+                        .build();
+                List<ReactorFormula> result = parsedResponse.getData().orElse(Collections.emptyList());
+                return new SyncPagingIterable<>(true, result, () -> list(nextRequest, requestOptions));
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {

@@ -8,10 +8,12 @@ import com.basis.theory.api.core.BasisTheoryException;
 import com.basis.theory.api.core.ClientOptions;
 import com.basis.theory.api.core.ObjectMappers;
 import com.basis.theory.api.core.RequestOptions;
+import com.basis.theory.api.core.pagination.SyncPagingIterable;
 import com.basis.theory.api.errors.BadRequestError;
 import com.basis.theory.api.errors.ForbiddenError;
 import com.basis.theory.api.errors.UnauthorizedError;
 import com.basis.theory.api.resources.logs.requests.LogsListRequest;
+import com.basis.theory.api.types.Log;
 import com.basis.theory.api.types.LogEntityType;
 import com.basis.theory.api.types.LogPaginatedList;
 import com.basis.theory.api.types.ProblemDetails;
@@ -19,6 +21,7 @@ import com.basis.theory.api.types.ValidationProblemDetails;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
@@ -34,15 +37,15 @@ public class LogsClient {
         this.clientOptions = clientOptions;
     }
 
-    public LogPaginatedList list() {
+    public SyncPagingIterable<Log> list() {
         return list(LogsListRequest.builder().build());
     }
 
-    public LogPaginatedList list(LogsListRequest request) {
+    public SyncPagingIterable<Log> list(LogsListRequest request) {
         return list(request, null);
     }
 
-    public LogPaginatedList list(LogsListRequest request, RequestOptions requestOptions) {
+    public SyncPagingIterable<Log> list(LogsListRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("logs");
@@ -80,7 +83,15 @@ public class LogsClient {
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), LogPaginatedList.class);
+                LogPaginatedList parsedResponse =
+                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), LogPaginatedList.class);
+                int newPageNumber = request.getPage().map(page -> page + 1).orElse(1);
+                LogsListRequest nextRequest = LogsListRequest.builder()
+                        .from(request)
+                        .page(newPageNumber)
+                        .build();
+                List<Log> result = parsedResponse.getData().orElse(Collections.emptyList());
+                return new SyncPagingIterable<>(true, result, () -> list(nextRequest, requestOptions));
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
