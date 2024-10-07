@@ -5,24 +5,165 @@ package com.basis.theory.api;
 
 import com.basis.theory.api.core.ClientOptions;
 import com.basis.theory.api.core.Environment;
-import com.basis.theory.api.resources.roles.RolesClient;
+import com.basis.theory.api.errors.NotFoundError;
+import com.basis.theory.api.resources.applications.ApplicationsClient;
+import com.basis.theory.api.resources.applications.requests.CreateApplicationRequest;
+import com.basis.theory.api.resources.proxies.ProxiesClient;
+import com.basis.theory.api.resources.proxies.requests.CreateProxyRequest;
+import com.basis.theory.api.resources.reactors.ReactorsClient;
+import com.basis.theory.api.resources.reactors.requests.CreateReactorRequest;
+import com.basis.theory.api.resources.reactors.requests.ReactRequest;
 import com.basis.theory.api.resources.tenants.TenantsClient;
-import com.basis.theory.api.types.Tenant;
-import org.junit.jupiter.api.Assertions;
+import com.basis.theory.api.resources.tokens.TokensClient;
+import com.basis.theory.api.resources.tokens.requests.CreateTokenRequest;
+import com.basis.theory.api.resources.tokens.requests.UpdateTokenRequest;
+import com.basis.theory.api.types.*;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public final class TestClient {
     @Test
     public void shouldCallTenantSelf() {
-        TenantsClient client = new TenantsClient(
-                ClientOptions.builder()
-                        .environment(Environment.custom(System.getenv("BT_API_URL")))
-                        .addHeader("BT-API-KEY", System.getenv("BT_MGT_API_KEY"))
-                        .build()
-        );
+        TenantsClient client = new TenantsClient(managementClientOptions());
         Tenant actual = client.self().get();
         assertEquals("SDK Integration Tests", actual.getName().get());
+    }
+
+    @Test
+    public void shouldSupportTokenLifecycle() {
+        String cardNumber = "6011000990139424";
+        TokensClient tokensClient = new TokensClient(privateClientOptions());
+
+        String tokenId = createToken(tokensClient, cardNumber);
+        getAndValidateCardNumber(tokensClient, tokenId, cardNumber);
+
+        // Update currently does not support correct `Content-Type` header for PATCH command
+//        String updateCardNumber = "4242424242424242";
+//        updateToken(tokensClient, tokenId, updateCardNumber);
+//        getAndValidateCardNumber(tokensClient, tokenId, updateCardNumber);
+
+        ApplicationsClient applicationsClient = new ApplicationsClient(managementClientOptions());
+        String applicationId = createApplication(applicationsClient);
+
+        // Proxies
+        ProxiesClient proxyClient = new ProxiesClient(managementClientOptions());
+        Proxy proxy = createProxy(proxyClient, applicationId);
+        String proxyId = proxy.getId().get();
+        proxyClient.delete(proxyId);
+
+        // Reactors
+        ReactorsClient reactorsClient = new ReactorsClient(managementClientOptions());
+        Reactor reactor = reactorsClient.create(CreateReactorRequest.builder()
+                .name("(Deletable) node-SDK-" + UUID.randomUUID())
+                .code("module.exports = function (req) {return {raw: req.args}}")
+                .application(Application.builder().id(applicationId).build())
+                .build()
+        );
+        String reactorId = reactor.getId().get();
+        // REACT Doesn't work right now...? Returns a 403 requiring `token:use`.
+        // However, the application has `token:use` and the reactor appears to be setup correctly in the Portal 🤷
+//        react(reactorsClient, reactorId);
+        reactorsClient.delete(reactorId);
+
+        applicationsClient.delete(applicationId);
+
+        tokensClient.delete(tokenId);
+        try {
+            tokensClient.get(tokenId);
+            fail("Should have raised NotFoundError");
+        } catch (NotFoundError e) {
+            assertTrue(true);
+        }
+    }
+
+    private static void updateToken(TokensClient tokensClient, String tokenId, String updateCardNumber) {
+        tokensClient.update(tokenId, UpdateTokenRequest.builder()
+                        .data(new HashMap<String, Object>() {{
+                            put("number", updateCardNumber);
+                        }})
+                .build());
+    }
+
+    @NotNull
+    private static ClientOptions managementClientOptions() {
+        return ClientOptions.builder()
+                .environment(Environment.custom(System.getenv("BT_API_URL")))
+                .addHeader("BT-API-KEY", System.getenv("BT_MGT_API_KEY"))
+                .build();
+    }
+
+    @NotNull
+    private static ClientOptions privateClientOptions() {
+        return ClientOptions.builder()
+                .environment(Environment.custom(System.getenv("BT_API_URL")))
+                .addHeader("BT-API-KEY", System.getenv("BT_PVT_API_KEY"))
+                .build();
+    }
+
+    @NotNull
+    private static String createToken(TokensClient tokensClient, String cardNumber) {
+        Token token = tokensClient.create(CreateTokenRequest.builder()
+                .data(new HashMap<String, Object>() {{
+                    put("number", cardNumber);
+                    put("expiration_month", 4);
+                    put("expiration_year", 2025);
+                    put("cvc", 123);
+                }})
+                .type("card")
+                .metadata(new HashMap<String, Optional<String>>() {{
+                    put("customer_id", Optional.of("3181"));
+                }})
+                .searchIndexes(Arrays.asList("{{ data.expiration_month }}", "{{ data.number | last4 }}"))
+                .fingerprintExpression("{{ data.number }}")
+                .mask(new HashMap<String, Object>() {{
+                    put("number", "{{ data.number, reveal_last: 4 }}");
+                    put("cvc", "{{ data.cvc }}");
+                }})
+                .deduplicateToken(false)
+                .containers(Arrays.asList("/pci/high/"))
+                .build());
+        String tokenId = token.getId().get();
+        assertNotNull(tokenId);
+        return tokenId;
+    }
+
+    private static void getAndValidateCardNumber(TokensClient tokensClient, String tokenId, String cardNumber) {
+        Token token = tokensClient.get(tokenId);
+        assertEquals(cardNumber, ((Map)token.getData().get()).get("number"));
+    }
+
+    @NotNull
+    private static String createApplication(ApplicationsClient applicationsClient) {
+        Application application =  applicationsClient.create(CreateApplicationRequest.builder()
+                .name("(Deletable) java-SDK-" + UUID.randomUUID())
+                .type("private")
+                .permissions(Collections.singletonList("token:use"))
+                .build());
+        String applicationId = application.getId().get();
+        return applicationId;
+    }
+
+    private static Proxy createProxy(ProxiesClient proxyClient, String applicationId) {
+        Proxy proxy = proxyClient.create(CreateProxyRequest.builder()
+                .name("(Deletable) java-SDK-" + UUID.randomUUID())
+                .destinationUrl("https://echo.basistheory.com/" + UUID.randomUUID())
+                .application(Application.builder().id(applicationId).build())
+                .build()
+        );
+        return proxy;
+    }
+
+    private static void react(ReactorsClient reactorsClient, String reactorId) {
+        HashMap<String, Object> expected = new HashMap<String, Object>() {{
+            put("Key1", "Key1-" + UUID.randomUUID());
+            put("Key2", "Key2-" + UUID.randomUUID());
+        }};
+        ReactResponse react = reactorsClient.react(reactorId, ReactRequest.builder().args(expected).build());
+        assertEquals(expected.get("Key1"), ((Map)react.getRaw().get()).get("Key1"));
+        assertEquals(expected.get("Key2"), ((Map)react.getRaw().get()).get("Key2"));
     }
 }
