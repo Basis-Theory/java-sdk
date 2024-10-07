@@ -3,9 +3,26 @@
  */
 package com.basis.theory.api;
 
+import com.basis.theory.api.core.ClientOptions;
+import com.basis.theory.api.core.Environment;
+import com.basis.theory.api.resources.roles.RolesClient;
+import com.basis.theory.api.resources.tenants.TenantsClient;
+import com.basis.theory.api.types.Tenant;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public final class TestClient {
-    public void test() {
-        // Add tests here and mark this file in .fernignore
-        assert true;
+    @Test
+    public void shouldCallTenantSelf() {
+        TenantsClient client = new TenantsClient(
+                ClientOptions.builder()
+                        .environment(Environment.custom(System.getenv("BT_API_URL")))
+                        .addHeader("BT-API-KEY", System.getenv("BT_MGT_API_KEY"))
+                        .build()
+        );
+        Tenant actual = client.self().get();
+        assertEquals("SDK Integration Tests", actual.getName().get());
     }
 }
