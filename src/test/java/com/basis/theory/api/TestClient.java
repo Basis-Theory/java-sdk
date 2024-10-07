@@ -20,6 +20,9 @@ import com.basis.theory.api.resources.tokens.requests.CreateTokenRequest;
 import com.basis.theory.api.resources.tokens.requests.TokensListRequest;
 import com.basis.theory.api.resources.tokens.requests.TokensListV2Request;
 import com.basis.theory.api.resources.tokens.requests.UpdateTokenRequest;
+import com.basis.theory.api.resources.webhooks.WebhooksClient;
+import com.basis.theory.api.resources.webhooks.requests.CreateWebhookRequest;
+import com.basis.theory.api.resources.webhooks.requests.UpdateWebhookRequest;
 import com.basis.theory.api.types.*;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Disabled;
@@ -127,6 +130,28 @@ public final class TestClient {
         assertTrue(count > pageSize);
     }
 
+    @Test
+    public void shouldManageWebhookLifecycle() throws InterruptedException {
+        WebhooksClient webhooksClient = new WebhooksClient(managementClientOptions());
+        String url = "https://echo.basistheory.com/" + UUID.randomUUID();
+        String webhookId = createWebhook(webhooksClient, url);
+        getAndAssertWebhookUrl(webhooksClient, webhookId, url);
+
+        Thread.sleep(2000); // Required to avoid error `The webhook subscription is undergoing another concurrent operation. Please wait a few seconds, then try again.`
+
+        String updatedUrl = "https://echo.basistheory.com/" + UUID.randomUUID();
+        updateWebhook(webhooksClient, webhookId, updatedUrl);
+        getAndAssertWebhookUrl(webhooksClient, webhookId, updatedUrl);
+
+        Thread.sleep(2000); // Required to avoid error `The webhook subscription is undergoing another concurrent operation. Please wait a few seconds, then try again.`
+
+        webhooksClient.delete(webhookId);
+
+        // This currently does not work due to webhook sending an empty body in 404;
+        // Issue eng-7345
+//        ensureWebhookIsRemoved(webhooksClient, webhookId);
+    }
+
     @NotNull
     private static ClientOptions managementClientOptions() {
         return ClientOptions.builder()
@@ -212,5 +237,40 @@ public final class TestClient {
         ReactResponse react = reactorsClient.react(reactorId, ReactRequest.builder().args(expected).build());
         assertEquals(expected.get("Key1"), ((Map)react.getRaw().get()).get("Key1"));
         assertEquals(expected.get("Key2"), ((Map)react.getRaw().get()).get("Key2"));
+    }
+
+    private static String createWebhook(WebhooksClient webhooksClient, String url) {
+        Webhook webhook = webhooksClient.create(CreateWebhookRequest.builder()
+                .name("(Deletable) java-SDK-" + UUID.randomUUID())
+                .url(url)
+                .addEvents("token.created")
+                .build()
+        );
+        String webhookId = webhook.getId();
+        return webhookId;
+    }
+
+    private static void getAndAssertWebhookUrl(WebhooksClient webhooksClient, String webhookId, String url) {
+        Webhook webhook = webhooksClient.get(webhookId);
+        assertEquals(url, webhook.getUrl());
+    }
+
+    private static void updateWebhook(WebhooksClient webhooksClient, String webhookId, String url) {
+        webhooksClient.update(webhookId, UpdateWebhookRequest.builder()
+                .name("(Deletable) java-SDK-" + UUID.randomUUID())
+                .url(url)
+                .addEvents("token.created")
+                .addEvents("token.updated")
+                .build()
+        );
+    }
+
+    private static void ensureWebhookIsRemoved(WebhooksClient webhooksClient, String webhookId) {
+        try {
+            webhooksClient.get(webhookId);
+            fail("Should have raised NotFoundError");
+        } catch (NotFoundError e) {
+            assertTrue(true);
+        }
     }
 }
