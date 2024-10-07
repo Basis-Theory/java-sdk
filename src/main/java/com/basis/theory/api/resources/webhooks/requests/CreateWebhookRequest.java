@@ -20,8 +20,8 @@ import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = WebhookCreateRequest.Builder.class)
-public final class WebhookCreateRequest {
+@JsonDeserialize(builder = CreateWebhookRequest.Builder.class)
+public final class CreateWebhookRequest {
     private final String name;
 
     private final String url;
@@ -30,7 +30,7 @@ public final class WebhookCreateRequest {
 
     private final Map<String, Object> additionalProperties;
 
-    private WebhookCreateRequest(
+    private CreateWebhookRequest(
             String name, String url, List<String> events, Map<String, Object> additionalProperties) {
         this.name = name;
         this.url = url;
@@ -65,7 +65,7 @@ public final class WebhookCreateRequest {
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof WebhookCreateRequest && equalTo((WebhookCreateRequest) other);
+        return other instanceof CreateWebhookRequest && equalTo((CreateWebhookRequest) other);
     }
 
     @JsonAnyGetter
@@ -73,7 +73,7 @@ public final class WebhookCreateRequest {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(WebhookCreateRequest other) {
+    private boolean equalTo(CreateWebhookRequest other) {
         return name.equals(other.name) && url.equals(other.url) && events.equals(other.events);
     }
 
@@ -94,7 +94,7 @@ public final class WebhookCreateRequest {
     public interface NameStage {
         UrlStage name(@NotNull String name);
 
-        Builder from(WebhookCreateRequest other);
+        Builder from(CreateWebhookRequest other);
     }
 
     public interface UrlStage {
@@ -102,7 +102,7 @@ public final class WebhookCreateRequest {
     }
 
     public interface _FinalStage {
-        WebhookCreateRequest build();
+        CreateWebhookRequest build();
 
         _FinalStage events(List<String> events);
 
@@ -125,7 +125,7 @@ public final class WebhookCreateRequest {
         private Builder() {}
 
         @java.lang.Override
-        public Builder from(WebhookCreateRequest other) {
+        public Builder from(CreateWebhookRequest other) {
             name(other.getName());
             url(other.getUrl());
             events(other.getEvents());
@@ -183,8 +183,8 @@ public final class WebhookCreateRequest {
         }
 
         @java.lang.Override
-        public WebhookCreateRequest build() {
-            return new WebhookCreateRequest(name, url, events, additionalProperties);
+        public CreateWebhookRequest build() {
+            return new CreateWebhookRequest(name, url, events, additionalProperties);
         }
     }
 }

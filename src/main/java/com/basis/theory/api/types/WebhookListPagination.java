@@ -18,15 +18,15 @@ import java.util.Objects;
 import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = WebhookListResponsePagination.Builder.class)
-public final class WebhookListResponsePagination {
+@JsonDeserialize(builder = WebhookListPagination.Builder.class)
+public final class WebhookListPagination {
     private final Optional<Integer> pageSize;
 
     private final Optional<String> next;
 
     private final Map<String, Object> additionalProperties;
 
-    private WebhookListResponsePagination(
+    private WebhookListPagination(
             Optional<Integer> pageSize, Optional<String> next, Map<String, Object> additionalProperties) {
         this.pageSize = pageSize;
         this.next = next;
@@ -46,7 +46,7 @@ public final class WebhookListResponsePagination {
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof WebhookListResponsePagination && equalTo((WebhookListResponsePagination) other);
+        return other instanceof WebhookListPagination && equalTo((WebhookListPagination) other);
     }
 
     @JsonAnyGetter
@@ -54,7 +54,7 @@ public final class WebhookListResponsePagination {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(WebhookListResponsePagination other) {
+    private boolean equalTo(WebhookListPagination other) {
         return pageSize.equals(other.pageSize) && next.equals(other.next);
     }
 
@@ -83,7 +83,7 @@ public final class WebhookListResponsePagination {
 
         private Builder() {}
 
-        public Builder from(WebhookListResponsePagination other) {
+        public Builder from(WebhookListPagination other) {
             pageSize(other.getPageSize());
             next(other.getNext());
             return this;
@@ -111,8 +111,8 @@ public final class WebhookListResponsePagination {
             return this;
         }
 
-        public WebhookListResponsePagination build() {
-            return new WebhookListResponsePagination(pageSize, next, additionalProperties);
+        public WebhookListPagination build() {
+            return new WebhookListPagination(pageSize, next, additionalProperties);
         }
     }
 }

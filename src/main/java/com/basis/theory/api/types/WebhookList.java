@@ -20,37 +20,35 @@ import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = WebhookListResponse.Builder.class)
-public final class WebhookListResponse {
-    private final WebhookListResponsePagination pagination;
+@JsonDeserialize(builder = WebhookList.Builder.class)
+public final class WebhookList {
+    private final WebhookListPagination pagination;
 
-    private final List<WebhookResponse> data;
+    private final List<Webhook> data;
 
     private final Map<String, Object> additionalProperties;
 
-    private WebhookListResponse(
-            WebhookListResponsePagination pagination,
-            List<WebhookResponse> data,
-            Map<String, Object> additionalProperties) {
+    private WebhookList(
+            WebhookListPagination pagination, List<Webhook> data, Map<String, Object> additionalProperties) {
         this.pagination = pagination;
         this.data = data;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("pagination")
-    public WebhookListResponsePagination getPagination() {
+    public WebhookListPagination getPagination() {
         return pagination;
     }
 
     @JsonProperty("data")
-    public List<WebhookResponse> getData() {
+    public List<Webhook> getData() {
         return data;
     }
 
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof WebhookListResponse && equalTo((WebhookListResponse) other);
+        return other instanceof WebhookList && equalTo((WebhookList) other);
     }
 
     @JsonAnyGetter
@@ -58,7 +56,7 @@ public final class WebhookListResponse {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(WebhookListResponse other) {
+    private boolean equalTo(WebhookList other) {
         return pagination.equals(other.pagination) && data.equals(other.data);
     }
 
@@ -77,26 +75,26 @@ public final class WebhookListResponse {
     }
 
     public interface PaginationStage {
-        _FinalStage pagination(@NotNull WebhookListResponsePagination pagination);
+        _FinalStage pagination(@NotNull WebhookListPagination pagination);
 
-        Builder from(WebhookListResponse other);
+        Builder from(WebhookList other);
     }
 
     public interface _FinalStage {
-        WebhookListResponse build();
+        WebhookList build();
 
-        _FinalStage data(List<WebhookResponse> data);
+        _FinalStage data(List<Webhook> data);
 
-        _FinalStage addData(WebhookResponse data);
+        _FinalStage addData(Webhook data);
 
-        _FinalStage addAllData(List<WebhookResponse> data);
+        _FinalStage addAllData(List<Webhook> data);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements PaginationStage, _FinalStage {
-        private WebhookListResponsePagination pagination;
+        private WebhookListPagination pagination;
 
-        private List<WebhookResponse> data = new ArrayList<>();
+        private List<Webhook> data = new ArrayList<>();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -104,7 +102,7 @@ public final class WebhookListResponse {
         private Builder() {}
 
         @java.lang.Override
-        public Builder from(WebhookListResponse other) {
+        public Builder from(WebhookList other) {
             pagination(other.getPagination());
             data(other.getData());
             return this;
@@ -112,34 +110,34 @@ public final class WebhookListResponse {
 
         @java.lang.Override
         @JsonSetter("pagination")
-        public _FinalStage pagination(@NotNull WebhookListResponsePagination pagination) {
+        public _FinalStage pagination(@NotNull WebhookListPagination pagination) {
             this.pagination = Objects.requireNonNull(pagination, "pagination must not be null");
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage addAllData(List<WebhookResponse> data) {
+        public _FinalStage addAllData(List<Webhook> data) {
             this.data.addAll(data);
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage addData(WebhookResponse data) {
+        public _FinalStage addData(Webhook data) {
             this.data.add(data);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "data", nulls = Nulls.SKIP)
-        public _FinalStage data(List<WebhookResponse> data) {
+        public _FinalStage data(List<Webhook> data) {
             this.data.clear();
             this.data.addAll(data);
             return this;
         }
 
         @java.lang.Override
-        public WebhookListResponse build() {
-            return new WebhookListResponse(pagination, data, additionalProperties);
+        public WebhookList build() {
+            return new WebhookList(pagination, data, additionalProperties);
         }
     }
 }
