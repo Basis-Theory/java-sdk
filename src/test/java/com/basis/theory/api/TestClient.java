@@ -5,6 +5,7 @@ package com.basis.theory.api;
 
 import com.basis.theory.api.core.ClientOptions;
 import com.basis.theory.api.core.Environment;
+import com.basis.theory.api.core.pagination.SyncPagingIterable;
 import com.basis.theory.api.errors.NotFoundError;
 import com.basis.theory.api.resources.applications.ApplicationsClient;
 import com.basis.theory.api.resources.applications.requests.CreateApplicationRequest;
@@ -16,9 +17,12 @@ import com.basis.theory.api.resources.reactors.requests.ReactRequest;
 import com.basis.theory.api.resources.tenants.TenantsClient;
 import com.basis.theory.api.resources.tokens.TokensClient;
 import com.basis.theory.api.resources.tokens.requests.CreateTokenRequest;
+import com.basis.theory.api.resources.tokens.requests.TokensListRequest;
+import com.basis.theory.api.resources.tokens.requests.TokensListV2Request;
 import com.basis.theory.api.resources.tokens.requests.UpdateTokenRequest;
 import com.basis.theory.api.types.*;
 import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -80,12 +84,47 @@ public final class TestClient {
         }
     }
 
-    private static void updateToken(TokensClient tokensClient, String tokenId, String updateCardNumber) {
-        tokensClient.update(tokenId, UpdateTokenRequest.builder()
-                        .data(new HashMap<String, Object>() {{
-                            put("number", updateCardNumber);
-                        }})
+    @Test()
+    @Disabled("Idempotency headers are currently NOT supported; Fern needs to update")
+    public void shouldSupportIdempotencyHeaders() {
+
+    }
+
+    @Test
+    public void shouldSupportPaginationOnListV1() {
+        TokensClient tokensClient = new TokensClient(privateClientOptions());
+        int pageSize = 3;
+        SyncPagingIterable<Token> tokens = tokensClient.list(TokensListRequest.builder()
+                        .page(1)
+                        .size(pageSize)
                 .build());
+
+        int count = 0;
+        for (Token token : tokens) {
+            count++;
+            if (count > pageSize) {
+                break;
+            }
+        }
+        assertTrue(count > pageSize);
+    }
+
+    @Test
+    public void shouldSupportPaginationOnListV2() {
+        TokensClient tokensClient = new TokensClient(privateClientOptions());
+        int pageSize = 3;
+        SyncPagingIterable<Token> tokens = tokensClient.listV2(TokensListV2Request.builder()
+                        .size(pageSize)
+                .build());
+
+        int count = 0;
+        for (Token token : tokens) {
+            count++;
+            if (count > pageSize) {
+                break;
+            }
+        }
+        assertTrue(count > pageSize);
     }
 
     @NotNull
@@ -129,6 +168,14 @@ public final class TestClient {
         String tokenId = token.getId().get();
         assertNotNull(tokenId);
         return tokenId;
+    }
+
+    private static void updateToken(TokensClient tokensClient, String tokenId, String updateCardNumber) {
+        tokensClient.update(tokenId, UpdateTokenRequest.builder()
+                .data(new HashMap<String, Object>() {{
+                    put("number", updateCardNumber);
+                }})
+                .build());
     }
 
     private static void getAndValidateCardNumber(TokensClient tokensClient, String tokenId, String cardNumber) {
