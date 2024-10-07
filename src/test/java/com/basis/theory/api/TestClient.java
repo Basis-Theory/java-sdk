@@ -32,6 +32,7 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Disabled("Need to setup Production test tenant and setup Github Action")
 public final class TestClient {
     @Test
     public void shouldCallTenantSelf() {
