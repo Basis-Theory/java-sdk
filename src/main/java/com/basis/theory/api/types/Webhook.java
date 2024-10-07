@@ -18,16 +18,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = WebhookResponse.Builder.class)
-public final class WebhookResponse {
+@JsonDeserialize(builder = Webhook.Builder.class)
+public final class Webhook {
     private final String id;
 
     private final String tenantId;
 
-    private final WebhookResponseStatus status;
+    private final WebhookStatus status;
 
     private final String name;
 
@@ -39,23 +40,23 @@ public final class WebhookResponse {
 
     private final OffsetDateTime createdAt;
 
-    private final String modifiedBy;
+    private final Optional<String> modifiedBy;
 
-    private final OffsetDateTime modifiedAt;
+    private final Optional<OffsetDateTime> modifiedAt;
 
     private final Map<String, Object> additionalProperties;
 
-    private WebhookResponse(
+    private Webhook(
             String id,
             String tenantId,
-            WebhookResponseStatus status,
+            WebhookStatus status,
             String name,
             String url,
             List<String> events,
             String createdBy,
             OffsetDateTime createdAt,
-            String modifiedBy,
-            OffsetDateTime modifiedAt,
+            Optional<String> modifiedBy,
+            Optional<OffsetDateTime> modifiedAt,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.tenantId = tenantId;
@@ -81,7 +82,7 @@ public final class WebhookResponse {
     }
 
     @JsonProperty("status")
-    public WebhookResponseStatus getStatus() {
+    public WebhookStatus getStatus() {
         return status;
     }
 
@@ -111,19 +112,19 @@ public final class WebhookResponse {
     }
 
     @JsonProperty("modified_by")
-    public String getModifiedBy() {
+    public Optional<String> getModifiedBy() {
         return modifiedBy;
     }
 
     @JsonProperty("modified_at")
-    public OffsetDateTime getModifiedAt() {
+    public Optional<OffsetDateTime> getModifiedAt() {
         return modifiedAt;
     }
 
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof WebhookResponse && equalTo((WebhookResponse) other);
+        return other instanceof Webhook && equalTo((Webhook) other);
     }
 
     @JsonAnyGetter
@@ -131,7 +132,7 @@ public final class WebhookResponse {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(WebhookResponse other) {
+    private boolean equalTo(Webhook other) {
         return id.equals(other.id)
                 && tenantId.equals(other.tenantId)
                 && status.equals(other.status)
@@ -171,7 +172,7 @@ public final class WebhookResponse {
     public interface IdStage {
         TenantIdStage id(@NotNull String id);
 
-        Builder from(WebhookResponse other);
+        Builder from(Webhook other);
     }
 
     public interface TenantIdStage {
@@ -179,7 +180,7 @@ public final class WebhookResponse {
     }
 
     public interface StatusStage {
-        NameStage status(@NotNull WebhookResponseStatus status);
+        NameStage status(@NotNull WebhookStatus status);
     }
 
     public interface NameStage {
@@ -195,25 +196,25 @@ public final class WebhookResponse {
     }
 
     public interface CreatedAtStage {
-        ModifiedByStage createdAt(@NotNull OffsetDateTime createdAt);
-    }
-
-    public interface ModifiedByStage {
-        ModifiedAtStage modifiedBy(@NotNull String modifiedBy);
-    }
-
-    public interface ModifiedAtStage {
-        _FinalStage modifiedAt(@NotNull OffsetDateTime modifiedAt);
+        _FinalStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface _FinalStage {
-        WebhookResponse build();
+        Webhook build();
 
         _FinalStage events(List<String> events);
 
         _FinalStage addEvents(String events);
 
         _FinalStage addAllEvents(List<String> events);
+
+        _FinalStage modifiedBy(Optional<String> modifiedBy);
+
+        _FinalStage modifiedBy(String modifiedBy);
+
+        _FinalStage modifiedAt(Optional<OffsetDateTime> modifiedAt);
+
+        _FinalStage modifiedAt(OffsetDateTime modifiedAt);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -225,14 +226,12 @@ public final class WebhookResponse {
                     UrlStage,
                     CreatedByStage,
                     CreatedAtStage,
-                    ModifiedByStage,
-                    ModifiedAtStage,
                     _FinalStage {
         private String id;
 
         private String tenantId;
 
-        private WebhookResponseStatus status;
+        private WebhookStatus status;
 
         private String name;
 
@@ -242,9 +241,9 @@ public final class WebhookResponse {
 
         private OffsetDateTime createdAt;
 
-        private String modifiedBy;
+        private Optional<OffsetDateTime> modifiedAt = Optional.empty();
 
-        private OffsetDateTime modifiedAt;
+        private Optional<String> modifiedBy = Optional.empty();
 
         private List<String> events = new ArrayList<>();
 
@@ -254,7 +253,7 @@ public final class WebhookResponse {
         private Builder() {}
 
         @java.lang.Override
-        public Builder from(WebhookResponse other) {
+        public Builder from(Webhook other) {
             id(other.getId());
             tenantId(other.getTenantId());
             status(other.getStatus());
@@ -284,7 +283,7 @@ public final class WebhookResponse {
 
         @java.lang.Override
         @JsonSetter("status")
-        public NameStage status(@NotNull WebhookResponseStatus status) {
+        public NameStage status(@NotNull WebhookStatus status) {
             this.status = Objects.requireNonNull(status, "status must not be null");
             return this;
         }
@@ -312,22 +311,34 @@ public final class WebhookResponse {
 
         @java.lang.Override
         @JsonSetter("created_at")
-        public ModifiedByStage createdAt(@NotNull OffsetDateTime createdAt) {
+        public _FinalStage createdAt(@NotNull OffsetDateTime createdAt) {
             this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("modified_by")
-        public ModifiedAtStage modifiedBy(@NotNull String modifiedBy) {
-            this.modifiedBy = Objects.requireNonNull(modifiedBy, "modifiedBy must not be null");
+        public _FinalStage modifiedAt(OffsetDateTime modifiedAt) {
+            this.modifiedAt = Optional.ofNullable(modifiedAt);
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("modified_at")
-        public _FinalStage modifiedAt(@NotNull OffsetDateTime modifiedAt) {
-            this.modifiedAt = Objects.requireNonNull(modifiedAt, "modifiedAt must not be null");
+        @JsonSetter(value = "modified_at", nulls = Nulls.SKIP)
+        public _FinalStage modifiedAt(Optional<OffsetDateTime> modifiedAt) {
+            this.modifiedAt = modifiedAt;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage modifiedBy(String modifiedBy) {
+            this.modifiedBy = Optional.ofNullable(modifiedBy);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "modified_by", nulls = Nulls.SKIP)
+        public _FinalStage modifiedBy(Optional<String> modifiedBy) {
+            this.modifiedBy = modifiedBy;
             return this;
         }
 
@@ -352,8 +363,8 @@ public final class WebhookResponse {
         }
 
         @java.lang.Override
-        public WebhookResponse build() {
-            return new WebhookResponse(
+        public Webhook build() {
+            return new Webhook(
                     id,
                     tenantId,
                     status,

@@ -17,13 +17,13 @@ import com.basis.theory.api.errors.NotFoundError;
 import com.basis.theory.api.errors.UnauthorizedError;
 import com.basis.theory.api.errors.UnprocessableEntityError;
 import com.basis.theory.api.resources.webhooks.events.EventsClient;
-import com.basis.theory.api.resources.webhooks.requests.WebhookCreateRequest;
-import com.basis.theory.api.resources.webhooks.requests.WebhookUpdateRequest;
+import com.basis.theory.api.resources.webhooks.requests.CreateWebhookRequest;
+import com.basis.theory.api.resources.webhooks.requests.UpdateWebhookRequest;
 import com.basis.theory.api.resources.webhooks.signingkey.SigningKeyClient;
 import com.basis.theory.api.types.ProblemDetails;
 import com.basis.theory.api.types.ValidationProblemDetails;
-import com.basis.theory.api.types.WebhookListResponse;
-import com.basis.theory.api.types.WebhookResponse;
+import com.basis.theory.api.types.Webhook;
+import com.basis.theory.api.types.WebhookList;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import java.util.function.Supplier;
@@ -90,14 +90,14 @@ public class WebhooksClient {
     /**
      * Returns the webhook
      */
-    public WebhookResponse get(String id) {
+    public Webhook get(String id) {
         return get(id, null);
     }
 
     /**
      * Returns the webhook
      */
-    public WebhookResponse get(String id, RequestOptions requestOptions) {
+    public Webhook get(String id, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("webhooks")
@@ -116,7 +116,7 @@ public class WebhooksClient {
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), WebhookResponse.class);
+                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Webhook.class);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
@@ -143,14 +143,14 @@ public class WebhooksClient {
     /**
      * Update a new webhook
      */
-    public WebhookResponse update(String id, WebhookUpdateRequest request) {
+    public Webhook update(String id, UpdateWebhookRequest request) {
         return update(id, request, null);
     }
 
     /**
      * Update a new webhook
      */
-    public WebhookResponse update(String id, WebhookUpdateRequest request, RequestOptions requestOptions) {
+    public Webhook update(String id, UpdateWebhookRequest request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("webhooks")
@@ -176,7 +176,7 @@ public class WebhooksClient {
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), WebhookResponse.class);
+                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Webhook.class);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
@@ -271,14 +271,14 @@ public class WebhooksClient {
     /**
      * Returns the configured webhooks
      */
-    public WebhookListResponse list() {
+    public WebhookList list() {
         return list(null);
     }
 
     /**
      * Returns the configured webhooks
      */
-    public WebhookListResponse list(RequestOptions requestOptions) {
+    public WebhookList list(RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("webhooks")
@@ -296,7 +296,7 @@ public class WebhooksClient {
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), WebhookListResponse.class);
+                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), WebhookList.class);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
@@ -323,14 +323,14 @@ public class WebhooksClient {
     /**
      * Create a new webhook
      */
-    public WebhookResponse create(WebhookCreateRequest request) {
+    public Webhook create(CreateWebhookRequest request) {
         return create(request, null);
     }
 
     /**
      * Create a new webhook
      */
-    public WebhookResponse create(WebhookCreateRequest request, RequestOptions requestOptions) {
+    public Webhook create(CreateWebhookRequest request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("webhooks")
@@ -355,7 +355,7 @@ public class WebhooksClient {
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), WebhookResponse.class);
+                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Webhook.class);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {

@@ -5,14 +5,14 @@ package com.basis.theory.api.types;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum WebhookResponseStatus {
+public enum WebhookStatus {
     ENABLED("enabled"),
 
     DISABLED("disabled");
 
     private final String value;
 
-    WebhookResponseStatus(String value) {
+    WebhookStatus(String value) {
         this.value = value;
     }
 
