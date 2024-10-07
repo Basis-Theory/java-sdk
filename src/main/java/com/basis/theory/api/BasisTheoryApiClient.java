@@ -17,8 +17,8 @@ import com.basis.theory.api.resources.roles.RolesClient;
 import com.basis.theory.api.resources.sessions.SessionsClient;
 import com.basis.theory.api.resources.tenants.TenantsClient;
 import com.basis.theory.api.resources.threeds.ThreedsClient;
-import com.basis.theory.api.resources.tokenize.TokenizeClient;
 import com.basis.theory.api.resources.tokens.TokensClient;
+import com.basis.theory.api.resources.webhooks.WebhooksClient;
 import java.util.function.Supplier;
 
 public class BasisTheoryApiClient {
@@ -29,6 +29,8 @@ public class BasisTheoryApiClient {
     protected final Supplier<ApplicationKeysClient> applicationKeysClient;
 
     protected final Supplier<ApplicationTemplatesClient> applicationTemplatesClient;
+
+    protected final Supplier<TokensClient> tokensClient;
 
     protected final Supplier<LogsClient> logsClient;
 
@@ -46,9 +48,7 @@ public class BasisTheoryApiClient {
 
     protected final Supplier<ThreedsClient> threedsClient;
 
-    protected final Supplier<TokenizeClient> tokenizeClient;
-
-    protected final Supplier<TokensClient> tokensClient;
+    protected final Supplier<WebhooksClient> webhooksClient;
 
     protected final Supplier<TenantsClient> tenantsClient;
 
@@ -57,6 +57,7 @@ public class BasisTheoryApiClient {
         this.applicationsClient = Suppliers.memoize(() -> new ApplicationsClient(clientOptions));
         this.applicationKeysClient = Suppliers.memoize(() -> new ApplicationKeysClient(clientOptions));
         this.applicationTemplatesClient = Suppliers.memoize(() -> new ApplicationTemplatesClient(clientOptions));
+        this.tokensClient = Suppliers.memoize(() -> new TokensClient(clientOptions));
         this.logsClient = Suppliers.memoize(() -> new LogsClient(clientOptions));
         this.permissionsClient = Suppliers.memoize(() -> new PermissionsClient(clientOptions));
         this.proxiesClient = Suppliers.memoize(() -> new ProxiesClient(clientOptions));
@@ -65,8 +66,7 @@ public class BasisTheoryApiClient {
         this.rolesClient = Suppliers.memoize(() -> new RolesClient(clientOptions));
         this.sessionsClient = Suppliers.memoize(() -> new SessionsClient(clientOptions));
         this.threedsClient = Suppliers.memoize(() -> new ThreedsClient(clientOptions));
-        this.tokenizeClient = Suppliers.memoize(() -> new TokenizeClient(clientOptions));
-        this.tokensClient = Suppliers.memoize(() -> new TokensClient(clientOptions));
+        this.webhooksClient = Suppliers.memoize(() -> new WebhooksClient(clientOptions));
         this.tenantsClient = Suppliers.memoize(() -> new TenantsClient(clientOptions));
     }
 
@@ -80,6 +80,10 @@ public class BasisTheoryApiClient {
 
     public ApplicationTemplatesClient applicationTemplates() {
         return this.applicationTemplatesClient.get();
+    }
+
+    public TokensClient tokens() {
+        return this.tokensClient.get();
     }
 
     public LogsClient logs() {
@@ -114,12 +118,8 @@ public class BasisTheoryApiClient {
         return this.threedsClient.get();
     }
 
-    public TokenizeClient tokenize() {
-        return this.tokenizeClient.get();
-    }
-
-    public TokensClient tokens() {
-        return this.tokensClient.get();
+    public WebhooksClient webhooks() {
+        return this.webhooksClient.get();
     }
 
     public TenantsClient tenants() {
