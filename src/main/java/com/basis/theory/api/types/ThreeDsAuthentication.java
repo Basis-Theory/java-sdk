@@ -23,6 +23,10 @@ import java.util.Optional;
 public final class ThreeDsAuthentication {
     private final Optional<String> panTokenId;
 
+    private final Optional<String> tokenId;
+
+    private final Optional<String> tokenIntentId;
+
     private final Optional<String> threedsVersion;
 
     private final Optional<String> acsTransactionId;
@@ -73,6 +77,8 @@ public final class ThreeDsAuthentication {
 
     private ThreeDsAuthentication(
             Optional<String> panTokenId,
+            Optional<String> tokenId,
+            Optional<String> tokenIntentId,
             Optional<String> threedsVersion,
             Optional<String> acsTransactionId,
             Optional<String> dsTransactionId,
@@ -98,6 +104,8 @@ public final class ThreeDsAuthentication {
             Optional<List<ThreeDsMessageExtension>> messageExtensions,
             Map<String, Object> additionalProperties) {
         this.panTokenId = panTokenId;
+        this.tokenId = tokenId;
+        this.tokenIntentId = tokenIntentId;
         this.threedsVersion = threedsVersion;
         this.acsTransactionId = acsTransactionId;
         this.dsTransactionId = dsTransactionId;
@@ -127,6 +135,16 @@ public final class ThreeDsAuthentication {
     @JsonProperty("pan_token_id")
     public Optional<String> getPanTokenId() {
         return panTokenId;
+    }
+
+    @JsonProperty("token_id")
+    public Optional<String> getTokenId() {
+        return tokenId;
+    }
+
+    @JsonProperty("token_intent_id")
+    public Optional<String> getTokenIntentId() {
+        return tokenIntentId;
     }
 
     @JsonProperty("threeds_version")
@@ -257,6 +275,8 @@ public final class ThreeDsAuthentication {
 
     private boolean equalTo(ThreeDsAuthentication other) {
         return panTokenId.equals(other.panTokenId)
+                && tokenId.equals(other.tokenId)
+                && tokenIntentId.equals(other.tokenIntentId)
                 && threedsVersion.equals(other.threedsVersion)
                 && acsTransactionId.equals(other.acsTransactionId)
                 && dsTransactionId.equals(other.dsTransactionId)
@@ -286,6 +306,8 @@ public final class ThreeDsAuthentication {
     public int hashCode() {
         return Objects.hash(
                 this.panTokenId,
+                this.tokenId,
+                this.tokenIntentId,
                 this.threedsVersion,
                 this.acsTransactionId,
                 this.dsTransactionId,
@@ -323,6 +345,10 @@ public final class ThreeDsAuthentication {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
         private Optional<String> panTokenId = Optional.empty();
+
+        private Optional<String> tokenId = Optional.empty();
+
+        private Optional<String> tokenIntentId = Optional.empty();
 
         private Optional<String> threedsVersion = Optional.empty();
 
@@ -377,6 +403,8 @@ public final class ThreeDsAuthentication {
 
         public Builder from(ThreeDsAuthentication other) {
             panTokenId(other.getPanTokenId());
+            tokenId(other.getTokenId());
+            tokenIntentId(other.getTokenIntentId());
             threedsVersion(other.getThreedsVersion());
             acsTransactionId(other.getAcsTransactionId());
             dsTransactionId(other.getDsTransactionId());
@@ -411,6 +439,28 @@ public final class ThreeDsAuthentication {
 
         public Builder panTokenId(String panTokenId) {
             this.panTokenId = Optional.ofNullable(panTokenId);
+            return this;
+        }
+
+        @JsonSetter(value = "token_id", nulls = Nulls.SKIP)
+        public Builder tokenId(Optional<String> tokenId) {
+            this.tokenId = tokenId;
+            return this;
+        }
+
+        public Builder tokenId(String tokenId) {
+            this.tokenId = Optional.ofNullable(tokenId);
+            return this;
+        }
+
+        @JsonSetter(value = "token_intent_id", nulls = Nulls.SKIP)
+        public Builder tokenIntentId(Optional<String> tokenIntentId) {
+            this.tokenIntentId = tokenIntentId;
+            return this;
+        }
+
+        public Builder tokenIntentId(String tokenIntentId) {
+            this.tokenIntentId = Optional.ofNullable(tokenIntentId);
             return this;
         }
 
@@ -670,6 +720,8 @@ public final class ThreeDsAuthentication {
         public ThreeDsAuthentication build() {
             return new ThreeDsAuthentication(
                     panTokenId,
+                    tokenId,
+                    tokenIntentId,
                     threedsVersion,
                     acsTransactionId,
                     dsTransactionId,

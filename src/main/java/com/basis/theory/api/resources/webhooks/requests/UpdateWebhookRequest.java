@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -26,14 +27,21 @@ public final class UpdateWebhookRequest {
 
     private final String url;
 
+    private final Optional<String> notifyEmail;
+
     private final List<String> events;
 
     private final Map<String, Object> additionalProperties;
 
     private UpdateWebhookRequest(
-            String name, String url, List<String> events, Map<String, Object> additionalProperties) {
+            String name,
+            String url,
+            Optional<String> notifyEmail,
+            List<String> events,
+            Map<String, Object> additionalProperties) {
         this.name = name;
         this.url = url;
+        this.notifyEmail = notifyEmail;
         this.events = events;
         this.additionalProperties = additionalProperties;
     }
@@ -52,6 +60,14 @@ public final class UpdateWebhookRequest {
     @JsonProperty("url")
     public String getUrl() {
         return url;
+    }
+
+    /**
+     * @return The email address to use for management notification events. Ie: webhook disabled
+     */
+    @JsonProperty("notify_email")
+    public Optional<String> getNotifyEmail() {
+        return notifyEmail;
     }
 
     /**
@@ -74,12 +90,15 @@ public final class UpdateWebhookRequest {
     }
 
     private boolean equalTo(UpdateWebhookRequest other) {
-        return name.equals(other.name) && url.equals(other.url) && events.equals(other.events);
+        return name.equals(other.name)
+                && url.equals(other.url)
+                && notifyEmail.equals(other.notifyEmail)
+                && events.equals(other.events);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.name, this.url, this.events);
+        return Objects.hash(this.name, this.url, this.notifyEmail, this.events);
     }
 
     @java.lang.Override
@@ -104,6 +123,10 @@ public final class UpdateWebhookRequest {
     public interface _FinalStage {
         UpdateWebhookRequest build();
 
+        _FinalStage notifyEmail(Optional<String> notifyEmail);
+
+        _FinalStage notifyEmail(String notifyEmail);
+
         _FinalStage events(List<String> events);
 
         _FinalStage addEvents(String events);
@@ -119,6 +142,8 @@ public final class UpdateWebhookRequest {
 
         private List<String> events = new ArrayList<>();
 
+        private Optional<String> notifyEmail = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -128,6 +153,7 @@ public final class UpdateWebhookRequest {
         public Builder from(UpdateWebhookRequest other) {
             name(other.getName());
             url(other.getUrl());
+            notifyEmail(other.getNotifyEmail());
             events(other.getEvents());
             return this;
         }
@@ -182,9 +208,26 @@ public final class UpdateWebhookRequest {
             return this;
         }
 
+        /**
+         * <p>The email address to use for management notification events. Ie: webhook disabled</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage notifyEmail(String notifyEmail) {
+            this.notifyEmail = Optional.ofNullable(notifyEmail);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "notify_email", nulls = Nulls.SKIP)
+        public _FinalStage notifyEmail(Optional<String> notifyEmail) {
+            this.notifyEmail = notifyEmail;
+            return this;
+        }
+
         @java.lang.Override
         public UpdateWebhookRequest build() {
-            return new UpdateWebhookRequest(name, url, events, additionalProperties);
+            return new UpdateWebhookRequest(name, url, notifyEmail, events, additionalProperties);
         }
     }
 }

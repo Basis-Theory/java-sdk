@@ -23,9 +23,15 @@ import java.util.Optional;
 public final class ThreeDsSession {
     private final Optional<String> id;
 
+    private final Optional<String> type;
+
     private final Optional<String> tenantId;
 
     private final Optional<String> panTokenId;
+
+    private final Optional<String> tokenId;
+
+    private final Optional<String> tokenIntentId;
 
     private final Optional<String> cardBrand;
 
@@ -53,8 +59,11 @@ public final class ThreeDsSession {
 
     private ThreeDsSession(
             Optional<String> id,
+            Optional<String> type,
             Optional<String> tenantId,
             Optional<String> panTokenId,
+            Optional<String> tokenId,
+            Optional<String> tokenIntentId,
             Optional<String> cardBrand,
             Optional<OffsetDateTime> expirationDate,
             Optional<OffsetDateTime> createdDate,
@@ -68,8 +77,11 @@ public final class ThreeDsSession {
             Optional<ThreeDsAuthentication> authentication,
             Map<String, Object> additionalProperties) {
         this.id = id;
+        this.type = type;
         this.tenantId = tenantId;
         this.panTokenId = panTokenId;
+        this.tokenId = tokenId;
+        this.tokenIntentId = tokenIntentId;
         this.cardBrand = cardBrand;
         this.expirationDate = expirationDate;
         this.createdDate = createdDate;
@@ -89,6 +101,11 @@ public final class ThreeDsSession {
         return id;
     }
 
+    @JsonProperty("type")
+    public Optional<String> getType() {
+        return type;
+    }
+
     @JsonProperty("tenant_id")
     public Optional<String> getTenantId() {
         return tenantId;
@@ -97,6 +114,16 @@ public final class ThreeDsSession {
     @JsonProperty("pan_token_id")
     public Optional<String> getPanTokenId() {
         return panTokenId;
+    }
+
+    @JsonProperty("token_id")
+    public Optional<String> getTokenId() {
+        return tokenId;
+    }
+
+    @JsonProperty("token_intent_id")
+    public Optional<String> getTokenIntentId() {
+        return tokenIntentId;
     }
 
     @JsonProperty("card_brand")
@@ -167,8 +194,11 @@ public final class ThreeDsSession {
 
     private boolean equalTo(ThreeDsSession other) {
         return id.equals(other.id)
+                && type.equals(other.type)
                 && tenantId.equals(other.tenantId)
                 && panTokenId.equals(other.panTokenId)
+                && tokenId.equals(other.tokenId)
+                && tokenIntentId.equals(other.tokenIntentId)
                 && cardBrand.equals(other.cardBrand)
                 && expirationDate.equals(other.expirationDate)
                 && createdDate.equals(other.createdDate)
@@ -186,8 +216,11 @@ public final class ThreeDsSession {
     public int hashCode() {
         return Objects.hash(
                 this.id,
+                this.type,
                 this.tenantId,
                 this.panTokenId,
+                this.tokenId,
+                this.tokenIntentId,
                 this.cardBrand,
                 this.expirationDate,
                 this.createdDate,
@@ -214,9 +247,15 @@ public final class ThreeDsSession {
     public static final class Builder {
         private Optional<String> id = Optional.empty();
 
+        private Optional<String> type = Optional.empty();
+
         private Optional<String> tenantId = Optional.empty();
 
         private Optional<String> panTokenId = Optional.empty();
+
+        private Optional<String> tokenId = Optional.empty();
+
+        private Optional<String> tokenIntentId = Optional.empty();
 
         private Optional<String> cardBrand = Optional.empty();
 
@@ -247,8 +286,11 @@ public final class ThreeDsSession {
 
         public Builder from(ThreeDsSession other) {
             id(other.getId());
+            type(other.getType());
             tenantId(other.getTenantId());
             panTokenId(other.getPanTokenId());
+            tokenId(other.getTokenId());
+            tokenIntentId(other.getTokenIntentId());
             cardBrand(other.getCardBrand());
             expirationDate(other.getExpirationDate());
             createdDate(other.getCreatedDate());
@@ -274,6 +316,17 @@ public final class ThreeDsSession {
             return this;
         }
 
+        @JsonSetter(value = "type", nulls = Nulls.SKIP)
+        public Builder type(Optional<String> type) {
+            this.type = type;
+            return this;
+        }
+
+        public Builder type(String type) {
+            this.type = Optional.ofNullable(type);
+            return this;
+        }
+
         @JsonSetter(value = "tenant_id", nulls = Nulls.SKIP)
         public Builder tenantId(Optional<String> tenantId) {
             this.tenantId = tenantId;
@@ -293,6 +346,28 @@ public final class ThreeDsSession {
 
         public Builder panTokenId(String panTokenId) {
             this.panTokenId = Optional.ofNullable(panTokenId);
+            return this;
+        }
+
+        @JsonSetter(value = "token_id", nulls = Nulls.SKIP)
+        public Builder tokenId(Optional<String> tokenId) {
+            this.tokenId = tokenId;
+            return this;
+        }
+
+        public Builder tokenId(String tokenId) {
+            this.tokenId = Optional.ofNullable(tokenId);
+            return this;
+        }
+
+        @JsonSetter(value = "token_intent_id", nulls = Nulls.SKIP)
+        public Builder tokenIntentId(Optional<String> tokenIntentId) {
+            this.tokenIntentId = tokenIntentId;
+            return this;
+        }
+
+        public Builder tokenIntentId(String tokenIntentId) {
+            this.tokenIntentId = Optional.ofNullable(tokenIntentId);
             return this;
         }
 
@@ -420,8 +495,11 @@ public final class ThreeDsSession {
         public ThreeDsSession build() {
             return new ThreeDsSession(
                     id,
+                    type,
                     tenantId,
                     panTokenId,
+                    tokenId,
+                    tokenIntentId,
                     cardBrand,
                     expirationDate,
                     createdDate,

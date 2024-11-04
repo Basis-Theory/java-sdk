@@ -58,6 +58,8 @@ public final class Token {
 
     private final Optional<List<String>> aliases;
 
+    private final Optional<TokenExtras> extras;
+
     private final Map<String, Object> additionalProperties;
 
     private Token(
@@ -79,6 +81,7 @@ public final class Token {
             Optional<OffsetDateTime> expiresAt,
             Optional<List<String>> containers,
             Optional<List<String>> aliases,
+            Optional<TokenExtras> extras,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.type = type;
@@ -98,6 +101,7 @@ public final class Token {
         this.expiresAt = expiresAt;
         this.containers = containers;
         this.aliases = aliases;
+        this.extras = extras;
         this.additionalProperties = additionalProperties;
     }
 
@@ -191,6 +195,11 @@ public final class Token {
         return aliases;
     }
 
+    @JsonProperty("_extras")
+    public Optional<TokenExtras> getExtras() {
+        return extras;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -220,7 +229,8 @@ public final class Token {
                 && searchIndexes.equals(other.searchIndexes)
                 && expiresAt.equals(other.expiresAt)
                 && containers.equals(other.containers)
-                && aliases.equals(other.aliases);
+                && aliases.equals(other.aliases)
+                && extras.equals(other.extras);
     }
 
     @java.lang.Override
@@ -243,7 +253,8 @@ public final class Token {
                 this.searchIndexes,
                 this.expiresAt,
                 this.containers,
-                this.aliases);
+                this.aliases,
+                this.extras);
     }
 
     @java.lang.Override
@@ -293,6 +304,8 @@ public final class Token {
 
         private Optional<List<String>> aliases = Optional.empty();
 
+        private Optional<TokenExtras> extras = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -317,6 +330,7 @@ public final class Token {
             expiresAt(other.getExpiresAt());
             containers(other.getContainers());
             aliases(other.getAliases());
+            extras(other.getExtras());
             return this;
         }
 
@@ -518,6 +532,17 @@ public final class Token {
             return this;
         }
 
+        @JsonSetter(value = "_extras", nulls = Nulls.SKIP)
+        public Builder extras(Optional<TokenExtras> extras) {
+            this.extras = extras;
+            return this;
+        }
+
+        public Builder extras(TokenExtras extras) {
+            this.extras = Optional.ofNullable(extras);
+            return this;
+        }
+
         public Token build() {
             return new Token(
                     id,
@@ -538,6 +563,7 @@ public final class Token {
                     expiresAt,
                     containers,
                     aliases,
+                    extras,
                     additionalProperties);
         }
     }

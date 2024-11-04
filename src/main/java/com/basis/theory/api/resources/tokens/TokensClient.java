@@ -238,6 +238,10 @@ public class TokensClient {
         }
     }
 
+    public Token create() {
+        return create(CreateTokenRequest.builder().build());
+    }
+
     public Token create(CreateTokenRequest request) {
         return create(request, null);
     }
