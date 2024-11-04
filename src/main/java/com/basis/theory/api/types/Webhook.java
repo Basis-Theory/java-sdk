@@ -34,6 +34,8 @@ public final class Webhook {
 
     private final String url;
 
+    private final Optional<String> notifyEmail;
+
     private final List<String> events;
 
     private final String createdBy;
@@ -52,6 +54,7 @@ public final class Webhook {
             WebhookStatus status,
             String name,
             String url,
+            Optional<String> notifyEmail,
             List<String> events,
             String createdBy,
             OffsetDateTime createdAt,
@@ -63,6 +66,7 @@ public final class Webhook {
         this.status = status;
         this.name = name;
         this.url = url;
+        this.notifyEmail = notifyEmail;
         this.events = events;
         this.createdBy = createdBy;
         this.createdAt = createdAt;
@@ -94,6 +98,14 @@ public final class Webhook {
     @JsonProperty("url")
     public String getUrl() {
         return url;
+    }
+
+    /**
+     * @return The email address to use for management notification events. Ie: webhook disabled
+     */
+    @JsonProperty("notify_email")
+    public Optional<String> getNotifyEmail() {
+        return notifyEmail;
     }
 
     @JsonProperty("events")
@@ -138,6 +150,7 @@ public final class Webhook {
                 && status.equals(other.status)
                 && name.equals(other.name)
                 && url.equals(other.url)
+                && notifyEmail.equals(other.notifyEmail)
                 && events.equals(other.events)
                 && createdBy.equals(other.createdBy)
                 && createdAt.equals(other.createdAt)
@@ -153,6 +166,7 @@ public final class Webhook {
                 this.status,
                 this.name,
                 this.url,
+                this.notifyEmail,
                 this.events,
                 this.createdBy,
                 this.createdAt,
@@ -202,6 +216,10 @@ public final class Webhook {
     public interface _FinalStage {
         Webhook build();
 
+        _FinalStage notifyEmail(Optional<String> notifyEmail);
+
+        _FinalStage notifyEmail(String notifyEmail);
+
         _FinalStage events(List<String> events);
 
         _FinalStage addEvents(String events);
@@ -247,6 +265,8 @@ public final class Webhook {
 
         private List<String> events = new ArrayList<>();
 
+        private Optional<String> notifyEmail = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -259,6 +279,7 @@ public final class Webhook {
             status(other.getStatus());
             name(other.getName());
             url(other.getUrl());
+            notifyEmail(other.getNotifyEmail());
             events(other.getEvents());
             createdBy(other.getCreatedBy());
             createdAt(other.getCreatedAt());
@@ -362,6 +383,23 @@ public final class Webhook {
             return this;
         }
 
+        /**
+         * <p>The email address to use for management notification events. Ie: webhook disabled</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage notifyEmail(String notifyEmail) {
+            this.notifyEmail = Optional.ofNullable(notifyEmail);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "notify_email", nulls = Nulls.SKIP)
+        public _FinalStage notifyEmail(Optional<String> notifyEmail) {
+            this.notifyEmail = notifyEmail;
+            return this;
+        }
+
         @java.lang.Override
         public Webhook build() {
             return new Webhook(
@@ -370,6 +408,7 @@ public final class Webhook {
                     status,
                     name,
                     url,
+                    notifyEmail,
                     events,
                     createdBy,
                     createdAt,

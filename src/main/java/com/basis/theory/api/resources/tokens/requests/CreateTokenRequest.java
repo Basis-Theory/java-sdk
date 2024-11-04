@@ -26,7 +26,7 @@ public final class CreateTokenRequest {
 
     private final Optional<String> type;
 
-    private final Object data;
+    private final Optional<Object> data;
 
     private final Optional<Privacy> privacy;
 
@@ -44,12 +44,14 @@ public final class CreateTokenRequest {
 
     private final Optional<List<String>> containers;
 
+    private final Optional<String> tokenIntentId;
+
     private final Map<String, Object> additionalProperties;
 
     private CreateTokenRequest(
             Optional<String> id,
             Optional<String> type,
-            Object data,
+            Optional<Object> data,
             Optional<Privacy> privacy,
             Optional<Map<String, Optional<String>>> metadata,
             Optional<List<String>> searchIndexes,
@@ -58,6 +60,7 @@ public final class CreateTokenRequest {
             Optional<Boolean> deduplicateToken,
             Optional<String> expiresAt,
             Optional<List<String>> containers,
+            Optional<String> tokenIntentId,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.type = type;
@@ -70,6 +73,7 @@ public final class CreateTokenRequest {
         this.deduplicateToken = deduplicateToken;
         this.expiresAt = expiresAt;
         this.containers = containers;
+        this.tokenIntentId = tokenIntentId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -84,7 +88,7 @@ public final class CreateTokenRequest {
     }
 
     @JsonProperty("data")
-    public Object getData() {
+    public Optional<Object> getData() {
         return data;
     }
 
@@ -128,6 +132,11 @@ public final class CreateTokenRequest {
         return containers;
     }
 
+    @JsonProperty("token_intent_id")
+    public Optional<String> getTokenIntentId() {
+        return tokenIntentId;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -150,7 +159,8 @@ public final class CreateTokenRequest {
                 && mask.equals(other.mask)
                 && deduplicateToken.equals(other.deduplicateToken)
                 && expiresAt.equals(other.expiresAt)
-                && containers.equals(other.containers);
+                && containers.equals(other.containers)
+                && tokenIntentId.equals(other.tokenIntentId);
     }
 
     @java.lang.Override
@@ -166,7 +176,8 @@ public final class CreateTokenRequest {
                 this.mask,
                 this.deduplicateToken,
                 this.expiresAt,
-                this.containers);
+                this.containers,
+                this.tokenIntentId);
     }
 
     @java.lang.Override
@@ -174,90 +185,41 @@ public final class CreateTokenRequest {
         return ObjectMappers.stringify(this);
     }
 
-    public static DataStage builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public interface DataStage {
-        _FinalStage data(Object data);
-
-        Builder from(CreateTokenRequest other);
-    }
-
-    public interface _FinalStage {
-        CreateTokenRequest build();
-
-        _FinalStage id(Optional<String> id);
-
-        _FinalStage id(String id);
-
-        _FinalStage type(Optional<String> type);
-
-        _FinalStage type(String type);
-
-        _FinalStage privacy(Optional<Privacy> privacy);
-
-        _FinalStage privacy(Privacy privacy);
-
-        _FinalStage metadata(Optional<Map<String, Optional<String>>> metadata);
-
-        _FinalStage metadata(Map<String, Optional<String>> metadata);
-
-        _FinalStage searchIndexes(Optional<List<String>> searchIndexes);
-
-        _FinalStage searchIndexes(List<String> searchIndexes);
-
-        _FinalStage fingerprintExpression(Optional<String> fingerprintExpression);
-
-        _FinalStage fingerprintExpression(String fingerprintExpression);
-
-        _FinalStage mask(Optional<Object> mask);
-
-        _FinalStage mask(Object mask);
-
-        _FinalStage deduplicateToken(Optional<Boolean> deduplicateToken);
-
-        _FinalStage deduplicateToken(Boolean deduplicateToken);
-
-        _FinalStage expiresAt(Optional<String> expiresAt);
-
-        _FinalStage expiresAt(String expiresAt);
-
-        _FinalStage containers(Optional<List<String>> containers);
-
-        _FinalStage containers(List<String> containers);
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements DataStage, _FinalStage {
-        private Object data;
-
-        private Optional<List<String>> containers = Optional.empty();
-
-        private Optional<String> expiresAt = Optional.empty();
-
-        private Optional<Boolean> deduplicateToken = Optional.empty();
-
-        private Optional<Object> mask = Optional.empty();
-
-        private Optional<String> fingerprintExpression = Optional.empty();
-
-        private Optional<List<String>> searchIndexes = Optional.empty();
-
-        private Optional<Map<String, Optional<String>>> metadata = Optional.empty();
-
-        private Optional<Privacy> privacy = Optional.empty();
+    public static final class Builder {
+        private Optional<String> id = Optional.empty();
 
         private Optional<String> type = Optional.empty();
 
-        private Optional<String> id = Optional.empty();
+        private Optional<Object> data = Optional.empty();
+
+        private Optional<Privacy> privacy = Optional.empty();
+
+        private Optional<Map<String, Optional<String>>> metadata = Optional.empty();
+
+        private Optional<List<String>> searchIndexes = Optional.empty();
+
+        private Optional<String> fingerprintExpression = Optional.empty();
+
+        private Optional<Object> mask = Optional.empty();
+
+        private Optional<Boolean> deduplicateToken = Optional.empty();
+
+        private Optional<String> expiresAt = Optional.empty();
+
+        private Optional<List<String>> containers = Optional.empty();
+
+        private Optional<String> tokenIntentId = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        @java.lang.Override
         public Builder from(CreateTokenRequest other) {
             id(other.getId());
             type(other.getType());
@@ -270,147 +232,142 @@ public final class CreateTokenRequest {
             deduplicateToken(other.getDeduplicateToken());
             expiresAt(other.getExpiresAt());
             containers(other.getContainers());
+            tokenIntentId(other.getTokenIntentId());
             return this;
         }
 
-        @java.lang.Override
-        @JsonSetter("data")
-        public _FinalStage data(Object data) {
-            this.data = data;
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage containers(List<String> containers) {
-            this.containers = Optional.ofNullable(containers);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "containers", nulls = Nulls.SKIP)
-        public _FinalStage containers(Optional<List<String>> containers) {
-            this.containers = containers;
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage expiresAt(String expiresAt) {
-            this.expiresAt = Optional.ofNullable(expiresAt);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "expires_at", nulls = Nulls.SKIP)
-        public _FinalStage expiresAt(Optional<String> expiresAt) {
-            this.expiresAt = expiresAt;
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage deduplicateToken(Boolean deduplicateToken) {
-            this.deduplicateToken = Optional.ofNullable(deduplicateToken);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "deduplicate_token", nulls = Nulls.SKIP)
-        public _FinalStage deduplicateToken(Optional<Boolean> deduplicateToken) {
-            this.deduplicateToken = deduplicateToken;
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage mask(Object mask) {
-            this.mask = Optional.ofNullable(mask);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "mask", nulls = Nulls.SKIP)
-        public _FinalStage mask(Optional<Object> mask) {
-            this.mask = mask;
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage fingerprintExpression(String fingerprintExpression) {
-            this.fingerprintExpression = Optional.ofNullable(fingerprintExpression);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "fingerprint_expression", nulls = Nulls.SKIP)
-        public _FinalStage fingerprintExpression(Optional<String> fingerprintExpression) {
-            this.fingerprintExpression = fingerprintExpression;
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage searchIndexes(List<String> searchIndexes) {
-            this.searchIndexes = Optional.ofNullable(searchIndexes);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "search_indexes", nulls = Nulls.SKIP)
-        public _FinalStage searchIndexes(Optional<List<String>> searchIndexes) {
-            this.searchIndexes = searchIndexes;
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage metadata(Map<String, Optional<String>> metadata) {
-            this.metadata = Optional.ofNullable(metadata);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
-        public _FinalStage metadata(Optional<Map<String, Optional<String>>> metadata) {
-            this.metadata = metadata;
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage privacy(Privacy privacy) {
-            this.privacy = Optional.ofNullable(privacy);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "privacy", nulls = Nulls.SKIP)
-        public _FinalStage privacy(Optional<Privacy> privacy) {
-            this.privacy = privacy;
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage type(String type) {
-            this.type = Optional.ofNullable(type);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "type", nulls = Nulls.SKIP)
-        public _FinalStage type(Optional<String> type) {
-            this.type = type;
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage id(String id) {
-            this.id = Optional.ofNullable(id);
-            return this;
-        }
-
-        @java.lang.Override
         @JsonSetter(value = "id", nulls = Nulls.SKIP)
-        public _FinalStage id(Optional<String> id) {
+        public Builder id(Optional<String> id) {
             this.id = id;
             return this;
         }
 
-        @java.lang.Override
+        public Builder id(String id) {
+            this.id = Optional.ofNullable(id);
+            return this;
+        }
+
+        @JsonSetter(value = "type", nulls = Nulls.SKIP)
+        public Builder type(Optional<String> type) {
+            this.type = type;
+            return this;
+        }
+
+        public Builder type(String type) {
+            this.type = Optional.ofNullable(type);
+            return this;
+        }
+
+        @JsonSetter(value = "data", nulls = Nulls.SKIP)
+        public Builder data(Optional<Object> data) {
+            this.data = data;
+            return this;
+        }
+
+        public Builder data(Object data) {
+            this.data = Optional.ofNullable(data);
+            return this;
+        }
+
+        @JsonSetter(value = "privacy", nulls = Nulls.SKIP)
+        public Builder privacy(Optional<Privacy> privacy) {
+            this.privacy = privacy;
+            return this;
+        }
+
+        public Builder privacy(Privacy privacy) {
+            this.privacy = Optional.ofNullable(privacy);
+            return this;
+        }
+
+        @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
+        public Builder metadata(Optional<Map<String, Optional<String>>> metadata) {
+            this.metadata = metadata;
+            return this;
+        }
+
+        public Builder metadata(Map<String, Optional<String>> metadata) {
+            this.metadata = Optional.ofNullable(metadata);
+            return this;
+        }
+
+        @JsonSetter(value = "search_indexes", nulls = Nulls.SKIP)
+        public Builder searchIndexes(Optional<List<String>> searchIndexes) {
+            this.searchIndexes = searchIndexes;
+            return this;
+        }
+
+        public Builder searchIndexes(List<String> searchIndexes) {
+            this.searchIndexes = Optional.ofNullable(searchIndexes);
+            return this;
+        }
+
+        @JsonSetter(value = "fingerprint_expression", nulls = Nulls.SKIP)
+        public Builder fingerprintExpression(Optional<String> fingerprintExpression) {
+            this.fingerprintExpression = fingerprintExpression;
+            return this;
+        }
+
+        public Builder fingerprintExpression(String fingerprintExpression) {
+            this.fingerprintExpression = Optional.ofNullable(fingerprintExpression);
+            return this;
+        }
+
+        @JsonSetter(value = "mask", nulls = Nulls.SKIP)
+        public Builder mask(Optional<Object> mask) {
+            this.mask = mask;
+            return this;
+        }
+
+        public Builder mask(Object mask) {
+            this.mask = Optional.ofNullable(mask);
+            return this;
+        }
+
+        @JsonSetter(value = "deduplicate_token", nulls = Nulls.SKIP)
+        public Builder deduplicateToken(Optional<Boolean> deduplicateToken) {
+            this.deduplicateToken = deduplicateToken;
+            return this;
+        }
+
+        public Builder deduplicateToken(Boolean deduplicateToken) {
+            this.deduplicateToken = Optional.ofNullable(deduplicateToken);
+            return this;
+        }
+
+        @JsonSetter(value = "expires_at", nulls = Nulls.SKIP)
+        public Builder expiresAt(Optional<String> expiresAt) {
+            this.expiresAt = expiresAt;
+            return this;
+        }
+
+        public Builder expiresAt(String expiresAt) {
+            this.expiresAt = Optional.ofNullable(expiresAt);
+            return this;
+        }
+
+        @JsonSetter(value = "containers", nulls = Nulls.SKIP)
+        public Builder containers(Optional<List<String>> containers) {
+            this.containers = containers;
+            return this;
+        }
+
+        public Builder containers(List<String> containers) {
+            this.containers = Optional.ofNullable(containers);
+            return this;
+        }
+
+        @JsonSetter(value = "token_intent_id", nulls = Nulls.SKIP)
+        public Builder tokenIntentId(Optional<String> tokenIntentId) {
+            this.tokenIntentId = tokenIntentId;
+            return this;
+        }
+
+        public Builder tokenIntentId(String tokenIntentId) {
+            this.tokenIntentId = Optional.ofNullable(tokenIntentId);
+            return this;
+        }
+
         public CreateTokenRequest build() {
             return new CreateTokenRequest(
                     id,
@@ -424,6 +381,7 @@ public final class CreateTokenRequest {
                     deduplicateToken,
                     expiresAt,
                     containers,
+                    tokenIntentId,
                     additionalProperties);
         }
     }
