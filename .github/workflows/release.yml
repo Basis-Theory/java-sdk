@@ -53,9 +53,6 @@ jobs:
           git config --local user.email "platform@basistheory.com"
           git config --local user.name "github-actions[bot]"
 
-#          sed -i "s/\(versionName = \)'[^']*'/\1'${{ steps.tag-version.outputs.new_tag }}'/g" lib/build.gradle
-#          sed -i "s/\(3ds-android:\)[^']*'/\1${{ steps.tag-version.outputs.new_tag }}'/g" README.md
-
           echo "${{ steps.tag-version.outputs.changelog }}" | cat - CHANGELOG.md > temp && mv temp CHANGELOG.md
 
           git add CHANGELOG.md README.md
