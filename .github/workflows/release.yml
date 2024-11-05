@@ -43,7 +43,7 @@ jobs:
       - name: Publish to GH Packages
         if: ${{ steps.tag-version.outputs.new_tag != '' }}
         run: |
-          NEW_TAG="${{ steps.tag-version.outputs.new_tag }}" ./gradlew compileJava publish -Pversion="$NEW_TAG"
+          ./gradlew compileJava publish -Pversion="${{ steps.tag-version.outputs.new_tag }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
