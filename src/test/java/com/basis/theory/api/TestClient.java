@@ -63,18 +63,16 @@ public final class TestClient {
         proxyClient.delete(proxyId);
 
         // Reactors
-        ReactorsClient reactorsClient = new ReactorsClient(managementClientOptions());
-        Reactor reactor = reactorsClient.create(CreateReactorRequest.builder()
+        ReactorsClient reactorsManagementClient = new ReactorsClient(managementClientOptions());
+        Reactor reactor = reactorsManagementClient.create(CreateReactorRequest.builder()
                 .name("(Deletable) node-SDK-" + UUID.randomUUID())
                 .code("module.exports = function (req) {return {raw: req.args}}")
                 .application(Application.builder().id(applicationId).build())
                 .build()
         );
         String reactorId = reactor.getId().get();
-        // REACT Doesn't work right now...? Returns a 403 requiring `token:use`.
-        // However, the application has `token:use` and the reactor appears to be setup correctly in the Portal 🤷
-//        react(reactorsClient, reactorId);
-        reactorsClient.delete(reactorId);
+        react(new ReactorsClient(privateClientOptions()), reactorId);
+        reactorsManagementClient.delete(reactorId);
 
         applicationsClient.delete(applicationId);
 
