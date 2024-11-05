@@ -13,11 +13,11 @@ jobs:
       contents: write
       packages: write
     steps:
-#      - name: Start Deploy Message
-#        uses: Basis-Theory/github-actions/deploy-slack-action@master
-#        with:
-#          slack-api-token: ${{ secrets.SLACK_DUCKBOT_API_KEY }}
-#          channel: ${{ vars.SLACK_DUCKBOT_PRODUCT_DEPLOY_CHANNEL }}
+      - name: Start Deploy Message
+        uses: Basis-Theory/github-actions/deploy-slack-action@master
+        with:
+          slack-api-token: ${{ secrets.SLACK_DUCKBOT_API_KEY }}
+          channel: ${{ vars.SLACK_DUCKBOT_PRODUCT_DEPLOY_CHANNEL }}
 
       - name: Checkout
         uses: actions/checkout@v3
@@ -65,10 +65,10 @@ jobs:
           github_token: ${{ secrets.SEMANTIC_RELEASE_PAT }}
           branch: ${{ github.ref }}
 
-#      - name: Stop Deploy Message
-#        if: always()
-#        uses: Basis-Theory/github-actions/deploy-slack-action@master
-#        with:
-#          slack-api-token: ${{ secrets.SLACK_DUCKBOT_API_KEY }}
-#          channel: ${{ vars.SLACK_DUCKBOT_PRODUCT_DEPLOY_CHANNEL }}
-#          status: "done"
+      - name: Stop Deploy Message
+        if: always()
+        uses: Basis-Theory/github-actions/deploy-slack-action@master
+        with:
+          slack-api-token: ${{ secrets.SLACK_DUCKBOT_API_KEY }}
+          channel: ${{ vars.SLACK_DUCKBOT_PRODUCT_DEPLOY_CHANNEL }}
+          status: "done"
