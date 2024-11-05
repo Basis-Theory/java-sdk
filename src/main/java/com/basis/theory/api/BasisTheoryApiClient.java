@@ -49,11 +49,11 @@ public class BasisTheoryApiClient {
 
     protected final Supplier<SessionsClient> sessionsClient;
 
-    protected final Supplier<TenantsClient> tenantsClient;
-
     protected final Supplier<ThreedsClient> threedsClient;
 
     protected final Supplier<WebhooksClient> webhooksClient;
+
+    protected final Supplier<TenantsClient> tenantsClient;
 
     public BasisTheoryApiClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
@@ -69,9 +69,9 @@ public class BasisTheoryApiClient {
         this.reactorsClient = Suppliers.memoize(() -> new ReactorsClient(clientOptions));
         this.rolesClient = Suppliers.memoize(() -> new RolesClient(clientOptions));
         this.sessionsClient = Suppliers.memoize(() -> new SessionsClient(clientOptions));
-        this.tenantsClient = Suppliers.memoize(() -> new TenantsClient(clientOptions));
         this.threedsClient = Suppliers.memoize(() -> new ThreedsClient(clientOptions));
         this.webhooksClient = Suppliers.memoize(() -> new WebhooksClient(clientOptions));
+        this.tenantsClient = Suppliers.memoize(() -> new TenantsClient(clientOptions));
     }
 
     public ApplicationsClient applications() {
@@ -122,16 +122,16 @@ public class BasisTheoryApiClient {
         return this.sessionsClient.get();
     }
 
-    public TenantsClient tenants() {
-        return this.tenantsClient.get();
-    }
-
     public ThreedsClient threeds() {
         return this.threedsClient.get();
     }
 
     public WebhooksClient webhooks() {
         return this.webhooksClient.get();
+    }
+
+    public TenantsClient tenants() {
+        return this.tenantsClient.get();
     }
 
     public static BasisTheoryApiClientBuilder builder() {

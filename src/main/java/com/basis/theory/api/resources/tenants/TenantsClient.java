@@ -3,30 +3,14 @@
  */
 package com.basis.theory.api.resources.tenants;
 
-import com.basis.theory.api.core.BasisTheoryApiApiException;
-import com.basis.theory.api.core.BasisTheoryException;
 import com.basis.theory.api.core.ClientOptions;
-import com.basis.theory.api.core.ObjectMappers;
-import com.basis.theory.api.core.RequestOptions;
 import com.basis.theory.api.core.Suppliers;
-import com.basis.theory.api.errors.ForbiddenError;
-import com.basis.theory.api.errors.NotFoundError;
-import com.basis.theory.api.errors.UnauthorizedError;
 import com.basis.theory.api.resources.tenants.connections.ConnectionsClient;
 import com.basis.theory.api.resources.tenants.invitations.InvitationsClient;
 import com.basis.theory.api.resources.tenants.members.MembersClient;
+import com.basis.theory.api.resources.tenants.owner.OwnerClient;
 import com.basis.theory.api.resources.tenants.self.SelfClient;
-import com.basis.theory.api.types.ProblemDetails;
-import com.basis.theory.api.types.TenantMemberResponse;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import java.io.IOException;
 import java.util.function.Supplier;
-import okhttp3.Headers;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 public class TenantsClient {
     protected final ClientOptions clientOptions;
@@ -37,6 +21,8 @@ public class TenantsClient {
 
     protected final Supplier<MembersClient> membersClient;
 
+    protected final Supplier<OwnerClient> ownerClient;
+
     protected final Supplier<SelfClient> selfClient;
 
     public TenantsClient(ClientOptions clientOptions) {
@@ -44,55 +30,8 @@ public class TenantsClient {
         this.connectionsClient = Suppliers.memoize(() -> new ConnectionsClient(clientOptions));
         this.invitationsClient = Suppliers.memoize(() -> new InvitationsClient(clientOptions));
         this.membersClient = Suppliers.memoize(() -> new MembersClient(clientOptions));
+        this.ownerClient = Suppliers.memoize(() -> new OwnerClient(clientOptions));
         this.selfClient = Suppliers.memoize(() -> new SelfClient(clientOptions));
-    }
-
-    public TenantMemberResponse ownerGet() {
-        return ownerGet(null);
-    }
-
-    public TenantMemberResponse ownerGet(RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("tenants/self/owner")
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), TenantMemberResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                switch (response.code()) {
-                    case 401:
-                        throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class));
-                    case 403:
-                        throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class));
-                    case 404:
-                        throw new NotFoundError(ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new BasisTheoryApiApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new BasisTheoryException("Network error executing HTTP request", e);
-        }
     }
 
     public ConnectionsClient connections() {
@@ -105,6 +44,10 @@ public class TenantsClient {
 
     public MembersClient members() {
         return this.membersClient.get();
+    }
+
+    public OwnerClient owner() {
+        return this.ownerClient.get();
     }
 
     public SelfClient self() {
