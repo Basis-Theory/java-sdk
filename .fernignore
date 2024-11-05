@@ -1,5 +1,10 @@
 # Specify files that shouldn't be modified by Fern
 
 .github/workflows/ci.yml
+.github/workflows/release.yml
+.github/workflows/security-scan.yml
+
+build.gradle
+CHANGELOG.md
 
 src/test/java/com/basis/theory/api/TestClient.java
