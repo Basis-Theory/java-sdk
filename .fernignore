@@ -4,4 +4,7 @@
 .github/workflows/release.yml
 .github/workflows/security-scan.yml
 
+build.gradle
+CHANGELOG.md
+
 src/test/java/com/basis/theory/api/TestClient.java

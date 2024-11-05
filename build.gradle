@@ -41,28 +41,52 @@ test {
         showStandardStreams = true
     }
 }
+//publishing {
+//    publications {
+//        maven(MavenPublication) {
+//            groupId = 'dev.basis-theory'
+//            artifactId = 'basis-theory-java-sdk'
+//            version = '0.0.1'
+//            from components.java
+//            pom {
+//                scm {
+//                    connection = 'scm:git:git://github.com/Basis-Theory/java-sdk.git'
+//                    developerConnection = 'scm:git:git://github.com/Basis-Theory/java-sdk.git'
+//                    url = 'https://github.com/Basis-Theory/java-sdk'
+//                }
+//            }
+//        }
+//    }
+//    repositories {
+//        maven {
+//            url "$System.env.MAVEN_PUBLISH_REGISTRY_URL"
+//            credentials {
+//                username "$System.env.MAVEN_USERNAME"
+//                password "$System.env.MAVEN_PASSWORD"
+//            }
+//        }
+//    }
+//}
+
 publishing {
     publications {
         maven(MavenPublication) {
-            groupId = 'dev.basis-theory'
-            artifactId = 'basis-theory-java-sdk'
-            version = '0.0.1'
-            from components.java
-            pom {
-                scm {
-                    connection = 'scm:git:git://github.com/Basis-Theory/java-sdk.git'
-                    developerConnection = 'scm:git:git://github.com/Basis-Theory/java-sdk.git'
-                    url = 'https://github.com/Basis-Theory/java-sdk'
-                }
-            }
+            groupId "com.basistheory"
+            artifactId "client"
+            version = project.hasProperty('version') ? project.version : 'default-version'
+            artifact("$buildDir/outputs/aar/lib-release.aar")
         }
+
     }
+
     repositories {
         maven {
-            url "$System.env.MAVEN_PUBLISH_REGISTRY_URL"
+            name "GithubPackages"
+            url uri("https://maven.pkg.github.com/basis-theory/3ds-android")
+
             credentials {
-                username "$System.env.MAVEN_USERNAME"
-                password "$System.env.MAVEN_PASSWORD"
+                username = "platform@basistheory.com"
+                password = properties["GITHUB_TOKEN"] ?: System.getenv("GITHUB_TOKEN")
             }
         }
     }
