@@ -65,7 +65,7 @@ public final class TestClient {
         // Reactors
         ReactorsClient reactorsManagementClient = new ReactorsClient(managementClientOptions());
         Reactor reactor = reactorsManagementClient.create(CreateReactorRequest.builder()
-                .name("(Deletable) node-SDK-" + UUID.randomUUID())
+                .name("(Deletable) java-SDK-" + UUID.randomUUID())
                 .code("module.exports = function (req) {return {raw: req.args}}")
                 .application(Application.builder().id(applicationId).build())
                 .build()

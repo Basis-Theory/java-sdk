@@ -12,7 +12,7 @@ jobs:
     secrets: inherit
     with:
       scan-directory: $GITHUB_WORKSPACE
-      app-name: node-sdk
+      app-name: java-sdk
 
   dependency-scan:
     name: SCA scan
@@ -20,4 +20,4 @@ jobs:
     secrets: inherit
     with:
       scan-directory: $GITHUB_WORKSPACE
-      app-name: node-sdk
+      app-name: java-sdk
