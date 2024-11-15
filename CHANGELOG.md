@@ -1,3 +1,11 @@
+## [0.1.0](https://github.com/Basis-Theory/java-sdk/compare/0.0.5...0.1.0) (2024-11-15)
+
+
+### Features
+
+* Add correlation id ([#23](https://github.com/Basis-Theory/java-sdk/issues/23)) ([50f8e4e](https://github.com/Basis-Theory/java-sdk/commit/50f8e4ef867d750851402531bc88ff237220b78b))
+
+
 ### [0.0.5](https://github.com/Basis-Theory/java-sdk/compare/0.0.4...0.0.5) (2024-11-05)
 
 
