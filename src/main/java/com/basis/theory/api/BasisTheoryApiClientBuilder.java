@@ -11,6 +11,8 @@ public final class BasisTheoryApiClientBuilder {
 
     private String apiKey = System.getenv("BT-API-KEY");
 
+    private String correlationId = null;
+
     private Environment environment = Environment.DEFAULT;
 
     /**
@@ -19,6 +21,14 @@ public final class BasisTheoryApiClientBuilder {
      */
     public BasisTheoryApiClientBuilder apiKey(String apiKey) {
         this.apiKey = apiKey;
+        return this;
+    }
+
+    /**
+     * Sets correlationId
+     */
+    public BasisTheoryApiClientBuilder correlationId(String correlationId) {
+        this.correlationId = correlationId;
         return this;
     }
 
@@ -37,6 +47,9 @@ public final class BasisTheoryApiClientBuilder {
             throw new RuntimeException("Please provide apiKey or set the BT-API-KEY environment variable.");
         }
         this.clientOptionsBuilder.addHeader("BT-API-KEY", this.apiKey);
+        if (correlationId != null) {
+            this.clientOptionsBuilder.addHeader("BT-TRACE-ID", this.correlationId);
+        }
         clientOptionsBuilder.environment(this.environment);
         return new BasisTheoryApiClient(clientOptionsBuilder.build());
     }

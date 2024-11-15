@@ -11,12 +11,15 @@ import java.util.concurrent.TimeUnit;
 public final class RequestOptions {
     private final String apiKey;
 
+    private final String correlationId;
+
     private final Optional<Integer> timeout;
 
     private final TimeUnit timeoutTimeUnit;
 
-    private RequestOptions(String apiKey, Optional<Integer> timeout, TimeUnit timeoutTimeUnit) {
+    private RequestOptions(String apiKey, String correlationId, Optional<Integer> timeout, TimeUnit timeoutTimeUnit) {
         this.apiKey = apiKey;
+        this.correlationId = correlationId;
         this.timeout = timeout;
         this.timeoutTimeUnit = timeoutTimeUnit;
     }
@@ -34,6 +37,9 @@ public final class RequestOptions {
         if (this.apiKey != null) {
             headers.put("BT-API-KEY", this.apiKey);
         }
+        if (this.correlationId != null) {
+            headers.put("BT-TRACE-ID", this.correlationId);
+        }
         return headers;
     }
 
@@ -44,12 +50,19 @@ public final class RequestOptions {
     public static final class Builder {
         private String apiKey = null;
 
+        private String correlationId = null;
+
         private Optional<Integer> timeout = Optional.empty();
 
         private TimeUnit timeoutTimeUnit = TimeUnit.SECONDS;
 
         public Builder apiKey(String apiKey) {
             this.apiKey = apiKey;
+            return this;
+        }
+
+        public Builder correlationId(String correlationId) {
+            this.correlationId = correlationId;
             return this;
         }
 
@@ -65,7 +78,7 @@ public final class RequestOptions {
         }
 
         public RequestOptions build() {
-            return new RequestOptions(apiKey, timeout, timeoutTimeUnit);
+            return new RequestOptions(apiKey, correlationId, timeout, timeoutTimeUnit);
         }
     }
 }
