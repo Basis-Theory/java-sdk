@@ -24,6 +24,7 @@ import com.basis.theory.api.resources.reactors.requests.ReactRequestAsync;
 import com.basis.theory.api.resources.reactors.requests.ReactorsListRequest;
 import com.basis.theory.api.resources.reactors.requests.UpdateReactorRequest;
 import com.basis.theory.api.resources.reactors.results.ResultsClient;
+import com.basis.theory.api.types.AsyncReactResponse;
 import com.basis.theory.api.types.ProblemDetails;
 import com.basis.theory.api.types.ReactResponse;
 import com.basis.theory.api.types.Reactor;
@@ -468,15 +469,15 @@ public class ReactorsClient {
         }
     }
 
-    public ReactResponse reactAsync(String id) {
+    public AsyncReactResponse reactAsync(String id) {
         return reactAsync(id, ReactRequestAsync.builder().build());
     }
 
-    public ReactResponse reactAsync(String id, ReactRequestAsync request) {
+    public AsyncReactResponse reactAsync(String id, ReactRequestAsync request) {
         return reactAsync(id, request, null);
     }
 
-    public ReactResponse reactAsync(String id, ReactRequestAsync request, RequestOptions requestOptions) {
+    public AsyncReactResponse reactAsync(String id, ReactRequestAsync request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("reactors")
@@ -503,7 +504,7 @@ public class ReactorsClient {
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ReactResponse.class);
+                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), AsyncReactResponse.class);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {

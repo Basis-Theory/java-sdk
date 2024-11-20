@@ -11,7 +11,7 @@ import com.basis.theory.api.core.RequestOptions;
 import com.basis.theory.api.errors.BadRequestError;
 import com.basis.theory.api.errors.ForbiddenError;
 import com.basis.theory.api.errors.UnauthorizedError;
-import com.basis.theory.api.resources.permissions.requests.PermissionsGetRequest;
+import com.basis.theory.api.resources.permissions.requests.PermissionsListRequest;
 import com.basis.theory.api.types.Permission;
 import com.basis.theory.api.types.ProblemDetails;
 import com.basis.theory.api.types.ValidationProblemDetails;
@@ -33,15 +33,15 @@ public class PermissionsClient {
         this.clientOptions = clientOptions;
     }
 
-    public List<Permission> get() {
-        return get(PermissionsGetRequest.builder().build());
+    public List<Permission> list() {
+        return list(PermissionsListRequest.builder().build());
     }
 
-    public List<Permission> get(PermissionsGetRequest request) {
-        return get(request, null);
+    public List<Permission> list(PermissionsListRequest request) {
+        return list(request, null);
     }
 
-    public List<Permission> get(PermissionsGetRequest request, RequestOptions requestOptions) {
+    public List<Permission> list(PermissionsListRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("permissions");

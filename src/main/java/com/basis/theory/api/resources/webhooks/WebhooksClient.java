@@ -19,7 +19,6 @@ import com.basis.theory.api.errors.UnprocessableEntityError;
 import com.basis.theory.api.resources.webhooks.events.EventsClient;
 import com.basis.theory.api.resources.webhooks.requests.CreateWebhookRequest;
 import com.basis.theory.api.resources.webhooks.requests.UpdateWebhookRequest;
-import com.basis.theory.api.resources.webhooks.signingkey.SigningKeyClient;
 import com.basis.theory.api.types.ProblemDetails;
 import com.basis.theory.api.types.ValidationProblemDetails;
 import com.basis.theory.api.types.Webhook;
@@ -40,12 +39,9 @@ public class WebhooksClient {
 
     protected final Supplier<EventsClient> eventsClient;
 
-    protected final Supplier<SigningKeyClient> signingKeyClient;
-
     public WebhooksClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
         this.eventsClient = Suppliers.memoize(() -> new EventsClient(clientOptions));
-        this.signingKeyClient = Suppliers.memoize(() -> new SigningKeyClient(clientOptions));
     }
 
     /**
@@ -392,9 +388,5 @@ public class WebhooksClient {
 
     public EventsClient events() {
         return this.eventsClient.get();
-    }
-
-    public SigningKeyClient signingKey() {
-        return this.signingKeyClient.get();
     }
 }

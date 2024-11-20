@@ -15,7 +15,6 @@ import com.basis.theory.api.errors.BadRequestError;
 import com.basis.theory.api.errors.ForbiddenError;
 import com.basis.theory.api.errors.NotFoundError;
 import com.basis.theory.api.errors.UnauthorizedError;
-import com.basis.theory.api.errors.UnprocessableEntityError;
 import com.basis.theory.api.resources.applications.requests.ApplicationsListRequest;
 import com.basis.theory.api.resources.applications.requests.CreateApplicationRequest;
 import com.basis.theory.api.resources.applications.requests.UpdateApplicationRequest;
@@ -360,59 +359,6 @@ public class ApplicationsClient {
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class));
                     case 404:
                         throw new NotFoundError(ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new BasisTheoryApiApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new BasisTheoryException("Network error executing HTTP request", e);
-        }
-    }
-
-    public Application regenerateKey(String id) {
-        return regenerateKey(id, null);
-    }
-
-    public Application regenerateKey(String id, IdempotentRequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("applications")
-                .addPathSegment(id)
-                .addPathSegments("regenerate")
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("POST", RequestBody.create("", null))
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Application.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                switch (response.code()) {
-                    case 401:
-                        throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class));
-                    case 403:
-                        throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class));
-                    case 404:
-                        throw new NotFoundError(ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-                    case 422:
-                        throw new UnprocessableEntityError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class));
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
