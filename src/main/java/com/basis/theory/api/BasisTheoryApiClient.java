@@ -17,6 +17,7 @@ import com.basis.theory.api.resources.roles.RolesClient;
 import com.basis.theory.api.resources.sessions.SessionsClient;
 import com.basis.theory.api.resources.tenants.TenantsClient;
 import com.basis.theory.api.resources.threeds.ThreedsClient;
+import com.basis.theory.api.resources.tokenintents.TokenIntentsClient;
 import com.basis.theory.api.resources.tokens.TokensClient;
 import com.basis.theory.api.resources.webhooks.WebhooksClient;
 import java.util.function.Supplier;
@@ -46,6 +47,8 @@ public class BasisTheoryApiClient {
 
     protected final Supplier<SessionsClient> sessionsClient;
 
+    protected final Supplier<TokenIntentsClient> tokenIntentsClient;
+
     protected final Supplier<WebhooksClient> webhooksClient;
 
     protected final Supplier<TenantsClient> tenantsClient;
@@ -65,6 +68,7 @@ public class BasisTheoryApiClient {
         this.reactorsClient = Suppliers.memoize(() -> new ReactorsClient(clientOptions));
         this.rolesClient = Suppliers.memoize(() -> new RolesClient(clientOptions));
         this.sessionsClient = Suppliers.memoize(() -> new SessionsClient(clientOptions));
+        this.tokenIntentsClient = Suppliers.memoize(() -> new TokenIntentsClient(clientOptions));
         this.webhooksClient = Suppliers.memoize(() -> new WebhooksClient(clientOptions));
         this.tenantsClient = Suppliers.memoize(() -> new TenantsClient(clientOptions));
         this.threedsClient = Suppliers.memoize(() -> new ThreedsClient(clientOptions));
@@ -112,6 +116,10 @@ public class BasisTheoryApiClient {
 
     public SessionsClient sessions() {
         return this.sessionsClient.get();
+    }
+
+    public TokenIntentsClient tokenIntents() {
+        return this.tokenIntentsClient.get();
     }
 
     public WebhooksClient webhooks() {
