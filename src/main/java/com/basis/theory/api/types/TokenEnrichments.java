@@ -22,13 +22,13 @@ import java.util.Optional;
 public final class TokenEnrichments {
     private final Optional<BinDetails> binDetails;
 
-    private final Optional<CardDetails> cardDetails;
+    private final Optional<TokenEnrichmentsCardDetails> cardDetails;
 
     private final Map<String, Object> additionalProperties;
 
     private TokenEnrichments(
             Optional<BinDetails> binDetails,
-            Optional<CardDetails> cardDetails,
+            Optional<TokenEnrichmentsCardDetails> cardDetails,
             Map<String, Object> additionalProperties) {
         this.binDetails = binDetails;
         this.cardDetails = cardDetails;
@@ -41,7 +41,7 @@ public final class TokenEnrichments {
     }
 
     @JsonProperty("card_details")
-    public Optional<CardDetails> getCardDetails() {
+    public Optional<TokenEnrichmentsCardDetails> getCardDetails() {
         return cardDetails;
     }
 
@@ -78,7 +78,7 @@ public final class TokenEnrichments {
     public static final class Builder {
         private Optional<BinDetails> binDetails = Optional.empty();
 
-        private Optional<CardDetails> cardDetails = Optional.empty();
+        private Optional<TokenEnrichmentsCardDetails> cardDetails = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -103,12 +103,12 @@ public final class TokenEnrichments {
         }
 
         @JsonSetter(value = "card_details", nulls = Nulls.SKIP)
-        public Builder cardDetails(Optional<CardDetails> cardDetails) {
+        public Builder cardDetails(Optional<TokenEnrichmentsCardDetails> cardDetails) {
             this.cardDetails = cardDetails;
             return this;
         }
 
-        public Builder cardDetails(CardDetails cardDetails) {
+        public Builder cardDetails(TokenEnrichmentsCardDetails cardDetails) {
             this.cardDetails = Optional.ofNullable(cardDetails);
             return this;
         }

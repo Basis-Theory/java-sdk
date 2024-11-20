@@ -24,11 +24,34 @@ public final class CardDetails {
 
     private final Optional<String> last4;
 
+    private final Optional<Integer> expirationMonth;
+
+    private final Optional<Integer> expirationYear;
+
+    private final Optional<String> brand;
+
+    private final Optional<String> funding;
+
+    private final Optional<String> authentication;
+
     private final Map<String, Object> additionalProperties;
 
-    private CardDetails(Optional<String> bin, Optional<String> last4, Map<String, Object> additionalProperties) {
+    private CardDetails(
+            Optional<String> bin,
+            Optional<String> last4,
+            Optional<Integer> expirationMonth,
+            Optional<Integer> expirationYear,
+            Optional<String> brand,
+            Optional<String> funding,
+            Optional<String> authentication,
+            Map<String, Object> additionalProperties) {
         this.bin = bin;
         this.last4 = last4;
+        this.expirationMonth = expirationMonth;
+        this.expirationYear = expirationYear;
+        this.brand = brand;
+        this.funding = funding;
+        this.authentication = authentication;
         this.additionalProperties = additionalProperties;
     }
 
@@ -40,6 +63,31 @@ public final class CardDetails {
     @JsonProperty("last4")
     public Optional<String> getLast4() {
         return last4;
+    }
+
+    @JsonProperty("expiration_month")
+    public Optional<Integer> getExpirationMonth() {
+        return expirationMonth;
+    }
+
+    @JsonProperty("expiration_year")
+    public Optional<Integer> getExpirationYear() {
+        return expirationYear;
+    }
+
+    @JsonProperty("brand")
+    public Optional<String> getBrand() {
+        return brand;
+    }
+
+    @JsonProperty("funding")
+    public Optional<String> getFunding() {
+        return funding;
+    }
+
+    @JsonProperty("authentication")
+    public Optional<String> getAuthentication() {
+        return authentication;
     }
 
     @java.lang.Override
@@ -54,12 +102,25 @@ public final class CardDetails {
     }
 
     private boolean equalTo(CardDetails other) {
-        return bin.equals(other.bin) && last4.equals(other.last4);
+        return bin.equals(other.bin)
+                && last4.equals(other.last4)
+                && expirationMonth.equals(other.expirationMonth)
+                && expirationYear.equals(other.expirationYear)
+                && brand.equals(other.brand)
+                && funding.equals(other.funding)
+                && authentication.equals(other.authentication);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.bin, this.last4);
+        return Objects.hash(
+                this.bin,
+                this.last4,
+                this.expirationMonth,
+                this.expirationYear,
+                this.brand,
+                this.funding,
+                this.authentication);
     }
 
     @java.lang.Override
@@ -77,6 +138,16 @@ public final class CardDetails {
 
         private Optional<String> last4 = Optional.empty();
 
+        private Optional<Integer> expirationMonth = Optional.empty();
+
+        private Optional<Integer> expirationYear = Optional.empty();
+
+        private Optional<String> brand = Optional.empty();
+
+        private Optional<String> funding = Optional.empty();
+
+        private Optional<String> authentication = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -85,6 +156,11 @@ public final class CardDetails {
         public Builder from(CardDetails other) {
             bin(other.getBin());
             last4(other.getLast4());
+            expirationMonth(other.getExpirationMonth());
+            expirationYear(other.getExpirationYear());
+            brand(other.getBrand());
+            funding(other.getFunding());
+            authentication(other.getAuthentication());
             return this;
         }
 
@@ -110,8 +186,64 @@ public final class CardDetails {
             return this;
         }
 
+        @JsonSetter(value = "expiration_month", nulls = Nulls.SKIP)
+        public Builder expirationMonth(Optional<Integer> expirationMonth) {
+            this.expirationMonth = expirationMonth;
+            return this;
+        }
+
+        public Builder expirationMonth(Integer expirationMonth) {
+            this.expirationMonth = Optional.ofNullable(expirationMonth);
+            return this;
+        }
+
+        @JsonSetter(value = "expiration_year", nulls = Nulls.SKIP)
+        public Builder expirationYear(Optional<Integer> expirationYear) {
+            this.expirationYear = expirationYear;
+            return this;
+        }
+
+        public Builder expirationYear(Integer expirationYear) {
+            this.expirationYear = Optional.ofNullable(expirationYear);
+            return this;
+        }
+
+        @JsonSetter(value = "brand", nulls = Nulls.SKIP)
+        public Builder brand(Optional<String> brand) {
+            this.brand = brand;
+            return this;
+        }
+
+        public Builder brand(String brand) {
+            this.brand = Optional.ofNullable(brand);
+            return this;
+        }
+
+        @JsonSetter(value = "funding", nulls = Nulls.SKIP)
+        public Builder funding(Optional<String> funding) {
+            this.funding = funding;
+            return this;
+        }
+
+        public Builder funding(String funding) {
+            this.funding = Optional.ofNullable(funding);
+            return this;
+        }
+
+        @JsonSetter(value = "authentication", nulls = Nulls.SKIP)
+        public Builder authentication(Optional<String> authentication) {
+            this.authentication = authentication;
+            return this;
+        }
+
+        public Builder authentication(String authentication) {
+            this.authentication = Optional.ofNullable(authentication);
+            return this;
+        }
+
         public CardDetails build() {
-            return new CardDetails(bin, last4, additionalProperties);
+            return new CardDetails(
+                    bin, last4, expirationMonth, expirationYear, brand, funding, authentication, additionalProperties);
         }
     }
 }
