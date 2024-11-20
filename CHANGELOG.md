@@ -1,3 +1,11 @@
+### [0.1.2](https://github.com/Basis-Theory/java-sdk/compare/0.1.1...0.1.2) (2024-11-20)
+
+
+### Bug Fixes
+
+* Add token-intents ([#25](https://github.com/Basis-Theory/java-sdk/issues/25)) ([248128c](https://github.com/Basis-Theory/java-sdk/commit/248128cbe0fec88dffd86b736f15af589b214718))
+
+
 ### [0.1.1](https://github.com/Basis-Theory/java-sdk/compare/0.1.0...0.1.1) (2024-11-20)
 
 
