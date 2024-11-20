@@ -1,3 +1,11 @@
+### [0.1.1](https://github.com/Basis-Theory/java-sdk/compare/0.1.0...0.1.1) (2024-11-20)
+
+
+### Bug Fixes
+
+* Update to latest specs ([#24](https://github.com/Basis-Theory/java-sdk/issues/24)) ([a85aea3](https://github.com/Basis-Theory/java-sdk/commit/a85aea345c3b181365581977e1963b8c226ee28f))
+
+
 ## [0.1.0](https://github.com/Basis-Theory/java-sdk/compare/0.0.5...0.1.0) (2024-11-15)
 
 
