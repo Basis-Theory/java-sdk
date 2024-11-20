@@ -48,11 +48,11 @@ public class TokensClient {
         this.clientOptions = clientOptions;
     }
 
-    public void detokenize(Object request) {
-        detokenize(request, null);
+    public Object detokenize(Object request) {
+        return detokenize(request, null);
     }
 
-    public void detokenize(Object request, RequestOptions requestOptions) {
+    public Object detokenize(Object request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("detokenize")
@@ -77,7 +77,7 @@ public class TokensClient {
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
-                return;
+                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Object.class);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {

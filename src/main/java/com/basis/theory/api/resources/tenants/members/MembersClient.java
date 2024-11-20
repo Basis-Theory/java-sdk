@@ -14,7 +14,7 @@ import com.basis.theory.api.errors.ForbiddenError;
 import com.basis.theory.api.errors.NotFoundError;
 import com.basis.theory.api.errors.UnauthorizedError;
 import com.basis.theory.api.errors.UnprocessableEntityError;
-import com.basis.theory.api.resources.tenants.members.requests.MembersGetRequest;
+import com.basis.theory.api.resources.tenants.members.requests.MembersListRequest;
 import com.basis.theory.api.resources.tenants.members.requests.UpdateTenantMemberRequest;
 import com.basis.theory.api.types.ProblemDetails;
 import com.basis.theory.api.types.TenantMemberResponse;
@@ -36,15 +36,15 @@ public class MembersClient {
         this.clientOptions = clientOptions;
     }
 
-    public TenantMemberResponsePaginatedList get() {
-        return get(MembersGetRequest.builder().build());
+    public TenantMemberResponsePaginatedList list() {
+        return list(MembersListRequest.builder().build());
     }
 
-    public TenantMemberResponsePaginatedList get(MembersGetRequest request) {
-        return get(request, null);
+    public TenantMemberResponsePaginatedList list(MembersListRequest request) {
+        return list(request, null);
     }
 
-    public TenantMemberResponsePaginatedList get(MembersGetRequest request, RequestOptions requestOptions) {
+    public TenantMemberResponsePaginatedList list(MembersListRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("tenants/self/members");

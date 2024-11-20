@@ -33,6 +33,10 @@ public final class AuthenticateThreeDsSessionRequest {
 
     private final Optional<String> challengePreference;
 
+    private final Optional<Boolean> requestDecoupledChallenge;
+
+    private final Optional<Integer> decoupledChallengeMaxTime;
+
     private final Optional<ThreeDsPurchaseInfo> purchaseInfo;
 
     private final Optional<ThreeDsMerchantInfo> merchantInfo;
@@ -51,6 +55,8 @@ public final class AuthenticateThreeDsSessionRequest {
             String authenticationCategory,
             String authenticationType,
             Optional<String> challengePreference,
+            Optional<Boolean> requestDecoupledChallenge,
+            Optional<Integer> decoupledChallengeMaxTime,
             Optional<ThreeDsPurchaseInfo> purchaseInfo,
             Optional<ThreeDsMerchantInfo> merchantInfo,
             ThreeDsRequestorInfo requestorInfo,
@@ -61,6 +67,8 @@ public final class AuthenticateThreeDsSessionRequest {
         this.authenticationCategory = authenticationCategory;
         this.authenticationType = authenticationType;
         this.challengePreference = challengePreference;
+        this.requestDecoupledChallenge = requestDecoupledChallenge;
+        this.decoupledChallengeMaxTime = decoupledChallengeMaxTime;
         this.purchaseInfo = purchaseInfo;
         this.merchantInfo = merchantInfo;
         this.requestorInfo = requestorInfo;
@@ -83,6 +91,16 @@ public final class AuthenticateThreeDsSessionRequest {
     @JsonProperty("challenge_preference")
     public Optional<String> getChallengePreference() {
         return challengePreference;
+    }
+
+    @JsonProperty("request_decoupled_challenge")
+    public Optional<Boolean> getRequestDecoupledChallenge() {
+        return requestDecoupledChallenge;
+    }
+
+    @JsonProperty("decoupled_challenge_max_time")
+    public Optional<Integer> getDecoupledChallengeMaxTime() {
+        return decoupledChallengeMaxTime;
     }
 
     @JsonProperty("purchase_info")
@@ -130,6 +148,8 @@ public final class AuthenticateThreeDsSessionRequest {
         return authenticationCategory.equals(other.authenticationCategory)
                 && authenticationType.equals(other.authenticationType)
                 && challengePreference.equals(other.challengePreference)
+                && requestDecoupledChallenge.equals(other.requestDecoupledChallenge)
+                && decoupledChallengeMaxTime.equals(other.decoupledChallengeMaxTime)
                 && purchaseInfo.equals(other.purchaseInfo)
                 && merchantInfo.equals(other.merchantInfo)
                 && requestorInfo.equals(other.requestorInfo)
@@ -144,6 +164,8 @@ public final class AuthenticateThreeDsSessionRequest {
                 this.authenticationCategory,
                 this.authenticationType,
                 this.challengePreference,
+                this.requestDecoupledChallenge,
+                this.decoupledChallengeMaxTime,
                 this.purchaseInfo,
                 this.merchantInfo,
                 this.requestorInfo,
@@ -181,6 +203,14 @@ public final class AuthenticateThreeDsSessionRequest {
         _FinalStage challengePreference(Optional<String> challengePreference);
 
         _FinalStage challengePreference(String challengePreference);
+
+        _FinalStage requestDecoupledChallenge(Optional<Boolean> requestDecoupledChallenge);
+
+        _FinalStage requestDecoupledChallenge(Boolean requestDecoupledChallenge);
+
+        _FinalStage decoupledChallengeMaxTime(Optional<Integer> decoupledChallengeMaxTime);
+
+        _FinalStage decoupledChallengeMaxTime(Integer decoupledChallengeMaxTime);
 
         _FinalStage purchaseInfo(Optional<ThreeDsPurchaseInfo> purchaseInfo);
 
@@ -222,6 +252,10 @@ public final class AuthenticateThreeDsSessionRequest {
 
         private Optional<ThreeDsPurchaseInfo> purchaseInfo = Optional.empty();
 
+        private Optional<Integer> decoupledChallengeMaxTime = Optional.empty();
+
+        private Optional<Boolean> requestDecoupledChallenge = Optional.empty();
+
         private Optional<String> challengePreference = Optional.empty();
 
         @JsonAnySetter
@@ -234,6 +268,8 @@ public final class AuthenticateThreeDsSessionRequest {
             authenticationCategory(other.getAuthenticationCategory());
             authenticationType(other.getAuthenticationType());
             challengePreference(other.getChallengePreference());
+            requestDecoupledChallenge(other.getRequestDecoupledChallenge());
+            decoupledChallengeMaxTime(other.getDecoupledChallengeMaxTime());
             purchaseInfo(other.getPurchaseInfo());
             merchantInfo(other.getMerchantInfo());
             requestorInfo(other.getRequestorInfo());
@@ -331,6 +367,32 @@ public final class AuthenticateThreeDsSessionRequest {
         }
 
         @java.lang.Override
+        public _FinalStage decoupledChallengeMaxTime(Integer decoupledChallengeMaxTime) {
+            this.decoupledChallengeMaxTime = Optional.ofNullable(decoupledChallengeMaxTime);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "decoupled_challenge_max_time", nulls = Nulls.SKIP)
+        public _FinalStage decoupledChallengeMaxTime(Optional<Integer> decoupledChallengeMaxTime) {
+            this.decoupledChallengeMaxTime = decoupledChallengeMaxTime;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage requestDecoupledChallenge(Boolean requestDecoupledChallenge) {
+            this.requestDecoupledChallenge = Optional.ofNullable(requestDecoupledChallenge);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "request_decoupled_challenge", nulls = Nulls.SKIP)
+        public _FinalStage requestDecoupledChallenge(Optional<Boolean> requestDecoupledChallenge) {
+            this.requestDecoupledChallenge = requestDecoupledChallenge;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage challengePreference(String challengePreference) {
             this.challengePreference = Optional.ofNullable(challengePreference);
             return this;
@@ -349,6 +411,8 @@ public final class AuthenticateThreeDsSessionRequest {
                     authenticationCategory,
                     authenticationType,
                     challengePreference,
+                    requestDecoupledChallenge,
+                    decoupledChallengeMaxTime,
                     purchaseInfo,
                     merchantInfo,
                     requestorInfo,

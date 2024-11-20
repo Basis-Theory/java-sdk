@@ -13,6 +13,7 @@ import com.basis.theory.api.errors.BadRequestError;
 import com.basis.theory.api.errors.ForbiddenError;
 import com.basis.theory.api.errors.UnauthorizedError;
 import com.basis.theory.api.resources.enrichments.requests.BankVerificationRequest;
+import com.basis.theory.api.types.BankVerificationResponse;
 import com.basis.theory.api.types.ProblemDetails;
 import com.basis.theory.api.types.ValidationProblemDetails;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -32,11 +33,11 @@ public class EnrichmentsClient {
         this.clientOptions = clientOptions;
     }
 
-    public void bankaccountverify(BankVerificationRequest request) {
-        bankaccountverify(request, null);
+    public BankVerificationResponse bankAccountVerify(BankVerificationRequest request) {
+        return bankAccountVerify(request, null);
     }
 
-    public void bankaccountverify(BankVerificationRequest request, RequestOptions requestOptions) {
+    public BankVerificationResponse bankAccountVerify(BankVerificationRequest request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("enrichments/bank-account-verify")
@@ -61,7 +62,7 @@ public class EnrichmentsClient {
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
-                return;
+                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), BankVerificationResponse.class);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
