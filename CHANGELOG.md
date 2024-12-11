@@ -1,3 +1,16 @@
+### [0.1.3](https://github.com/Basis-Theory/java-sdk/compare/0.1.2...0.1.3) (2024-12-11)
+
+
+### Bug Fixes
+
+* package name prefix ([#27](https://github.com/Basis-Theory/java-sdk/issues/27)) ([39f8c01](https://github.com/Basis-Theory/java-sdk/commit/39f8c016b46e092cb94dc62a1dd5a6b0490182ed))
+
+
+### Continuous Integration
+
+* update release notifications ([#26](https://github.com/Basis-Theory/java-sdk/issues/26)) ([fac1f57](https://github.com/Basis-Theory/java-sdk/commit/fac1f574ad1fccad029606dbf4d481ff3a5a7b96))
+
+
 ### [0.1.2](https://github.com/Basis-Theory/java-sdk/compare/0.1.1...0.1.2) (2024-11-20)
 
 
