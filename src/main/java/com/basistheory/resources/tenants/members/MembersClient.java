@@ -120,7 +120,7 @@ public class MembersClient {
                 .url(httpUrl)
                 .method("PUT", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
+                .addHeader("Content-Type", "application/json-patch+json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {

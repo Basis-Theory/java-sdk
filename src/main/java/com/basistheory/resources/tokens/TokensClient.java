@@ -301,15 +301,15 @@ public class TokensClient {
         }
     }
 
-    public TokenPaginatedList search() {
+    public SyncPagingIterable<Token> search() {
         return search(SearchTokensRequest.builder().build());
     }
 
-    public TokenPaginatedList search(SearchTokensRequest request) {
+    public SyncPagingIterable<Token> search(SearchTokensRequest request) {
         return search(request, null);
     }
 
-    public TokenPaginatedList search(SearchTokensRequest request, IdempotentRequestOptions requestOptions) {
+    public SyncPagingIterable<Token> search(SearchTokensRequest request, IdempotentRequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("tokens/search")
@@ -334,7 +334,15 @@ public class TokensClient {
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), TokenPaginatedList.class);
+                TokenPaginatedList parsedResponse =
+                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), TokenPaginatedList.class);
+                int newPageNumber = request.getPage().map(page -> page + 1).orElse(1);
+                SearchTokensRequest nextRequest = SearchTokensRequest.builder()
+                        .from(request)
+                        .page(newPageNumber)
+                        .build();
+                List<Token> result = parsedResponse.getData().orElse(Collections.emptyList());
+                return new SyncPagingIterable<>(true, result, () -> search(nextRequest, requestOptions));
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
@@ -486,7 +494,7 @@ public class TokensClient {
                 .url(httpUrl)
                 .method("PATCH", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
+                .addHeader("Content-Type", "application/merge-patch+json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -591,15 +599,15 @@ public class TokensClient {
         }
     }
 
-    public TokenCursorPaginatedList searchV2() {
+    public SyncPagingIterable<Token> searchV2() {
         return searchV2(SearchTokensRequestV2.builder().build());
     }
 
-    public TokenCursorPaginatedList searchV2(SearchTokensRequestV2 request) {
+    public SyncPagingIterable<Token> searchV2(SearchTokensRequestV2 request) {
         return searchV2(request, null);
     }
 
-    public TokenCursorPaginatedList searchV2(SearchTokensRequestV2 request, IdempotentRequestOptions requestOptions) {
+    public SyncPagingIterable<Token> searchV2(SearchTokensRequestV2 request, IdempotentRequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("v2/tokens/search")
@@ -624,7 +632,16 @@ public class TokensClient {
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), TokenCursorPaginatedList.class);
+                TokenCursorPaginatedList parsedResponse =
+                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), TokenCursorPaginatedList.class);
+                Optional<String> startingAfter = parsedResponse.getPagination().flatMap(CursorPagination::getNext);
+                SearchTokensRequestV2 nextRequest = SearchTokensRequestV2.builder()
+                        .from(request)
+                        .start(startingAfter)
+                        .build();
+                List<Token> result = parsedResponse.getData().orElse(Collections.emptyList());
+                return new SyncPagingIterable<>(
+                        startingAfter.isPresent(), result, () -> searchV2(nextRequest, requestOptions));
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
