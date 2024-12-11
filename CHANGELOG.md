@@ -1,3 +1,11 @@
+### [0.1.4](https://github.com/Basis-Theory/java-sdk/compare/0.1.3...0.1.4) (2024-12-11)
+
+
+### Bug Fixes
+
+* Support PATCH operations ([#28](https://github.com/Basis-Theory/java-sdk/issues/28)) ([4925845](https://github.com/Basis-Theory/java-sdk/commit/4925845191d9dd8fc4c215f3b5265ee4632d0c97))
+
+
 ### [0.1.3](https://github.com/Basis-Theory/java-sdk/compare/0.1.2...0.1.3) (2024-12-11)
 
 
