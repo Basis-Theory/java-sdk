@@ -547,6 +547,18 @@ public class TokensClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("v2/tokens");
+        if (request.getType().isPresent()) {
+            httpUrl.addQueryParameter("type", request.getType().get());
+        }
+        if (request.getContainer().isPresent()) {
+            httpUrl.addQueryParameter("container", request.getContainer().get());
+        }
+        if (request.getFingerprint().isPresent()) {
+            httpUrl.addQueryParameter("fingerprint", request.getFingerprint().get());
+        }
+        if (request.getMetadata().isPresent()) {
+            httpUrl.addQueryParameter("metadata", request.getMetadata().get().toString());
+        }
         if (request.getStart().isPresent()) {
             httpUrl.addQueryParameter("start", request.getStart().get());
         }

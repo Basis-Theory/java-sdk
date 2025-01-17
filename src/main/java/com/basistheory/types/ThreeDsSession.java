@@ -49,6 +49,8 @@ public final class ThreeDsSession {
 
     private final Optional<ThreeDsDeviceInfo> deviceInfo;
 
+    private final Optional<String> webChallengeMode;
+
     private final Optional<ThreeDsVersion> version;
 
     private final Optional<ThreeDsMethod> method;
@@ -72,6 +74,7 @@ public final class ThreeDsSession {
             Optional<String> modifiedBy,
             Optional<String> device,
             Optional<ThreeDsDeviceInfo> deviceInfo,
+            Optional<String> webChallengeMode,
             Optional<ThreeDsVersion> version,
             Optional<ThreeDsMethod> method,
             Optional<ThreeDsAuthentication> authentication,
@@ -90,6 +93,7 @@ public final class ThreeDsSession {
         this.modifiedBy = modifiedBy;
         this.device = device;
         this.deviceInfo = deviceInfo;
+        this.webChallengeMode = webChallengeMode;
         this.version = version;
         this.method = method;
         this.authentication = authentication;
@@ -166,6 +170,11 @@ public final class ThreeDsSession {
         return deviceInfo;
     }
 
+    @JsonProperty("web_challenge_mode")
+    public Optional<String> getWebChallengeMode() {
+        return webChallengeMode;
+    }
+
     @JsonProperty("version")
     public Optional<ThreeDsVersion> getVersion() {
         return version;
@@ -207,6 +216,7 @@ public final class ThreeDsSession {
                 && modifiedBy.equals(other.modifiedBy)
                 && device.equals(other.device)
                 && deviceInfo.equals(other.deviceInfo)
+                && webChallengeMode.equals(other.webChallengeMode)
                 && version.equals(other.version)
                 && method.equals(other.method)
                 && authentication.equals(other.authentication);
@@ -229,6 +239,7 @@ public final class ThreeDsSession {
                 this.modifiedBy,
                 this.device,
                 this.deviceInfo,
+                this.webChallengeMode,
                 this.version,
                 this.method,
                 this.authentication);
@@ -273,6 +284,8 @@ public final class ThreeDsSession {
 
         private Optional<ThreeDsDeviceInfo> deviceInfo = Optional.empty();
 
+        private Optional<String> webChallengeMode = Optional.empty();
+
         private Optional<ThreeDsVersion> version = Optional.empty();
 
         private Optional<ThreeDsMethod> method = Optional.empty();
@@ -299,6 +312,7 @@ public final class ThreeDsSession {
             modifiedBy(other.getModifiedBy());
             device(other.getDevice());
             deviceInfo(other.getDeviceInfo());
+            webChallengeMode(other.getWebChallengeMode());
             version(other.getVersion());
             method(other.getMethod());
             authentication(other.getAuthentication());
@@ -459,6 +473,17 @@ public final class ThreeDsSession {
             return this;
         }
 
+        @JsonSetter(value = "web_challenge_mode", nulls = Nulls.SKIP)
+        public Builder webChallengeMode(Optional<String> webChallengeMode) {
+            this.webChallengeMode = webChallengeMode;
+            return this;
+        }
+
+        public Builder webChallengeMode(String webChallengeMode) {
+            this.webChallengeMode = Optional.ofNullable(webChallengeMode);
+            return this;
+        }
+
         @JsonSetter(value = "version", nulls = Nulls.SKIP)
         public Builder version(Optional<ThreeDsVersion> version) {
             this.version = version;
@@ -508,6 +533,7 @@ public final class ThreeDsSession {
                     modifiedBy,
                     device,
                     deviceInfo,
+                    webChallengeMode,
                     version,
                     method,
                     authentication,

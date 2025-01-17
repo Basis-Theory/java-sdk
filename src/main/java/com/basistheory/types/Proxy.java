@@ -47,6 +47,8 @@ public final class Proxy {
 
     private final Optional<String> proxyHost;
 
+    private final Optional<Integer> timeout;
+
     private final Optional<String> createdBy;
 
     private final Optional<OffsetDateTime> createdAt;
@@ -71,6 +73,7 @@ public final class Proxy {
             Optional<String> applicationId,
             Optional<Map<String, Optional<String>>> configuration,
             Optional<String> proxyHost,
+            Optional<Integer> timeout,
             Optional<String> createdBy,
             Optional<OffsetDateTime> createdAt,
             Optional<String> modifiedBy,
@@ -89,6 +92,7 @@ public final class Proxy {
         this.applicationId = applicationId;
         this.configuration = configuration;
         this.proxyHost = proxyHost;
+        this.timeout = timeout;
         this.createdBy = createdBy;
         this.createdAt = createdAt;
         this.modifiedBy = modifiedBy;
@@ -161,6 +165,11 @@ public final class Proxy {
         return proxyHost;
     }
 
+    @JsonProperty("timeout")
+    public Optional<Integer> getTimeout() {
+        return timeout;
+    }
+
     @JsonProperty("created_by")
     public Optional<String> getCreatedBy() {
         return createdBy;
@@ -206,6 +215,7 @@ public final class Proxy {
                 && applicationId.equals(other.applicationId)
                 && configuration.equals(other.configuration)
                 && proxyHost.equals(other.proxyHost)
+                && timeout.equals(other.timeout)
                 && createdBy.equals(other.createdBy)
                 && createdAt.equals(other.createdAt)
                 && modifiedBy.equals(other.modifiedBy)
@@ -228,6 +238,7 @@ public final class Proxy {
                 this.applicationId,
                 this.configuration,
                 this.proxyHost,
+                this.timeout,
                 this.createdBy,
                 this.createdAt,
                 this.modifiedBy,
@@ -271,6 +282,8 @@ public final class Proxy {
 
         private Optional<String> proxyHost = Optional.empty();
 
+        private Optional<Integer> timeout = Optional.empty();
+
         private Optional<String> createdBy = Optional.empty();
 
         private Optional<OffsetDateTime> createdAt = Optional.empty();
@@ -298,6 +311,7 @@ public final class Proxy {
             applicationId(other.getApplicationId());
             configuration(other.getConfiguration());
             proxyHost(other.getProxyHost());
+            timeout(other.getTimeout());
             createdBy(other.getCreatedBy());
             createdAt(other.getCreatedAt());
             modifiedBy(other.getModifiedBy());
@@ -448,6 +462,17 @@ public final class Proxy {
             return this;
         }
 
+        @JsonSetter(value = "timeout", nulls = Nulls.SKIP)
+        public Builder timeout(Optional<Integer> timeout) {
+            this.timeout = timeout;
+            return this;
+        }
+
+        public Builder timeout(Integer timeout) {
+            this.timeout = Optional.ofNullable(timeout);
+            return this;
+        }
+
         @JsonSetter(value = "created_by", nulls = Nulls.SKIP)
         public Builder createdBy(Optional<String> createdBy) {
             this.createdBy = createdBy;
@@ -507,6 +532,7 @@ public final class Proxy {
                     applicationId,
                     configuration,
                     proxyHost,
+                    timeout,
                     createdBy,
                     createdAt,
                     modifiedBy,

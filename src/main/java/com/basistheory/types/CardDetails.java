@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -34,6 +35,8 @@ public final class CardDetails {
 
     private final Optional<String> authentication;
 
+    private final Optional<List<AdditionalCardDetails>> additional;
+
     private final Map<String, Object> additionalProperties;
 
     private CardDetails(
@@ -44,6 +47,7 @@ public final class CardDetails {
             Optional<String> brand,
             Optional<String> funding,
             Optional<String> authentication,
+            Optional<List<AdditionalCardDetails>> additional,
             Map<String, Object> additionalProperties) {
         this.bin = bin;
         this.last4 = last4;
@@ -52,6 +56,7 @@ public final class CardDetails {
         this.brand = brand;
         this.funding = funding;
         this.authentication = authentication;
+        this.additional = additional;
         this.additionalProperties = additionalProperties;
     }
 
@@ -90,6 +95,11 @@ public final class CardDetails {
         return authentication;
     }
 
+    @JsonProperty("additional")
+    public Optional<List<AdditionalCardDetails>> getAdditional() {
+        return additional;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -108,7 +118,8 @@ public final class CardDetails {
                 && expirationYear.equals(other.expirationYear)
                 && brand.equals(other.brand)
                 && funding.equals(other.funding)
-                && authentication.equals(other.authentication);
+                && authentication.equals(other.authentication)
+                && additional.equals(other.additional);
     }
 
     @java.lang.Override
@@ -120,7 +131,8 @@ public final class CardDetails {
                 this.expirationYear,
                 this.brand,
                 this.funding,
-                this.authentication);
+                this.authentication,
+                this.additional);
     }
 
     @java.lang.Override
@@ -148,6 +160,8 @@ public final class CardDetails {
 
         private Optional<String> authentication = Optional.empty();
 
+        private Optional<List<AdditionalCardDetails>> additional = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -161,6 +175,7 @@ public final class CardDetails {
             brand(other.getBrand());
             funding(other.getFunding());
             authentication(other.getAuthentication());
+            additional(other.getAdditional());
             return this;
         }
 
@@ -241,9 +256,28 @@ public final class CardDetails {
             return this;
         }
 
+        @JsonSetter(value = "additional", nulls = Nulls.SKIP)
+        public Builder additional(Optional<List<AdditionalCardDetails>> additional) {
+            this.additional = additional;
+            return this;
+        }
+
+        public Builder additional(List<AdditionalCardDetails> additional) {
+            this.additional = Optional.ofNullable(additional);
+            return this;
+        }
+
         public CardDetails build() {
             return new CardDetails(
-                    bin, last4, expirationMonth, expirationYear, brand, funding, authentication, additionalProperties);
+                    bin,
+                    last4,
+                    expirationMonth,
+                    expirationYear,
+                    brand,
+                    funding,
+                    authentication,
+                    additional,
+                    additionalProperties);
         }
     }
 }

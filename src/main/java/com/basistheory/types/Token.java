@@ -38,6 +38,8 @@ public final class Token {
 
     private final Optional<OffsetDateTime> createdAt;
 
+    private final Optional<CardDetails> card;
+
     private final Optional<String> modifiedBy;
 
     private final Optional<OffsetDateTime> modifiedAt;
@@ -71,6 +73,7 @@ public final class Token {
             Optional<TokenEnrichments> enrichments,
             Optional<String> createdBy,
             Optional<OffsetDateTime> createdAt,
+            Optional<CardDetails> card,
             Optional<String> modifiedBy,
             Optional<OffsetDateTime> modifiedAt,
             Optional<String> fingerprint,
@@ -91,6 +94,7 @@ public final class Token {
         this.enrichments = enrichments;
         this.createdBy = createdBy;
         this.createdAt = createdAt;
+        this.card = card;
         this.modifiedBy = modifiedBy;
         this.modifiedAt = modifiedAt;
         this.fingerprint = fingerprint;
@@ -143,6 +147,11 @@ public final class Token {
     @JsonProperty("created_at")
     public Optional<OffsetDateTime> getCreatedAt() {
         return createdAt;
+    }
+
+    @JsonProperty("card")
+    public Optional<CardDetails> getCard() {
+        return card;
     }
 
     @JsonProperty("modified_by")
@@ -220,6 +229,7 @@ public final class Token {
                 && enrichments.equals(other.enrichments)
                 && createdBy.equals(other.createdBy)
                 && createdAt.equals(other.createdAt)
+                && card.equals(other.card)
                 && modifiedBy.equals(other.modifiedBy)
                 && modifiedAt.equals(other.modifiedAt)
                 && fingerprint.equals(other.fingerprint)
@@ -244,6 +254,7 @@ public final class Token {
                 this.enrichments,
                 this.createdBy,
                 this.createdAt,
+                this.card,
                 this.modifiedBy,
                 this.modifiedAt,
                 this.fingerprint,
@@ -284,6 +295,8 @@ public final class Token {
 
         private Optional<OffsetDateTime> createdAt = Optional.empty();
 
+        private Optional<CardDetails> card = Optional.empty();
+
         private Optional<String> modifiedBy = Optional.empty();
 
         private Optional<OffsetDateTime> modifiedAt = Optional.empty();
@@ -320,6 +333,7 @@ public final class Token {
             enrichments(other.getEnrichments());
             createdBy(other.getCreatedBy());
             createdAt(other.getCreatedAt());
+            card(other.getCard());
             modifiedBy(other.getModifiedBy());
             modifiedAt(other.getModifiedAt());
             fingerprint(other.getFingerprint());
@@ -419,6 +433,17 @@ public final class Token {
 
         public Builder createdAt(OffsetDateTime createdAt) {
             this.createdAt = Optional.ofNullable(createdAt);
+            return this;
+        }
+
+        @JsonSetter(value = "card", nulls = Nulls.SKIP)
+        public Builder card(Optional<CardDetails> card) {
+            this.card = card;
+            return this;
+        }
+
+        public Builder card(CardDetails card) {
+            this.card = Optional.ofNullable(card);
             return this;
         }
 
@@ -553,6 +578,7 @@ public final class Token {
                     enrichments,
                     createdBy,
                     createdAt,
+                    card,
                     modifiedBy,
                     modifiedAt,
                     fingerprint,

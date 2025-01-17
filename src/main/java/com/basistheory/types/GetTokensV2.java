@@ -20,16 +20,55 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = GetTokensV2.Builder.class)
 public final class GetTokensV2 {
+    private final Optional<String> type;
+
+    private final Optional<String> container;
+
+    private final Optional<String> fingerprint;
+
+    private final Optional<Map<String, Optional<String>>> metadata;
+
     private final Optional<String> start;
 
     private final Optional<Integer> size;
 
     private final Map<String, Object> additionalProperties;
 
-    private GetTokensV2(Optional<String> start, Optional<Integer> size, Map<String, Object> additionalProperties) {
+    private GetTokensV2(
+            Optional<String> type,
+            Optional<String> container,
+            Optional<String> fingerprint,
+            Optional<Map<String, Optional<String>>> metadata,
+            Optional<String> start,
+            Optional<Integer> size,
+            Map<String, Object> additionalProperties) {
+        this.type = type;
+        this.container = container;
+        this.fingerprint = fingerprint;
+        this.metadata = metadata;
         this.start = start;
         this.size = size;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("type")
+    public Optional<String> getType() {
+        return type;
+    }
+
+    @JsonProperty("container")
+    public Optional<String> getContainer() {
+        return container;
+    }
+
+    @JsonProperty("fingerprint")
+    public Optional<String> getFingerprint() {
+        return fingerprint;
+    }
+
+    @JsonProperty("metadata")
+    public Optional<Map<String, Optional<String>>> getMetadata() {
+        return metadata;
     }
 
     @JsonProperty("start")
@@ -54,12 +93,17 @@ public final class GetTokensV2 {
     }
 
     private boolean equalTo(GetTokensV2 other) {
-        return start.equals(other.start) && size.equals(other.size);
+        return type.equals(other.type)
+                && container.equals(other.container)
+                && fingerprint.equals(other.fingerprint)
+                && metadata.equals(other.metadata)
+                && start.equals(other.start)
+                && size.equals(other.size);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.start, this.size);
+        return Objects.hash(this.type, this.container, this.fingerprint, this.metadata, this.start, this.size);
     }
 
     @java.lang.Override
@@ -73,6 +117,14 @@ public final class GetTokensV2 {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<String> type = Optional.empty();
+
+        private Optional<String> container = Optional.empty();
+
+        private Optional<String> fingerprint = Optional.empty();
+
+        private Optional<Map<String, Optional<String>>> metadata = Optional.empty();
+
         private Optional<String> start = Optional.empty();
 
         private Optional<Integer> size = Optional.empty();
@@ -83,8 +135,56 @@ public final class GetTokensV2 {
         private Builder() {}
 
         public Builder from(GetTokensV2 other) {
+            type(other.getType());
+            container(other.getContainer());
+            fingerprint(other.getFingerprint());
+            metadata(other.getMetadata());
             start(other.getStart());
             size(other.getSize());
+            return this;
+        }
+
+        @JsonSetter(value = "type", nulls = Nulls.SKIP)
+        public Builder type(Optional<String> type) {
+            this.type = type;
+            return this;
+        }
+
+        public Builder type(String type) {
+            this.type = Optional.ofNullable(type);
+            return this;
+        }
+
+        @JsonSetter(value = "container", nulls = Nulls.SKIP)
+        public Builder container(Optional<String> container) {
+            this.container = container;
+            return this;
+        }
+
+        public Builder container(String container) {
+            this.container = Optional.ofNullable(container);
+            return this;
+        }
+
+        @JsonSetter(value = "fingerprint", nulls = Nulls.SKIP)
+        public Builder fingerprint(Optional<String> fingerprint) {
+            this.fingerprint = fingerprint;
+            return this;
+        }
+
+        public Builder fingerprint(String fingerprint) {
+            this.fingerprint = Optional.ofNullable(fingerprint);
+            return this;
+        }
+
+        @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
+        public Builder metadata(Optional<Map<String, Optional<String>>> metadata) {
+            this.metadata = metadata;
+            return this;
+        }
+
+        public Builder metadata(Map<String, Optional<String>> metadata) {
+            this.metadata = Optional.ofNullable(metadata);
             return this;
         }
 
@@ -111,7 +211,7 @@ public final class GetTokensV2 {
         }
 
         public GetTokensV2 build() {
-            return new GetTokensV2(start, size, additionalProperties);
+            return new GetTokensV2(type, container, fingerprint, metadata, start, size, additionalProperties);
         }
     }
 }
