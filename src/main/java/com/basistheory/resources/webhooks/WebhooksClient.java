@@ -11,7 +11,6 @@ import com.basistheory.core.ObjectMappers;
 import com.basistheory.core.RequestOptions;
 import com.basistheory.core.Suppliers;
 import com.basistheory.errors.BadRequestError;
-import com.basistheory.errors.ConflictError;
 import com.basistheory.errors.ForbiddenError;
 import com.basistheory.errors.NotFoundError;
 import com.basistheory.errors.UnauthorizedError;
@@ -190,9 +189,6 @@ public class WebhooksClient {
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class));
                     case 404:
                         throw new NotFoundError(ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-                    case 409:
-                        throw new ConflictError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class));
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -250,9 +246,6 @@ public class WebhooksClient {
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class));
                     case 404:
                         throw new NotFoundError(ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-                    case 409:
-                        throw new ConflictError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class));
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error

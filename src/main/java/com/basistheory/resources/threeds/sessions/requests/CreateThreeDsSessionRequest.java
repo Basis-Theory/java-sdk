@@ -31,6 +31,8 @@ public final class CreateThreeDsSessionRequest {
 
     private final Optional<String> device;
 
+    private final Optional<String> webChallengeMode;
+
     private final Optional<ThreeDsDeviceInfo> deviceInfo;
 
     private final Map<String, Object> additionalProperties;
@@ -41,6 +43,7 @@ public final class CreateThreeDsSessionRequest {
             Optional<String> tokenIntentId,
             Optional<String> type,
             Optional<String> device,
+            Optional<String> webChallengeMode,
             Optional<ThreeDsDeviceInfo> deviceInfo,
             Map<String, Object> additionalProperties) {
         this.pan = pan;
@@ -48,6 +51,7 @@ public final class CreateThreeDsSessionRequest {
         this.tokenIntentId = tokenIntentId;
         this.type = type;
         this.device = device;
+        this.webChallengeMode = webChallengeMode;
         this.deviceInfo = deviceInfo;
         this.additionalProperties = additionalProperties;
     }
@@ -77,6 +81,11 @@ public final class CreateThreeDsSessionRequest {
         return device;
     }
 
+    @JsonProperty("web_challenge_mode")
+    public Optional<String> getWebChallengeMode() {
+        return webChallengeMode;
+    }
+
     @JsonProperty("device_info")
     public Optional<ThreeDsDeviceInfo> getDeviceInfo() {
         return deviceInfo;
@@ -99,12 +108,20 @@ public final class CreateThreeDsSessionRequest {
                 && tokenIntentId.equals(other.tokenIntentId)
                 && type.equals(other.type)
                 && device.equals(other.device)
+                && webChallengeMode.equals(other.webChallengeMode)
                 && deviceInfo.equals(other.deviceInfo);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.pan, this.tokenId, this.tokenIntentId, this.type, this.device, this.deviceInfo);
+        return Objects.hash(
+                this.pan,
+                this.tokenId,
+                this.tokenIntentId,
+                this.type,
+                this.device,
+                this.webChallengeMode,
+                this.deviceInfo);
     }
 
     @java.lang.Override
@@ -128,6 +145,8 @@ public final class CreateThreeDsSessionRequest {
 
         private Optional<String> device = Optional.empty();
 
+        private Optional<String> webChallengeMode = Optional.empty();
+
         private Optional<ThreeDsDeviceInfo> deviceInfo = Optional.empty();
 
         @JsonAnySetter
@@ -141,6 +160,7 @@ public final class CreateThreeDsSessionRequest {
             tokenIntentId(other.getTokenIntentId());
             type(other.getType());
             device(other.getDevice());
+            webChallengeMode(other.getWebChallengeMode());
             deviceInfo(other.getDeviceInfo());
             return this;
         }
@@ -200,6 +220,17 @@ public final class CreateThreeDsSessionRequest {
             return this;
         }
 
+        @JsonSetter(value = "web_challenge_mode", nulls = Nulls.SKIP)
+        public Builder webChallengeMode(Optional<String> webChallengeMode) {
+            this.webChallengeMode = webChallengeMode;
+            return this;
+        }
+
+        public Builder webChallengeMode(String webChallengeMode) {
+            this.webChallengeMode = Optional.ofNullable(webChallengeMode);
+            return this;
+        }
+
         @JsonSetter(value = "device_info", nulls = Nulls.SKIP)
         public Builder deviceInfo(Optional<ThreeDsDeviceInfo> deviceInfo) {
             this.deviceInfo = deviceInfo;
@@ -213,7 +244,7 @@ public final class CreateThreeDsSessionRequest {
 
         public CreateThreeDsSessionRequest build() {
             return new CreateThreeDsSessionRequest(
-                    pan, tokenId, tokenIntentId, type, device, deviceInfo, additionalProperties);
+                    pan, tokenId, tokenIntentId, type, device, webChallengeMode, deviceInfo, additionalProperties);
         }
     }
 }

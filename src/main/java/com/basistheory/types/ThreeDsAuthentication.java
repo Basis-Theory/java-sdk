@@ -61,9 +61,15 @@ public final class ThreeDsAuthentication {
 
     private final Optional<String> acsChallengeUrl;
 
+    private final Optional<String> challengePreference;
+
+    private final Optional<String> challengePreferenceCode;
+
     private final Optional<String> challengeAttempts;
 
     private final Optional<String> challengeCancelReason;
+
+    private final Optional<String> challengeCancelReasonCode;
 
     private final Optional<String> cardholderInfo;
 
@@ -96,8 +102,11 @@ public final class ThreeDsAuthentication {
             Optional<ThreeDsAcsRenderingType> acsRenderingType,
             Optional<String> acsSignedContent,
             Optional<String> acsChallengeUrl,
+            Optional<String> challengePreference,
+            Optional<String> challengePreferenceCode,
             Optional<String> challengeAttempts,
             Optional<String> challengeCancelReason,
+            Optional<String> challengeCancelReasonCode,
             Optional<String> cardholderInfo,
             Optional<String> whitelistStatus,
             Optional<String> whitelistStatusSource,
@@ -123,8 +132,11 @@ public final class ThreeDsAuthentication {
         this.acsRenderingType = acsRenderingType;
         this.acsSignedContent = acsSignedContent;
         this.acsChallengeUrl = acsChallengeUrl;
+        this.challengePreference = challengePreference;
+        this.challengePreferenceCode = challengePreferenceCode;
         this.challengeAttempts = challengeAttempts;
         this.challengeCancelReason = challengeCancelReason;
+        this.challengeCancelReasonCode = challengeCancelReasonCode;
         this.cardholderInfo = cardholderInfo;
         this.whitelistStatus = whitelistStatus;
         this.whitelistStatusSource = whitelistStatusSource;
@@ -232,6 +244,16 @@ public final class ThreeDsAuthentication {
         return acsChallengeUrl;
     }
 
+    @JsonProperty("challenge_preference")
+    public Optional<String> getChallengePreference() {
+        return challengePreference;
+    }
+
+    @JsonProperty("challenge_preference_code")
+    public Optional<String> getChallengePreferenceCode() {
+        return challengePreferenceCode;
+    }
+
     @JsonProperty("challenge_attempts")
     public Optional<String> getChallengeAttempts() {
         return challengeAttempts;
@@ -240,6 +262,11 @@ public final class ThreeDsAuthentication {
     @JsonProperty("challenge_cancel_reason")
     public Optional<String> getChallengeCancelReason() {
         return challengeCancelReason;
+    }
+
+    @JsonProperty("challenge_cancel_reason_code")
+    public Optional<String> getChallengeCancelReasonCode() {
+        return challengeCancelReasonCode;
     }
 
     @JsonProperty("cardholder_info")
@@ -294,8 +321,11 @@ public final class ThreeDsAuthentication {
                 && acsRenderingType.equals(other.acsRenderingType)
                 && acsSignedContent.equals(other.acsSignedContent)
                 && acsChallengeUrl.equals(other.acsChallengeUrl)
+                && challengePreference.equals(other.challengePreference)
+                && challengePreferenceCode.equals(other.challengePreferenceCode)
                 && challengeAttempts.equals(other.challengeAttempts)
                 && challengeCancelReason.equals(other.challengeCancelReason)
+                && challengeCancelReasonCode.equals(other.challengeCancelReasonCode)
                 && cardholderInfo.equals(other.cardholderInfo)
                 && whitelistStatus.equals(other.whitelistStatus)
                 && whitelistStatusSource.equals(other.whitelistStatusSource)
@@ -325,8 +355,11 @@ public final class ThreeDsAuthentication {
                 this.acsRenderingType,
                 this.acsSignedContent,
                 this.acsChallengeUrl,
+                this.challengePreference,
+                this.challengePreferenceCode,
                 this.challengeAttempts,
                 this.challengeCancelReason,
+                this.challengeCancelReasonCode,
                 this.cardholderInfo,
                 this.whitelistStatus,
                 this.whitelistStatusSource,
@@ -384,9 +417,15 @@ public final class ThreeDsAuthentication {
 
         private Optional<String> acsChallengeUrl = Optional.empty();
 
+        private Optional<String> challengePreference = Optional.empty();
+
+        private Optional<String> challengePreferenceCode = Optional.empty();
+
         private Optional<String> challengeAttempts = Optional.empty();
 
         private Optional<String> challengeCancelReason = Optional.empty();
+
+        private Optional<String> challengeCancelReasonCode = Optional.empty();
 
         private Optional<String> cardholderInfo = Optional.empty();
 
@@ -422,8 +461,11 @@ public final class ThreeDsAuthentication {
             acsRenderingType(other.getAcsRenderingType());
             acsSignedContent(other.getAcsSignedContent());
             acsChallengeUrl(other.getAcsChallengeUrl());
+            challengePreference(other.getChallengePreference());
+            challengePreferenceCode(other.getChallengePreferenceCode());
             challengeAttempts(other.getChallengeAttempts());
             challengeCancelReason(other.getChallengeCancelReason());
+            challengeCancelReasonCode(other.getChallengeCancelReasonCode());
             cardholderInfo(other.getCardholderInfo());
             whitelistStatus(other.getWhitelistStatus());
             whitelistStatusSource(other.getWhitelistStatusSource());
@@ -651,6 +693,28 @@ public final class ThreeDsAuthentication {
             return this;
         }
 
+        @JsonSetter(value = "challenge_preference", nulls = Nulls.SKIP)
+        public Builder challengePreference(Optional<String> challengePreference) {
+            this.challengePreference = challengePreference;
+            return this;
+        }
+
+        public Builder challengePreference(String challengePreference) {
+            this.challengePreference = Optional.ofNullable(challengePreference);
+            return this;
+        }
+
+        @JsonSetter(value = "challenge_preference_code", nulls = Nulls.SKIP)
+        public Builder challengePreferenceCode(Optional<String> challengePreferenceCode) {
+            this.challengePreferenceCode = challengePreferenceCode;
+            return this;
+        }
+
+        public Builder challengePreferenceCode(String challengePreferenceCode) {
+            this.challengePreferenceCode = Optional.ofNullable(challengePreferenceCode);
+            return this;
+        }
+
         @JsonSetter(value = "challenge_attempts", nulls = Nulls.SKIP)
         public Builder challengeAttempts(Optional<String> challengeAttempts) {
             this.challengeAttempts = challengeAttempts;
@@ -670,6 +734,17 @@ public final class ThreeDsAuthentication {
 
         public Builder challengeCancelReason(String challengeCancelReason) {
             this.challengeCancelReason = Optional.ofNullable(challengeCancelReason);
+            return this;
+        }
+
+        @JsonSetter(value = "challenge_cancel_reason_code", nulls = Nulls.SKIP)
+        public Builder challengeCancelReasonCode(Optional<String> challengeCancelReasonCode) {
+            this.challengeCancelReasonCode = challengeCancelReasonCode;
+            return this;
+        }
+
+        public Builder challengeCancelReasonCode(String challengeCancelReasonCode) {
+            this.challengeCancelReasonCode = Optional.ofNullable(challengeCancelReasonCode);
             return this;
         }
 
@@ -739,8 +814,11 @@ public final class ThreeDsAuthentication {
                     acsRenderingType,
                     acsSignedContent,
                     acsChallengeUrl,
+                    challengePreference,
+                    challengePreferenceCode,
                     challengeAttempts,
                     challengeCancelReason,
+                    challengeCancelReasonCode,
                     cardholderInfo,
                     whitelistStatus,
                     whitelistStatusSource,
