@@ -37,6 +37,10 @@ public final class CreateTokenIntentResponse {
 
     private final Optional<CardDetails> card;
 
+    private final Optional<TokenAuthentication> authentication;
+
+    private final Optional<TokenIntentExtras> extras;
+
     private final Map<String, Object> additionalProperties;
 
     private CreateTokenIntentResponse(
@@ -48,6 +52,8 @@ public final class CreateTokenIntentResponse {
             Optional<OffsetDateTime> createdAt,
             Optional<OffsetDateTime> expiresAt,
             Optional<CardDetails> card,
+            Optional<TokenAuthentication> authentication,
+            Optional<TokenIntentExtras> extras,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.type = type;
@@ -57,6 +63,8 @@ public final class CreateTokenIntentResponse {
         this.createdAt = createdAt;
         this.expiresAt = expiresAt;
         this.card = card;
+        this.authentication = authentication;
+        this.extras = extras;
         this.additionalProperties = additionalProperties;
     }
 
@@ -100,6 +108,16 @@ public final class CreateTokenIntentResponse {
         return card;
     }
 
+    @JsonProperty("authentication")
+    public Optional<TokenAuthentication> getAuthentication() {
+        return authentication;
+    }
+
+    @JsonProperty("_extras")
+    public Optional<TokenIntentExtras> getExtras() {
+        return extras;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -119,7 +137,9 @@ public final class CreateTokenIntentResponse {
                 && createdBy.equals(other.createdBy)
                 && createdAt.equals(other.createdAt)
                 && expiresAt.equals(other.expiresAt)
-                && card.equals(other.card);
+                && card.equals(other.card)
+                && authentication.equals(other.authentication)
+                && extras.equals(other.extras);
     }
 
     @java.lang.Override
@@ -132,7 +152,9 @@ public final class CreateTokenIntentResponse {
                 this.createdBy,
                 this.createdAt,
                 this.expiresAt,
-                this.card);
+                this.card,
+                this.authentication,
+                this.extras);
     }
 
     @java.lang.Override
@@ -162,6 +184,10 @@ public final class CreateTokenIntentResponse {
 
         private Optional<CardDetails> card = Optional.empty();
 
+        private Optional<TokenAuthentication> authentication = Optional.empty();
+
+        private Optional<TokenIntentExtras> extras = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -176,6 +202,8 @@ public final class CreateTokenIntentResponse {
             createdAt(other.getCreatedAt());
             expiresAt(other.getExpiresAt());
             card(other.getCard());
+            authentication(other.getAuthentication());
+            extras(other.getExtras());
             return this;
         }
 
@@ -267,9 +295,41 @@ public final class CreateTokenIntentResponse {
             return this;
         }
 
+        @JsonSetter(value = "authentication", nulls = Nulls.SKIP)
+        public Builder authentication(Optional<TokenAuthentication> authentication) {
+            this.authentication = authentication;
+            return this;
+        }
+
+        public Builder authentication(TokenAuthentication authentication) {
+            this.authentication = Optional.ofNullable(authentication);
+            return this;
+        }
+
+        @JsonSetter(value = "_extras", nulls = Nulls.SKIP)
+        public Builder extras(Optional<TokenIntentExtras> extras) {
+            this.extras = extras;
+            return this;
+        }
+
+        public Builder extras(TokenIntentExtras extras) {
+            this.extras = Optional.ofNullable(extras);
+            return this;
+        }
+
         public CreateTokenIntentResponse build() {
             return new CreateTokenIntentResponse(
-                    id, type, tenantId, fingerprint, createdBy, createdAt, expiresAt, card, additionalProperties);
+                    id,
+                    type,
+                    tenantId,
+                    fingerprint,
+                    createdBy,
+                    createdAt,
+                    expiresAt,
+                    card,
+                    authentication,
+                    extras,
+                    additionalProperties);
         }
     }
 }

@@ -60,6 +60,8 @@ public final class Token {
 
     private final Optional<List<String>> aliases;
 
+    private final Optional<TokenAuthentication> authentication;
+
     private final Optional<TokenExtras> extras;
 
     private final Map<String, Object> additionalProperties;
@@ -84,6 +86,7 @@ public final class Token {
             Optional<OffsetDateTime> expiresAt,
             Optional<List<String>> containers,
             Optional<List<String>> aliases,
+            Optional<TokenAuthentication> authentication,
             Optional<TokenExtras> extras,
             Map<String, Object> additionalProperties) {
         this.id = id;
@@ -105,6 +108,7 @@ public final class Token {
         this.expiresAt = expiresAt;
         this.containers = containers;
         this.aliases = aliases;
+        this.authentication = authentication;
         this.extras = extras;
         this.additionalProperties = additionalProperties;
     }
@@ -204,6 +208,11 @@ public final class Token {
         return aliases;
     }
 
+    @JsonProperty("authentication")
+    public Optional<TokenAuthentication> getAuthentication() {
+        return authentication;
+    }
+
     @JsonProperty("_extras")
     public Optional<TokenExtras> getExtras() {
         return extras;
@@ -240,6 +249,7 @@ public final class Token {
                 && expiresAt.equals(other.expiresAt)
                 && containers.equals(other.containers)
                 && aliases.equals(other.aliases)
+                && authentication.equals(other.authentication)
                 && extras.equals(other.extras);
     }
 
@@ -265,6 +275,7 @@ public final class Token {
                 this.expiresAt,
                 this.containers,
                 this.aliases,
+                this.authentication,
                 this.extras);
     }
 
@@ -317,6 +328,8 @@ public final class Token {
 
         private Optional<List<String>> aliases = Optional.empty();
 
+        private Optional<TokenAuthentication> authentication = Optional.empty();
+
         private Optional<TokenExtras> extras = Optional.empty();
 
         @JsonAnySetter
@@ -344,6 +357,7 @@ public final class Token {
             expiresAt(other.getExpiresAt());
             containers(other.getContainers());
             aliases(other.getAliases());
+            authentication(other.getAuthentication());
             extras(other.getExtras());
             return this;
         }
@@ -557,6 +571,17 @@ public final class Token {
             return this;
         }
 
+        @JsonSetter(value = "authentication", nulls = Nulls.SKIP)
+        public Builder authentication(Optional<TokenAuthentication> authentication) {
+            this.authentication = authentication;
+            return this;
+        }
+
+        public Builder authentication(TokenAuthentication authentication) {
+            this.authentication = Optional.ofNullable(authentication);
+            return this;
+        }
+
         @JsonSetter(value = "_extras", nulls = Nulls.SKIP)
         public Builder extras(Optional<TokenExtras> extras) {
             this.extras = extras;
@@ -589,6 +614,7 @@ public final class Token {
                     expiresAt,
                     containers,
                     aliases,
+                    authentication,
                     extras,
                     additionalProperties);
         }
