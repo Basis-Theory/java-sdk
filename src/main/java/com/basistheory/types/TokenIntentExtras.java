@@ -18,26 +18,16 @@ import java.util.Objects;
 import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = TokenExtras.Builder.class)
-public final class TokenExtras {
-    private final Optional<Boolean> deduplicated;
-
+@JsonDeserialize(builder = TokenIntentExtras.Builder.class)
+public final class TokenIntentExtras {
     private final Optional<TokenServiceProviderDetails> tspDetails;
 
     private final Map<String, Object> additionalProperties;
 
-    private TokenExtras(
-            Optional<Boolean> deduplicated,
-            Optional<TokenServiceProviderDetails> tspDetails,
-            Map<String, Object> additionalProperties) {
-        this.deduplicated = deduplicated;
+    private TokenIntentExtras(
+            Optional<TokenServiceProviderDetails> tspDetails, Map<String, Object> additionalProperties) {
         this.tspDetails = tspDetails;
         this.additionalProperties = additionalProperties;
-    }
-
-    @JsonProperty("deduplicated")
-    public Optional<Boolean> getDeduplicated() {
-        return deduplicated;
     }
 
     @JsonProperty("tsp_details")
@@ -48,7 +38,7 @@ public final class TokenExtras {
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof TokenExtras && equalTo((TokenExtras) other);
+        return other instanceof TokenIntentExtras && equalTo((TokenIntentExtras) other);
     }
 
     @JsonAnyGetter
@@ -56,13 +46,13 @@ public final class TokenExtras {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(TokenExtras other) {
-        return deduplicated.equals(other.deduplicated) && tspDetails.equals(other.tspDetails);
+    private boolean equalTo(TokenIntentExtras other) {
+        return tspDetails.equals(other.tspDetails);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.deduplicated, this.tspDetails);
+        return Objects.hash(this.tspDetails);
     }
 
     @java.lang.Override
@@ -76,8 +66,6 @@ public final class TokenExtras {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<Boolean> deduplicated = Optional.empty();
-
         private Optional<TokenServiceProviderDetails> tspDetails = Optional.empty();
 
         @JsonAnySetter
@@ -85,20 +73,8 @@ public final class TokenExtras {
 
         private Builder() {}
 
-        public Builder from(TokenExtras other) {
-            deduplicated(other.getDeduplicated());
+        public Builder from(TokenIntentExtras other) {
             tspDetails(other.getTspDetails());
-            return this;
-        }
-
-        @JsonSetter(value = "deduplicated", nulls = Nulls.SKIP)
-        public Builder deduplicated(Optional<Boolean> deduplicated) {
-            this.deduplicated = deduplicated;
-            return this;
-        }
-
-        public Builder deduplicated(Boolean deduplicated) {
-            this.deduplicated = Optional.ofNullable(deduplicated);
             return this;
         }
 
@@ -113,8 +89,8 @@ public final class TokenExtras {
             return this;
         }
 
-        public TokenExtras build() {
-            return new TokenExtras(deduplicated, tspDetails, additionalProperties);
+        public TokenIntentExtras build() {
+            return new TokenIntentExtras(tspDetails, additionalProperties);
         }
     }
 }
