@@ -1,3 +1,11 @@
+## [0.2.0](https://github.com/Basis-Theory/java-sdk/compare/0.1.4...0.2.0) (2025-01-27)
+
+
+### Features
+
+* Google Pay ([41ca83c](https://github.com/Basis-Theory/java-sdk/commit/41ca83c8e59bc85c9e679f257d7515be59dd00cc))
+
+
 ### [0.1.4](https://github.com/Basis-Theory/java-sdk/compare/0.1.3...0.1.4) (2024-12-11)
 
 
