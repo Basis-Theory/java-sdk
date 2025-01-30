@@ -1,3 +1,11 @@
+## [0.3.0](https://github.com/Basis-Theory/java-sdk/compare/0.2.0...0.3.0) (2025-01-30)
+
+
+### Features
+
+* Add Google Pay tokenization ([6b93d02](https://github.com/Basis-Theory/java-sdk/commit/6b93d02be691ec282584945fd88e413753a5cb51))
+
+
 ## [0.2.0](https://github.com/Basis-Theory/java-sdk/compare/0.1.4...0.2.0) (2025-01-27)
 
 
