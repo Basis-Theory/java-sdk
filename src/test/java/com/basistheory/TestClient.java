@@ -50,9 +50,9 @@ public final class TestClient {
         getAndValidateCardNumber(tokensClient, tokenId, cardNumber);
 
         // Update currently does not support correct `Content-Type` header for PATCH command
-//        String updateCardNumber = "4242424242424242";
-//        updateToken(tokensClient, tokenId, updateCardNumber);
-//        getAndValidateCardNumber(tokensClient, tokenId, updateCardNumber);
+        String updateCardNumber = "4242424242424242";
+        updateToken(tokensClient, tokenId, updateCardNumber);
+        getAndValidateCardNumber(tokensClient, tokenId, updateCardNumber);
 
         ApplicationsClient applicationsClient = new ApplicationsClient(managementClientOptions());
         String applicationId = createApplication(applicationsClient);
