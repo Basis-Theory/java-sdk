@@ -13,6 +13,7 @@ import com.basistheory.errors.BadRequestError;
 import com.basistheory.errors.ConflictError;
 import com.basistheory.errors.ForbiddenError;
 import com.basistheory.errors.UnauthorizedError;
+import com.basistheory.errors.UnprocessableEntityError;
 import com.basistheory.resources.googlepay.requests.GooglePayTokenizeRequest;
 import com.basistheory.types.GooglePayTokenizeResponse;
 import com.basistheory.types.ProblemDetails;
@@ -83,6 +84,9 @@ public class GooglepayClient {
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class));
                     case 409:
                         throw new ConflictError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class));
+                    case 422:
+                        throw new UnprocessableEntityError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class));
                 }
             } catch (JsonProcessingException ignored) {

@@ -5,10 +5,14 @@ package com.basistheory;
 
 import com.basistheory.core.ClientOptions;
 import com.basistheory.core.Environment;
+import com.basistheory.core.ObjectMappers;
 import com.basistheory.core.pagination.SyncPagingIterable;
 import com.basistheory.errors.NotFoundError;
+import com.basistheory.errors.UnprocessableEntityError;
 import com.basistheory.resources.applications.ApplicationsClient;
 import com.basistheory.resources.applications.requests.CreateApplicationRequest;
+import com.basistheory.resources.googlepay.GooglepayClient;
+import com.basistheory.resources.googlepay.requests.GooglePayTokenizeRequest;
 import com.basistheory.resources.proxies.ProxiesClient;
 import com.basistheory.resources.proxies.requests.CreateProxyRequest;
 import com.basistheory.resources.reactors.ReactorsClient;
@@ -24,7 +28,10 @@ import com.basistheory.resources.webhooks.WebhooksClient;
 import com.basistheory.resources.webhooks.requests.CreateWebhookRequest;
 import com.basistheory.resources.webhooks.requests.UpdateWebhookRequest;
 import com.basistheory.types.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -50,9 +57,9 @@ public final class TestClient {
         getAndValidateCardNumber(tokensClient, tokenId, cardNumber);
 
         // Update currently does not support correct `Content-Type` header for PATCH command
-//        String updateCardNumber = "4242424242424242";
-//        updateToken(tokensClient, tokenId, updateCardNumber);
-//        getAndValidateCardNumber(tokensClient, tokenId, updateCardNumber);
+        String updateCardNumber = "4242424242424242";
+        updateToken(tokensClient, tokenId, updateCardNumber);
+        getAndValidateCardNumber(tokensClient, tokenId, updateCardNumber);
 
         ApplicationsClient applicationsClient = new ApplicationsClient(managementClientOptions());
         String applicationId = createApplication(applicationsClient);
@@ -149,6 +156,24 @@ public final class TestClient {
         // This currently does not work due to webhook sending an empty body in 404;
         // Issue eng-7345
 //        ensureWebhookIsRemoved(webhooksClient, webhookId);
+    }
+
+    @Test
+    public void shouldSupportGooglePay() throws JsonProcessingException {
+        GooglepayClient client = new GooglepayClient(privateClientOptions());
+        GooglePaymentMethodToken googlePayToken = ObjectMappers.JSON_MAPPER.readValue(
+            "{\"signature\":\"MEQCIBnz8wKrUi3qrLSn6KSrTcNIo6YcOzrfre7X49S27MrKAiBMF70q7EHe0Bw8uva77pclggSiPMRTFRFl7TZILyACOQ\\u003d\\u003d\",\"intermediateSigningKey\":{\"signedKey\":\"{\\\"keyValue\\\":\\\"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEnK9rrDl5FJalSwcoZD3qB5EYcA/sYVTH2Nbh6y/EZArFvvBRQA1eI3BIv1iZeCkBLd/A2nU1ve7xENoPOfp7+Q\\\\u003d\\\\u003d\\\",\\\"keyExpiration\\\":\\\"1737724267469\\\"}\",\"signatures\":[\"MEQCIHugFzQtVBVNizwkMhG/POcZAmRRXyeiZpt3aFwBzt5cAiBSOY4pfT4tQGWzZjkldbYkpBwWGpSasxRmlt7XPNOaLQ\\u003d\\u003d\"]},\"protocolVersion\":\"ECv2\",\"signedMessage\":\"{\\\"encryptedMessage\\\":\\\"XURDnvPAIhAKT9rARBV9RT0/yVTesT/w0UniXCJflwu2TkE54UnP7ZmWBo0gKjTJIU3j8D1Rntw2Ywr2UDLbZor+UoeZltzZOAv6iAR4MfvCLSzlh3HcjechwqZM8oxSF2iZoD2XrNqOgaYbOY1EaYoLx1JpftZDuTqSDLYa+szsoPjAUgzBO5TJZTDIa3zDNAdK3UtAPwutL1M4pTyuFhUKOC12J3RzZdaGFANbKSc8vdfqnR1hqsvsEt1sWPf2O3yty91klSA7FDckvwlKfRoNyQMDhaDkEvYUi75uxcjCRHE0Jjbj61bZriSTXiG2KWNF2OKpz7l61kgPJxCpK7A7TV3P4pBLwW7DYbRusO6FupLehxOZl9nBpVfApytCZGjaSXT7QfPpxdBv8j2VfKsodOf/dwv2Thrra9a6ZzFWsUz4l7Jbr4MCBLhXH4lSuxKrlA2Rf/CVPTgz8b88cYpEDZyqLJxDstwy74/Nl7Mjc4V7thzmdskAeYSuZXKXyyeo3BHqkguRkeagEwuHiZoem2V4W2qWOF8hYn14KY3cXXNcVA\\\\u003d\\\\u003d\\\",\\\"ephemeralPublicKey\\\":\\\"BHBDKlM3tik4o9leEkHu+875bHbORaCK7dDeXFCRmv4bzWJw/4bsvtBtaBH3SW5JXkE/6pkRYAtjFzQmHMRQYvc\\\\u003d\\\",\\\"tag\\\":\\\"Hle3Oafx5sfUc3U3sCQgV0tRPhCAvPlVLYiqvbPyTYY\\\\u003d\\\"}\"}",
+                GooglePaymentMethodToken.class);
+
+        try {
+            client.tokenize(GooglePayTokenizeRequest.builder().googlePaymentMethodToken(googlePayToken).build());
+            fail("Should have thrown exception");
+        } catch (UnprocessableEntityError e) {
+            assertTrue(true);
+            assertTrue(e.body().getDetail()
+                    .orElseThrow(() -> new RuntimeException("No detail in error"))
+                    .contains("expired intermediateSigningKey"));
+        }
     }
 
     @NotNull

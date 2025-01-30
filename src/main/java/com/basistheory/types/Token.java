@@ -40,6 +40,8 @@ public final class Token {
 
     private final Optional<CardDetails> card;
 
+    private final Optional<CardDetails> networkToken;
+
     private final Optional<String> modifiedBy;
 
     private final Optional<OffsetDateTime> modifiedAt;
@@ -76,6 +78,7 @@ public final class Token {
             Optional<String> createdBy,
             Optional<OffsetDateTime> createdAt,
             Optional<CardDetails> card,
+            Optional<CardDetails> networkToken,
             Optional<String> modifiedBy,
             Optional<OffsetDateTime> modifiedAt,
             Optional<String> fingerprint,
@@ -98,6 +101,7 @@ public final class Token {
         this.createdBy = createdBy;
         this.createdAt = createdAt;
         this.card = card;
+        this.networkToken = networkToken;
         this.modifiedBy = modifiedBy;
         this.modifiedAt = modifiedAt;
         this.fingerprint = fingerprint;
@@ -156,6 +160,11 @@ public final class Token {
     @JsonProperty("card")
     public Optional<CardDetails> getCard() {
         return card;
+    }
+
+    @JsonProperty("network_token")
+    public Optional<CardDetails> getNetworkToken() {
+        return networkToken;
     }
 
     @JsonProperty("modified_by")
@@ -239,6 +248,7 @@ public final class Token {
                 && createdBy.equals(other.createdBy)
                 && createdAt.equals(other.createdAt)
                 && card.equals(other.card)
+                && networkToken.equals(other.networkToken)
                 && modifiedBy.equals(other.modifiedBy)
                 && modifiedAt.equals(other.modifiedAt)
                 && fingerprint.equals(other.fingerprint)
@@ -265,6 +275,7 @@ public final class Token {
                 this.createdBy,
                 this.createdAt,
                 this.card,
+                this.networkToken,
                 this.modifiedBy,
                 this.modifiedAt,
                 this.fingerprint,
@@ -308,6 +319,8 @@ public final class Token {
 
         private Optional<CardDetails> card = Optional.empty();
 
+        private Optional<CardDetails> networkToken = Optional.empty();
+
         private Optional<String> modifiedBy = Optional.empty();
 
         private Optional<OffsetDateTime> modifiedAt = Optional.empty();
@@ -347,6 +360,7 @@ public final class Token {
             createdBy(other.getCreatedBy());
             createdAt(other.getCreatedAt());
             card(other.getCard());
+            networkToken(other.getNetworkToken());
             modifiedBy(other.getModifiedBy());
             modifiedAt(other.getModifiedAt());
             fingerprint(other.getFingerprint());
@@ -458,6 +472,17 @@ public final class Token {
 
         public Builder card(CardDetails card) {
             this.card = Optional.ofNullable(card);
+            return this;
+        }
+
+        @JsonSetter(value = "network_token", nulls = Nulls.SKIP)
+        public Builder networkToken(Optional<CardDetails> networkToken) {
+            this.networkToken = networkToken;
+            return this;
+        }
+
+        public Builder networkToken(CardDetails networkToken) {
+            this.networkToken = Optional.ofNullable(networkToken);
             return this;
         }
 
@@ -604,6 +629,7 @@ public final class Token {
                     createdBy,
                     createdAt,
                     card,
+                    networkToken,
                     modifiedBy,
                     modifiedAt,
                     fingerprint,

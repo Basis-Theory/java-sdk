@@ -33,13 +33,8 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import okhttp3.Headers;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
+
+import okhttp3.*;
 
 public class TokensClient {
     protected final ClientOptions clientOptions;
@@ -486,7 +481,7 @@ public class TokensClient {
         RequestBody body;
         try {
             body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaType.parse("application/merge-patch+json"));
         } catch (JsonProcessingException e) {
             throw new BasisTheoryException("Failed to serialize request", e);
         }
@@ -494,7 +489,6 @@ public class TokensClient {
                 .url(httpUrl)
                 .method("PATCH", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/merge-patch+json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
