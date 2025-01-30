@@ -24,14 +24,18 @@ public final class TokenExtras {
 
     private final Optional<TokenServiceProviderDetails> tspDetails;
 
+    private final Optional<String> deduplicationBehavior;
+
     private final Map<String, Object> additionalProperties;
 
     private TokenExtras(
             Optional<Boolean> deduplicated,
             Optional<TokenServiceProviderDetails> tspDetails,
+            Optional<String> deduplicationBehavior,
             Map<String, Object> additionalProperties) {
         this.deduplicated = deduplicated;
         this.tspDetails = tspDetails;
+        this.deduplicationBehavior = deduplicationBehavior;
         this.additionalProperties = additionalProperties;
     }
 
@@ -43,6 +47,11 @@ public final class TokenExtras {
     @JsonProperty("tsp_details")
     public Optional<TokenServiceProviderDetails> getTspDetails() {
         return tspDetails;
+    }
+
+    @JsonProperty("deduplication_behavior")
+    public Optional<String> getDeduplicationBehavior() {
+        return deduplicationBehavior;
     }
 
     @java.lang.Override
@@ -57,12 +66,14 @@ public final class TokenExtras {
     }
 
     private boolean equalTo(TokenExtras other) {
-        return deduplicated.equals(other.deduplicated) && tspDetails.equals(other.tspDetails);
+        return deduplicated.equals(other.deduplicated)
+                && tspDetails.equals(other.tspDetails)
+                && deduplicationBehavior.equals(other.deduplicationBehavior);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.deduplicated, this.tspDetails);
+        return Objects.hash(this.deduplicated, this.tspDetails, this.deduplicationBehavior);
     }
 
     @java.lang.Override
@@ -80,6 +91,8 @@ public final class TokenExtras {
 
         private Optional<TokenServiceProviderDetails> tspDetails = Optional.empty();
 
+        private Optional<String> deduplicationBehavior = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -88,6 +101,7 @@ public final class TokenExtras {
         public Builder from(TokenExtras other) {
             deduplicated(other.getDeduplicated());
             tspDetails(other.getTspDetails());
+            deduplicationBehavior(other.getDeduplicationBehavior());
             return this;
         }
 
@@ -113,8 +127,19 @@ public final class TokenExtras {
             return this;
         }
 
+        @JsonSetter(value = "deduplication_behavior", nulls = Nulls.SKIP)
+        public Builder deduplicationBehavior(Optional<String> deduplicationBehavior) {
+            this.deduplicationBehavior = deduplicationBehavior;
+            return this;
+        }
+
+        public Builder deduplicationBehavior(String deduplicationBehavior) {
+            this.deduplicationBehavior = Optional.ofNullable(deduplicationBehavior);
+            return this;
+        }
+
         public TokenExtras build() {
-            return new TokenExtras(deduplicated, tspDetails, additionalProperties);
+            return new TokenExtras(deduplicated, tspDetails, deduplicationBehavior, additionalProperties);
         }
     }
 }
