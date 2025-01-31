@@ -37,6 +37,8 @@ public final class CreateTokenIntentResponse {
 
     private final Optional<CardDetails> card;
 
+    private final Optional<CardDetails> networkToken;
+
     private final Optional<TokenAuthentication> authentication;
 
     private final Optional<TokenIntentExtras> extras;
@@ -52,6 +54,7 @@ public final class CreateTokenIntentResponse {
             Optional<OffsetDateTime> createdAt,
             Optional<OffsetDateTime> expiresAt,
             Optional<CardDetails> card,
+            Optional<CardDetails> networkToken,
             Optional<TokenAuthentication> authentication,
             Optional<TokenIntentExtras> extras,
             Map<String, Object> additionalProperties) {
@@ -63,6 +66,7 @@ public final class CreateTokenIntentResponse {
         this.createdAt = createdAt;
         this.expiresAt = expiresAt;
         this.card = card;
+        this.networkToken = networkToken;
         this.authentication = authentication;
         this.extras = extras;
         this.additionalProperties = additionalProperties;
@@ -108,6 +112,11 @@ public final class CreateTokenIntentResponse {
         return card;
     }
 
+    @JsonProperty("network_token")
+    public Optional<CardDetails> getNetworkToken() {
+        return networkToken;
+    }
+
     @JsonProperty("authentication")
     public Optional<TokenAuthentication> getAuthentication() {
         return authentication;
@@ -138,6 +147,7 @@ public final class CreateTokenIntentResponse {
                 && createdAt.equals(other.createdAt)
                 && expiresAt.equals(other.expiresAt)
                 && card.equals(other.card)
+                && networkToken.equals(other.networkToken)
                 && authentication.equals(other.authentication)
                 && extras.equals(other.extras);
     }
@@ -153,6 +163,7 @@ public final class CreateTokenIntentResponse {
                 this.createdAt,
                 this.expiresAt,
                 this.card,
+                this.networkToken,
                 this.authentication,
                 this.extras);
     }
@@ -184,6 +195,8 @@ public final class CreateTokenIntentResponse {
 
         private Optional<CardDetails> card = Optional.empty();
 
+        private Optional<CardDetails> networkToken = Optional.empty();
+
         private Optional<TokenAuthentication> authentication = Optional.empty();
 
         private Optional<TokenIntentExtras> extras = Optional.empty();
@@ -202,6 +215,7 @@ public final class CreateTokenIntentResponse {
             createdAt(other.getCreatedAt());
             expiresAt(other.getExpiresAt());
             card(other.getCard());
+            networkToken(other.getNetworkToken());
             authentication(other.getAuthentication());
             extras(other.getExtras());
             return this;
@@ -295,6 +309,17 @@ public final class CreateTokenIntentResponse {
             return this;
         }
 
+        @JsonSetter(value = "network_token", nulls = Nulls.SKIP)
+        public Builder networkToken(Optional<CardDetails> networkToken) {
+            this.networkToken = networkToken;
+            return this;
+        }
+
+        public Builder networkToken(CardDetails networkToken) {
+            this.networkToken = Optional.ofNullable(networkToken);
+            return this;
+        }
+
         @JsonSetter(value = "authentication", nulls = Nulls.SKIP)
         public Builder authentication(Optional<TokenAuthentication> authentication) {
             this.authentication = authentication;
@@ -327,6 +352,7 @@ public final class CreateTokenIntentResponse {
                     createdAt,
                     expiresAt,
                     card,
+                    networkToken,
                     authentication,
                     extras,
                     additionalProperties);
