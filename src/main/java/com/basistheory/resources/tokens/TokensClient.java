@@ -495,6 +495,7 @@ public class TokensClient {
                 .url(httpUrl)
                 .method("PATCH", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/merge-patch+json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {

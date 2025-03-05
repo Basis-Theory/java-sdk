@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -30,6 +31,22 @@ public final class TokenServiceProviderDetails {
 
     private final Optional<AssuranceDetails> assuranceDetails;
 
+    private final Optional<String> transactionId;
+
+    private final Optional<String> currencyCode;
+
+    private final Optional<Long> transactionAmount;
+
+    private final Optional<String> cardholderName;
+
+    private final Optional<String> deviceManufacturerIdentifier;
+
+    private final Optional<String> paymentDataType;
+
+    private final Optional<String> merchantTokenIdentifier;
+
+    private final Optional<List<AuthenticationResponse>> authenticationResponses;
+
     private final Map<String, Object> additionalProperties;
 
     private TokenServiceProviderDetails(
@@ -38,12 +55,28 @@ public final class TokenServiceProviderDetails {
             Optional<String> messageId,
             Optional<String> eciIndicator,
             Optional<AssuranceDetails> assuranceDetails,
+            Optional<String> transactionId,
+            Optional<String> currencyCode,
+            Optional<Long> transactionAmount,
+            Optional<String> cardholderName,
+            Optional<String> deviceManufacturerIdentifier,
+            Optional<String> paymentDataType,
+            Optional<String> merchantTokenIdentifier,
+            Optional<List<AuthenticationResponse>> authenticationResponses,
             Map<String, Object> additionalProperties) {
         this.tsp = tsp;
         this.authMethod = authMethod;
         this.messageId = messageId;
         this.eciIndicator = eciIndicator;
         this.assuranceDetails = assuranceDetails;
+        this.transactionId = transactionId;
+        this.currencyCode = currencyCode;
+        this.transactionAmount = transactionAmount;
+        this.cardholderName = cardholderName;
+        this.deviceManufacturerIdentifier = deviceManufacturerIdentifier;
+        this.paymentDataType = paymentDataType;
+        this.merchantTokenIdentifier = merchantTokenIdentifier;
+        this.authenticationResponses = authenticationResponses;
         this.additionalProperties = additionalProperties;
     }
 
@@ -72,6 +105,46 @@ public final class TokenServiceProviderDetails {
         return assuranceDetails;
     }
 
+    @JsonProperty("transaction_id")
+    public Optional<String> getTransactionId() {
+        return transactionId;
+    }
+
+    @JsonProperty("currency_code")
+    public Optional<String> getCurrencyCode() {
+        return currencyCode;
+    }
+
+    @JsonProperty("transaction_amount")
+    public Optional<Long> getTransactionAmount() {
+        return transactionAmount;
+    }
+
+    @JsonProperty("cardholder_name")
+    public Optional<String> getCardholderName() {
+        return cardholderName;
+    }
+
+    @JsonProperty("device_manufacturer_identifier")
+    public Optional<String> getDeviceManufacturerIdentifier() {
+        return deviceManufacturerIdentifier;
+    }
+
+    @JsonProperty("payment_data_type")
+    public Optional<String> getPaymentDataType() {
+        return paymentDataType;
+    }
+
+    @JsonProperty("merchant_token_identifier")
+    public Optional<String> getMerchantTokenIdentifier() {
+        return merchantTokenIdentifier;
+    }
+
+    @JsonProperty("authentication_responses")
+    public Optional<List<AuthenticationResponse>> getAuthenticationResponses() {
+        return authenticationResponses;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -88,12 +161,33 @@ public final class TokenServiceProviderDetails {
                 && authMethod.equals(other.authMethod)
                 && messageId.equals(other.messageId)
                 && eciIndicator.equals(other.eciIndicator)
-                && assuranceDetails.equals(other.assuranceDetails);
+                && assuranceDetails.equals(other.assuranceDetails)
+                && transactionId.equals(other.transactionId)
+                && currencyCode.equals(other.currencyCode)
+                && transactionAmount.equals(other.transactionAmount)
+                && cardholderName.equals(other.cardholderName)
+                && deviceManufacturerIdentifier.equals(other.deviceManufacturerIdentifier)
+                && paymentDataType.equals(other.paymentDataType)
+                && merchantTokenIdentifier.equals(other.merchantTokenIdentifier)
+                && authenticationResponses.equals(other.authenticationResponses);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.tsp, this.authMethod, this.messageId, this.eciIndicator, this.assuranceDetails);
+        return Objects.hash(
+                this.tsp,
+                this.authMethod,
+                this.messageId,
+                this.eciIndicator,
+                this.assuranceDetails,
+                this.transactionId,
+                this.currencyCode,
+                this.transactionAmount,
+                this.cardholderName,
+                this.deviceManufacturerIdentifier,
+                this.paymentDataType,
+                this.merchantTokenIdentifier,
+                this.authenticationResponses);
     }
 
     @java.lang.Override
@@ -117,6 +211,22 @@ public final class TokenServiceProviderDetails {
 
         private Optional<AssuranceDetails> assuranceDetails = Optional.empty();
 
+        private Optional<String> transactionId = Optional.empty();
+
+        private Optional<String> currencyCode = Optional.empty();
+
+        private Optional<Long> transactionAmount = Optional.empty();
+
+        private Optional<String> cardholderName = Optional.empty();
+
+        private Optional<String> deviceManufacturerIdentifier = Optional.empty();
+
+        private Optional<String> paymentDataType = Optional.empty();
+
+        private Optional<String> merchantTokenIdentifier = Optional.empty();
+
+        private Optional<List<AuthenticationResponse>> authenticationResponses = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -128,6 +238,14 @@ public final class TokenServiceProviderDetails {
             messageId(other.getMessageId());
             eciIndicator(other.getEciIndicator());
             assuranceDetails(other.getAssuranceDetails());
+            transactionId(other.getTransactionId());
+            currencyCode(other.getCurrencyCode());
+            transactionAmount(other.getTransactionAmount());
+            cardholderName(other.getCardholderName());
+            deviceManufacturerIdentifier(other.getDeviceManufacturerIdentifier());
+            paymentDataType(other.getPaymentDataType());
+            merchantTokenIdentifier(other.getMerchantTokenIdentifier());
+            authenticationResponses(other.getAuthenticationResponses());
             return this;
         }
 
@@ -186,9 +304,110 @@ public final class TokenServiceProviderDetails {
             return this;
         }
 
+        @JsonSetter(value = "transaction_id", nulls = Nulls.SKIP)
+        public Builder transactionId(Optional<String> transactionId) {
+            this.transactionId = transactionId;
+            return this;
+        }
+
+        public Builder transactionId(String transactionId) {
+            this.transactionId = Optional.ofNullable(transactionId);
+            return this;
+        }
+
+        @JsonSetter(value = "currency_code", nulls = Nulls.SKIP)
+        public Builder currencyCode(Optional<String> currencyCode) {
+            this.currencyCode = currencyCode;
+            return this;
+        }
+
+        public Builder currencyCode(String currencyCode) {
+            this.currencyCode = Optional.ofNullable(currencyCode);
+            return this;
+        }
+
+        @JsonSetter(value = "transaction_amount", nulls = Nulls.SKIP)
+        public Builder transactionAmount(Optional<Long> transactionAmount) {
+            this.transactionAmount = transactionAmount;
+            return this;
+        }
+
+        public Builder transactionAmount(Long transactionAmount) {
+            this.transactionAmount = Optional.ofNullable(transactionAmount);
+            return this;
+        }
+
+        @JsonSetter(value = "cardholder_name", nulls = Nulls.SKIP)
+        public Builder cardholderName(Optional<String> cardholderName) {
+            this.cardholderName = cardholderName;
+            return this;
+        }
+
+        public Builder cardholderName(String cardholderName) {
+            this.cardholderName = Optional.ofNullable(cardholderName);
+            return this;
+        }
+
+        @JsonSetter(value = "device_manufacturer_identifier", nulls = Nulls.SKIP)
+        public Builder deviceManufacturerIdentifier(Optional<String> deviceManufacturerIdentifier) {
+            this.deviceManufacturerIdentifier = deviceManufacturerIdentifier;
+            return this;
+        }
+
+        public Builder deviceManufacturerIdentifier(String deviceManufacturerIdentifier) {
+            this.deviceManufacturerIdentifier = Optional.ofNullable(deviceManufacturerIdentifier);
+            return this;
+        }
+
+        @JsonSetter(value = "payment_data_type", nulls = Nulls.SKIP)
+        public Builder paymentDataType(Optional<String> paymentDataType) {
+            this.paymentDataType = paymentDataType;
+            return this;
+        }
+
+        public Builder paymentDataType(String paymentDataType) {
+            this.paymentDataType = Optional.ofNullable(paymentDataType);
+            return this;
+        }
+
+        @JsonSetter(value = "merchant_token_identifier", nulls = Nulls.SKIP)
+        public Builder merchantTokenIdentifier(Optional<String> merchantTokenIdentifier) {
+            this.merchantTokenIdentifier = merchantTokenIdentifier;
+            return this;
+        }
+
+        public Builder merchantTokenIdentifier(String merchantTokenIdentifier) {
+            this.merchantTokenIdentifier = Optional.ofNullable(merchantTokenIdentifier);
+            return this;
+        }
+
+        @JsonSetter(value = "authentication_responses", nulls = Nulls.SKIP)
+        public Builder authenticationResponses(Optional<List<AuthenticationResponse>> authenticationResponses) {
+            this.authenticationResponses = authenticationResponses;
+            return this;
+        }
+
+        public Builder authenticationResponses(List<AuthenticationResponse> authenticationResponses) {
+            this.authenticationResponses = Optional.ofNullable(authenticationResponses);
+            return this;
+        }
+
         public TokenServiceProviderDetails build() {
             return new TokenServiceProviderDetails(
-                    tsp, authMethod, messageId, eciIndicator, assuranceDetails, additionalProperties);
+                    tsp,
+                    authMethod,
+                    messageId,
+                    eciIndicator,
+                    assuranceDetails,
+                    transactionId,
+                    currencyCode,
+                    transactionAmount,
+                    cardholderName,
+                    deviceManufacturerIdentifier,
+                    paymentDataType,
+                    merchantTokenIdentifier,
+                    authenticationResponses,
+                    additionalProperties);
         }
     }
 }

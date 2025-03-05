@@ -26,16 +26,32 @@ public final class ThreeDsRequestorInfo {
 
     private final Optional<String> url;
 
+    private final Optional<String> discoverClientId;
+
+    private final Optional<String> discoverRequestorId;
+
+    private final Optional<String> amexRequestorType;
+
+    private final Optional<String> cbSiretNumber;
+
     private final Map<String, Object> additionalProperties;
 
     private ThreeDsRequestorInfo(
             Optional<String> id,
             Optional<String> name,
             Optional<String> url,
+            Optional<String> discoverClientId,
+            Optional<String> discoverRequestorId,
+            Optional<String> amexRequestorType,
+            Optional<String> cbSiretNumber,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.name = name;
         this.url = url;
+        this.discoverClientId = discoverClientId;
+        this.discoverRequestorId = discoverRequestorId;
+        this.amexRequestorType = amexRequestorType;
+        this.cbSiretNumber = cbSiretNumber;
         this.additionalProperties = additionalProperties;
     }
 
@@ -54,6 +70,26 @@ public final class ThreeDsRequestorInfo {
         return url;
     }
 
+    @JsonProperty("discover_client_id")
+    public Optional<String> getDiscoverClientId() {
+        return discoverClientId;
+    }
+
+    @JsonProperty("discover_requestor_id")
+    public Optional<String> getDiscoverRequestorId() {
+        return discoverRequestorId;
+    }
+
+    @JsonProperty("amex_requestor_type")
+    public Optional<String> getAmexRequestorType() {
+        return amexRequestorType;
+    }
+
+    @JsonProperty("cb_siret_number")
+    public Optional<String> getCbSiretNumber() {
+        return cbSiretNumber;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -66,12 +102,25 @@ public final class ThreeDsRequestorInfo {
     }
 
     private boolean equalTo(ThreeDsRequestorInfo other) {
-        return id.equals(other.id) && name.equals(other.name) && url.equals(other.url);
+        return id.equals(other.id)
+                && name.equals(other.name)
+                && url.equals(other.url)
+                && discoverClientId.equals(other.discoverClientId)
+                && discoverRequestorId.equals(other.discoverRequestorId)
+                && amexRequestorType.equals(other.amexRequestorType)
+                && cbSiretNumber.equals(other.cbSiretNumber);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.id, this.name, this.url);
+        return Objects.hash(
+                this.id,
+                this.name,
+                this.url,
+                this.discoverClientId,
+                this.discoverRequestorId,
+                this.amexRequestorType,
+                this.cbSiretNumber);
     }
 
     @java.lang.Override
@@ -91,6 +140,14 @@ public final class ThreeDsRequestorInfo {
 
         private Optional<String> url = Optional.empty();
 
+        private Optional<String> discoverClientId = Optional.empty();
+
+        private Optional<String> discoverRequestorId = Optional.empty();
+
+        private Optional<String> amexRequestorType = Optional.empty();
+
+        private Optional<String> cbSiretNumber = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -100,6 +157,10 @@ public final class ThreeDsRequestorInfo {
             id(other.getId());
             name(other.getName());
             url(other.getUrl());
+            discoverClientId(other.getDiscoverClientId());
+            discoverRequestorId(other.getDiscoverRequestorId());
+            amexRequestorType(other.getAmexRequestorType());
+            cbSiretNumber(other.getCbSiretNumber());
             return this;
         }
 
@@ -136,8 +197,60 @@ public final class ThreeDsRequestorInfo {
             return this;
         }
 
+        @JsonSetter(value = "discover_client_id", nulls = Nulls.SKIP)
+        public Builder discoverClientId(Optional<String> discoverClientId) {
+            this.discoverClientId = discoverClientId;
+            return this;
+        }
+
+        public Builder discoverClientId(String discoverClientId) {
+            this.discoverClientId = Optional.ofNullable(discoverClientId);
+            return this;
+        }
+
+        @JsonSetter(value = "discover_requestor_id", nulls = Nulls.SKIP)
+        public Builder discoverRequestorId(Optional<String> discoverRequestorId) {
+            this.discoverRequestorId = discoverRequestorId;
+            return this;
+        }
+
+        public Builder discoverRequestorId(String discoverRequestorId) {
+            this.discoverRequestorId = Optional.ofNullable(discoverRequestorId);
+            return this;
+        }
+
+        @JsonSetter(value = "amex_requestor_type", nulls = Nulls.SKIP)
+        public Builder amexRequestorType(Optional<String> amexRequestorType) {
+            this.amexRequestorType = amexRequestorType;
+            return this;
+        }
+
+        public Builder amexRequestorType(String amexRequestorType) {
+            this.amexRequestorType = Optional.ofNullable(amexRequestorType);
+            return this;
+        }
+
+        @JsonSetter(value = "cb_siret_number", nulls = Nulls.SKIP)
+        public Builder cbSiretNumber(Optional<String> cbSiretNumber) {
+            this.cbSiretNumber = cbSiretNumber;
+            return this;
+        }
+
+        public Builder cbSiretNumber(String cbSiretNumber) {
+            this.cbSiretNumber = Optional.ofNullable(cbSiretNumber);
+            return this;
+        }
+
         public ThreeDsRequestorInfo build() {
-            return new ThreeDsRequestorInfo(id, name, url, additionalProperties);
+            return new ThreeDsRequestorInfo(
+                    id,
+                    name,
+                    url,
+                    discoverClientId,
+                    discoverRequestorId,
+                    amexRequestorType,
+                    cbSiretNumber,
+                    additionalProperties);
         }
     }
 }

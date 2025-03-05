@@ -39,6 +39,8 @@ public final class ThreeDsAuthentication {
 
     private final Optional<String> dsReferenceNumber;
 
+    private final Optional<Boolean> liabilityShifted;
+
     private final Optional<String> authenticationValue;
 
     private final Optional<String> authenticationStatus;
@@ -91,6 +93,7 @@ public final class ThreeDsAuthentication {
             Optional<String> sdkTransactionId,
             Optional<String> acsReferenceNumber,
             Optional<String> dsReferenceNumber,
+            Optional<Boolean> liabilityShifted,
             Optional<String> authenticationValue,
             Optional<String> authenticationStatus,
             Optional<String> authenticationStatusCode,
@@ -121,6 +124,7 @@ public final class ThreeDsAuthentication {
         this.sdkTransactionId = sdkTransactionId;
         this.acsReferenceNumber = acsReferenceNumber;
         this.dsReferenceNumber = dsReferenceNumber;
+        this.liabilityShifted = liabilityShifted;
         this.authenticationValue = authenticationValue;
         this.authenticationStatus = authenticationStatus;
         this.authenticationStatusCode = authenticationStatusCode;
@@ -187,6 +191,11 @@ public final class ThreeDsAuthentication {
     @JsonProperty("ds_reference_number")
     public Optional<String> getDsReferenceNumber() {
         return dsReferenceNumber;
+    }
+
+    @JsonProperty("liability_shifted")
+    public Optional<Boolean> getLiabilityShifted() {
+        return liabilityShifted;
     }
 
     @JsonProperty("authentication_value")
@@ -310,6 +319,7 @@ public final class ThreeDsAuthentication {
                 && sdkTransactionId.equals(other.sdkTransactionId)
                 && acsReferenceNumber.equals(other.acsReferenceNumber)
                 && dsReferenceNumber.equals(other.dsReferenceNumber)
+                && liabilityShifted.equals(other.liabilityShifted)
                 && authenticationValue.equals(other.authenticationValue)
                 && authenticationStatus.equals(other.authenticationStatus)
                 && authenticationStatusCode.equals(other.authenticationStatusCode)
@@ -344,6 +354,7 @@ public final class ThreeDsAuthentication {
                 this.sdkTransactionId,
                 this.acsReferenceNumber,
                 this.dsReferenceNumber,
+                this.liabilityShifted,
                 this.authenticationValue,
                 this.authenticationStatus,
                 this.authenticationStatusCode,
@@ -394,6 +405,8 @@ public final class ThreeDsAuthentication {
         private Optional<String> acsReferenceNumber = Optional.empty();
 
         private Optional<String> dsReferenceNumber = Optional.empty();
+
+        private Optional<Boolean> liabilityShifted = Optional.empty();
 
         private Optional<String> authenticationValue = Optional.empty();
 
@@ -450,6 +463,7 @@ public final class ThreeDsAuthentication {
             sdkTransactionId(other.getSdkTransactionId());
             acsReferenceNumber(other.getAcsReferenceNumber());
             dsReferenceNumber(other.getDsReferenceNumber());
+            liabilityShifted(other.getLiabilityShifted());
             authenticationValue(other.getAuthenticationValue());
             authenticationStatus(other.getAuthenticationStatus());
             authenticationStatusCode(other.getAuthenticationStatusCode());
@@ -569,6 +583,17 @@ public final class ThreeDsAuthentication {
 
         public Builder dsReferenceNumber(String dsReferenceNumber) {
             this.dsReferenceNumber = Optional.ofNullable(dsReferenceNumber);
+            return this;
+        }
+
+        @JsonSetter(value = "liability_shifted", nulls = Nulls.SKIP)
+        public Builder liabilityShifted(Optional<Boolean> liabilityShifted) {
+            this.liabilityShifted = liabilityShifted;
+            return this;
+        }
+
+        public Builder liabilityShifted(Boolean liabilityShifted) {
+            this.liabilityShifted = Optional.ofNullable(liabilityShifted);
             return this;
         }
 
@@ -803,6 +828,7 @@ public final class ThreeDsAuthentication {
                     sdkTransactionId,
                     acsReferenceNumber,
                     dsReferenceNumber,
+                    liabilityShifted,
                     authenticationValue,
                     authenticationStatus,
                     authenticationStatusCode,
