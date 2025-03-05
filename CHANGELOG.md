@@ -1,3 +1,15 @@
+## [1.0.0](https://github.com/Basis-Theory/java-sdk/compare/0.3.1...1.0.0) (2025-03-05)
+
+
+### ⚠ BREAKING CHANGES
+
+* Updated Token Usage response and removes expires_at from Applications
+
+### Features
+
+* adding get token intents ([f108c92](https://github.com/Basis-Theory/java-sdk/commit/f108c928d8ec94a00be0b1a8629679f238d70674))
+
+
 ### [0.3.1](https://github.com/Basis-Theory/java-sdk/compare/0.3.0...0.3.1) (2025-01-31)
 
 
