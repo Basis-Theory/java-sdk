@@ -42,8 +42,6 @@ public final class Application {
 
     private final Optional<OffsetDateTime> modifiedAt;
 
-    private final Optional<OffsetDateTime> expiresAt;
-
     private final Optional<List<String>> permissions;
 
     private final Optional<List<AccessRule>> rules;
@@ -61,7 +59,6 @@ public final class Application {
             Optional<OffsetDateTime> createdAt,
             Optional<String> modifiedBy,
             Optional<OffsetDateTime> modifiedAt,
-            Optional<OffsetDateTime> expiresAt,
             Optional<List<String>> permissions,
             Optional<List<AccessRule>> rules,
             Map<String, Object> additionalProperties) {
@@ -75,7 +72,6 @@ public final class Application {
         this.createdAt = createdAt;
         this.modifiedBy = modifiedBy;
         this.modifiedAt = modifiedAt;
-        this.expiresAt = expiresAt;
         this.permissions = permissions;
         this.rules = rules;
         this.additionalProperties = additionalProperties;
@@ -131,11 +127,6 @@ public final class Application {
         return modifiedAt;
     }
 
-    @JsonProperty("expires_at")
-    public Optional<OffsetDateTime> getExpiresAt() {
-        return expiresAt;
-    }
-
     @JsonProperty("permissions")
     public Optional<List<String>> getPermissions() {
         return permissions;
@@ -168,7 +159,6 @@ public final class Application {
                 && createdAt.equals(other.createdAt)
                 && modifiedBy.equals(other.modifiedBy)
                 && modifiedAt.equals(other.modifiedAt)
-                && expiresAt.equals(other.expiresAt)
                 && permissions.equals(other.permissions)
                 && rules.equals(other.rules);
     }
@@ -186,7 +176,6 @@ public final class Application {
                 this.createdAt,
                 this.modifiedBy,
                 this.modifiedAt,
-                this.expiresAt,
                 this.permissions,
                 this.rules);
     }
@@ -222,8 +211,6 @@ public final class Application {
 
         private Optional<OffsetDateTime> modifiedAt = Optional.empty();
 
-        private Optional<OffsetDateTime> expiresAt = Optional.empty();
-
         private Optional<List<String>> permissions = Optional.empty();
 
         private Optional<List<AccessRule>> rules = Optional.empty();
@@ -244,7 +231,6 @@ public final class Application {
             createdAt(other.getCreatedAt());
             modifiedBy(other.getModifiedBy());
             modifiedAt(other.getModifiedAt());
-            expiresAt(other.getExpiresAt());
             permissions(other.getPermissions());
             rules(other.getRules());
             return this;
@@ -360,17 +346,6 @@ public final class Application {
             return this;
         }
 
-        @JsonSetter(value = "expires_at", nulls = Nulls.SKIP)
-        public Builder expiresAt(Optional<OffsetDateTime> expiresAt) {
-            this.expiresAt = expiresAt;
-            return this;
-        }
-
-        public Builder expiresAt(OffsetDateTime expiresAt) {
-            this.expiresAt = Optional.ofNullable(expiresAt);
-            return this;
-        }
-
         @JsonSetter(value = "permissions", nulls = Nulls.SKIP)
         public Builder permissions(Optional<List<String>> permissions) {
             this.permissions = permissions;
@@ -405,7 +380,6 @@ public final class Application {
                     createdAt,
                     modifiedBy,
                     modifiedAt,
-                    expiresAt,
                     permissions,
                     rules,
                     additionalProperties);

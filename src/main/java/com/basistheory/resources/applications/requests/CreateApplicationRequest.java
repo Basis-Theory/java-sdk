@@ -27,8 +27,6 @@ public final class CreateApplicationRequest {
 
     private final String type;
 
-    private final Optional<String> expiresAt;
-
     private final Optional<List<String>> permissions;
 
     private final Optional<List<AccessRule>> rules;
@@ -40,14 +38,12 @@ public final class CreateApplicationRequest {
     private CreateApplicationRequest(
             String name,
             String type,
-            Optional<String> expiresAt,
             Optional<List<String>> permissions,
             Optional<List<AccessRule>> rules,
             Optional<Boolean> createKey,
             Map<String, Object> additionalProperties) {
         this.name = name;
         this.type = type;
-        this.expiresAt = expiresAt;
         this.permissions = permissions;
         this.rules = rules;
         this.createKey = createKey;
@@ -62,11 +58,6 @@ public final class CreateApplicationRequest {
     @JsonProperty("type")
     public String getType() {
         return type;
-    }
-
-    @JsonProperty("expires_at")
-    public Optional<String> getExpiresAt() {
-        return expiresAt;
     }
 
     @JsonProperty("permissions")
@@ -98,7 +89,6 @@ public final class CreateApplicationRequest {
     private boolean equalTo(CreateApplicationRequest other) {
         return name.equals(other.name)
                 && type.equals(other.type)
-                && expiresAt.equals(other.expiresAt)
                 && permissions.equals(other.permissions)
                 && rules.equals(other.rules)
                 && createKey.equals(other.createKey);
@@ -106,7 +96,7 @@ public final class CreateApplicationRequest {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.name, this.type, this.expiresAt, this.permissions, this.rules, this.createKey);
+        return Objects.hash(this.name, this.type, this.permissions, this.rules, this.createKey);
     }
 
     @java.lang.Override
@@ -130,10 +120,6 @@ public final class CreateApplicationRequest {
 
     public interface _FinalStage {
         CreateApplicationRequest build();
-
-        _FinalStage expiresAt(Optional<String> expiresAt);
-
-        _FinalStage expiresAt(String expiresAt);
 
         _FinalStage permissions(Optional<List<String>> permissions);
 
@@ -160,8 +146,6 @@ public final class CreateApplicationRequest {
 
         private Optional<List<String>> permissions = Optional.empty();
 
-        private Optional<String> expiresAt = Optional.empty();
-
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -171,7 +155,6 @@ public final class CreateApplicationRequest {
         public Builder from(CreateApplicationRequest other) {
             name(other.getName());
             type(other.getType());
-            expiresAt(other.getExpiresAt());
             permissions(other.getPermissions());
             rules(other.getRules());
             createKey(other.getCreateKey());
@@ -232,22 +215,8 @@ public final class CreateApplicationRequest {
         }
 
         @java.lang.Override
-        public _FinalStage expiresAt(String expiresAt) {
-            this.expiresAt = Optional.ofNullable(expiresAt);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "expires_at", nulls = Nulls.SKIP)
-        public _FinalStage expiresAt(Optional<String> expiresAt) {
-            this.expiresAt = expiresAt;
-            return this;
-        }
-
-        @java.lang.Override
         public CreateApplicationRequest build() {
-            return new CreateApplicationRequest(
-                    name, type, expiresAt, permissions, rules, createKey, additionalProperties);
+            return new CreateApplicationRequest(name, type, permissions, rules, createKey, additionalProperties);
         }
     }
 }

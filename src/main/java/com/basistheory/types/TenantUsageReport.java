@@ -20,18 +20,18 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = TenantUsageReport.Builder.class)
 public final class TenantUsageReport {
-    private final Optional<TokenReport> tokenReport;
+    private final Optional<Long> totalTokens;
 
     private final Map<String, Object> additionalProperties;
 
-    private TenantUsageReport(Optional<TokenReport> tokenReport, Map<String, Object> additionalProperties) {
-        this.tokenReport = tokenReport;
+    private TenantUsageReport(Optional<Long> totalTokens, Map<String, Object> additionalProperties) {
+        this.totalTokens = totalTokens;
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("token_report")
-    public Optional<TokenReport> getTokenReport() {
-        return tokenReport;
+    @JsonProperty("total_tokens")
+    public Optional<Long> getTotalTokens() {
+        return totalTokens;
     }
 
     @java.lang.Override
@@ -46,12 +46,12 @@ public final class TenantUsageReport {
     }
 
     private boolean equalTo(TenantUsageReport other) {
-        return tokenReport.equals(other.tokenReport);
+        return totalTokens.equals(other.totalTokens);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.tokenReport);
+        return Objects.hash(this.totalTokens);
     }
 
     @java.lang.Override
@@ -65,7 +65,7 @@ public final class TenantUsageReport {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<TokenReport> tokenReport = Optional.empty();
+        private Optional<Long> totalTokens = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -73,23 +73,23 @@ public final class TenantUsageReport {
         private Builder() {}
 
         public Builder from(TenantUsageReport other) {
-            tokenReport(other.getTokenReport());
+            totalTokens(other.getTotalTokens());
             return this;
         }
 
-        @JsonSetter(value = "token_report", nulls = Nulls.SKIP)
-        public Builder tokenReport(Optional<TokenReport> tokenReport) {
-            this.tokenReport = tokenReport;
+        @JsonSetter(value = "total_tokens", nulls = Nulls.SKIP)
+        public Builder totalTokens(Optional<Long> totalTokens) {
+            this.totalTokens = totalTokens;
             return this;
         }
 
-        public Builder tokenReport(TokenReport tokenReport) {
-            this.tokenReport = Optional.ofNullable(tokenReport);
+        public Builder totalTokens(Long totalTokens) {
+            this.totalTokens = Optional.ofNullable(totalTokens);
             return this;
         }
 
         public TenantUsageReport build() {
-            return new TenantUsageReport(tokenReport, additionalProperties);
+            return new TenantUsageReport(totalTokens, additionalProperties);
         }
     }
 }
