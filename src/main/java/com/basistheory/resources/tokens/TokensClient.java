@@ -486,7 +486,7 @@ public class TokensClient {
         RequestBody body;
         try {
             body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaType.parse("application/merge-patch+json"));
         } catch (JsonProcessingException e) {
             throw new BasisTheoryException("Failed to serialize request", e);
         }
