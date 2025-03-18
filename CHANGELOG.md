@@ -1,3 +1,11 @@
+## [1.1.0](https://github.com/Basis-Theory/java-sdk/compare/1.0.1...1.1.0) (2025-03-18)
+
+
+### Features
+
+* Apple Pay support ([28157ab](https://github.com/Basis-Theory/java-sdk/commit/28157abb2b4ce43748d0cbf0cbb240a8df2ead6a))
+
+
 ### [1.0.1](https://github.com/Basis-Theory/java-sdk/compare/1.0.0...1.0.1) (2025-03-18)
 
 
