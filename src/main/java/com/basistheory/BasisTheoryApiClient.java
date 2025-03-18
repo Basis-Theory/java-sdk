@@ -8,6 +8,7 @@ import com.basistheory.core.Suppliers;
 import com.basistheory.resources.applicationkeys.ApplicationKeysClient;
 import com.basistheory.resources.applications.ApplicationsClient;
 import com.basistheory.resources.applicationtemplates.ApplicationTemplatesClient;
+import com.basistheory.resources.connections.ConnectionsClient;
 import com.basistheory.resources.enrichments.EnrichmentsClient;
 import com.basistheory.resources.googlepay.GooglepayClient;
 import com.basistheory.resources.logs.LogsClient;
@@ -54,6 +55,8 @@ public class BasisTheoryApiClient {
 
     protected final Supplier<WebhooksClient> webhooksClient;
 
+    protected final Supplier<ConnectionsClient> connectionsClient;
+
     protected final Supplier<TenantsClient> tenantsClient;
 
     protected final Supplier<ThreedsClient> threedsClient;
@@ -74,6 +77,7 @@ public class BasisTheoryApiClient {
         this.sessionsClient = Suppliers.memoize(() -> new SessionsClient(clientOptions));
         this.tokenIntentsClient = Suppliers.memoize(() -> new TokenIntentsClient(clientOptions));
         this.webhooksClient = Suppliers.memoize(() -> new WebhooksClient(clientOptions));
+        this.connectionsClient = Suppliers.memoize(() -> new ConnectionsClient(clientOptions));
         this.tenantsClient = Suppliers.memoize(() -> new TenantsClient(clientOptions));
         this.threedsClient = Suppliers.memoize(() -> new ThreedsClient(clientOptions));
     }
@@ -132,6 +136,10 @@ public class BasisTheoryApiClient {
 
     public WebhooksClient webhooks() {
         return this.webhooksClient.get();
+    }
+
+    public ConnectionsClient connections() {
+        return this.connectionsClient.get();
     }
 
     public TenantsClient tenants() {
