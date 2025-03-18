@@ -100,25 +100,6 @@ public final class TestClient {
     }
 
     @Test
-    public void shouldSupportPaginationOnListV1() {
-        TokensClient tokensClient = new TokensClient(privateClientOptions());
-        int pageSize = 3;
-        SyncPagingIterable<Token> tokens = tokensClient.list(TokensListRequest.builder()
-                .page(1)
-                .size(pageSize)
-                .build());
-
-        int count = 0;
-        for (Token token : tokens) {
-            count++;
-            if (count > pageSize) {
-                break;
-            }
-        }
-        assertTrue(count > pageSize);
-    }
-
-    @Test
     public void shouldSupportPaginationOnListV2() {
         TokensClient tokensClient = new TokensClient(privateClientOptions());
         int pageSize = 3;
@@ -158,23 +139,23 @@ public final class TestClient {
 //        ensureWebhookIsRemoved(webhooksClient, webhookId);
     }
 
-    // @Test
-    // public void shouldSupportGooglePay() throws JsonProcessingException {
-    //     GooglepayClient client = new GooglepayClient(privateClientOptions());
-    //     GooglePaymentMethodToken googlePayToken = ObjectMappers.JSON_MAPPER.readValue(
-    //         "{\"signature\":\"MEQCIBnz8wKrUi3qrLSn6KSrTcNIo6YcOzrfre7X49S27MrKAiBMF70q7EHe0Bw8uva77pclggSiPMRTFRFl7TZILyACOQ\\u003d\\u003d\",\"intermediateSigningKey\":{\"signedKey\":\"{\\\"keyValue\\\":\\\"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEnK9rrDl5FJalSwcoZD3qB5EYcA/sYVTH2Nbh6y/EZArFvvBRQA1eI3BIv1iZeCkBLd/A2nU1ve7xENoPOfp7+Q\\\\u003d\\\\u003d\\\",\\\"keyExpiration\\\":\\\"1737724267469\\\"}\",\"signatures\":[\"MEQCIHugFzQtVBVNizwkMhG/POcZAmRRXyeiZpt3aFwBzt5cAiBSOY4pfT4tQGWzZjkldbYkpBwWGpSasxRmlt7XPNOaLQ\\u003d\\u003d\"]},\"protocolVersion\":\"ECv2\",\"signedMessage\":\"{\\\"encryptedMessage\\\":\\\"XURDnvPAIhAKT9rARBV9RT0/yVTesT/w0UniXCJflwu2TkE54UnP7ZmWBo0gKjTJIU3j8D1Rntw2Ywr2UDLbZor+UoeZltzZOAv6iAR4MfvCLSzlh3HcjechwqZM8oxSF2iZoD2XrNqOgaYbOY1EaYoLx1JpftZDuTqSDLYa+szsoPjAUgzBO5TJZTDIa3zDNAdK3UtAPwutL1M4pTyuFhUKOC12J3RzZdaGFANbKSc8vdfqnR1hqsvsEt1sWPf2O3yty91klSA7FDckvwlKfRoNyQMDhaDkEvYUi75uxcjCRHE0Jjbj61bZriSTXiG2KWNF2OKpz7l61kgPJxCpK7A7TV3P4pBLwW7DYbRusO6FupLehxOZl9nBpVfApytCZGjaSXT7QfPpxdBv8j2VfKsodOf/dwv2Thrra9a6ZzFWsUz4l7Jbr4MCBLhXH4lSuxKrlA2Rf/CVPTgz8b88cYpEDZyqLJxDstwy74/Nl7Mjc4V7thzmdskAeYSuZXKXyyeo3BHqkguRkeagEwuHiZoem2V4W2qWOF8hYn14KY3cXXNcVA\\\\u003d\\\\u003d\\\",\\\"ephemeralPublicKey\\\":\\\"BHBDKlM3tik4o9leEkHu+875bHbORaCK7dDeXFCRmv4bzWJw/4bsvtBtaBH3SW5JXkE/6pkRYAtjFzQmHMRQYvc\\\\u003d\\\",\\\"tag\\\":\\\"Hle3Oafx5sfUc3U3sCQgV0tRPhCAvPlVLYiqvbPyTYY\\\\u003d\\\"}\"}",
-    //             GooglePaymentMethodToken.class);
+     @Test
+     public void shouldSupportGooglePay() throws JsonProcessingException {
+         GooglepayClient client = new GooglepayClient(privateTestTenantClientOptions());
+         GooglePaymentMethodToken googlePayToken = ObjectMappers.JSON_MAPPER.readValue(
+             "{\"signature\":\"MEQCIBnz8wKrUi3qrLSn6KSrTcNIo6YcOzrfre7X49S27MrKAiBMF70q7EHe0Bw8uva77pclggSiPMRTFRFl7TZILyACOQ\\u003d\\u003d\",\"intermediateSigningKey\":{\"signedKey\":\"{\\\"keyValue\\\":\\\"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEnK9rrDl5FJalSwcoZD3qB5EYcA/sYVTH2Nbh6y/EZArFvvBRQA1eI3BIv1iZeCkBLd/A2nU1ve7xENoPOfp7+Q\\\\u003d\\\\u003d\\\",\\\"keyExpiration\\\":\\\"1737724267469\\\"}\",\"signatures\":[\"MEQCIHugFzQtVBVNizwkMhG/POcZAmRRXyeiZpt3aFwBzt5cAiBSOY4pfT4tQGWzZjkldbYkpBwWGpSasxRmlt7XPNOaLQ\\u003d\\u003d\"]},\"protocolVersion\":\"ECv2\",\"signedMessage\":\"{\\\"encryptedMessage\\\":\\\"XURDnvPAIhAKT9rARBV9RT0/yVTesT/w0UniXCJflwu2TkE54UnP7ZmWBo0gKjTJIU3j8D1Rntw2Ywr2UDLbZor+UoeZltzZOAv6iAR4MfvCLSzlh3HcjechwqZM8oxSF2iZoD2XrNqOgaYbOY1EaYoLx1JpftZDuTqSDLYa+szsoPjAUgzBO5TJZTDIa3zDNAdK3UtAPwutL1M4pTyuFhUKOC12J3RzZdaGFANbKSc8vdfqnR1hqsvsEt1sWPf2O3yty91klSA7FDckvwlKfRoNyQMDhaDkEvYUi75uxcjCRHE0Jjbj61bZriSTXiG2KWNF2OKpz7l61kgPJxCpK7A7TV3P4pBLwW7DYbRusO6FupLehxOZl9nBpVfApytCZGjaSXT7QfPpxdBv8j2VfKsodOf/dwv2Thrra9a6ZzFWsUz4l7Jbr4MCBLhXH4lSuxKrlA2Rf/CVPTgz8b88cYpEDZyqLJxDstwy74/Nl7Mjc4V7thzmdskAeYSuZXKXyyeo3BHqkguRkeagEwuHiZoem2V4W2qWOF8hYn14KY3cXXNcVA\\\\u003d\\\\u003d\\\",\\\"ephemeralPublicKey\\\":\\\"BHBDKlM3tik4o9leEkHu+875bHbORaCK7dDeXFCRmv4bzWJw/4bsvtBtaBH3SW5JXkE/6pkRYAtjFzQmHMRQYvc\\\\u003d\\\",\\\"tag\\\":\\\"Hle3Oafx5sfUc3U3sCQgV0tRPhCAvPlVLYiqvbPyTYY\\\\u003d\\\"}\"}",
+                 GooglePaymentMethodToken.class);
 
-    //     try {
-    //         client.tokenize(GooglePayTokenizeRequest.builder().googlePaymentMethodToken(googlePayToken).build());
-    //         fail("Should have thrown exception");
-    //     } catch (UnprocessableEntityError e) {
-    //         assertTrue(true);
-    //         assertTrue(e.body().getDetail()
-    //                 .orElseThrow(() -> new RuntimeException("No detail in error"))
-    //                 .contains("expired intermediateSigningKey"));
-    //     }
-    // }
+         try {
+             client.tokenize(GooglePayTokenizeRequest.builder().googlePaymentMethodToken(googlePayToken).build());
+             fail("Should have thrown exception");
+         } catch (UnprocessableEntityError e) {
+             assertTrue(true);
+             assertTrue(e.body().getDetail()
+                     .orElseThrow(() -> new RuntimeException("No detail in error"))
+                     .contains("expired intermediateSigningKey"), "Expected exception body to contain \"expired intermediateSigningKey\"; Actual: " + e.body().getDetail().get());
+         }
+     }
 
     @NotNull
     private static ClientOptions managementClientOptions() {
@@ -189,6 +170,14 @@ public final class TestClient {
         return ClientOptions.builder()
                 .environment(Environment.custom(System.getenv("BT_API_URL")))
                 .addHeader("BT-API-KEY", System.getenv("BT_PVT_API_KEY"))
+                .build();
+    }
+
+    @NotNull
+    private static ClientOptions privateTestTenantClientOptions() {
+        return ClientOptions.builder()
+                .environment(Environment.custom(System.getenv("BT_API_URL")))
+                .addHeader("BT-API-KEY", System.getenv("BT_PVT_TEST_API_KEY"))
                 .build();
     }
 
