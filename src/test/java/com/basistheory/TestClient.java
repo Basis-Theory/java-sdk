@@ -15,15 +15,16 @@ import com.basistheory.resources.googlepay.GooglepayClient;
 import com.basistheory.resources.googlepay.requests.GooglePayTokenizeRequest;
 import com.basistheory.resources.proxies.ProxiesClient;
 import com.basistheory.resources.proxies.requests.CreateProxyRequest;
+import com.basistheory.resources.proxies.requests.PatchProxyRequest;
 import com.basistheory.resources.proxies.requests.UpdateProxyRequest;
 import com.basistheory.resources.reactors.ReactorsClient;
 import com.basistheory.resources.reactors.requests.CreateReactorRequest;
+import com.basistheory.resources.reactors.requests.PatchReactorRequest;
 import com.basistheory.resources.reactors.requests.ReactRequest;
 import com.basistheory.resources.reactors.requests.UpdateReactorRequest;
 import com.basistheory.resources.tenants.TenantsClient;
 import com.basistheory.resources.tokens.TokensClient;
 import com.basistheory.resources.tokens.requests.CreateTokenRequest;
-import com.basistheory.resources.tokens.requests.TokensListRequest;
 import com.basistheory.resources.tokens.requests.TokensListV2Request;
 import com.basistheory.resources.tokens.requests.UpdateTokenRequest;
 import com.basistheory.resources.webhooks.WebhooksClient;
@@ -31,9 +32,7 @@ import com.basistheory.resources.webhooks.requests.CreateWebhookRequest;
 import com.basistheory.resources.webhooks.requests.UpdateWebhookRequest;
 import com.basistheory.types.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -70,7 +69,7 @@ public final class TestClient {
         ProxiesClient proxyClient = new ProxiesClient(managementClientOptions());
         Proxy proxy = createProxy(proxyClient, applicationId);
         String proxyId = proxy.getId().get();
-        updateProxy(proxyClient, applicationId, proxyId);
+        patchProxy(proxyClient, applicationId, proxyId);
         proxyClient.delete(proxyId);
 
         // Reactors
@@ -82,7 +81,7 @@ public final class TestClient {
                 .build()
         );
         String reactorId = reactor.getId().get();
-        reactorsManagementClient.update(reactorId, UpdateReactorRequest.builder()
+        reactorsManagementClient.patch(reactorId, PatchReactorRequest.builder()
                 .name("(Deletable) java-SDK-" + UUID.randomUUID())
                 .code("module.exports = function (req) {return {raw: req.args}}")
                 .application(Application.builder().id(applicationId).build())
@@ -251,14 +250,13 @@ public final class TestClient {
         return proxy;
     }
 
-    private static Proxy updateProxy(ProxiesClient proxyClient, String applicationId, String proxyId) {
-        Proxy proxy = proxyClient.update(proxyId, UpdateProxyRequest.builder()
+    private static void patchProxy(ProxiesClient proxyClient, String applicationId, String proxyId) {
+        proxyClient.patch(proxyId, PatchProxyRequest.builder()
                 .name("(Deletable) java-SDK-" + UUID.randomUUID())
                 .destinationUrl("https://echo.basistheory.com/" + UUID.randomUUID())
                 .application(Application.builder().id(applicationId).build())
                 .build()
         );
-        return proxy;
     }
 
     private static void react(ReactorsClient reactorsClient, String reactorId) {
