@@ -7,6 +7,7 @@ import com.basistheory.core.BasisTheoryApiApiException;
 import com.basistheory.core.BasisTheoryException;
 import com.basistheory.core.ClientOptions;
 import com.basistheory.core.ObjectMappers;
+import com.basistheory.core.QueryStringMapper;
 import com.basistheory.core.RequestOptions;
 import com.basistheory.errors.BadRequestError;
 import com.basistheory.errors.ForbiddenError;
@@ -46,14 +47,15 @@ public class PermissionsClient {
                 .newBuilder()
                 .addPathSegments("permissions");
         if (request.getApplicationType().isPresent()) {
-            httpUrl.addQueryParameter(
-                    "application_type", request.getApplicationType().get());
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "application_type", request.getApplicationType().get(), false);
         }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json");
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json");
         Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {

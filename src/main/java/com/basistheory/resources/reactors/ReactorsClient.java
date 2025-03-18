@@ -9,6 +9,7 @@ import com.basistheory.core.ClientOptions;
 import com.basistheory.core.IdempotentRequestOptions;
 import com.basistheory.core.MediaTypes;
 import com.basistheory.core.ObjectMappers;
+import com.basistheory.core.QueryStringMapper;
 import com.basistheory.core.RequestOptions;
 import com.basistheory.core.Suppliers;
 import com.basistheory.core.pagination.SyncPagingIterable;
@@ -67,25 +68,30 @@ public class ReactorsClient {
                 .newBuilder()
                 .addPathSegments("reactors");
         if (request.getId().isPresent()) {
-            httpUrl.addQueryParameter("id", request.getId().get());
+            QueryStringMapper.addQueryParameter(httpUrl, "id", request.getId().get(), false);
         }
         if (request.getName().isPresent()) {
-            httpUrl.addQueryParameter("name", request.getName().get());
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "name", request.getName().get(), false);
         }
         if (request.getPage().isPresent()) {
-            httpUrl.addQueryParameter("page", request.getPage().get().toString());
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "page", request.getPage().get().toString(), false);
         }
         if (request.getStart().isPresent()) {
-            httpUrl.addQueryParameter("start", request.getStart().get());
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "start", request.getStart().get(), false);
         }
         if (request.getSize().isPresent()) {
-            httpUrl.addQueryParameter("size", request.getSize().get().toString());
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "size", request.getSize().get().toString(), false);
         }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json");
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json");
         Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -102,7 +108,7 @@ public class ReactorsClient {
                         .page(newPageNumber)
                         .build();
                 List<Reactor> result = parsedResponse.getData().orElse(Collections.emptyList());
-                return new SyncPagingIterable<>(true, result, () -> list(nextRequest, requestOptions));
+                return new SyncPagingIterable<Reactor>(true, result, () -> list(nextRequest, requestOptions));
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
@@ -149,6 +155,7 @@ public class ReactorsClient {
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -199,6 +206,7 @@ public class ReactorsClient {
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -255,6 +263,7 @@ public class ReactorsClient {
                 .method("PUT", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -306,6 +315,7 @@ public class ReactorsClient {
                 .url(httpUrl)
                 .method("DELETE", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -365,6 +375,8 @@ public class ReactorsClient {
                 .url(httpUrl)
                 .method("PATCH", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/merge-patch+json")
+                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -429,6 +441,7 @@ public class ReactorsClient {
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -496,6 +509,7 @@ public class ReactorsClient {
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {

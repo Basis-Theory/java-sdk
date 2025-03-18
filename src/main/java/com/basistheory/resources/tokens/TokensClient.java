@@ -9,6 +9,7 @@ import com.basistheory.core.ClientOptions;
 import com.basistheory.core.IdempotentRequestOptions;
 import com.basistheory.core.MediaTypes;
 import com.basistheory.core.ObjectMappers;
+import com.basistheory.core.QueryStringMapper;
 import com.basistheory.core.RequestOptions;
 import com.basistheory.core.pagination.SyncPagingIterable;
 import com.basistheory.errors.BadRequestError;
@@ -70,6 +71,7 @@ public class TokensClient {
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -129,6 +131,7 @@ public class TokensClient {
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -180,25 +183,30 @@ public class TokensClient {
                 .newBuilder()
                 .addPathSegments("tokens");
         if (request.getId().isPresent()) {
-            httpUrl.addQueryParameter("id", request.getId().get());
+            QueryStringMapper.addQueryParameter(httpUrl, "id", request.getId().get(), false);
         }
         if (request.getMetadata().isPresent()) {
-            httpUrl.addQueryParameter("metadata", request.getMetadata().get().toString());
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "metadata", request.getMetadata().get().toString(), false);
         }
         if (request.getPage().isPresent()) {
-            httpUrl.addQueryParameter("page", request.getPage().get().toString());
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "page", request.getPage().get().toString(), false);
         }
         if (request.getStart().isPresent()) {
-            httpUrl.addQueryParameter("start", request.getStart().get());
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "start", request.getStart().get(), false);
         }
         if (request.getSize().isPresent()) {
-            httpUrl.addQueryParameter("size", request.getSize().get().toString());
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "size", request.getSize().get().toString(), false);
         }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json");
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json");
         Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -215,7 +223,7 @@ public class TokensClient {
                         .page(newPageNumber)
                         .build();
                 List<Token> result = parsedResponse.getData().orElse(Collections.emptyList());
-                return new SyncPagingIterable<>(true, result, () -> list(nextRequest, requestOptions));
+                return new SyncPagingIterable<Token>(true, result, () -> list(nextRequest, requestOptions));
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
@@ -264,6 +272,7 @@ public class TokensClient {
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -327,6 +336,7 @@ public class TokensClient {
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -343,7 +353,7 @@ public class TokensClient {
                         .page(newPageNumber)
                         .build();
                 List<Token> result = parsedResponse.getData().orElse(Collections.emptyList());
-                return new SyncPagingIterable<>(true, result, () -> search(nextRequest, requestOptions));
+                return new SyncPagingIterable<Token>(true, result, () -> search(nextRequest, requestOptions));
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
@@ -385,6 +395,7 @@ public class TokensClient {
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -433,6 +444,7 @@ public class TokensClient {
                 .url(httpUrl)
                 .method("DELETE", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -496,6 +508,7 @@ public class TokensClient {
                 .method("PATCH", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/merge-patch+json")
+                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -549,28 +562,35 @@ public class TokensClient {
                 .newBuilder()
                 .addPathSegments("v2/tokens");
         if (request.getType().isPresent()) {
-            httpUrl.addQueryParameter("type", request.getType().get());
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "type", request.getType().get(), false);
         }
         if (request.getContainer().isPresent()) {
-            httpUrl.addQueryParameter("container", request.getContainer().get());
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "container", request.getContainer().get(), false);
         }
         if (request.getFingerprint().isPresent()) {
-            httpUrl.addQueryParameter("fingerprint", request.getFingerprint().get());
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "fingerprint", request.getFingerprint().get(), false);
         }
         if (request.getMetadata().isPresent()) {
-            httpUrl.addQueryParameter("metadata", request.getMetadata().get().toString());
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "metadata", request.getMetadata().get().toString(), false);
         }
         if (request.getStart().isPresent()) {
-            httpUrl.addQueryParameter("start", request.getStart().get());
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "start", request.getStart().get(), false);
         }
         if (request.getSize().isPresent()) {
-            httpUrl.addQueryParameter("size", request.getSize().get().toString());
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "size", request.getSize().get().toString(), false);
         }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json");
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json");
         Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -587,7 +607,7 @@ public class TokensClient {
                         .start(startingAfter)
                         .build();
                 List<Token> result = parsedResponse.getData().orElse(Collections.emptyList());
-                return new SyncPagingIterable<>(
+                return new SyncPagingIterable<Token>(
                         startingAfter.isPresent(), result, () -> listV2(nextRequest, requestOptions));
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
@@ -637,6 +657,7 @@ public class TokensClient {
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -653,7 +674,7 @@ public class TokensClient {
                         .start(startingAfter)
                         .build();
                 List<Token> result = parsedResponse.getData().orElse(Collections.emptyList());
-                return new SyncPagingIterable<>(
+                return new SyncPagingIterable<Token>(
                         startingAfter.isPresent(), result, () -> searchV2(nextRequest, requestOptions));
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
