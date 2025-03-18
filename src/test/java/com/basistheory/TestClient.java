@@ -15,9 +15,11 @@ import com.basistheory.resources.googlepay.GooglepayClient;
 import com.basistheory.resources.googlepay.requests.GooglePayTokenizeRequest;
 import com.basistheory.resources.proxies.ProxiesClient;
 import com.basistheory.resources.proxies.requests.CreateProxyRequest;
+import com.basistheory.resources.proxies.requests.UpdateProxyRequest;
 import com.basistheory.resources.reactors.ReactorsClient;
 import com.basistheory.resources.reactors.requests.CreateReactorRequest;
 import com.basistheory.resources.reactors.requests.ReactRequest;
+import com.basistheory.resources.reactors.requests.UpdateReactorRequest;
 import com.basistheory.resources.tenants.TenantsClient;
 import com.basistheory.resources.tokens.TokensClient;
 import com.basistheory.resources.tokens.requests.CreateTokenRequest;
@@ -68,6 +70,7 @@ public final class TestClient {
         ProxiesClient proxyClient = new ProxiesClient(managementClientOptions());
         Proxy proxy = createProxy(proxyClient, applicationId);
         String proxyId = proxy.getId().get();
+        updateProxy(proxyClient, applicationId, proxyId);
         proxyClient.delete(proxyId);
 
         // Reactors
@@ -79,6 +82,12 @@ public final class TestClient {
                 .build()
         );
         String reactorId = reactor.getId().get();
+        reactorsManagementClient.update(reactorId, UpdateReactorRequest.builder()
+                .name("(Deletable) java-SDK-" + UUID.randomUUID())
+                .code("module.exports = function (req) {return {raw: req.args}}")
+                .application(Application.builder().id(applicationId).build())
+                .build()
+        );
         react(new ReactorsClient(privateClientOptions()), reactorId);
         reactorsManagementClient.delete(reactorId);
 
@@ -234,6 +243,16 @@ public final class TestClient {
 
     private static Proxy createProxy(ProxiesClient proxyClient, String applicationId) {
         Proxy proxy = proxyClient.create(CreateProxyRequest.builder()
+                .name("(Deletable) java-SDK-" + UUID.randomUUID())
+                .destinationUrl("https://echo.basistheory.com/" + UUID.randomUUID())
+                .application(Application.builder().id(applicationId).build())
+                .build()
+        );
+        return proxy;
+    }
+
+    private static Proxy updateProxy(ProxiesClient proxyClient, String applicationId, String proxyId) {
+        Proxy proxy = proxyClient.update(proxyId, UpdateProxyRequest.builder()
                 .name("(Deletable) java-SDK-" + UUID.randomUUID())
                 .destinationUrl("https://echo.basistheory.com/" + UUID.randomUUID())
                 .application(Application.builder().id(applicationId).build())
