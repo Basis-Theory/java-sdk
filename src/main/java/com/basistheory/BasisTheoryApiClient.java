@@ -5,6 +5,7 @@ package com.basistheory;
 
 import com.basistheory.core.ClientOptions;
 import com.basistheory.core.Suppliers;
+import com.basistheory.resources.applepay.ApplePayClient;
 import com.basistheory.resources.applicationkeys.ApplicationKeysClient;
 import com.basistheory.resources.applications.ApplicationsClient;
 import com.basistheory.resources.applicationtemplates.ApplicationTemplatesClient;
@@ -25,6 +26,8 @@ import java.util.function.Supplier;
 
 public class BasisTheoryApiClient {
     protected final ClientOptions clientOptions;
+
+    protected final Supplier<ApplePayClient> applePayClient;
 
     protected final Supplier<ApplicationsClient> applicationsClient;
 
@@ -60,6 +63,7 @@ public class BasisTheoryApiClient {
 
     public BasisTheoryApiClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
+        this.applePayClient = Suppliers.memoize(() -> new ApplePayClient(clientOptions));
         this.applicationsClient = Suppliers.memoize(() -> new ApplicationsClient(clientOptions));
         this.applicationKeysClient = Suppliers.memoize(() -> new ApplicationKeysClient(clientOptions));
         this.applicationTemplatesClient = Suppliers.memoize(() -> new ApplicationTemplatesClient(clientOptions));
@@ -76,6 +80,10 @@ public class BasisTheoryApiClient {
         this.webhooksClient = Suppliers.memoize(() -> new WebhooksClient(clientOptions));
         this.tenantsClient = Suppliers.memoize(() -> new TenantsClient(clientOptions));
         this.threedsClient = Suppliers.memoize(() -> new ThreedsClient(clientOptions));
+    }
+
+    public ApplePayClient applePay() {
+        return this.applePayClient.get();
     }
 
     public ApplicationsClient applications() {

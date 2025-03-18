@@ -9,6 +9,7 @@ import com.basistheory.core.ClientOptions;
 import com.basistheory.core.IdempotentRequestOptions;
 import com.basistheory.core.MediaTypes;
 import com.basistheory.core.ObjectMappers;
+import com.basistheory.core.QueryStringMapper;
 import com.basistheory.core.RequestOptions;
 import com.basistheory.core.pagination.SyncPagingIterable;
 import com.basistheory.errors.BadRequestError;
@@ -29,7 +30,6 @@ import java.util.Collections;
 import java.util.List;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -56,25 +56,30 @@ public class ProxiesClient {
                 .newBuilder()
                 .addPathSegments("proxies");
         if (request.getId().isPresent()) {
-            httpUrl.addQueryParameter("id", request.getId().get());
+            QueryStringMapper.addQueryParameter(httpUrl, "id", request.getId().get(), false);
         }
         if (request.getName().isPresent()) {
-            httpUrl.addQueryParameter("name", request.getName().get());
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "name", request.getName().get(), false);
         }
         if (request.getPage().isPresent()) {
-            httpUrl.addQueryParameter("page", request.getPage().get().toString());
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "page", request.getPage().get().toString(), false);
         }
         if (request.getStart().isPresent()) {
-            httpUrl.addQueryParameter("start", request.getStart().get());
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "start", request.getStart().get(), false);
         }
         if (request.getSize().isPresent()) {
-            httpUrl.addQueryParameter("size", request.getSize().get().toString());
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "size", request.getSize().get().toString(), false);
         }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json");
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json");
         Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -91,7 +96,7 @@ public class ProxiesClient {
                         .page(newPageNumber)
                         .build();
                 List<Proxy> result = parsedResponse.getData().orElse(Collections.emptyList());
-                return new SyncPagingIterable<>(true, result, () -> list(nextRequest, requestOptions));
+                return new SyncPagingIterable<Proxy>(true, result, () -> list(nextRequest, requestOptions));
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
@@ -138,6 +143,7 @@ public class ProxiesClient {
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -188,6 +194,7 @@ public class ProxiesClient {
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -244,6 +251,7 @@ public class ProxiesClient {
                 .method("PUT", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -295,6 +303,7 @@ public class ProxiesClient {
                 .url(httpUrl)
                 .method("DELETE", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -346,7 +355,7 @@ public class ProxiesClient {
         RequestBody body;
         try {
             body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaType.parse("application/merge-patch+json"));
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
         } catch (JsonProcessingException e) {
             throw new BasisTheoryException("Failed to serialize request", e);
         }
@@ -354,6 +363,8 @@ public class ProxiesClient {
                 .url(httpUrl)
                 .method("PATCH", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/merge-patch+json")
+                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {

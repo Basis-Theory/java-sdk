@@ -7,6 +7,7 @@ import com.basistheory.core.BasisTheoryApiApiException;
 import com.basistheory.core.BasisTheoryException;
 import com.basistheory.core.ClientOptions;
 import com.basistheory.core.ObjectMappers;
+import com.basistheory.core.QueryStringMapper;
 import com.basistheory.core.RequestOptions;
 import com.basistheory.core.pagination.SyncPagingIterable;
 import com.basistheory.errors.BadRequestError;
@@ -50,31 +51,39 @@ public class LogsClient {
                 .newBuilder()
                 .addPathSegments("logs");
         if (request.getEntityType().isPresent()) {
-            httpUrl.addQueryParameter("entity_type", request.getEntityType().get());
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "entity_type", request.getEntityType().get(), false);
         }
         if (request.getEntityId().isPresent()) {
-            httpUrl.addQueryParameter("entity_id", request.getEntityId().get());
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "entity_id", request.getEntityId().get(), false);
         }
         if (request.getStartDate().isPresent()) {
-            httpUrl.addQueryParameter("start_date", request.getStartDate().get().toString());
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "start_date", request.getStartDate().get().toString(), false);
         }
         if (request.getEndDate().isPresent()) {
-            httpUrl.addQueryParameter("end_date", request.getEndDate().get().toString());
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "end_date", request.getEndDate().get().toString(), false);
         }
         if (request.getPage().isPresent()) {
-            httpUrl.addQueryParameter("page", request.getPage().get().toString());
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "page", request.getPage().get().toString(), false);
         }
         if (request.getStart().isPresent()) {
-            httpUrl.addQueryParameter("start", request.getStart().get());
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "start", request.getStart().get(), false);
         }
         if (request.getSize().isPresent()) {
-            httpUrl.addQueryParameter("size", request.getSize().get().toString());
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "size", request.getSize().get().toString(), false);
         }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json");
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json");
         Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -91,7 +100,7 @@ public class LogsClient {
                         .page(newPageNumber)
                         .build();
                 List<Log> result = parsedResponse.getData().orElse(Collections.emptyList());
-                return new SyncPagingIterable<>(true, result, () -> list(nextRequest, requestOptions));
+                return new SyncPagingIterable<Log>(true, result, () -> list(nextRequest, requestOptions));
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
@@ -132,6 +141,7 @@ public class LogsClient {
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
