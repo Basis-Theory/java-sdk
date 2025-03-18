@@ -188,7 +188,7 @@ public final class TestClient {
     private static ClientOptions privateTestTenantClientOptions() {
         return ClientOptions.builder()
                 .environment(Environment.custom(System.getenv("BT_API_URL")))
-                .addHeader("BT-API-KEY", System.getenv("BT_PVT_TEST_API_KEY"))
+                .addHeader("BT-API-KEY", System.getenv("BT_SDK_INT_TEST_PVT_TEST_API_KEY"))
                 .build();
     }
 
