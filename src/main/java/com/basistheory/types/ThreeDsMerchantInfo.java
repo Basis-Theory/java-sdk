@@ -30,6 +30,8 @@ public final class ThreeDsMerchantInfo {
 
     private final Optional<String> categoryCode;
 
+    private final Optional<String> url;
+
     private final Optional<ThreeDsMerchantRiskInfo> riskInfo;
 
     private final Map<String, Object> additionalProperties;
@@ -40,6 +42,7 @@ public final class ThreeDsMerchantInfo {
             Optional<String> name,
             Optional<String> countryCode,
             Optional<String> categoryCode,
+            Optional<String> url,
             Optional<ThreeDsMerchantRiskInfo> riskInfo,
             Map<String, Object> additionalProperties) {
         this.mid = mid;
@@ -47,6 +50,7 @@ public final class ThreeDsMerchantInfo {
         this.name = name;
         this.countryCode = countryCode;
         this.categoryCode = categoryCode;
+        this.url = url;
         this.riskInfo = riskInfo;
         this.additionalProperties = additionalProperties;
     }
@@ -76,6 +80,11 @@ public final class ThreeDsMerchantInfo {
         return categoryCode;
     }
 
+    @JsonProperty("url")
+    public Optional<String> getUrl() {
+        return url;
+    }
+
     @JsonProperty("risk_info")
     public Optional<ThreeDsMerchantRiskInfo> getRiskInfo() {
         return riskInfo;
@@ -98,12 +107,14 @@ public final class ThreeDsMerchantInfo {
                 && name.equals(other.name)
                 && countryCode.equals(other.countryCode)
                 && categoryCode.equals(other.categoryCode)
+                && url.equals(other.url)
                 && riskInfo.equals(other.riskInfo);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.mid, this.acquirerBin, this.name, this.countryCode, this.categoryCode, this.riskInfo);
+        return Objects.hash(
+                this.mid, this.acquirerBin, this.name, this.countryCode, this.categoryCode, this.url, this.riskInfo);
     }
 
     @java.lang.Override
@@ -127,6 +138,8 @@ public final class ThreeDsMerchantInfo {
 
         private Optional<String> categoryCode = Optional.empty();
 
+        private Optional<String> url = Optional.empty();
+
         private Optional<ThreeDsMerchantRiskInfo> riskInfo = Optional.empty();
 
         @JsonAnySetter
@@ -140,6 +153,7 @@ public final class ThreeDsMerchantInfo {
             name(other.getName());
             countryCode(other.getCountryCode());
             categoryCode(other.getCategoryCode());
+            url(other.getUrl());
             riskInfo(other.getRiskInfo());
             return this;
         }
@@ -199,6 +213,17 @@ public final class ThreeDsMerchantInfo {
             return this;
         }
 
+        @JsonSetter(value = "url", nulls = Nulls.SKIP)
+        public Builder url(Optional<String> url) {
+            this.url = url;
+            return this;
+        }
+
+        public Builder url(String url) {
+            this.url = Optional.ofNullable(url);
+            return this;
+        }
+
         @JsonSetter(value = "risk_info", nulls = Nulls.SKIP)
         public Builder riskInfo(Optional<ThreeDsMerchantRiskInfo> riskInfo) {
             this.riskInfo = riskInfo;
@@ -212,7 +237,7 @@ public final class ThreeDsMerchantInfo {
 
         public ThreeDsMerchantInfo build() {
             return new ThreeDsMerchantInfo(
-                    mid, acquirerBin, name, countryCode, categoryCode, riskInfo, additionalProperties);
+                    mid, acquirerBin, name, countryCode, categoryCode, url, riskInfo, additionalProperties);
         }
     }
 }
