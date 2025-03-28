@@ -37,6 +37,8 @@ public final class TokenIntent {
 
     private final Optional<CardDetails> card;
 
+    private final Optional<BankDetails> bank;
+
     private final Optional<CardDetails> networkToken;
 
     private final Optional<TokenAuthentication> authentication;
@@ -54,6 +56,7 @@ public final class TokenIntent {
             Optional<OffsetDateTime> createdAt,
             Optional<OffsetDateTime> expiresAt,
             Optional<CardDetails> card,
+            Optional<BankDetails> bank,
             Optional<CardDetails> networkToken,
             Optional<TokenAuthentication> authentication,
             Optional<TokenIntentExtras> extras,
@@ -66,6 +69,7 @@ public final class TokenIntent {
         this.createdAt = createdAt;
         this.expiresAt = expiresAt;
         this.card = card;
+        this.bank = bank;
         this.networkToken = networkToken;
         this.authentication = authentication;
         this.extras = extras;
@@ -112,6 +116,11 @@ public final class TokenIntent {
         return card;
     }
 
+    @JsonProperty("bank")
+    public Optional<BankDetails> getBank() {
+        return bank;
+    }
+
     @JsonProperty("network_token")
     public Optional<CardDetails> getNetworkToken() {
         return networkToken;
@@ -147,6 +156,7 @@ public final class TokenIntent {
                 && createdAt.equals(other.createdAt)
                 && expiresAt.equals(other.expiresAt)
                 && card.equals(other.card)
+                && bank.equals(other.bank)
                 && networkToken.equals(other.networkToken)
                 && authentication.equals(other.authentication)
                 && extras.equals(other.extras);
@@ -163,6 +173,7 @@ public final class TokenIntent {
                 this.createdAt,
                 this.expiresAt,
                 this.card,
+                this.bank,
                 this.networkToken,
                 this.authentication,
                 this.extras);
@@ -195,6 +206,8 @@ public final class TokenIntent {
 
         private Optional<CardDetails> card = Optional.empty();
 
+        private Optional<BankDetails> bank = Optional.empty();
+
         private Optional<CardDetails> networkToken = Optional.empty();
 
         private Optional<TokenAuthentication> authentication = Optional.empty();
@@ -215,6 +228,7 @@ public final class TokenIntent {
             createdAt(other.getCreatedAt());
             expiresAt(other.getExpiresAt());
             card(other.getCard());
+            bank(other.getBank());
             networkToken(other.getNetworkToken());
             authentication(other.getAuthentication());
             extras(other.getExtras());
@@ -309,6 +323,17 @@ public final class TokenIntent {
             return this;
         }
 
+        @JsonSetter(value = "bank", nulls = Nulls.SKIP)
+        public Builder bank(Optional<BankDetails> bank) {
+            this.bank = bank;
+            return this;
+        }
+
+        public Builder bank(BankDetails bank) {
+            this.bank = Optional.ofNullable(bank);
+            return this;
+        }
+
         @JsonSetter(value = "network_token", nulls = Nulls.SKIP)
         public Builder networkToken(Optional<CardDetails> networkToken) {
             this.networkToken = networkToken;
@@ -352,6 +377,7 @@ public final class TokenIntent {
                     createdAt,
                     expiresAt,
                     card,
+                    bank,
                     networkToken,
                     authentication,
                     extras,
