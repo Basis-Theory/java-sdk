@@ -41,7 +41,7 @@ public final class AuthenticateThreeDsSessionRequest {
 
     private final Optional<ThreeDsMerchantInfo> merchantInfo;
 
-    private final ThreeDsRequestorInfo requestorInfo;
+    private final Optional<ThreeDsRequestorInfo> requestorInfo;
 
     private final Optional<ThreeDsCardholderInfo> cardholderInfo;
 
@@ -59,7 +59,7 @@ public final class AuthenticateThreeDsSessionRequest {
             Optional<Integer> decoupledChallengeMaxTime,
             Optional<ThreeDsPurchaseInfo> purchaseInfo,
             Optional<ThreeDsMerchantInfo> merchantInfo,
-            ThreeDsRequestorInfo requestorInfo,
+            Optional<ThreeDsRequestorInfo> requestorInfo,
             Optional<ThreeDsCardholderInfo> cardholderInfo,
             Optional<Object> broadcastInfo,
             Optional<List<ThreeDsMessageExtension>> messageExtensions,
@@ -114,7 +114,7 @@ public final class AuthenticateThreeDsSessionRequest {
     }
 
     @JsonProperty("requestor_info")
-    public ThreeDsRequestorInfo getRequestorInfo() {
+    public Optional<ThreeDsRequestorInfo> getRequestorInfo() {
         return requestorInfo;
     }
 
@@ -190,11 +190,7 @@ public final class AuthenticateThreeDsSessionRequest {
     }
 
     public interface AuthenticationTypeStage {
-        RequestorInfoStage authenticationType(@NotNull String authenticationType);
-    }
-
-    public interface RequestorInfoStage {
-        _FinalStage requestorInfo(@NotNull ThreeDsRequestorInfo requestorInfo);
+        _FinalStage authenticationType(@NotNull String authenticationType);
     }
 
     public interface _FinalStage {
@@ -220,6 +216,10 @@ public final class AuthenticateThreeDsSessionRequest {
 
         _FinalStage merchantInfo(ThreeDsMerchantInfo merchantInfo);
 
+        _FinalStage requestorInfo(Optional<ThreeDsRequestorInfo> requestorInfo);
+
+        _FinalStage requestorInfo(ThreeDsRequestorInfo requestorInfo);
+
         _FinalStage cardholderInfo(Optional<ThreeDsCardholderInfo> cardholderInfo);
 
         _FinalStage cardholderInfo(ThreeDsCardholderInfo cardholderInfo);
@@ -234,19 +234,18 @@ public final class AuthenticateThreeDsSessionRequest {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder
-            implements AuthenticationCategoryStage, AuthenticationTypeStage, RequestorInfoStage, _FinalStage {
+    public static final class Builder implements AuthenticationCategoryStage, AuthenticationTypeStage, _FinalStage {
         private String authenticationCategory;
 
         private String authenticationType;
-
-        private ThreeDsRequestorInfo requestorInfo;
 
         private Optional<List<ThreeDsMessageExtension>> messageExtensions = Optional.empty();
 
         private Optional<Object> broadcastInfo = Optional.empty();
 
         private Optional<ThreeDsCardholderInfo> cardholderInfo = Optional.empty();
+
+        private Optional<ThreeDsRequestorInfo> requestorInfo = Optional.empty();
 
         private Optional<ThreeDsMerchantInfo> merchantInfo = Optional.empty();
 
@@ -289,15 +288,8 @@ public final class AuthenticateThreeDsSessionRequest {
 
         @java.lang.Override
         @JsonSetter("authentication_type")
-        public RequestorInfoStage authenticationType(@NotNull String authenticationType) {
+        public _FinalStage authenticationType(@NotNull String authenticationType) {
             this.authenticationType = Objects.requireNonNull(authenticationType, "authenticationType must not be null");
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("requestor_info")
-        public _FinalStage requestorInfo(@NotNull ThreeDsRequestorInfo requestorInfo) {
-            this.requestorInfo = Objects.requireNonNull(requestorInfo, "requestorInfo must not be null");
             return this;
         }
 
@@ -337,6 +329,19 @@ public final class AuthenticateThreeDsSessionRequest {
         @JsonSetter(value = "cardholder_info", nulls = Nulls.SKIP)
         public _FinalStage cardholderInfo(Optional<ThreeDsCardholderInfo> cardholderInfo) {
             this.cardholderInfo = cardholderInfo;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage requestorInfo(ThreeDsRequestorInfo requestorInfo) {
+            this.requestorInfo = Optional.ofNullable(requestorInfo);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "requestor_info", nulls = Nulls.SKIP)
+        public _FinalStage requestorInfo(Optional<ThreeDsRequestorInfo> requestorInfo) {
+            this.requestorInfo = requestorInfo;
             return this;
         }
 

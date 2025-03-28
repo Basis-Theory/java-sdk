@@ -12,7 +12,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -20,7 +22,7 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = TokensListRequest.Builder.class)
 public final class TokensListRequest {
-    private final Optional<String> id;
+    private final Optional<List<String>> id;
 
     private final Optional<Map<String, Optional<String>>> metadata;
 
@@ -33,7 +35,7 @@ public final class TokensListRequest {
     private final Map<String, Object> additionalProperties;
 
     private TokensListRequest(
-            Optional<String> id,
+            Optional<List<String>> id,
             Optional<Map<String, Optional<String>>> metadata,
             Optional<Integer> page,
             Optional<String> start,
@@ -48,7 +50,7 @@ public final class TokensListRequest {
     }
 
     @JsonProperty("id")
-    public Optional<String> getId() {
+    public Optional<List<String>> getId() {
         return id;
     }
 
@@ -107,7 +109,7 @@ public final class TokensListRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<String> id = Optional.empty();
+        private Optional<List<String>> id = Optional.empty();
 
         private Optional<Map<String, Optional<String>>> metadata = Optional.empty();
 
@@ -132,13 +134,18 @@ public final class TokensListRequest {
         }
 
         @JsonSetter(value = "id", nulls = Nulls.SKIP)
-        public Builder id(Optional<String> id) {
+        public Builder id(Optional<List<String>> id) {
             this.id = id;
             return this;
         }
 
-        public Builder id(String id) {
+        public Builder id(List<String> id) {
             this.id = Optional.ofNullable(id);
+            return this;
+        }
+
+        public Builder id(String id) {
+            this.id = Optional.of(Collections.singletonList(id));
             return this;
         }
 
