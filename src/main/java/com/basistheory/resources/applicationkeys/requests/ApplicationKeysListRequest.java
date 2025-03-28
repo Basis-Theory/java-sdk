@@ -12,7 +12,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -20,26 +22,26 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ApplicationKeysListRequest.Builder.class)
 public final class ApplicationKeysListRequest {
-    private final Optional<String> id;
+    private final Optional<List<String>> id;
 
-    private final Optional<String> type;
+    private final Optional<List<String>> type;
 
     private final Map<String, Object> additionalProperties;
 
     private ApplicationKeysListRequest(
-            Optional<String> id, Optional<String> type, Map<String, Object> additionalProperties) {
+            Optional<List<String>> id, Optional<List<String>> type, Map<String, Object> additionalProperties) {
         this.id = id;
         this.type = type;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("id")
-    public Optional<String> getId() {
+    public Optional<List<String>> getId() {
         return id;
     }
 
     @JsonProperty("type")
-    public Optional<String> getType() {
+    public Optional<List<String>> getType() {
         return type;
     }
 
@@ -74,9 +76,9 @@ public final class ApplicationKeysListRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<String> id = Optional.empty();
+        private Optional<List<String>> id = Optional.empty();
 
-        private Optional<String> type = Optional.empty();
+        private Optional<List<String>> type = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -90,24 +92,34 @@ public final class ApplicationKeysListRequest {
         }
 
         @JsonSetter(value = "id", nulls = Nulls.SKIP)
-        public Builder id(Optional<String> id) {
+        public Builder id(Optional<List<String>> id) {
             this.id = id;
             return this;
         }
 
-        public Builder id(String id) {
+        public Builder id(List<String> id) {
             this.id = Optional.ofNullable(id);
             return this;
         }
 
+        public Builder id(String id) {
+            this.id = Optional.of(Collections.singletonList(id));
+            return this;
+        }
+
         @JsonSetter(value = "type", nulls = Nulls.SKIP)
-        public Builder type(Optional<String> type) {
+        public Builder type(Optional<List<String>> type) {
             this.type = type;
             return this;
         }
 
-        public Builder type(String type) {
+        public Builder type(List<String> type) {
             this.type = Optional.ofNullable(type);
+            return this;
+        }
+
+        public Builder type(String type) {
+            this.type = Optional.of(Collections.singletonList(type));
             return this;
         }
 

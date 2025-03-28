@@ -27,6 +27,8 @@ public final class ThreeDsAuthentication {
 
     private final Optional<String> tokenIntentId;
 
+    private final Optional<String> sessionId;
+
     private final Optional<String> threedsVersion;
 
     private final Optional<String> acsTransactionId;
@@ -46,6 +48,8 @@ public final class ThreeDsAuthentication {
     private final Optional<String> authenticationStatus;
 
     private final Optional<String> authenticationStatusCode;
+
+    private final Optional<String> directoryStatusCode;
 
     private final Optional<String> authenticationStatusReason;
 
@@ -87,6 +91,7 @@ public final class ThreeDsAuthentication {
             Optional<String> panTokenId,
             Optional<String> tokenId,
             Optional<String> tokenIntentId,
+            Optional<String> sessionId,
             Optional<String> threedsVersion,
             Optional<String> acsTransactionId,
             Optional<String> dsTransactionId,
@@ -97,6 +102,7 @@ public final class ThreeDsAuthentication {
             Optional<String> authenticationValue,
             Optional<String> authenticationStatus,
             Optional<String> authenticationStatusCode,
+            Optional<String> directoryStatusCode,
             Optional<String> authenticationStatusReason,
             Optional<String> eci,
             Optional<String> acsChallengeMandated,
@@ -118,6 +124,7 @@ public final class ThreeDsAuthentication {
         this.panTokenId = panTokenId;
         this.tokenId = tokenId;
         this.tokenIntentId = tokenIntentId;
+        this.sessionId = sessionId;
         this.threedsVersion = threedsVersion;
         this.acsTransactionId = acsTransactionId;
         this.dsTransactionId = dsTransactionId;
@@ -128,6 +135,7 @@ public final class ThreeDsAuthentication {
         this.authenticationValue = authenticationValue;
         this.authenticationStatus = authenticationStatus;
         this.authenticationStatusCode = authenticationStatusCode;
+        this.directoryStatusCode = directoryStatusCode;
         this.authenticationStatusReason = authenticationStatusReason;
         this.eci = eci;
         this.acsChallengeMandated = acsChallengeMandated;
@@ -161,6 +169,11 @@ public final class ThreeDsAuthentication {
     @JsonProperty("token_intent_id")
     public Optional<String> getTokenIntentId() {
         return tokenIntentId;
+    }
+
+    @JsonProperty("session_id")
+    public Optional<String> getSessionId() {
+        return sessionId;
     }
 
     @JsonProperty("threeds_version")
@@ -211,6 +224,11 @@ public final class ThreeDsAuthentication {
     @JsonProperty("authentication_status_code")
     public Optional<String> getAuthenticationStatusCode() {
         return authenticationStatusCode;
+    }
+
+    @JsonProperty("directory_status_code")
+    public Optional<String> getDirectoryStatusCode() {
+        return directoryStatusCode;
     }
 
     @JsonProperty("authentication_status_reason")
@@ -313,6 +331,7 @@ public final class ThreeDsAuthentication {
         return panTokenId.equals(other.panTokenId)
                 && tokenId.equals(other.tokenId)
                 && tokenIntentId.equals(other.tokenIntentId)
+                && sessionId.equals(other.sessionId)
                 && threedsVersion.equals(other.threedsVersion)
                 && acsTransactionId.equals(other.acsTransactionId)
                 && dsTransactionId.equals(other.dsTransactionId)
@@ -323,6 +342,7 @@ public final class ThreeDsAuthentication {
                 && authenticationValue.equals(other.authenticationValue)
                 && authenticationStatus.equals(other.authenticationStatus)
                 && authenticationStatusCode.equals(other.authenticationStatusCode)
+                && directoryStatusCode.equals(other.directoryStatusCode)
                 && authenticationStatusReason.equals(other.authenticationStatusReason)
                 && eci.equals(other.eci)
                 && acsChallengeMandated.equals(other.acsChallengeMandated)
@@ -348,6 +368,7 @@ public final class ThreeDsAuthentication {
                 this.panTokenId,
                 this.tokenId,
                 this.tokenIntentId,
+                this.sessionId,
                 this.threedsVersion,
                 this.acsTransactionId,
                 this.dsTransactionId,
@@ -358,6 +379,7 @@ public final class ThreeDsAuthentication {
                 this.authenticationValue,
                 this.authenticationStatus,
                 this.authenticationStatusCode,
+                this.directoryStatusCode,
                 this.authenticationStatusReason,
                 this.eci,
                 this.acsChallengeMandated,
@@ -394,6 +416,8 @@ public final class ThreeDsAuthentication {
 
         private Optional<String> tokenIntentId = Optional.empty();
 
+        private Optional<String> sessionId = Optional.empty();
+
         private Optional<String> threedsVersion = Optional.empty();
 
         private Optional<String> acsTransactionId = Optional.empty();
@@ -413,6 +437,8 @@ public final class ThreeDsAuthentication {
         private Optional<String> authenticationStatus = Optional.empty();
 
         private Optional<String> authenticationStatusCode = Optional.empty();
+
+        private Optional<String> directoryStatusCode = Optional.empty();
 
         private Optional<String> authenticationStatusReason = Optional.empty();
 
@@ -457,6 +483,7 @@ public final class ThreeDsAuthentication {
             panTokenId(other.getPanTokenId());
             tokenId(other.getTokenId());
             tokenIntentId(other.getTokenIntentId());
+            sessionId(other.getSessionId());
             threedsVersion(other.getThreedsVersion());
             acsTransactionId(other.getAcsTransactionId());
             dsTransactionId(other.getDsTransactionId());
@@ -467,6 +494,7 @@ public final class ThreeDsAuthentication {
             authenticationValue(other.getAuthenticationValue());
             authenticationStatus(other.getAuthenticationStatus());
             authenticationStatusCode(other.getAuthenticationStatusCode());
+            directoryStatusCode(other.getDirectoryStatusCode());
             authenticationStatusReason(other.getAuthenticationStatusReason());
             eci(other.getEci());
             acsChallengeMandated(other.getAcsChallengeMandated());
@@ -517,6 +545,17 @@ public final class ThreeDsAuthentication {
 
         public Builder tokenIntentId(String tokenIntentId) {
             this.tokenIntentId = Optional.ofNullable(tokenIntentId);
+            return this;
+        }
+
+        @JsonSetter(value = "session_id", nulls = Nulls.SKIP)
+        public Builder sessionId(Optional<String> sessionId) {
+            this.sessionId = sessionId;
+            return this;
+        }
+
+        public Builder sessionId(String sessionId) {
+            this.sessionId = Optional.ofNullable(sessionId);
             return this;
         }
 
@@ -627,6 +666,17 @@ public final class ThreeDsAuthentication {
 
         public Builder authenticationStatusCode(String authenticationStatusCode) {
             this.authenticationStatusCode = Optional.ofNullable(authenticationStatusCode);
+            return this;
+        }
+
+        @JsonSetter(value = "directory_status_code", nulls = Nulls.SKIP)
+        public Builder directoryStatusCode(Optional<String> directoryStatusCode) {
+            this.directoryStatusCode = directoryStatusCode;
+            return this;
+        }
+
+        public Builder directoryStatusCode(String directoryStatusCode) {
+            this.directoryStatusCode = Optional.ofNullable(directoryStatusCode);
             return this;
         }
 
@@ -822,6 +872,7 @@ public final class ThreeDsAuthentication {
                     panTokenId,
                     tokenId,
                     tokenIntentId,
+                    sessionId,
                     threedsVersion,
                     acsTransactionId,
                     dsTransactionId,
@@ -832,6 +883,7 @@ public final class ThreeDsAuthentication {
                     authenticationValue,
                     authenticationStatus,
                     authenticationStatusCode,
+                    directoryStatusCode,
                     authenticationStatusReason,
                     eci,
                     acsChallengeMandated,
