@@ -1,3 +1,11 @@
+## [1.2.0](https://github.com/Basis-Theory/java-sdk/compare/1.1.0...1.2.0) (2025-03-31)
+
+
+### Features
+
+* Add support for response headers ([3c5edb6](https://github.com/Basis-Theory/java-sdk/commit/3c5edb60df4272a9d6b0ba40c221b3c22dff6698))
+
+
 ## [1.1.0](https://github.com/Basis-Theory/java-sdk/compare/1.0.1...1.1.0) (2025-03-18)
 
 
