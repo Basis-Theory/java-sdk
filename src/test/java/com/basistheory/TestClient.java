@@ -128,13 +128,13 @@ public final class TestClient {
     @Test
     public void shouldManageWebhookLifecycle() throws InterruptedException {
         WebhooksClient webhooksClient = new WebhooksClient(managementClientOptions());
-        String url = "https://echo.basistheory.com/" + UUID.randomUUID();
+        String url = "https://fern-test.com/" + UUID.randomUUID();
         String webhookId = createWebhook(webhooksClient, url);
         getAndAssertWebhookUrl(webhooksClient, webhookId, url);
 
         Thread.sleep(2000); // Required to avoid error `The webhook subscription is undergoing another concurrent operation. Please wait a few seconds, then try again.`
 
-        String updatedUrl = "https://echo.basistheory.com/" + UUID.randomUUID();
+        String updatedUrl = "https://fern-test.com/" + UUID.randomUUID();
         updateWebhook(webhooksClient, webhookId, updatedUrl);
         getAndAssertWebhookUrl(webhooksClient, webhookId, updatedUrl);
 
