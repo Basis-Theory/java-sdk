@@ -5,6 +5,7 @@ package com.basistheory.errors;
 
 import com.basistheory.core.BasisTheoryApiApiException;
 import com.basistheory.types.ProblemDetails;
+import okhttp3.Response;
 
 public final class ConflictError extends BasisTheoryApiApiException {
     /**
@@ -14,6 +15,11 @@ public final class ConflictError extends BasisTheoryApiApiException {
 
     public ConflictError(ProblemDetails body) {
         super("ConflictError", 409, body);
+        this.body = body;
+    }
+
+    public ConflictError(ProblemDetails body, Response rawResponse) {
+        super("ConflictError", 409, body, rawResponse);
         this.body = body;
     }
 

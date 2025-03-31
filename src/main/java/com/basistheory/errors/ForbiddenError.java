@@ -5,6 +5,7 @@ package com.basistheory.errors;
 
 import com.basistheory.core.BasisTheoryApiApiException;
 import com.basistheory.types.ProblemDetails;
+import okhttp3.Response;
 
 public final class ForbiddenError extends BasisTheoryApiApiException {
     /**
@@ -14,6 +15,11 @@ public final class ForbiddenError extends BasisTheoryApiApiException {
 
     public ForbiddenError(ProblemDetails body) {
         super("ForbiddenError", 403, body);
+        this.body = body;
+    }
+
+    public ForbiddenError(ProblemDetails body, Response rawResponse) {
+        super("ForbiddenError", 403, body, rawResponse);
         this.body = body;
     }
 
