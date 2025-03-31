@@ -3,40 +3,20 @@
  */
 package com.basistheory.resources.applepay;
 
-import com.basistheory.core.BasisTheoryApiApiException;
-import com.basistheory.core.BasisTheoryException;
 import com.basistheory.core.ClientOptions;
-import com.basistheory.core.MediaTypes;
-import com.basistheory.core.ObjectMappers;
 import com.basistheory.core.RequestOptions;
 import com.basistheory.core.Suppliers;
-import com.basistheory.errors.BadRequestError;
-import com.basistheory.errors.ForbiddenError;
-import com.basistheory.errors.UnauthorizedError;
-import com.basistheory.errors.UnprocessableEntityError;
 import com.basistheory.resources.applepay.domain.AsyncDomainClient;
 import com.basistheory.resources.applepay.requests.ApplePayTokenizeRequest;
 import com.basistheory.resources.applepay.session.AsyncSessionClient;
 import com.basistheory.types.ApplePayTokenizeResponse;
-import com.basistheory.types.ProblemDetails;
-import com.basistheory.types.ValidationProblemDetails;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Headers;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
-import org.jetbrains.annotations.NotNull;
 
 public class AsyncApplePayClient {
     protected final ClientOptions clientOptions;
+
+    private final AsyncRawApplePayClient rawClient;
 
     protected final Supplier<AsyncDomainClient> domainClient;
 
@@ -44,91 +24,29 @@ public class AsyncApplePayClient {
 
     public AsyncApplePayClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
+        this.rawClient = new AsyncRawApplePayClient(clientOptions);
         this.domainClient = Suppliers.memoize(() -> new AsyncDomainClient(clientOptions));
         this.sessionClient = Suppliers.memoize(() -> new AsyncSessionClient(clientOptions));
     }
 
+    /**
+     * Get responses with HTTP metadata like headers
+     */
+    public AsyncRawApplePayClient withRawResponse() {
+        return this.rawClient;
+    }
+
     public CompletableFuture<ApplePayTokenizeResponse> tokenize() {
-        return tokenize(ApplePayTokenizeRequest.builder().build());
+        return this.rawClient.tokenize().thenApply(response -> response.body());
     }
 
     public CompletableFuture<ApplePayTokenizeResponse> tokenize(ApplePayTokenizeRequest request) {
-        return tokenize(request, null);
+        return this.rawClient.tokenize(request).thenApply(response -> response.body());
     }
 
     public CompletableFuture<ApplePayTokenizeResponse> tokenize(
             ApplePayTokenizeRequest request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("connections/apple-pay/tokenize")
-                .build();
-        RequestBody body;
-        try {
-            body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
-        } catch (JsonProcessingException e) {
-            throw new BasisTheoryException("Failed to serialize request", e);
-        }
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("POST", body)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .addHeader("Accept", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        CompletableFuture<ApplePayTokenizeResponse> future = new CompletableFuture<>();
-        client.newCall(okhttpRequest).enqueue(new Callback() {
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                try (ResponseBody responseBody = response.body()) {
-                    if (response.isSuccessful()) {
-                        future.complete(ObjectMappers.JSON_MAPPER.readValue(
-                                responseBody.string(), ApplePayTokenizeResponse.class));
-                        return;
-                    }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-                    try {
-                        switch (response.code()) {
-                            case 400:
-                                future.completeExceptionally(new BadRequestError(ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBodyString, ValidationProblemDetails.class)));
-                                return;
-                            case 401:
-                                future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class)));
-                                return;
-                            case 403:
-                                future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class)));
-                                return;
-                            case 422:
-                                future.completeExceptionally(new UnprocessableEntityError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class)));
-                                return;
-                        }
-                    } catch (JsonProcessingException ignored) {
-                        // unable to map error response, throwing generic error
-                    }
-                    future.completeExceptionally(new BasisTheoryApiApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class)));
-                    return;
-                } catch (IOException e) {
-                    future.completeExceptionally(new BasisTheoryException("Network error executing HTTP request", e));
-                }
-            }
-
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                future.completeExceptionally(new BasisTheoryException("Network error executing HTTP request", e));
-            }
-        });
-        return future;
+        return this.rawClient.tokenize(request, requestOptions).thenApply(response -> response.body());
     }
 
     public AsyncDomainClient domain() {
