@@ -5,6 +5,7 @@ package com.basistheory.errors;
 
 import com.basistheory.core.BasisTheoryApiApiException;
 import com.basistheory.types.ValidationProblemDetails;
+import okhttp3.Response;
 
 public final class BadRequestError extends BasisTheoryApiApiException {
     /**
@@ -14,6 +15,11 @@ public final class BadRequestError extends BasisTheoryApiApiException {
 
     public BadRequestError(ValidationProblemDetails body) {
         super("BadRequestError", 400, body);
+        this.body = body;
+    }
+
+    public BadRequestError(ValidationProblemDetails body, Response rawResponse) {
+        super("BadRequestError", 400, body, rawResponse);
         this.body = body;
     }
 

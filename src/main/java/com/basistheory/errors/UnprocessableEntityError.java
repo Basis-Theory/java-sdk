@@ -5,6 +5,7 @@ package com.basistheory.errors;
 
 import com.basistheory.core.BasisTheoryApiApiException;
 import com.basistheory.types.ProblemDetails;
+import okhttp3.Response;
 
 public final class UnprocessableEntityError extends BasisTheoryApiApiException {
     /**
@@ -14,6 +15,11 @@ public final class UnprocessableEntityError extends BasisTheoryApiApiException {
 
     public UnprocessableEntityError(ProblemDetails body) {
         super("UnprocessableEntityError", 422, body);
+        this.body = body;
+    }
+
+    public UnprocessableEntityError(ProblemDetails body, Response rawResponse) {
+        super("UnprocessableEntityError", 422, body, rawResponse);
         this.body = body;
     }
 
