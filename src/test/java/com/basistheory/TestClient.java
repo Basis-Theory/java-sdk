@@ -5,6 +5,7 @@ package com.basistheory;
 
 import com.basistheory.core.ClientOptions;
 import com.basistheory.core.Environment;
+import com.basistheory.core.IdempotentRequestOptions;
 import com.basistheory.core.ObjectMappers;
 import com.basistheory.core.pagination.SyncPagingIterable;
 import com.basistheory.errors.NotFoundError;
@@ -16,12 +17,10 @@ import com.basistheory.resources.googlepay.requests.GooglePayTokenizeRequest;
 import com.basistheory.resources.proxies.ProxiesClient;
 import com.basistheory.resources.proxies.requests.CreateProxyRequest;
 import com.basistheory.resources.proxies.requests.PatchProxyRequest;
-import com.basistheory.resources.proxies.requests.UpdateProxyRequest;
 import com.basistheory.resources.reactors.ReactorsClient;
 import com.basistheory.resources.reactors.requests.CreateReactorRequest;
 import com.basistheory.resources.reactors.requests.PatchReactorRequest;
 import com.basistheory.resources.reactors.requests.ReactRequest;
-import com.basistheory.resources.reactors.requests.UpdateReactorRequest;
 import com.basistheory.resources.tenants.TenantsClient;
 import com.basistheory.resources.tokens.TokensClient;
 import com.basistheory.resources.tokens.requests.CreateTokenRequest;
@@ -102,9 +101,22 @@ public final class TestClient {
     }
 
     @Test()
-    @Disabled("Idempotency headers are currently NOT supported; Fern needs to update")
     public void shouldSupportIdempotencyHeaders() {
+        TokensClient tokensClient = new TokensClient(privateClientOptions());
+        String cardNumber = "6011000990139424";
+        String idempotencyKey = UUID.randomUUID().toString();
 
+        String firstTokenId = createToken(
+                tokensClient,
+                cardNumber,
+                IdempotentRequestOptions.builder().idempotencyKey(idempotencyKey).build());
+
+        String secondTokenId = createToken(
+                tokensClient,
+                cardNumber,
+                IdempotentRequestOptions.builder().idempotencyKey(idempotencyKey).build());
+
+        assertEquals(firstTokenId, secondTokenId);
     }
 
     @Test
@@ -191,6 +203,12 @@ public final class TestClient {
 
     @NotNull
     private static String createToken(TokensClient tokensClient, String cardNumber) {
+        IdempotentRequestOptions requestOptions = IdempotentRequestOptions.builder().build();
+        return createToken(tokensClient, cardNumber, requestOptions);
+    }
+
+    @NotNull
+    private static String createToken(TokensClient tokensClient, String cardNumber, IdempotentRequestOptions requestOptions) {
         Token token = tokensClient.create(CreateTokenRequest.builder()
                 .data(new HashMap<String, Object>() {{
                     put("number", cardNumber);
@@ -210,7 +228,8 @@ public final class TestClient {
                 }})
                 .deduplicateToken(false)
                 .containers(Arrays.asList("/pci/high/"))
-                .build());
+                .build(),
+                requestOptions);
         String tokenId = token.getId().get();
         assertNotNull(tokenId);
         return tokenId;
