@@ -1,3 +1,11 @@
+## [1.3.0](https://github.com/Basis-Theory/java-sdk/compare/1.2.0...1.3.0) (2025-04-01)
+
+
+### Features
+
+* Add registerAll to Apple Pay Domains and network token create ([9dac1f2](https://github.com/Basis-Theory/java-sdk/commit/9dac1f22709122da5c7ea5cf3c9529cd90db1c2f))
+
+
 ## [1.2.0](https://github.com/Basis-Theory/java-sdk/compare/1.1.0...1.2.0) (2025-03-31)
 
 
