@@ -47,6 +47,8 @@ public final class TokenServiceProviderDetails {
 
     private final Optional<List<AuthenticationResponse>> authenticationResponses;
 
+    private final Optional<String> status;
+
     private final Map<String, Object> additionalProperties;
 
     private TokenServiceProviderDetails(
@@ -63,6 +65,7 @@ public final class TokenServiceProviderDetails {
             Optional<String> paymentDataType,
             Optional<String> merchantTokenIdentifier,
             Optional<List<AuthenticationResponse>> authenticationResponses,
+            Optional<String> status,
             Map<String, Object> additionalProperties) {
         this.tsp = tsp;
         this.authMethod = authMethod;
@@ -77,6 +80,7 @@ public final class TokenServiceProviderDetails {
         this.paymentDataType = paymentDataType;
         this.merchantTokenIdentifier = merchantTokenIdentifier;
         this.authenticationResponses = authenticationResponses;
+        this.status = status;
         this.additionalProperties = additionalProperties;
     }
 
@@ -145,6 +149,11 @@ public final class TokenServiceProviderDetails {
         return authenticationResponses;
     }
 
+    @JsonProperty("status")
+    public Optional<String> getStatus() {
+        return status;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -169,7 +178,8 @@ public final class TokenServiceProviderDetails {
                 && deviceManufacturerIdentifier.equals(other.deviceManufacturerIdentifier)
                 && paymentDataType.equals(other.paymentDataType)
                 && merchantTokenIdentifier.equals(other.merchantTokenIdentifier)
-                && authenticationResponses.equals(other.authenticationResponses);
+                && authenticationResponses.equals(other.authenticationResponses)
+                && status.equals(other.status);
     }
 
     @java.lang.Override
@@ -187,7 +197,8 @@ public final class TokenServiceProviderDetails {
                 this.deviceManufacturerIdentifier,
                 this.paymentDataType,
                 this.merchantTokenIdentifier,
-                this.authenticationResponses);
+                this.authenticationResponses,
+                this.status);
     }
 
     @java.lang.Override
@@ -227,6 +238,8 @@ public final class TokenServiceProviderDetails {
 
         private Optional<List<AuthenticationResponse>> authenticationResponses = Optional.empty();
 
+        private Optional<String> status = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -246,6 +259,7 @@ public final class TokenServiceProviderDetails {
             paymentDataType(other.getPaymentDataType());
             merchantTokenIdentifier(other.getMerchantTokenIdentifier());
             authenticationResponses(other.getAuthenticationResponses());
+            status(other.getStatus());
             return this;
         }
 
@@ -392,6 +406,17 @@ public final class TokenServiceProviderDetails {
             return this;
         }
 
+        @JsonSetter(value = "status", nulls = Nulls.SKIP)
+        public Builder status(Optional<String> status) {
+            this.status = status;
+            return this;
+        }
+
+        public Builder status(String status) {
+            this.status = Optional.ofNullable(status);
+            return this;
+        }
+
         public TokenServiceProviderDetails build() {
             return new TokenServiceProviderDetails(
                     tsp,
@@ -407,6 +432,7 @@ public final class TokenServiceProviderDetails {
                     paymentDataType,
                     merchantTokenIdentifier,
                     authenticationResponses,
+                    status,
                     additionalProperties);
         }
     }

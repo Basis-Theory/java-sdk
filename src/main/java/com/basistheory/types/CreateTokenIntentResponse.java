@@ -41,7 +41,7 @@ public final class CreateTokenIntentResponse {
 
     private final Optional<CardDetails> networkToken;
 
-    private final Optional<TokenAuthentication> authentication;
+    private final Optional<Object> authentication;
 
     private final Optional<TokenIntentExtras> extras;
 
@@ -58,7 +58,7 @@ public final class CreateTokenIntentResponse {
             Optional<CardDetails> card,
             Optional<BankDetails> bank,
             Optional<CardDetails> networkToken,
-            Optional<TokenAuthentication> authentication,
+            Optional<Object> authentication,
             Optional<TokenIntentExtras> extras,
             Map<String, Object> additionalProperties) {
         this.id = id;
@@ -127,7 +127,7 @@ public final class CreateTokenIntentResponse {
     }
 
     @JsonProperty("authentication")
-    public Optional<TokenAuthentication> getAuthentication() {
+    public Optional<Object> getAuthentication() {
         return authentication;
     }
 
@@ -210,7 +210,7 @@ public final class CreateTokenIntentResponse {
 
         private Optional<CardDetails> networkToken = Optional.empty();
 
-        private Optional<TokenAuthentication> authentication = Optional.empty();
+        private Optional<Object> authentication = Optional.empty();
 
         private Optional<TokenIntentExtras> extras = Optional.empty();
 
@@ -346,12 +346,12 @@ public final class CreateTokenIntentResponse {
         }
 
         @JsonSetter(value = "authentication", nulls = Nulls.SKIP)
-        public Builder authentication(Optional<TokenAuthentication> authentication) {
+        public Builder authentication(Optional<Object> authentication) {
             this.authentication = authentication;
             return this;
         }
 
-        public Builder authentication(TokenAuthentication authentication) {
+        public Builder authentication(Object authentication) {
             this.authentication = Optional.ofNullable(authentication);
             return this;
         }
