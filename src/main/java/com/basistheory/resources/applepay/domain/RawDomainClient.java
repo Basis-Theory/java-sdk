@@ -16,7 +16,7 @@ import com.basistheory.errors.ServiceUnavailableError;
 import com.basistheory.errors.UnauthorizedError;
 import com.basistheory.errors.UnprocessableEntityError;
 import com.basistheory.resources.applepay.domain.requests.ApplePayDomainDeregistrationRequest;
-import com.basistheory.resources.applepay.domain.requests.ApplePayDomainRegistrationRequest;
+import com.basistheory.resources.applepay.domain.requests.ApplePayDomainRegistrationListRequest;
 import com.basistheory.types.ApplePayDomainRegistrationResponse;
 import com.basistheory.types.ProblemDetails;
 import com.basistheory.types.ValidationProblemDetails;
@@ -142,13 +142,17 @@ public class RawDomainClient {
         }
     }
 
+    public BasisTheoryApiHttpResponse<ApplePayDomainRegistrationResponse> register() {
+        return register(ApplePayDomainRegistrationListRequest.builder().build());
+    }
+
     public BasisTheoryApiHttpResponse<ApplePayDomainRegistrationResponse> register(
-            ApplePayDomainRegistrationRequest request) {
+            ApplePayDomainRegistrationListRequest request) {
         return register(request, null);
     }
 
     public BasisTheoryApiHttpResponse<ApplePayDomainRegistrationResponse> register(
-            ApplePayDomainRegistrationRequest request, RequestOptions requestOptions) {
+            ApplePayDomainRegistrationListRequest request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("connections/apple-pay/domain-registration")
@@ -162,7 +166,7 @@ public class RawDomainClient {
         }
         Request okhttpRequest = new Request.Builder()
                 .url(httpUrl)
-                .method("POST", body)
+                .method("PUT", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json")

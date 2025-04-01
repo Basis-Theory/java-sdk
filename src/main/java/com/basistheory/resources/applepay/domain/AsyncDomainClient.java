@@ -6,7 +6,7 @@ package com.basistheory.resources.applepay.domain;
 import com.basistheory.core.ClientOptions;
 import com.basistheory.core.RequestOptions;
 import com.basistheory.resources.applepay.domain.requests.ApplePayDomainDeregistrationRequest;
-import com.basistheory.resources.applepay.domain.requests.ApplePayDomainRegistrationRequest;
+import com.basistheory.resources.applepay.domain.requests.ApplePayDomainRegistrationListRequest;
 import com.basistheory.types.ApplePayDomainRegistrationResponse;
 import java.util.concurrent.CompletableFuture;
 
@@ -44,12 +44,17 @@ public class AsyncDomainClient {
         return this.rawClient.get(requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<ApplePayDomainRegistrationResponse> register(ApplePayDomainRegistrationRequest request) {
+    public CompletableFuture<ApplePayDomainRegistrationResponse> register() {
+        return this.rawClient.register().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ApplePayDomainRegistrationResponse> register(
+            ApplePayDomainRegistrationListRequest request) {
         return this.rawClient.register(request).thenApply(response -> response.body());
     }
 
     public CompletableFuture<ApplePayDomainRegistrationResponse> register(
-            ApplePayDomainRegistrationRequest request, RequestOptions requestOptions) {
+            ApplePayDomainRegistrationListRequest request, RequestOptions requestOptions) {
         return this.rawClient.register(request, requestOptions).thenApply(response -> response.body());
     }
 }

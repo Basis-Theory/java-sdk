@@ -6,7 +6,7 @@ package com.basistheory.resources.applepay.domain;
 import com.basistheory.core.ClientOptions;
 import com.basistheory.core.RequestOptions;
 import com.basistheory.resources.applepay.domain.requests.ApplePayDomainDeregistrationRequest;
-import com.basistheory.resources.applepay.domain.requests.ApplePayDomainRegistrationRequest;
+import com.basistheory.resources.applepay.domain.requests.ApplePayDomainRegistrationListRequest;
 import com.basistheory.types.ApplePayDomainRegistrationResponse;
 
 public class DomainClient {
@@ -42,12 +42,16 @@ public class DomainClient {
         return this.rawClient.get(requestOptions).body();
     }
 
-    public ApplePayDomainRegistrationResponse register(ApplePayDomainRegistrationRequest request) {
+    public ApplePayDomainRegistrationResponse register() {
+        return this.rawClient.register().body();
+    }
+
+    public ApplePayDomainRegistrationResponse register(ApplePayDomainRegistrationListRequest request) {
         return this.rawClient.register(request).body();
     }
 
     public ApplePayDomainRegistrationResponse register(
-            ApplePayDomainRegistrationRequest request, RequestOptions requestOptions) {
+            ApplePayDomainRegistrationListRequest request, RequestOptions requestOptions) {
         return this.rawClient.register(request, requestOptions).body();
     }
 }
