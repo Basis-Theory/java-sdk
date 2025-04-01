@@ -40,6 +40,8 @@ public final class Token {
 
     private final Optional<CardDetails> card;
 
+    private final Optional<BankDetails> bank;
+
     private final Optional<CardDetails> networkToken;
 
     private final Optional<String> modifiedBy;
@@ -62,7 +64,7 @@ public final class Token {
 
     private final Optional<List<String>> aliases;
 
-    private final Optional<TokenAuthentication> authentication;
+    private final Optional<Object> authentication;
 
     private final Optional<TokenExtras> extras;
 
@@ -78,6 +80,7 @@ public final class Token {
             Optional<String> createdBy,
             Optional<OffsetDateTime> createdAt,
             Optional<CardDetails> card,
+            Optional<BankDetails> bank,
             Optional<CardDetails> networkToken,
             Optional<String> modifiedBy,
             Optional<OffsetDateTime> modifiedAt,
@@ -89,7 +92,7 @@ public final class Token {
             Optional<OffsetDateTime> expiresAt,
             Optional<List<String>> containers,
             Optional<List<String>> aliases,
-            Optional<TokenAuthentication> authentication,
+            Optional<Object> authentication,
             Optional<TokenExtras> extras,
             Map<String, Object> additionalProperties) {
         this.id = id;
@@ -101,6 +104,7 @@ public final class Token {
         this.createdBy = createdBy;
         this.createdAt = createdAt;
         this.card = card;
+        this.bank = bank;
         this.networkToken = networkToken;
         this.modifiedBy = modifiedBy;
         this.modifiedAt = modifiedAt;
@@ -162,6 +166,11 @@ public final class Token {
         return card;
     }
 
+    @JsonProperty("bank")
+    public Optional<BankDetails> getBank() {
+        return bank;
+    }
+
     @JsonProperty("network_token")
     public Optional<CardDetails> getNetworkToken() {
         return networkToken;
@@ -218,7 +227,7 @@ public final class Token {
     }
 
     @JsonProperty("authentication")
-    public Optional<TokenAuthentication> getAuthentication() {
+    public Optional<Object> getAuthentication() {
         return authentication;
     }
 
@@ -248,6 +257,7 @@ public final class Token {
                 && createdBy.equals(other.createdBy)
                 && createdAt.equals(other.createdAt)
                 && card.equals(other.card)
+                && bank.equals(other.bank)
                 && networkToken.equals(other.networkToken)
                 && modifiedBy.equals(other.modifiedBy)
                 && modifiedAt.equals(other.modifiedAt)
@@ -275,6 +285,7 @@ public final class Token {
                 this.createdBy,
                 this.createdAt,
                 this.card,
+                this.bank,
                 this.networkToken,
                 this.modifiedBy,
                 this.modifiedAt,
@@ -319,6 +330,8 @@ public final class Token {
 
         private Optional<CardDetails> card = Optional.empty();
 
+        private Optional<BankDetails> bank = Optional.empty();
+
         private Optional<CardDetails> networkToken = Optional.empty();
 
         private Optional<String> modifiedBy = Optional.empty();
@@ -341,7 +354,7 @@ public final class Token {
 
         private Optional<List<String>> aliases = Optional.empty();
 
-        private Optional<TokenAuthentication> authentication = Optional.empty();
+        private Optional<Object> authentication = Optional.empty();
 
         private Optional<TokenExtras> extras = Optional.empty();
 
@@ -360,6 +373,7 @@ public final class Token {
             createdBy(other.getCreatedBy());
             createdAt(other.getCreatedAt());
             card(other.getCard());
+            bank(other.getBank());
             networkToken(other.getNetworkToken());
             modifiedBy(other.getModifiedBy());
             modifiedAt(other.getModifiedAt());
@@ -472,6 +486,17 @@ public final class Token {
 
         public Builder card(CardDetails card) {
             this.card = Optional.ofNullable(card);
+            return this;
+        }
+
+        @JsonSetter(value = "bank", nulls = Nulls.SKIP)
+        public Builder bank(Optional<BankDetails> bank) {
+            this.bank = bank;
+            return this;
+        }
+
+        public Builder bank(BankDetails bank) {
+            this.bank = Optional.ofNullable(bank);
             return this;
         }
 
@@ -597,12 +622,12 @@ public final class Token {
         }
 
         @JsonSetter(value = "authentication", nulls = Nulls.SKIP)
-        public Builder authentication(Optional<TokenAuthentication> authentication) {
+        public Builder authentication(Optional<Object> authentication) {
             this.authentication = authentication;
             return this;
         }
 
-        public Builder authentication(TokenAuthentication authentication) {
+        public Builder authentication(Object authentication) {
             this.authentication = Optional.ofNullable(authentication);
             return this;
         }
@@ -629,6 +654,7 @@ public final class Token {
                     createdBy,
                     createdAt,
                     card,
+                    bank,
                     networkToken,
                     modifiedBy,
                     modifiedAt,

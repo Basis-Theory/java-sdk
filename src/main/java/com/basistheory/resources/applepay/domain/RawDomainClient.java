@@ -16,6 +16,7 @@ import com.basistheory.errors.ServiceUnavailableError;
 import com.basistheory.errors.UnauthorizedError;
 import com.basistheory.errors.UnprocessableEntityError;
 import com.basistheory.resources.applepay.domain.requests.ApplePayDomainDeregistrationRequest;
+import com.basistheory.resources.applepay.domain.requests.ApplePayDomainRegistrationListRequest;
 import com.basistheory.resources.applepay.domain.requests.ApplePayDomainRegistrationRequest;
 import com.basistheory.types.ApplePayDomainRegistrationResponse;
 import com.basistheory.types.ProblemDetails;
@@ -163,6 +164,84 @@ public class RawDomainClient {
         Request okhttpRequest = new Request.Builder()
                 .url(httpUrl)
                 .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return new BasisTheoryApiHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(
+                                responseBody.string(), ApplePayDomainRegistrationResponse.class),
+                        response);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ValidationProblemDetails.class),
+                                response);
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                response);
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                response);
+                    case 422:
+                        throw new UnprocessableEntityError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                response);
+                    case 503:
+                        throw new ServiceUnavailableError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new BasisTheoryApiApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                    response);
+        } catch (IOException e) {
+            throw new BasisTheoryException("Network error executing HTTP request", e);
+        }
+    }
+
+    public BasisTheoryApiHttpResponse<ApplePayDomainRegistrationResponse> registerAll() {
+        return registerAll(ApplePayDomainRegistrationListRequest.builder().build());
+    }
+
+    public BasisTheoryApiHttpResponse<ApplePayDomainRegistrationResponse> registerAll(
+            ApplePayDomainRegistrationListRequest request) {
+        return registerAll(request, null);
+    }
+
+    public BasisTheoryApiHttpResponse<ApplePayDomainRegistrationResponse> registerAll(
+            ApplePayDomainRegistrationListRequest request, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("connections/apple-pay/domain-registration")
+                .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new BasisTheoryException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("PUT", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json")

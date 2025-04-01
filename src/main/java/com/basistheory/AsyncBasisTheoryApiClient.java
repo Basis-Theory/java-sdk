@@ -12,6 +12,7 @@ import com.basistheory.resources.applicationtemplates.AsyncApplicationTemplatesC
 import com.basistheory.resources.enrichments.AsyncEnrichmentsClient;
 import com.basistheory.resources.googlepay.AsyncGooglepayClient;
 import com.basistheory.resources.logs.AsyncLogsClient;
+import com.basistheory.resources.networktokens.AsyncNetworkTokensClient;
 import com.basistheory.resources.permissions.AsyncPermissionsClient;
 import com.basistheory.resources.proxies.AsyncProxiesClient;
 import com.basistheory.resources.reactors.AsyncReactorsClient;
@@ -34,6 +35,8 @@ public class AsyncBasisTheoryApiClient {
     protected final Supplier<AsyncApplicationKeysClient> applicationKeysClient;
 
     protected final Supplier<AsyncApplicationTemplatesClient> applicationTemplatesClient;
+
+    protected final Supplier<AsyncNetworkTokensClient> networkTokensClient;
 
     protected final Supplier<AsyncTokensClient> tokensClient;
 
@@ -67,6 +70,7 @@ public class AsyncBasisTheoryApiClient {
         this.applicationsClient = Suppliers.memoize(() -> new AsyncApplicationsClient(clientOptions));
         this.applicationKeysClient = Suppliers.memoize(() -> new AsyncApplicationKeysClient(clientOptions));
         this.applicationTemplatesClient = Suppliers.memoize(() -> new AsyncApplicationTemplatesClient(clientOptions));
+        this.networkTokensClient = Suppliers.memoize(() -> new AsyncNetworkTokensClient(clientOptions));
         this.tokensClient = Suppliers.memoize(() -> new AsyncTokensClient(clientOptions));
         this.enrichmentsClient = Suppliers.memoize(() -> new AsyncEnrichmentsClient(clientOptions));
         this.googlepayClient = Suppliers.memoize(() -> new AsyncGooglepayClient(clientOptions));
@@ -96,6 +100,10 @@ public class AsyncBasisTheoryApiClient {
 
     public AsyncApplicationTemplatesClient applicationTemplates() {
         return this.applicationTemplatesClient.get();
+    }
+
+    public AsyncNetworkTokensClient networkTokens() {
+        return this.networkTokensClient.get();
     }
 
     public AsyncTokensClient tokens() {
