@@ -26,16 +26,20 @@ public final class AdditionalCardDetails {
 
     private final Optional<String> authentication;
 
+    private final Optional<CardIssuer> issuer;
+
     private final Map<String, Object> additionalProperties;
 
     private AdditionalCardDetails(
             Optional<String> brand,
             Optional<String> funding,
             Optional<String> authentication,
+            Optional<CardIssuer> issuer,
             Map<String, Object> additionalProperties) {
         this.brand = brand;
         this.funding = funding;
         this.authentication = authentication;
+        this.issuer = issuer;
         this.additionalProperties = additionalProperties;
     }
 
@@ -54,6 +58,11 @@ public final class AdditionalCardDetails {
         return authentication;
     }
 
+    @JsonProperty("issuer")
+    public Optional<CardIssuer> getIssuer() {
+        return issuer;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -68,12 +77,13 @@ public final class AdditionalCardDetails {
     private boolean equalTo(AdditionalCardDetails other) {
         return brand.equals(other.brand)
                 && funding.equals(other.funding)
-                && authentication.equals(other.authentication);
+                && authentication.equals(other.authentication)
+                && issuer.equals(other.issuer);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.brand, this.funding, this.authentication);
+        return Objects.hash(this.brand, this.funding, this.authentication, this.issuer);
     }
 
     @java.lang.Override
@@ -93,6 +103,8 @@ public final class AdditionalCardDetails {
 
         private Optional<String> authentication = Optional.empty();
 
+        private Optional<CardIssuer> issuer = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -102,6 +114,7 @@ public final class AdditionalCardDetails {
             brand(other.getBrand());
             funding(other.getFunding());
             authentication(other.getAuthentication());
+            issuer(other.getIssuer());
             return this;
         }
 
@@ -138,8 +151,19 @@ public final class AdditionalCardDetails {
             return this;
         }
 
+        @JsonSetter(value = "issuer", nulls = Nulls.SKIP)
+        public Builder issuer(Optional<CardIssuer> issuer) {
+            this.issuer = issuer;
+            return this;
+        }
+
+        public Builder issuer(CardIssuer issuer) {
+            this.issuer = Optional.ofNullable(issuer);
+            return this;
+        }
+
         public AdditionalCardDetails build() {
-            return new AdditionalCardDetails(brand, funding, authentication, additionalProperties);
+            return new AdditionalCardDetails(brand, funding, authentication, issuer, additionalProperties);
         }
     }
 }

@@ -35,7 +35,11 @@ public final class CardDetails {
 
     private final Optional<String> authentication;
 
+    private final Optional<CardIssuer> issuer;
+
     private final Optional<CardIssuerCountry> issuerCountry;
+
+    private final Optional<String> segment;
 
     private final Optional<List<AdditionalCardDetails>> additional;
 
@@ -49,7 +53,9 @@ public final class CardDetails {
             Optional<String> brand,
             Optional<String> funding,
             Optional<String> authentication,
+            Optional<CardIssuer> issuer,
             Optional<CardIssuerCountry> issuerCountry,
+            Optional<String> segment,
             Optional<List<AdditionalCardDetails>> additional,
             Map<String, Object> additionalProperties) {
         this.bin = bin;
@@ -59,7 +65,9 @@ public final class CardDetails {
         this.brand = brand;
         this.funding = funding;
         this.authentication = authentication;
+        this.issuer = issuer;
         this.issuerCountry = issuerCountry;
+        this.segment = segment;
         this.additional = additional;
         this.additionalProperties = additionalProperties;
     }
@@ -99,9 +107,19 @@ public final class CardDetails {
         return authentication;
     }
 
+    @JsonProperty("issuer")
+    public Optional<CardIssuer> getIssuer() {
+        return issuer;
+    }
+
     @JsonProperty("issuer_country")
     public Optional<CardIssuerCountry> getIssuerCountry() {
         return issuerCountry;
+    }
+
+    @JsonProperty("segment")
+    public Optional<String> getSegment() {
+        return segment;
     }
 
     @JsonProperty("additional")
@@ -128,7 +146,9 @@ public final class CardDetails {
                 && brand.equals(other.brand)
                 && funding.equals(other.funding)
                 && authentication.equals(other.authentication)
+                && issuer.equals(other.issuer)
                 && issuerCountry.equals(other.issuerCountry)
+                && segment.equals(other.segment)
                 && additional.equals(other.additional);
     }
 
@@ -142,7 +162,9 @@ public final class CardDetails {
                 this.brand,
                 this.funding,
                 this.authentication,
+                this.issuer,
                 this.issuerCountry,
+                this.segment,
                 this.additional);
     }
 
@@ -171,7 +193,11 @@ public final class CardDetails {
 
         private Optional<String> authentication = Optional.empty();
 
+        private Optional<CardIssuer> issuer = Optional.empty();
+
         private Optional<CardIssuerCountry> issuerCountry = Optional.empty();
+
+        private Optional<String> segment = Optional.empty();
 
         private Optional<List<AdditionalCardDetails>> additional = Optional.empty();
 
@@ -188,7 +214,9 @@ public final class CardDetails {
             brand(other.getBrand());
             funding(other.getFunding());
             authentication(other.getAuthentication());
+            issuer(other.getIssuer());
             issuerCountry(other.getIssuerCountry());
+            segment(other.getSegment());
             additional(other.getAdditional());
             return this;
         }
@@ -270,6 +298,17 @@ public final class CardDetails {
             return this;
         }
 
+        @JsonSetter(value = "issuer", nulls = Nulls.SKIP)
+        public Builder issuer(Optional<CardIssuer> issuer) {
+            this.issuer = issuer;
+            return this;
+        }
+
+        public Builder issuer(CardIssuer issuer) {
+            this.issuer = Optional.ofNullable(issuer);
+            return this;
+        }
+
         @JsonSetter(value = "issuer_country", nulls = Nulls.SKIP)
         public Builder issuerCountry(Optional<CardIssuerCountry> issuerCountry) {
             this.issuerCountry = issuerCountry;
@@ -278,6 +317,17 @@ public final class CardDetails {
 
         public Builder issuerCountry(CardIssuerCountry issuerCountry) {
             this.issuerCountry = Optional.ofNullable(issuerCountry);
+            return this;
+        }
+
+        @JsonSetter(value = "segment", nulls = Nulls.SKIP)
+        public Builder segment(Optional<String> segment) {
+            this.segment = segment;
+            return this;
+        }
+
+        public Builder segment(String segment) {
+            this.segment = Optional.ofNullable(segment);
             return this;
         }
 
@@ -301,7 +351,9 @@ public final class CardDetails {
                     brand,
                     funding,
                     authentication,
+                    issuer,
                     issuerCountry,
+                    segment,
                     additional,
                     additionalProperties);
         }

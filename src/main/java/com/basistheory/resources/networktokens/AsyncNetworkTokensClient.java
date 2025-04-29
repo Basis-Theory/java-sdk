@@ -5,8 +5,6 @@ package com.basistheory.resources.networktokens;
 
 import com.basistheory.core.ClientOptions;
 import com.basistheory.core.RequestOptions;
-import com.basistheory.resources.networktokens.requests.CreateNetworkTokenRequest;
-import com.basistheory.types.Token;
 import java.util.concurrent.CompletableFuture;
 
 public class AsyncNetworkTokensClient {
@@ -26,15 +24,11 @@ public class AsyncNetworkTokensClient {
         return this.rawClient;
     }
 
-    public CompletableFuture<Token> create() {
+    public CompletableFuture<Void> create() {
         return this.rawClient.create().thenApply(response -> response.body());
     }
 
-    public CompletableFuture<Token> create(CreateNetworkTokenRequest request) {
-        return this.rawClient.create(request).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<Token> create(CreateNetworkTokenRequest request, RequestOptions requestOptions) {
-        return this.rawClient.create(request, requestOptions).thenApply(response -> response.body());
+    public CompletableFuture<Void> create(RequestOptions requestOptions) {
+        return this.rawClient.create(requestOptions).thenApply(response -> response.body());
     }
 }
