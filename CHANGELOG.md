@@ -1,3 +1,11 @@
+## [1.4.0](https://github.com/Basis-Theory/java-sdk/compare/1.3.0...1.4.0) (2025-04-29)
+
+
+### Features
+
+* Add card fields to tokens and token-intents ([#51](https://github.com/Basis-Theory/java-sdk/issues/51)) ([1a423c2](https://github.com/Basis-Theory/java-sdk/commit/1a423c28cde0df03a80738771d3ef2c92b4000ef))
+
+
 ## [1.3.0](https://github.com/Basis-Theory/java-sdk/compare/1.2.0...1.3.0) (2025-04-01)
 
 
