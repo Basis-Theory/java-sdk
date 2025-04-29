@@ -7,19 +7,8 @@ import com.basistheory.core.BasisTheoryApiApiException;
 import com.basistheory.core.BasisTheoryApiHttpResponse;
 import com.basistheory.core.BasisTheoryException;
 import com.basistheory.core.ClientOptions;
-import com.basistheory.core.MediaTypes;
 import com.basistheory.core.ObjectMappers;
 import com.basistheory.core.RequestOptions;
-import com.basistheory.errors.BadRequestError;
-import com.basistheory.errors.ForbiddenError;
-import com.basistheory.errors.ServiceUnavailableError;
-import com.basistheory.errors.UnauthorizedError;
-import com.basistheory.errors.UnprocessableEntityError;
-import com.basistheory.resources.networktokens.requests.CreateNetworkTokenRequest;
-import com.basistheory.types.ProblemDetails;
-import com.basistheory.types.Token;
-import com.basistheory.types.ValidationProblemDetails;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
@@ -36,32 +25,19 @@ public class RawNetworkTokensClient {
         this.clientOptions = clientOptions;
     }
 
-    public BasisTheoryApiHttpResponse<Token> create() {
-        return create(CreateNetworkTokenRequest.builder().build());
+    public BasisTheoryApiHttpResponse<Void> create() {
+        return create(null);
     }
 
-    public BasisTheoryApiHttpResponse<Token> create(CreateNetworkTokenRequest request) {
-        return create(request, null);
-    }
-
-    public BasisTheoryApiHttpResponse<Token> create(CreateNetworkTokenRequest request, RequestOptions requestOptions) {
+    public BasisTheoryApiHttpResponse<Void> create(RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("connections/network-tokens")
                 .build();
-        RequestBody body;
-        try {
-            body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
-        } catch (JsonProcessingException e) {
-            throw new BasisTheoryException("Failed to serialize request", e);
-        }
         Request okhttpRequest = new Request.Builder()
                 .url(httpUrl)
-                .method("POST", body)
+                .method("POST", RequestBody.create("", null))
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -70,36 +46,9 @@ public class RawNetworkTokensClient {
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
-                return new BasisTheoryApiHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Token.class), response);
+                return new BasisTheoryApiHttpResponse<>(null, response);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                switch (response.code()) {
-                    case 400:
-                        throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ValidationProblemDetails.class),
-                                response);
-                    case 401:
-                        throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
-                                response);
-                    case 403:
-                        throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
-                                response);
-                    case 422:
-                        throw new UnprocessableEntityError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
-                                response);
-                    case 503:
-                        throw new ServiceUnavailableError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
-                                response);
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
             throw new BasisTheoryApiApiException(
                     "Error with status code " + response.code(),
                     response.code(),

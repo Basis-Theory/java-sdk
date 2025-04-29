@@ -126,7 +126,7 @@ import com.basistheory.core.RequestOptions;
 // Client level
 BasisTheoryApiClient client = BasisTheoryApiClient
     .builder()
-    .tiemout(10)
+    .timeout(10)
     .build();
 
 // Request level

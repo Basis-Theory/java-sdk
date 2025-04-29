@@ -5,8 +5,6 @@ package com.basistheory.resources.networktokens;
 
 import com.basistheory.core.ClientOptions;
 import com.basistheory.core.RequestOptions;
-import com.basistheory.resources.networktokens.requests.CreateNetworkTokenRequest;
-import com.basistheory.types.Token;
 
 public class NetworkTokensClient {
     protected final ClientOptions clientOptions;
@@ -25,15 +23,11 @@ public class NetworkTokensClient {
         return this.rawClient;
     }
 
-    public Token create() {
-        return this.rawClient.create().body();
+    public void create() {
+        this.rawClient.create().body();
     }
 
-    public Token create(CreateNetworkTokenRequest request) {
-        return this.rawClient.create(request).body();
-    }
-
-    public Token create(CreateNetworkTokenRequest request, RequestOptions requestOptions) {
-        return this.rawClient.create(request, requestOptions).body();
+    public void create(RequestOptions requestOptions) {
+        this.rawClient.create(requestOptions).body();
     }
 }

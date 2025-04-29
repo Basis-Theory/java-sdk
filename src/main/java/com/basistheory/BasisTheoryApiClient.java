@@ -36,8 +36,6 @@ public class BasisTheoryApiClient {
 
     protected final Supplier<ApplicationTemplatesClient> applicationTemplatesClient;
 
-    protected final Supplier<NetworkTokensClient> networkTokensClient;
-
     protected final Supplier<TokensClient> tokensClient;
 
     protected final Supplier<EnrichmentsClient> enrichmentsClient;
@@ -45,6 +43,8 @@ public class BasisTheoryApiClient {
     protected final Supplier<GooglepayClient> googlepayClient;
 
     protected final Supplier<LogsClient> logsClient;
+
+    protected final Supplier<NetworkTokensClient> networkTokensClient;
 
     protected final Supplier<PermissionsClient> permissionsClient;
 
@@ -70,11 +70,11 @@ public class BasisTheoryApiClient {
         this.applicationsClient = Suppliers.memoize(() -> new ApplicationsClient(clientOptions));
         this.applicationKeysClient = Suppliers.memoize(() -> new ApplicationKeysClient(clientOptions));
         this.applicationTemplatesClient = Suppliers.memoize(() -> new ApplicationTemplatesClient(clientOptions));
-        this.networkTokensClient = Suppliers.memoize(() -> new NetworkTokensClient(clientOptions));
         this.tokensClient = Suppliers.memoize(() -> new TokensClient(clientOptions));
         this.enrichmentsClient = Suppliers.memoize(() -> new EnrichmentsClient(clientOptions));
         this.googlepayClient = Suppliers.memoize(() -> new GooglepayClient(clientOptions));
         this.logsClient = Suppliers.memoize(() -> new LogsClient(clientOptions));
+        this.networkTokensClient = Suppliers.memoize(() -> new NetworkTokensClient(clientOptions));
         this.permissionsClient = Suppliers.memoize(() -> new PermissionsClient(clientOptions));
         this.proxiesClient = Suppliers.memoize(() -> new ProxiesClient(clientOptions));
         this.reactorsClient = Suppliers.memoize(() -> new ReactorsClient(clientOptions));
@@ -102,10 +102,6 @@ public class BasisTheoryApiClient {
         return this.applicationTemplatesClient.get();
     }
 
-    public NetworkTokensClient networkTokens() {
-        return this.networkTokensClient.get();
-    }
-
     public TokensClient tokens() {
         return this.tokensClient.get();
     }
@@ -120,6 +116,10 @@ public class BasisTheoryApiClient {
 
     public LogsClient logs() {
         return this.logsClient.get();
+    }
+
+    public NetworkTokensClient networkTokens() {
+        return this.networkTokensClient.get();
     }
 
     public PermissionsClient permissions() {
