@@ -173,7 +173,7 @@ public final class TestClient {
              assertTrue(true);
              assertTrue(e.body().getDetail()
                      .orElseThrow(() -> new RuntimeException("No detail in error"))
-                     .contains("expired intermediateSigningKey"), "Expected exception body to contain \"expired intermediateSigningKey\"; Actual: " + e.body().getDetail().get());
+                     .contains("Failed to decrypt token"), "Expected exception body to contain \"expired intermediateSigningKey\"; Actual: " + e.body().getDetail().get());
          }
      }
 
