@@ -36,8 +36,6 @@ public class AsyncBasisTheoryApiClient {
 
     protected final Supplier<AsyncApplicationTemplatesClient> applicationTemplatesClient;
 
-    protected final Supplier<AsyncNetworkTokensClient> networkTokensClient;
-
     protected final Supplier<AsyncTokensClient> tokensClient;
 
     protected final Supplier<AsyncEnrichmentsClient> enrichmentsClient;
@@ -45,6 +43,8 @@ public class AsyncBasisTheoryApiClient {
     protected final Supplier<AsyncGooglepayClient> googlepayClient;
 
     protected final Supplier<AsyncLogsClient> logsClient;
+
+    protected final Supplier<AsyncNetworkTokensClient> networkTokensClient;
 
     protected final Supplier<AsyncPermissionsClient> permissionsClient;
 
@@ -70,11 +70,11 @@ public class AsyncBasisTheoryApiClient {
         this.applicationsClient = Suppliers.memoize(() -> new AsyncApplicationsClient(clientOptions));
         this.applicationKeysClient = Suppliers.memoize(() -> new AsyncApplicationKeysClient(clientOptions));
         this.applicationTemplatesClient = Suppliers.memoize(() -> new AsyncApplicationTemplatesClient(clientOptions));
-        this.networkTokensClient = Suppliers.memoize(() -> new AsyncNetworkTokensClient(clientOptions));
         this.tokensClient = Suppliers.memoize(() -> new AsyncTokensClient(clientOptions));
         this.enrichmentsClient = Suppliers.memoize(() -> new AsyncEnrichmentsClient(clientOptions));
         this.googlepayClient = Suppliers.memoize(() -> new AsyncGooglepayClient(clientOptions));
         this.logsClient = Suppliers.memoize(() -> new AsyncLogsClient(clientOptions));
+        this.networkTokensClient = Suppliers.memoize(() -> new AsyncNetworkTokensClient(clientOptions));
         this.permissionsClient = Suppliers.memoize(() -> new AsyncPermissionsClient(clientOptions));
         this.proxiesClient = Suppliers.memoize(() -> new AsyncProxiesClient(clientOptions));
         this.reactorsClient = Suppliers.memoize(() -> new AsyncReactorsClient(clientOptions));
@@ -102,10 +102,6 @@ public class AsyncBasisTheoryApiClient {
         return this.applicationTemplatesClient.get();
     }
 
-    public AsyncNetworkTokensClient networkTokens() {
-        return this.networkTokensClient.get();
-    }
-
     public AsyncTokensClient tokens() {
         return this.tokensClient.get();
     }
@@ -120,6 +116,10 @@ public class AsyncBasisTheoryApiClient {
 
     public AsyncLogsClient logs() {
         return this.logsClient.get();
+    }
+
+    public AsyncNetworkTokensClient networkTokens() {
+        return this.networkTokensClient.get();
     }
 
     public AsyncPermissionsClient permissions() {

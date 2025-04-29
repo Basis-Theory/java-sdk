@@ -49,6 +49,8 @@ public final class Proxy {
 
     private final Optional<Integer> timeout;
 
+    private final Optional<String> clientCertificate;
+
     private final Optional<String> createdBy;
 
     private final Optional<OffsetDateTime> createdAt;
@@ -74,6 +76,7 @@ public final class Proxy {
             Optional<Map<String, Optional<String>>> configuration,
             Optional<String> proxyHost,
             Optional<Integer> timeout,
+            Optional<String> clientCertificate,
             Optional<String> createdBy,
             Optional<OffsetDateTime> createdAt,
             Optional<String> modifiedBy,
@@ -93,6 +96,7 @@ public final class Proxy {
         this.configuration = configuration;
         this.proxyHost = proxyHost;
         this.timeout = timeout;
+        this.clientCertificate = clientCertificate;
         this.createdBy = createdBy;
         this.createdAt = createdAt;
         this.modifiedBy = modifiedBy;
@@ -170,6 +174,11 @@ public final class Proxy {
         return timeout;
     }
 
+    @JsonProperty("client_certificate")
+    public Optional<String> getClientCertificate() {
+        return clientCertificate;
+    }
+
     @JsonProperty("created_by")
     public Optional<String> getCreatedBy() {
         return createdBy;
@@ -216,6 +225,7 @@ public final class Proxy {
                 && configuration.equals(other.configuration)
                 && proxyHost.equals(other.proxyHost)
                 && timeout.equals(other.timeout)
+                && clientCertificate.equals(other.clientCertificate)
                 && createdBy.equals(other.createdBy)
                 && createdAt.equals(other.createdAt)
                 && modifiedBy.equals(other.modifiedBy)
@@ -239,6 +249,7 @@ public final class Proxy {
                 this.configuration,
                 this.proxyHost,
                 this.timeout,
+                this.clientCertificate,
                 this.createdBy,
                 this.createdAt,
                 this.modifiedBy,
@@ -284,6 +295,8 @@ public final class Proxy {
 
         private Optional<Integer> timeout = Optional.empty();
 
+        private Optional<String> clientCertificate = Optional.empty();
+
         private Optional<String> createdBy = Optional.empty();
 
         private Optional<OffsetDateTime> createdAt = Optional.empty();
@@ -312,6 +325,7 @@ public final class Proxy {
             configuration(other.getConfiguration());
             proxyHost(other.getProxyHost());
             timeout(other.getTimeout());
+            clientCertificate(other.getClientCertificate());
             createdBy(other.getCreatedBy());
             createdAt(other.getCreatedAt());
             modifiedBy(other.getModifiedBy());
@@ -473,6 +487,17 @@ public final class Proxy {
             return this;
         }
 
+        @JsonSetter(value = "client_certificate", nulls = Nulls.SKIP)
+        public Builder clientCertificate(Optional<String> clientCertificate) {
+            this.clientCertificate = clientCertificate;
+            return this;
+        }
+
+        public Builder clientCertificate(String clientCertificate) {
+            this.clientCertificate = Optional.ofNullable(clientCertificate);
+            return this;
+        }
+
         @JsonSetter(value = "created_by", nulls = Nulls.SKIP)
         public Builder createdBy(Optional<String> createdBy) {
             this.createdBy = createdBy;
@@ -533,6 +558,7 @@ public final class Proxy {
                     configuration,
                     proxyHost,
                     timeout,
+                    clientCertificate,
                     createdBy,
                     createdAt,
                     modifiedBy,
