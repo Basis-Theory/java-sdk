@@ -1,3 +1,11 @@
+## [1.5.0](https://github.com/Basis-Theory/java-sdk/compare/1.4.0...1.5.0) (2025-05-05)
+
+
+### Features
+
+* adds account updater endpoints ([#52](https://github.com/Basis-Theory/java-sdk/issues/52)) ([379f496](https://github.com/Basis-Theory/java-sdk/commit/379f49650135e349d4b0a4744bc6362797434c47))
+
+
 ## [1.4.0](https://github.com/Basis-Theory/java-sdk/compare/1.3.0...1.4.0) (2025-04-29)
 
 
