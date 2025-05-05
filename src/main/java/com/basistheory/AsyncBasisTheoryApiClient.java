@@ -5,6 +5,7 @@ package com.basistheory;
 
 import com.basistheory.core.ClientOptions;
 import com.basistheory.core.Suppliers;
+import com.basistheory.resources.accountupdater.AsyncAccountUpdaterClient;
 import com.basistheory.resources.applepay.AsyncApplePayClient;
 import com.basistheory.resources.applicationkeys.AsyncApplicationKeysClient;
 import com.basistheory.resources.applications.AsyncApplicationsClient;
@@ -60,6 +61,8 @@ public class AsyncBasisTheoryApiClient {
 
     protected final Supplier<AsyncWebhooksClient> webhooksClient;
 
+    protected final Supplier<AsyncAccountUpdaterClient> accountUpdaterClient;
+
     protected final Supplier<AsyncTenantsClient> tenantsClient;
 
     protected final Supplier<AsyncThreedsClient> threedsClient;
@@ -82,6 +85,7 @@ public class AsyncBasisTheoryApiClient {
         this.sessionsClient = Suppliers.memoize(() -> new AsyncSessionsClient(clientOptions));
         this.tokenIntentsClient = Suppliers.memoize(() -> new AsyncTokenIntentsClient(clientOptions));
         this.webhooksClient = Suppliers.memoize(() -> new AsyncWebhooksClient(clientOptions));
+        this.accountUpdaterClient = Suppliers.memoize(() -> new AsyncAccountUpdaterClient(clientOptions));
         this.tenantsClient = Suppliers.memoize(() -> new AsyncTenantsClient(clientOptions));
         this.threedsClient = Suppliers.memoize(() -> new AsyncThreedsClient(clientOptions));
     }
@@ -148,6 +152,10 @@ public class AsyncBasisTheoryApiClient {
 
     public AsyncWebhooksClient webhooks() {
         return this.webhooksClient.get();
+    }
+
+    public AsyncAccountUpdaterClient accountUpdater() {
+        return this.accountUpdaterClient.get();
     }
 
     public AsyncTenantsClient tenants() {
