@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -34,6 +35,8 @@ public final class ThreeDsSession {
     private final Optional<String> tokenIntentId;
 
     private final Optional<String> cardBrand;
+
+    private final Optional<List<String>> additionalCardBrands;
 
     private final Optional<OffsetDateTime> expirationDate;
 
@@ -67,6 +70,7 @@ public final class ThreeDsSession {
             Optional<String> tokenId,
             Optional<String> tokenIntentId,
             Optional<String> cardBrand,
+            Optional<List<String>> additionalCardBrands,
             Optional<OffsetDateTime> expirationDate,
             Optional<OffsetDateTime> createdDate,
             Optional<String> createdBy,
@@ -86,6 +90,7 @@ public final class ThreeDsSession {
         this.tokenId = tokenId;
         this.tokenIntentId = tokenIntentId;
         this.cardBrand = cardBrand;
+        this.additionalCardBrands = additionalCardBrands;
         this.expirationDate = expirationDate;
         this.createdDate = createdDate;
         this.createdBy = createdBy;
@@ -133,6 +138,11 @@ public final class ThreeDsSession {
     @JsonProperty("card_brand")
     public Optional<String> getCardBrand() {
         return cardBrand;
+    }
+
+    @JsonProperty("additional_card_brands")
+    public Optional<List<String>> getAdditionalCardBrands() {
+        return additionalCardBrands;
     }
 
     @JsonProperty("expiration_date")
@@ -209,6 +219,7 @@ public final class ThreeDsSession {
                 && tokenId.equals(other.tokenId)
                 && tokenIntentId.equals(other.tokenIntentId)
                 && cardBrand.equals(other.cardBrand)
+                && additionalCardBrands.equals(other.additionalCardBrands)
                 && expirationDate.equals(other.expirationDate)
                 && createdDate.equals(other.createdDate)
                 && createdBy.equals(other.createdBy)
@@ -232,6 +243,7 @@ public final class ThreeDsSession {
                 this.tokenId,
                 this.tokenIntentId,
                 this.cardBrand,
+                this.additionalCardBrands,
                 this.expirationDate,
                 this.createdDate,
                 this.createdBy,
@@ -270,6 +282,8 @@ public final class ThreeDsSession {
 
         private Optional<String> cardBrand = Optional.empty();
 
+        private Optional<List<String>> additionalCardBrands = Optional.empty();
+
         private Optional<OffsetDateTime> expirationDate = Optional.empty();
 
         private Optional<OffsetDateTime> createdDate = Optional.empty();
@@ -305,6 +319,7 @@ public final class ThreeDsSession {
             tokenId(other.getTokenId());
             tokenIntentId(other.getTokenIntentId());
             cardBrand(other.getCardBrand());
+            additionalCardBrands(other.getAdditionalCardBrands());
             expirationDate(other.getExpirationDate());
             createdDate(other.getCreatedDate());
             createdBy(other.getCreatedBy());
@@ -393,6 +408,17 @@ public final class ThreeDsSession {
 
         public Builder cardBrand(String cardBrand) {
             this.cardBrand = Optional.ofNullable(cardBrand);
+            return this;
+        }
+
+        @JsonSetter(value = "additional_card_brands", nulls = Nulls.SKIP)
+        public Builder additionalCardBrands(Optional<List<String>> additionalCardBrands) {
+            this.additionalCardBrands = additionalCardBrands;
+            return this;
+        }
+
+        public Builder additionalCardBrands(List<String> additionalCardBrands) {
+            this.additionalCardBrands = Optional.ofNullable(additionalCardBrands);
             return this;
         }
 
@@ -526,6 +552,7 @@ public final class ThreeDsSession {
                     tokenId,
                     tokenIntentId,
                     cardBrand,
+                    additionalCardBrands,
                     expirationDate,
                     createdDate,
                     createdBy,

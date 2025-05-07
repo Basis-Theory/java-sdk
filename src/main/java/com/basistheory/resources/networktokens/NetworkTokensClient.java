@@ -5,6 +5,7 @@ package com.basistheory.resources.networktokens;
 
 import com.basistheory.core.ClientOptions;
 import com.basistheory.core.RequestOptions;
+import com.basistheory.types.NetworkTokenCryptogram;
 
 public class NetworkTokensClient {
     protected final ClientOptions clientOptions;
@@ -29,5 +30,13 @@ public class NetworkTokensClient {
 
     public void create(RequestOptions requestOptions) {
         this.rawClient.create(requestOptions).body();
+    }
+
+    public NetworkTokenCryptogram cryptogram(String id) {
+        return this.rawClient.cryptogram(id).body();
+    }
+
+    public NetworkTokenCryptogram cryptogram(String id, RequestOptions requestOptions) {
+        return this.rawClient.cryptogram(id, requestOptions).body();
     }
 }
