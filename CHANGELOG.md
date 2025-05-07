@@ -1,3 +1,11 @@
+## [1.6.0](https://github.com/Basis-Theory/java-sdk/compare/1.5.0...1.6.0) (2025-05-07)
+
+
+### Features
+
+* add network tokens and 3ds co-badged cards props ([7b190ef](https://github.com/Basis-Theory/java-sdk/commit/7b190eff5c86336dd69170d85f6450e3cbf9a299))
+
+
 ## [1.5.0](https://github.com/Basis-Theory/java-sdk/compare/1.4.0...1.5.0) (2025-05-05)
 
 
