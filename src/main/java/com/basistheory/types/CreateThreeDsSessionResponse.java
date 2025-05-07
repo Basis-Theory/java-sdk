@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -25,6 +26,8 @@ public final class CreateThreeDsSessionResponse {
     private final Optional<String> type;
 
     private final Optional<String> cardBrand;
+
+    private final Optional<List<String>> additionalCardBrands;
 
     private final Optional<String> methodUrl;
 
@@ -40,6 +43,7 @@ public final class CreateThreeDsSessionResponse {
             Optional<String> id,
             Optional<String> type,
             Optional<String> cardBrand,
+            Optional<List<String>> additionalCardBrands,
             Optional<String> methodUrl,
             Optional<String> methodNotificationUrl,
             Optional<String> directoryServerId,
@@ -48,6 +52,7 @@ public final class CreateThreeDsSessionResponse {
         this.id = id;
         this.type = type;
         this.cardBrand = cardBrand;
+        this.additionalCardBrands = additionalCardBrands;
         this.methodUrl = methodUrl;
         this.methodNotificationUrl = methodNotificationUrl;
         this.directoryServerId = directoryServerId;
@@ -68,6 +73,11 @@ public final class CreateThreeDsSessionResponse {
     @JsonProperty("cardBrand")
     public Optional<String> getCardBrand() {
         return cardBrand;
+    }
+
+    @JsonProperty("additional_card_brands")
+    public Optional<List<String>> getAdditionalCardBrands() {
+        return additionalCardBrands;
     }
 
     @JsonProperty("method_url")
@@ -105,6 +115,7 @@ public final class CreateThreeDsSessionResponse {
         return id.equals(other.id)
                 && type.equals(other.type)
                 && cardBrand.equals(other.cardBrand)
+                && additionalCardBrands.equals(other.additionalCardBrands)
                 && methodUrl.equals(other.methodUrl)
                 && methodNotificationUrl.equals(other.methodNotificationUrl)
                 && directoryServerId.equals(other.directoryServerId)
@@ -117,6 +128,7 @@ public final class CreateThreeDsSessionResponse {
                 this.id,
                 this.type,
                 this.cardBrand,
+                this.additionalCardBrands,
                 this.methodUrl,
                 this.methodNotificationUrl,
                 this.directoryServerId,
@@ -140,6 +152,8 @@ public final class CreateThreeDsSessionResponse {
 
         private Optional<String> cardBrand = Optional.empty();
 
+        private Optional<List<String>> additionalCardBrands = Optional.empty();
+
         private Optional<String> methodUrl = Optional.empty();
 
         private Optional<String> methodNotificationUrl = Optional.empty();
@@ -157,6 +171,7 @@ public final class CreateThreeDsSessionResponse {
             id(other.getId());
             type(other.getType());
             cardBrand(other.getCardBrand());
+            additionalCardBrands(other.getAdditionalCardBrands());
             methodUrl(other.getMethodUrl());
             methodNotificationUrl(other.getMethodNotificationUrl());
             directoryServerId(other.getDirectoryServerId());
@@ -194,6 +209,17 @@ public final class CreateThreeDsSessionResponse {
 
         public Builder cardBrand(String cardBrand) {
             this.cardBrand = Optional.ofNullable(cardBrand);
+            return this;
+        }
+
+        @JsonSetter(value = "additional_card_brands", nulls = Nulls.SKIP)
+        public Builder additionalCardBrands(Optional<List<String>> additionalCardBrands) {
+            this.additionalCardBrands = additionalCardBrands;
+            return this;
+        }
+
+        public Builder additionalCardBrands(List<String> additionalCardBrands) {
+            this.additionalCardBrands = Optional.ofNullable(additionalCardBrands);
             return this;
         }
 
@@ -246,6 +272,7 @@ public final class CreateThreeDsSessionResponse {
                     id,
                     type,
                     cardBrand,
+                    additionalCardBrands,
                     methodUrl,
                     methodNotificationUrl,
                     directoryServerId,

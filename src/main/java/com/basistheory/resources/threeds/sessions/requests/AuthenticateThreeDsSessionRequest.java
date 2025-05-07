@@ -31,6 +31,8 @@ public final class AuthenticateThreeDsSessionRequest {
 
     private final String authenticationType;
 
+    private final Optional<String> cardBrand;
+
     private final Optional<String> challengePreference;
 
     private final Optional<Boolean> requestDecoupledChallenge;
@@ -54,6 +56,7 @@ public final class AuthenticateThreeDsSessionRequest {
     private AuthenticateThreeDsSessionRequest(
             String authenticationCategory,
             String authenticationType,
+            Optional<String> cardBrand,
             Optional<String> challengePreference,
             Optional<Boolean> requestDecoupledChallenge,
             Optional<Integer> decoupledChallengeMaxTime,
@@ -66,6 +69,7 @@ public final class AuthenticateThreeDsSessionRequest {
             Map<String, Object> additionalProperties) {
         this.authenticationCategory = authenticationCategory;
         this.authenticationType = authenticationType;
+        this.cardBrand = cardBrand;
         this.challengePreference = challengePreference;
         this.requestDecoupledChallenge = requestDecoupledChallenge;
         this.decoupledChallengeMaxTime = decoupledChallengeMaxTime;
@@ -86,6 +90,11 @@ public final class AuthenticateThreeDsSessionRequest {
     @JsonProperty("authentication_type")
     public String getAuthenticationType() {
         return authenticationType;
+    }
+
+    @JsonProperty("card_brand")
+    public Optional<String> getCardBrand() {
+        return cardBrand;
     }
 
     @JsonProperty("challenge_preference")
@@ -147,6 +156,7 @@ public final class AuthenticateThreeDsSessionRequest {
     private boolean equalTo(AuthenticateThreeDsSessionRequest other) {
         return authenticationCategory.equals(other.authenticationCategory)
                 && authenticationType.equals(other.authenticationType)
+                && cardBrand.equals(other.cardBrand)
                 && challengePreference.equals(other.challengePreference)
                 && requestDecoupledChallenge.equals(other.requestDecoupledChallenge)
                 && decoupledChallengeMaxTime.equals(other.decoupledChallengeMaxTime)
@@ -163,6 +173,7 @@ public final class AuthenticateThreeDsSessionRequest {
         return Objects.hash(
                 this.authenticationCategory,
                 this.authenticationType,
+                this.cardBrand,
                 this.challengePreference,
                 this.requestDecoupledChallenge,
                 this.decoupledChallengeMaxTime,
@@ -195,6 +206,10 @@ public final class AuthenticateThreeDsSessionRequest {
 
     public interface _FinalStage {
         AuthenticateThreeDsSessionRequest build();
+
+        _FinalStage cardBrand(Optional<String> cardBrand);
+
+        _FinalStage cardBrand(String cardBrand);
 
         _FinalStage challengePreference(Optional<String> challengePreference);
 
@@ -257,6 +272,8 @@ public final class AuthenticateThreeDsSessionRequest {
 
         private Optional<String> challengePreference = Optional.empty();
 
+        private Optional<String> cardBrand = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -266,6 +283,7 @@ public final class AuthenticateThreeDsSessionRequest {
         public Builder from(AuthenticateThreeDsSessionRequest other) {
             authenticationCategory(other.getAuthenticationCategory());
             authenticationType(other.getAuthenticationType());
+            cardBrand(other.getCardBrand());
             challengePreference(other.getChallengePreference());
             requestDecoupledChallenge(other.getRequestDecoupledChallenge());
             decoupledChallengeMaxTime(other.getDecoupledChallengeMaxTime());
@@ -411,10 +429,24 @@ public final class AuthenticateThreeDsSessionRequest {
         }
 
         @java.lang.Override
+        public _FinalStage cardBrand(String cardBrand) {
+            this.cardBrand = Optional.ofNullable(cardBrand);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "card_brand", nulls = Nulls.SKIP)
+        public _FinalStage cardBrand(Optional<String> cardBrand) {
+            this.cardBrand = cardBrand;
+            return this;
+        }
+
+        @java.lang.Override
         public AuthenticateThreeDsSessionRequest build() {
             return new AuthenticateThreeDsSessionRequest(
                     authenticationCategory,
                     authenticationType,
+                    cardBrand,
                     challengePreference,
                     requestDecoupledChallenge,
                     decoupledChallengeMaxTime,

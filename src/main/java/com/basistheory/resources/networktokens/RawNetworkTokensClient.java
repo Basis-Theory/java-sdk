@@ -9,6 +9,15 @@ import com.basistheory.core.BasisTheoryException;
 import com.basistheory.core.ClientOptions;
 import com.basistheory.core.ObjectMappers;
 import com.basistheory.core.RequestOptions;
+import com.basistheory.errors.BadRequestError;
+import com.basistheory.errors.ForbiddenError;
+import com.basistheory.errors.InternalServerError;
+import com.basistheory.errors.NotFoundError;
+import com.basistheory.errors.UnauthorizedError;
+import com.basistheory.types.NetworkTokenCryptogram;
+import com.basistheory.types.ProblemDetails;
+import com.basistheory.types.ValidationProblemDetails;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
@@ -49,6 +58,71 @@ public class RawNetworkTokensClient {
                 return new BasisTheoryApiHttpResponse<>(null, response);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            throw new BasisTheoryApiApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                    response);
+        } catch (IOException e) {
+            throw new BasisTheoryException("Network error executing HTTP request", e);
+        }
+    }
+
+    public BasisTheoryApiHttpResponse<NetworkTokenCryptogram> cryptogram(String id) {
+        return cryptogram(id, null);
+    }
+
+    public BasisTheoryApiHttpResponse<NetworkTokenCryptogram> cryptogram(String id, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("network-tokens")
+                .addPathSegment(id)
+                .addPathSegments("cryptogram")
+                .build();
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("POST", RequestBody.create("", null))
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return new BasisTheoryApiHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), NetworkTokenCryptogram.class),
+                        response);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ValidationProblemDetails.class),
+                                response);
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                response);
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                    case 500:
+                        throw new InternalServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
             throw new BasisTheoryApiApiException(
                     "Error with status code " + response.code(),
                     response.code(),
