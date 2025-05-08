@@ -5,6 +5,8 @@ package com.basistheory.resources.networktokens;
 
 import com.basistheory.core.ClientOptions;
 import com.basistheory.core.RequestOptions;
+import com.basistheory.resources.networktokens.requests.CreateNetworkTokenRequest;
+import com.basistheory.types.NetworkToken;
 import com.basistheory.types.NetworkTokenCryptogram;
 
 public class NetworkTokensClient {
@@ -24,12 +26,16 @@ public class NetworkTokensClient {
         return this.rawClient;
     }
 
-    public void create() {
-        this.rawClient.create().body();
+    public NetworkToken create() {
+        return this.rawClient.create().body();
     }
 
-    public void create(RequestOptions requestOptions) {
-        this.rawClient.create(requestOptions).body();
+    public NetworkToken create(CreateNetworkTokenRequest request) {
+        return this.rawClient.create(request).body();
+    }
+
+    public NetworkToken create(CreateNetworkTokenRequest request, RequestOptions requestOptions) {
+        return this.rawClient.create(request, requestOptions).body();
     }
 
     public NetworkTokenCryptogram cryptogram(String id) {
@@ -38,5 +44,21 @@ public class NetworkTokensClient {
 
     public NetworkTokenCryptogram cryptogram(String id, RequestOptions requestOptions) {
         return this.rawClient.cryptogram(id, requestOptions).body();
+    }
+
+    public NetworkToken get(String id) {
+        return this.rawClient.get(id).body();
+    }
+
+    public NetworkToken get(String id, RequestOptions requestOptions) {
+        return this.rawClient.get(id, requestOptions).body();
+    }
+
+    public void delete(String id) {
+        this.rawClient.delete(id).body();
+    }
+
+    public void delete(String id, RequestOptions requestOptions) {
+        this.rawClient.delete(id, requestOptions).body();
     }
 }
