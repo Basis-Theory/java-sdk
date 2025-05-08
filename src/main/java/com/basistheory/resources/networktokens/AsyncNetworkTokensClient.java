@@ -5,6 +5,8 @@ package com.basistheory.resources.networktokens;
 
 import com.basistheory.core.ClientOptions;
 import com.basistheory.core.RequestOptions;
+import com.basistheory.resources.networktokens.requests.CreateNetworkTokenRequest;
+import com.basistheory.types.NetworkToken;
 import com.basistheory.types.NetworkTokenCryptogram;
 import java.util.concurrent.CompletableFuture;
 
@@ -25,12 +27,16 @@ public class AsyncNetworkTokensClient {
         return this.rawClient;
     }
 
-    public CompletableFuture<Void> create() {
+    public CompletableFuture<NetworkToken> create() {
         return this.rawClient.create().thenApply(response -> response.body());
     }
 
-    public CompletableFuture<Void> create(RequestOptions requestOptions) {
-        return this.rawClient.create(requestOptions).thenApply(response -> response.body());
+    public CompletableFuture<NetworkToken> create(CreateNetworkTokenRequest request) {
+        return this.rawClient.create(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<NetworkToken> create(CreateNetworkTokenRequest request, RequestOptions requestOptions) {
+        return this.rawClient.create(request, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<NetworkTokenCryptogram> cryptogram(String id) {
@@ -39,5 +45,21 @@ public class AsyncNetworkTokensClient {
 
     public CompletableFuture<NetworkTokenCryptogram> cryptogram(String id, RequestOptions requestOptions) {
         return this.rawClient.cryptogram(id, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<NetworkToken> get(String id) {
+        return this.rawClient.get(id).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<NetworkToken> get(String id, RequestOptions requestOptions) {
+        return this.rawClient.get(id, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<Void> delete(String id) {
+        return this.rawClient.delete(id).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<Void> delete(String id, RequestOptions requestOptions) {
+        return this.rawClient.delete(id, requestOptions).thenApply(response -> response.body());
     }
 }
