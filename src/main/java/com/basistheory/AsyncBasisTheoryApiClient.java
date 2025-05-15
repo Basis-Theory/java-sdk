@@ -12,6 +12,7 @@ import com.basistheory.resources.applications.AsyncApplicationsClient;
 import com.basistheory.resources.applicationtemplates.AsyncApplicationTemplatesClient;
 import com.basistheory.resources.enrichments.AsyncEnrichmentsClient;
 import com.basistheory.resources.googlepay.AsyncGooglepayClient;
+import com.basistheory.resources.keys.AsyncKeysClient;
 import com.basistheory.resources.logs.AsyncLogsClient;
 import com.basistheory.resources.networktokens.AsyncNetworkTokensClient;
 import com.basistheory.resources.permissions.AsyncPermissionsClient;
@@ -42,6 +43,8 @@ public class AsyncBasisTheoryApiClient {
     protected final Supplier<AsyncEnrichmentsClient> enrichmentsClient;
 
     protected final Supplier<AsyncGooglepayClient> googlepayClient;
+
+    protected final Supplier<AsyncKeysClient> keysClient;
 
     protected final Supplier<AsyncLogsClient> logsClient;
 
@@ -76,6 +79,7 @@ public class AsyncBasisTheoryApiClient {
         this.tokensClient = Suppliers.memoize(() -> new AsyncTokensClient(clientOptions));
         this.enrichmentsClient = Suppliers.memoize(() -> new AsyncEnrichmentsClient(clientOptions));
         this.googlepayClient = Suppliers.memoize(() -> new AsyncGooglepayClient(clientOptions));
+        this.keysClient = Suppliers.memoize(() -> new AsyncKeysClient(clientOptions));
         this.logsClient = Suppliers.memoize(() -> new AsyncLogsClient(clientOptions));
         this.networkTokensClient = Suppliers.memoize(() -> new AsyncNetworkTokensClient(clientOptions));
         this.permissionsClient = Suppliers.memoize(() -> new AsyncPermissionsClient(clientOptions));
@@ -116,6 +120,10 @@ public class AsyncBasisTheoryApiClient {
 
     public AsyncGooglepayClient googlepay() {
         return this.googlepayClient.get();
+    }
+
+    public AsyncKeysClient keys() {
+        return this.keysClient.get();
     }
 
     public AsyncLogsClient logs() {

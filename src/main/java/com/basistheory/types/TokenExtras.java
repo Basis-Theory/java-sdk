@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -26,16 +27,20 @@ public final class TokenExtras {
 
     private final Optional<String> deduplicationBehavior;
 
+    private final Optional<List<String>> networkTokenIds;
+
     private final Map<String, Object> additionalProperties;
 
     private TokenExtras(
             Optional<Boolean> deduplicated,
             Optional<TokenServiceProviderDetails> tspDetails,
             Optional<String> deduplicationBehavior,
+            Optional<List<String>> networkTokenIds,
             Map<String, Object> additionalProperties) {
         this.deduplicated = deduplicated;
         this.tspDetails = tspDetails;
         this.deduplicationBehavior = deduplicationBehavior;
+        this.networkTokenIds = networkTokenIds;
         this.additionalProperties = additionalProperties;
     }
 
@@ -54,6 +59,11 @@ public final class TokenExtras {
         return deduplicationBehavior;
     }
 
+    @JsonProperty("network_token_ids")
+    public Optional<List<String>> getNetworkTokenIds() {
+        return networkTokenIds;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -68,12 +78,13 @@ public final class TokenExtras {
     private boolean equalTo(TokenExtras other) {
         return deduplicated.equals(other.deduplicated)
                 && tspDetails.equals(other.tspDetails)
-                && deduplicationBehavior.equals(other.deduplicationBehavior);
+                && deduplicationBehavior.equals(other.deduplicationBehavior)
+                && networkTokenIds.equals(other.networkTokenIds);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.deduplicated, this.tspDetails, this.deduplicationBehavior);
+        return Objects.hash(this.deduplicated, this.tspDetails, this.deduplicationBehavior, this.networkTokenIds);
     }
 
     @java.lang.Override
@@ -93,6 +104,8 @@ public final class TokenExtras {
 
         private Optional<String> deduplicationBehavior = Optional.empty();
 
+        private Optional<List<String>> networkTokenIds = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -102,6 +115,7 @@ public final class TokenExtras {
             deduplicated(other.getDeduplicated());
             tspDetails(other.getTspDetails());
             deduplicationBehavior(other.getDeduplicationBehavior());
+            networkTokenIds(other.getNetworkTokenIds());
             return this;
         }
 
@@ -138,8 +152,20 @@ public final class TokenExtras {
             return this;
         }
 
+        @JsonSetter(value = "network_token_ids", nulls = Nulls.SKIP)
+        public Builder networkTokenIds(Optional<List<String>> networkTokenIds) {
+            this.networkTokenIds = networkTokenIds;
+            return this;
+        }
+
+        public Builder networkTokenIds(List<String> networkTokenIds) {
+            this.networkTokenIds = Optional.ofNullable(networkTokenIds);
+            return this;
+        }
+
         public TokenExtras build() {
-            return new TokenExtras(deduplicated, tspDetails, deduplicationBehavior, additionalProperties);
+            return new TokenExtras(
+                    deduplicated, tspDetails, deduplicationBehavior, networkTokenIds, additionalProperties);
         }
     }
 }

@@ -24,13 +24,23 @@ import java.util.Optional;
 public final class CreateNetworkTokenRequest {
     private final Optional<Card> data;
 
+    private final Optional<String> tokenId;
+
+    private final Optional<String> tokenIntentId;
+
     private final Optional<CardholderInfo> cardholderInfo;
 
     private final Map<String, Object> additionalProperties;
 
     private CreateNetworkTokenRequest(
-            Optional<Card> data, Optional<CardholderInfo> cardholderInfo, Map<String, Object> additionalProperties) {
+            Optional<Card> data,
+            Optional<String> tokenId,
+            Optional<String> tokenIntentId,
+            Optional<CardholderInfo> cardholderInfo,
+            Map<String, Object> additionalProperties) {
         this.data = data;
+        this.tokenId = tokenId;
+        this.tokenIntentId = tokenIntentId;
         this.cardholderInfo = cardholderInfo;
         this.additionalProperties = additionalProperties;
     }
@@ -38,6 +48,16 @@ public final class CreateNetworkTokenRequest {
     @JsonProperty("data")
     public Optional<Card> getData() {
         return data;
+    }
+
+    @JsonProperty("token_id")
+    public Optional<String> getTokenId() {
+        return tokenId;
+    }
+
+    @JsonProperty("token_intent_id")
+    public Optional<String> getTokenIntentId() {
+        return tokenIntentId;
     }
 
     @JsonProperty("cardholder_info")
@@ -57,12 +77,15 @@ public final class CreateNetworkTokenRequest {
     }
 
     private boolean equalTo(CreateNetworkTokenRequest other) {
-        return data.equals(other.data) && cardholderInfo.equals(other.cardholderInfo);
+        return data.equals(other.data)
+                && tokenId.equals(other.tokenId)
+                && tokenIntentId.equals(other.tokenIntentId)
+                && cardholderInfo.equals(other.cardholderInfo);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.data, this.cardholderInfo);
+        return Objects.hash(this.data, this.tokenId, this.tokenIntentId, this.cardholderInfo);
     }
 
     @java.lang.Override
@@ -78,6 +101,10 @@ public final class CreateNetworkTokenRequest {
     public static final class Builder {
         private Optional<Card> data = Optional.empty();
 
+        private Optional<String> tokenId = Optional.empty();
+
+        private Optional<String> tokenIntentId = Optional.empty();
+
         private Optional<CardholderInfo> cardholderInfo = Optional.empty();
 
         @JsonAnySetter
@@ -87,6 +114,8 @@ public final class CreateNetworkTokenRequest {
 
         public Builder from(CreateNetworkTokenRequest other) {
             data(other.getData());
+            tokenId(other.getTokenId());
+            tokenIntentId(other.getTokenIntentId());
             cardholderInfo(other.getCardholderInfo());
             return this;
         }
@@ -102,6 +131,28 @@ public final class CreateNetworkTokenRequest {
             return this;
         }
 
+        @JsonSetter(value = "token_id", nulls = Nulls.SKIP)
+        public Builder tokenId(Optional<String> tokenId) {
+            this.tokenId = tokenId;
+            return this;
+        }
+
+        public Builder tokenId(String tokenId) {
+            this.tokenId = Optional.ofNullable(tokenId);
+            return this;
+        }
+
+        @JsonSetter(value = "token_intent_id", nulls = Nulls.SKIP)
+        public Builder tokenIntentId(Optional<String> tokenIntentId) {
+            this.tokenIntentId = tokenIntentId;
+            return this;
+        }
+
+        public Builder tokenIntentId(String tokenIntentId) {
+            this.tokenIntentId = Optional.ofNullable(tokenIntentId);
+            return this;
+        }
+
         @JsonSetter(value = "cardholder_info", nulls = Nulls.SKIP)
         public Builder cardholderInfo(Optional<CardholderInfo> cardholderInfo) {
             this.cardholderInfo = cardholderInfo;
@@ -114,7 +165,7 @@ public final class CreateNetworkTokenRequest {
         }
 
         public CreateNetworkTokenRequest build() {
-            return new CreateNetworkTokenRequest(data, cardholderInfo, additionalProperties);
+            return new CreateNetworkTokenRequest(data, tokenId, tokenIntentId, cardholderInfo, additionalProperties);
         }
     }
 }
