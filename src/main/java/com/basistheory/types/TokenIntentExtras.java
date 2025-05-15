@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -22,17 +23,27 @@ import java.util.Optional;
 public final class TokenIntentExtras {
     private final Optional<TokenServiceProviderDetails> tspDetails;
 
+    private final Optional<List<String>> networkTokenIds;
+
     private final Map<String, Object> additionalProperties;
 
     private TokenIntentExtras(
-            Optional<TokenServiceProviderDetails> tspDetails, Map<String, Object> additionalProperties) {
+            Optional<TokenServiceProviderDetails> tspDetails,
+            Optional<List<String>> networkTokenIds,
+            Map<String, Object> additionalProperties) {
         this.tspDetails = tspDetails;
+        this.networkTokenIds = networkTokenIds;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("tsp_details")
     public Optional<TokenServiceProviderDetails> getTspDetails() {
         return tspDetails;
+    }
+
+    @JsonProperty("network_token_ids")
+    public Optional<List<String>> getNetworkTokenIds() {
+        return networkTokenIds;
     }
 
     @java.lang.Override
@@ -47,12 +58,12 @@ public final class TokenIntentExtras {
     }
 
     private boolean equalTo(TokenIntentExtras other) {
-        return tspDetails.equals(other.tspDetails);
+        return tspDetails.equals(other.tspDetails) && networkTokenIds.equals(other.networkTokenIds);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.tspDetails);
+        return Objects.hash(this.tspDetails, this.networkTokenIds);
     }
 
     @java.lang.Override
@@ -68,6 +79,8 @@ public final class TokenIntentExtras {
     public static final class Builder {
         private Optional<TokenServiceProviderDetails> tspDetails = Optional.empty();
 
+        private Optional<List<String>> networkTokenIds = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -75,6 +88,7 @@ public final class TokenIntentExtras {
 
         public Builder from(TokenIntentExtras other) {
             tspDetails(other.getTspDetails());
+            networkTokenIds(other.getNetworkTokenIds());
             return this;
         }
 
@@ -89,8 +103,19 @@ public final class TokenIntentExtras {
             return this;
         }
 
+        @JsonSetter(value = "network_token_ids", nulls = Nulls.SKIP)
+        public Builder networkTokenIds(Optional<List<String>> networkTokenIds) {
+            this.networkTokenIds = networkTokenIds;
+            return this;
+        }
+
+        public Builder networkTokenIds(List<String> networkTokenIds) {
+            this.networkTokenIds = Optional.ofNullable(networkTokenIds);
+            return this;
+        }
+
         public TokenIntentExtras build() {
-            return new TokenIntentExtras(tspDetails, additionalProperties);
+            return new TokenIntentExtras(tspDetails, networkTokenIds, additionalProperties);
         }
     }
 }

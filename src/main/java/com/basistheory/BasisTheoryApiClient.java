@@ -12,6 +12,7 @@ import com.basistheory.resources.applications.ApplicationsClient;
 import com.basistheory.resources.applicationtemplates.ApplicationTemplatesClient;
 import com.basistheory.resources.enrichments.EnrichmentsClient;
 import com.basistheory.resources.googlepay.GooglepayClient;
+import com.basistheory.resources.keys.KeysClient;
 import com.basistheory.resources.logs.LogsClient;
 import com.basistheory.resources.networktokens.NetworkTokensClient;
 import com.basistheory.resources.permissions.PermissionsClient;
@@ -42,6 +43,8 @@ public class BasisTheoryApiClient {
     protected final Supplier<EnrichmentsClient> enrichmentsClient;
 
     protected final Supplier<GooglepayClient> googlepayClient;
+
+    protected final Supplier<KeysClient> keysClient;
 
     protected final Supplier<LogsClient> logsClient;
 
@@ -76,6 +79,7 @@ public class BasisTheoryApiClient {
         this.tokensClient = Suppliers.memoize(() -> new TokensClient(clientOptions));
         this.enrichmentsClient = Suppliers.memoize(() -> new EnrichmentsClient(clientOptions));
         this.googlepayClient = Suppliers.memoize(() -> new GooglepayClient(clientOptions));
+        this.keysClient = Suppliers.memoize(() -> new KeysClient(clientOptions));
         this.logsClient = Suppliers.memoize(() -> new LogsClient(clientOptions));
         this.networkTokensClient = Suppliers.memoize(() -> new NetworkTokensClient(clientOptions));
         this.permissionsClient = Suppliers.memoize(() -> new PermissionsClient(clientOptions));
@@ -116,6 +120,10 @@ public class BasisTheoryApiClient {
 
     public GooglepayClient googlepay() {
         return this.googlepayClient.get();
+    }
+
+    public KeysClient keys() {
+        return this.keysClient.get();
     }
 
     public LogsClient logs() {

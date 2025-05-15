@@ -35,6 +35,10 @@ public final class NetworkToken {
 
     private final Optional<OffsetDateTime> createdAt;
 
+    private final Optional<String> tokenId;
+
+    private final Optional<String> tokenIntentId;
+
     private final Map<String, Object> additionalProperties;
 
     private NetworkToken(
@@ -45,6 +49,8 @@ public final class NetworkToken {
             Optional<String> status,
             Optional<String> createdBy,
             Optional<OffsetDateTime> createdAt,
+            Optional<String> tokenId,
+            Optional<String> tokenIntentId,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.tenantId = tenantId;
@@ -53,6 +59,8 @@ public final class NetworkToken {
         this.status = status;
         this.createdBy = createdBy;
         this.createdAt = createdAt;
+        this.tokenId = tokenId;
+        this.tokenIntentId = tokenIntentId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -91,6 +99,16 @@ public final class NetworkToken {
         return createdAt;
     }
 
+    @JsonProperty("token_id")
+    public Optional<String> getTokenId() {
+        return tokenId;
+    }
+
+    @JsonProperty("token_intent_id")
+    public Optional<String> getTokenIntentId() {
+        return tokenIntentId;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -109,13 +127,23 @@ public final class NetworkToken {
                 && networkToken.equals(other.networkToken)
                 && status.equals(other.status)
                 && createdBy.equals(other.createdBy)
-                && createdAt.equals(other.createdAt);
+                && createdAt.equals(other.createdAt)
+                && tokenId.equals(other.tokenId)
+                && tokenIntentId.equals(other.tokenIntentId);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.id, this.tenantId, this.data, this.networkToken, this.status, this.createdBy, this.createdAt);
+                this.id,
+                this.tenantId,
+                this.data,
+                this.networkToken,
+                this.status,
+                this.createdBy,
+                this.createdAt,
+                this.tokenId,
+                this.tokenIntentId);
     }
 
     @java.lang.Override
@@ -143,6 +171,10 @@ public final class NetworkToken {
 
         private Optional<OffsetDateTime> createdAt = Optional.empty();
 
+        private Optional<String> tokenId = Optional.empty();
+
+        private Optional<String> tokenIntentId = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -156,6 +188,8 @@ public final class NetworkToken {
             status(other.getStatus());
             createdBy(other.getCreatedBy());
             createdAt(other.getCreatedAt());
+            tokenId(other.getTokenId());
+            tokenIntentId(other.getTokenIntentId());
             return this;
         }
 
@@ -236,9 +270,40 @@ public final class NetworkToken {
             return this;
         }
 
+        @JsonSetter(value = "token_id", nulls = Nulls.SKIP)
+        public Builder tokenId(Optional<String> tokenId) {
+            this.tokenId = tokenId;
+            return this;
+        }
+
+        public Builder tokenId(String tokenId) {
+            this.tokenId = Optional.ofNullable(tokenId);
+            return this;
+        }
+
+        @JsonSetter(value = "token_intent_id", nulls = Nulls.SKIP)
+        public Builder tokenIntentId(Optional<String> tokenIntentId) {
+            this.tokenIntentId = tokenIntentId;
+            return this;
+        }
+
+        public Builder tokenIntentId(String tokenIntentId) {
+            this.tokenIntentId = Optional.ofNullable(tokenIntentId);
+            return this;
+        }
+
         public NetworkToken build() {
             return new NetworkToken(
-                    id, tenantId, data, networkToken, status, createdBy, createdAt, additionalProperties);
+                    id,
+                    tenantId,
+                    data,
+                    networkToken,
+                    status,
+                    createdBy,
+                    createdAt,
+                    tokenId,
+                    tokenIntentId,
+                    additionalProperties);
         }
     }
 }

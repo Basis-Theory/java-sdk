@@ -4,6 +4,7 @@
 package com.basistheory.resources.threeds.sessions.requests;
 
 import com.basistheory.core.ObjectMappers;
+import com.basistheory.types.AuthenticateThreeDsSessionRequest;
 import com.basistheory.types.ThreeDsDeviceInfo;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -35,6 +36,8 @@ public final class CreateThreeDsSessionRequest {
 
     private final Optional<ThreeDsDeviceInfo> deviceInfo;
 
+    private final Optional<AuthenticateThreeDsSessionRequest> authenticationRequest;
+
     private final Map<String, Object> additionalProperties;
 
     private CreateThreeDsSessionRequest(
@@ -45,6 +48,7 @@ public final class CreateThreeDsSessionRequest {
             Optional<String> device,
             Optional<String> webChallengeMode,
             Optional<ThreeDsDeviceInfo> deviceInfo,
+            Optional<AuthenticateThreeDsSessionRequest> authenticationRequest,
             Map<String, Object> additionalProperties) {
         this.pan = pan;
         this.tokenId = tokenId;
@@ -53,6 +57,7 @@ public final class CreateThreeDsSessionRequest {
         this.device = device;
         this.webChallengeMode = webChallengeMode;
         this.deviceInfo = deviceInfo;
+        this.authenticationRequest = authenticationRequest;
         this.additionalProperties = additionalProperties;
     }
 
@@ -91,6 +96,11 @@ public final class CreateThreeDsSessionRequest {
         return deviceInfo;
     }
 
+    @JsonProperty("authentication_request")
+    public Optional<AuthenticateThreeDsSessionRequest> getAuthenticationRequest() {
+        return authenticationRequest;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -109,7 +119,8 @@ public final class CreateThreeDsSessionRequest {
                 && type.equals(other.type)
                 && device.equals(other.device)
                 && webChallengeMode.equals(other.webChallengeMode)
-                && deviceInfo.equals(other.deviceInfo);
+                && deviceInfo.equals(other.deviceInfo)
+                && authenticationRequest.equals(other.authenticationRequest);
     }
 
     @java.lang.Override
@@ -121,7 +132,8 @@ public final class CreateThreeDsSessionRequest {
                 this.type,
                 this.device,
                 this.webChallengeMode,
-                this.deviceInfo);
+                this.deviceInfo,
+                this.authenticationRequest);
     }
 
     @java.lang.Override
@@ -149,6 +161,8 @@ public final class CreateThreeDsSessionRequest {
 
         private Optional<ThreeDsDeviceInfo> deviceInfo = Optional.empty();
 
+        private Optional<AuthenticateThreeDsSessionRequest> authenticationRequest = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -162,6 +176,7 @@ public final class CreateThreeDsSessionRequest {
             device(other.getDevice());
             webChallengeMode(other.getWebChallengeMode());
             deviceInfo(other.getDeviceInfo());
+            authenticationRequest(other.getAuthenticationRequest());
             return this;
         }
 
@@ -242,9 +257,28 @@ public final class CreateThreeDsSessionRequest {
             return this;
         }
 
+        @JsonSetter(value = "authentication_request", nulls = Nulls.SKIP)
+        public Builder authenticationRequest(Optional<AuthenticateThreeDsSessionRequest> authenticationRequest) {
+            this.authenticationRequest = authenticationRequest;
+            return this;
+        }
+
+        public Builder authenticationRequest(AuthenticateThreeDsSessionRequest authenticationRequest) {
+            this.authenticationRequest = Optional.ofNullable(authenticationRequest);
+            return this;
+        }
+
         public CreateThreeDsSessionRequest build() {
             return new CreateThreeDsSessionRequest(
-                    pan, tokenId, tokenIntentId, type, device, webChallengeMode, deviceInfo, additionalProperties);
+                    pan,
+                    tokenId,
+                    tokenIntentId,
+                    type,
+                    device,
+                    webChallengeMode,
+                    deviceInfo,
+                    authenticationRequest,
+                    additionalProperties);
         }
     }
 }

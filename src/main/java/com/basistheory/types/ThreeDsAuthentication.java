@@ -53,6 +53,8 @@ public final class ThreeDsAuthentication {
 
     private final Optional<String> authenticationStatusReason;
 
+    private final Optional<String> authenticationStatusReasonCode;
+
     private final Optional<String> eci;
 
     private final Optional<String> acsChallengeMandated;
@@ -104,6 +106,7 @@ public final class ThreeDsAuthentication {
             Optional<String> authenticationStatusCode,
             Optional<String> directoryStatusCode,
             Optional<String> authenticationStatusReason,
+            Optional<String> authenticationStatusReasonCode,
             Optional<String> eci,
             Optional<String> acsChallengeMandated,
             Optional<String> acsDecoupledAuthentication,
@@ -137,6 +140,7 @@ public final class ThreeDsAuthentication {
         this.authenticationStatusCode = authenticationStatusCode;
         this.directoryStatusCode = directoryStatusCode;
         this.authenticationStatusReason = authenticationStatusReason;
+        this.authenticationStatusReasonCode = authenticationStatusReasonCode;
         this.eci = eci;
         this.acsChallengeMandated = acsChallengeMandated;
         this.acsDecoupledAuthentication = acsDecoupledAuthentication;
@@ -234,6 +238,11 @@ public final class ThreeDsAuthentication {
     @JsonProperty("authentication_status_reason")
     public Optional<String> getAuthenticationStatusReason() {
         return authenticationStatusReason;
+    }
+
+    @JsonProperty("authentication_status_reason_code")
+    public Optional<String> getAuthenticationStatusReasonCode() {
+        return authenticationStatusReasonCode;
     }
 
     @JsonProperty("eci")
@@ -344,6 +353,7 @@ public final class ThreeDsAuthentication {
                 && authenticationStatusCode.equals(other.authenticationStatusCode)
                 && directoryStatusCode.equals(other.directoryStatusCode)
                 && authenticationStatusReason.equals(other.authenticationStatusReason)
+                && authenticationStatusReasonCode.equals(other.authenticationStatusReasonCode)
                 && eci.equals(other.eci)
                 && acsChallengeMandated.equals(other.acsChallengeMandated)
                 && acsDecoupledAuthentication.equals(other.acsDecoupledAuthentication)
@@ -381,6 +391,7 @@ public final class ThreeDsAuthentication {
                 this.authenticationStatusCode,
                 this.directoryStatusCode,
                 this.authenticationStatusReason,
+                this.authenticationStatusReasonCode,
                 this.eci,
                 this.acsChallengeMandated,
                 this.acsDecoupledAuthentication,
@@ -442,6 +453,8 @@ public final class ThreeDsAuthentication {
 
         private Optional<String> authenticationStatusReason = Optional.empty();
 
+        private Optional<String> authenticationStatusReasonCode = Optional.empty();
+
         private Optional<String> eci = Optional.empty();
 
         private Optional<String> acsChallengeMandated = Optional.empty();
@@ -496,6 +509,7 @@ public final class ThreeDsAuthentication {
             authenticationStatusCode(other.getAuthenticationStatusCode());
             directoryStatusCode(other.getDirectoryStatusCode());
             authenticationStatusReason(other.getAuthenticationStatusReason());
+            authenticationStatusReasonCode(other.getAuthenticationStatusReasonCode());
             eci(other.getEci());
             acsChallengeMandated(other.getAcsChallengeMandated());
             acsDecoupledAuthentication(other.getAcsDecoupledAuthentication());
@@ -688,6 +702,17 @@ public final class ThreeDsAuthentication {
 
         public Builder authenticationStatusReason(String authenticationStatusReason) {
             this.authenticationStatusReason = Optional.ofNullable(authenticationStatusReason);
+            return this;
+        }
+
+        @JsonSetter(value = "authentication_status_reason_code", nulls = Nulls.SKIP)
+        public Builder authenticationStatusReasonCode(Optional<String> authenticationStatusReasonCode) {
+            this.authenticationStatusReasonCode = authenticationStatusReasonCode;
+            return this;
+        }
+
+        public Builder authenticationStatusReasonCode(String authenticationStatusReasonCode) {
+            this.authenticationStatusReasonCode = Optional.ofNullable(authenticationStatusReasonCode);
             return this;
         }
 
@@ -885,6 +910,7 @@ public final class ThreeDsAuthentication {
                     authenticationStatusCode,
                     directoryStatusCode,
                     authenticationStatusReason,
+                    authenticationStatusReasonCode,
                     eci,
                     acsChallengeMandated,
                     acsDecoupledAuthentication,
