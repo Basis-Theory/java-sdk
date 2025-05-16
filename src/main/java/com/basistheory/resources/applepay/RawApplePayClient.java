@@ -14,8 +14,9 @@ import com.basistheory.errors.BadRequestError;
 import com.basistheory.errors.ForbiddenError;
 import com.basistheory.errors.UnauthorizedError;
 import com.basistheory.errors.UnprocessableEntityError;
-import com.basistheory.resources.applepay.requests.ApplePayTokenizeRequest;
-import com.basistheory.types.ApplePayTokenizeResponse;
+import com.basistheory.resources.applepay.requests.ApplePayCreateRequest;
+import com.basistheory.types.ApplePayCreateResponse;
+import com.basistheory.types.ApplePayToken;
 import com.basistheory.types.ProblemDetails;
 import com.basistheory.types.ValidationProblemDetails;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -35,19 +36,19 @@ public class RawApplePayClient {
         this.clientOptions = clientOptions;
     }
 
-    public BasisTheoryApiHttpResponse<ApplePayTokenizeResponse> tokenize() {
-        return tokenize(ApplePayTokenizeRequest.builder().build());
+    public BasisTheoryApiHttpResponse<ApplePayCreateResponse> create() {
+        return create(ApplePayCreateRequest.builder().build());
     }
 
-    public BasisTheoryApiHttpResponse<ApplePayTokenizeResponse> tokenize(ApplePayTokenizeRequest request) {
-        return tokenize(request, null);
+    public BasisTheoryApiHttpResponse<ApplePayCreateResponse> create(ApplePayCreateRequest request) {
+        return create(request, null);
     }
 
-    public BasisTheoryApiHttpResponse<ApplePayTokenizeResponse> tokenize(
-            ApplePayTokenizeRequest request, RequestOptions requestOptions) {
+    public BasisTheoryApiHttpResponse<ApplePayCreateResponse> create(
+            ApplePayCreateRequest request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("connections/apple-pay/tokenize")
+                .addPathSegments("apple-pay")
                 .build();
         RequestBody body;
         try {
@@ -71,7 +72,7 @@ public class RawApplePayClient {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
                 return new BasisTheoryApiHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ApplePayTokenizeResponse.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ApplePayCreateResponse.class),
                         response);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
@@ -91,6 +92,58 @@ public class RawApplePayClient {
                                 response);
                     case 422:
                         throw new UnprocessableEntityError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new BasisTheoryApiApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                    response);
+        } catch (IOException e) {
+            throw new BasisTheoryException("Network error executing HTTP request", e);
+        }
+    }
+
+    public BasisTheoryApiHttpResponse<ApplePayToken> get(String id) {
+        return get(id, null);
+    }
+
+    public BasisTheoryApiHttpResponse<ApplePayToken> get(String id, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("apple-pay")
+                .addPathSegment(id)
+                .build();
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return new BasisTheoryApiHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ApplePayToken.class), response);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                response);
+                    case 403:
+                        throw new ForbiddenError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
                                 response);
                 }

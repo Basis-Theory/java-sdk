@@ -10,6 +10,7 @@ import com.basistheory.resources.applepay.AsyncApplePayClient;
 import com.basistheory.resources.applicationkeys.AsyncApplicationKeysClient;
 import com.basistheory.resources.applications.AsyncApplicationsClient;
 import com.basistheory.resources.applicationtemplates.AsyncApplicationTemplatesClient;
+import com.basistheory.resources.connections.AsyncConnectionsClient;
 import com.basistheory.resources.enrichments.AsyncEnrichmentsClient;
 import com.basistheory.resources.googlepay.AsyncGooglepayClient;
 import com.basistheory.resources.keys.AsyncKeysClient;
@@ -30,13 +31,13 @@ import java.util.function.Supplier;
 public class AsyncBasisTheoryApiClient {
     protected final ClientOptions clientOptions;
 
-    protected final Supplier<AsyncApplePayClient> applePayClient;
-
     protected final Supplier<AsyncApplicationsClient> applicationsClient;
 
     protected final Supplier<AsyncApplicationKeysClient> applicationKeysClient;
 
     protected final Supplier<AsyncApplicationTemplatesClient> applicationTemplatesClient;
+
+    protected final Supplier<AsyncApplePayClient> applePayClient;
 
     protected final Supplier<AsyncTokensClient> tokensClient;
 
@@ -66,16 +67,18 @@ public class AsyncBasisTheoryApiClient {
 
     protected final Supplier<AsyncAccountUpdaterClient> accountUpdaterClient;
 
+    protected final Supplier<AsyncConnectionsClient> connectionsClient;
+
     protected final Supplier<AsyncTenantsClient> tenantsClient;
 
     protected final Supplier<AsyncThreedsClient> threedsClient;
 
     public AsyncBasisTheoryApiClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
-        this.applePayClient = Suppliers.memoize(() -> new AsyncApplePayClient(clientOptions));
         this.applicationsClient = Suppliers.memoize(() -> new AsyncApplicationsClient(clientOptions));
         this.applicationKeysClient = Suppliers.memoize(() -> new AsyncApplicationKeysClient(clientOptions));
         this.applicationTemplatesClient = Suppliers.memoize(() -> new AsyncApplicationTemplatesClient(clientOptions));
+        this.applePayClient = Suppliers.memoize(() -> new AsyncApplePayClient(clientOptions));
         this.tokensClient = Suppliers.memoize(() -> new AsyncTokensClient(clientOptions));
         this.enrichmentsClient = Suppliers.memoize(() -> new AsyncEnrichmentsClient(clientOptions));
         this.googlepayClient = Suppliers.memoize(() -> new AsyncGooglepayClient(clientOptions));
@@ -90,12 +93,9 @@ public class AsyncBasisTheoryApiClient {
         this.tokenIntentsClient = Suppliers.memoize(() -> new AsyncTokenIntentsClient(clientOptions));
         this.webhooksClient = Suppliers.memoize(() -> new AsyncWebhooksClient(clientOptions));
         this.accountUpdaterClient = Suppliers.memoize(() -> new AsyncAccountUpdaterClient(clientOptions));
+        this.connectionsClient = Suppliers.memoize(() -> new AsyncConnectionsClient(clientOptions));
         this.tenantsClient = Suppliers.memoize(() -> new AsyncTenantsClient(clientOptions));
         this.threedsClient = Suppliers.memoize(() -> new AsyncThreedsClient(clientOptions));
-    }
-
-    public AsyncApplePayClient applePay() {
-        return this.applePayClient.get();
     }
 
     public AsyncApplicationsClient applications() {
@@ -108,6 +108,10 @@ public class AsyncBasisTheoryApiClient {
 
     public AsyncApplicationTemplatesClient applicationTemplates() {
         return this.applicationTemplatesClient.get();
+    }
+
+    public AsyncApplePayClient applePay() {
+        return this.applePayClient.get();
     }
 
     public AsyncTokensClient tokens() {
@@ -164,6 +168,10 @@ public class AsyncBasisTheoryApiClient {
 
     public AsyncAccountUpdaterClient accountUpdater() {
         return this.accountUpdaterClient.get();
+    }
+
+    public AsyncConnectionsClient connections() {
+        return this.connectionsClient.get();
     }
 
     public AsyncTenantsClient tenants() {
