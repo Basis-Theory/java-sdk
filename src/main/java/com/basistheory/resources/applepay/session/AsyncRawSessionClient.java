@@ -14,7 +14,7 @@ import com.basistheory.errors.BadRequestError;
 import com.basistheory.errors.ForbiddenError;
 import com.basistheory.errors.UnauthorizedError;
 import com.basistheory.errors.UnprocessableEntityError;
-import com.basistheory.resources.applepay.session.requests.ApplePaySessionRequest;
+import com.basistheory.types.ApplePaySessionRequest;
 import com.basistheory.types.ProblemDetails;
 import com.basistheory.types.ValidationProblemDetails;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -50,7 +50,7 @@ public class AsyncRawSessionClient {
             ApplePaySessionRequest request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("connections/apple-pay/session")
+                .addPathSegments("apple-pay/session")
                 .build();
         RequestBody body;
         try {
