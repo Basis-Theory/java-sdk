@@ -206,6 +206,8 @@ public final class TestClient {
                 assertInstanceOf(NotFoundError.class, e.getCause(), "Exception should be NotFoundError");
             }
         } catch (Exception e) {
+            System.err.println("Test failed with exception: " + e.getMessage());
+            e.printStackTrace();
             fail("Test failed with exception: " + e.getMessage());
         }
     }

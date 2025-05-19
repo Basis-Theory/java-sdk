@@ -37,7 +37,7 @@ jobs:
           architecture: x64
 
       - name: Test
-        run: ./gradlew test
+        run: ./gradlew test --info --stacktrace
         env:
           BT_API_URL: https://api.flock-dev.com
           BT_MGT_API_KEY: ${{ secrets.BT_SDK_INT_TEST_MGT_API_KEY }}
