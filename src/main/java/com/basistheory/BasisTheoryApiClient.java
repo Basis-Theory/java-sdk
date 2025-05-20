@@ -10,6 +10,7 @@ import com.basistheory.resources.applepay.ApplePayClient;
 import com.basistheory.resources.applicationkeys.ApplicationKeysClient;
 import com.basistheory.resources.applications.ApplicationsClient;
 import com.basistheory.resources.applicationtemplates.ApplicationTemplatesClient;
+import com.basistheory.resources.connection.ConnectionClient;
 import com.basistheory.resources.enrichments.EnrichmentsClient;
 import com.basistheory.resources.googlepay.GooglepayClient;
 import com.basistheory.resources.keys.KeysClient;
@@ -30,13 +31,13 @@ import java.util.function.Supplier;
 public class BasisTheoryApiClient {
     protected final ClientOptions clientOptions;
 
-    protected final Supplier<ApplePayClient> applePayClient;
-
     protected final Supplier<ApplicationsClient> applicationsClient;
 
     protected final Supplier<ApplicationKeysClient> applicationKeysClient;
 
     protected final Supplier<ApplicationTemplatesClient> applicationTemplatesClient;
+
+    protected final Supplier<ApplePayClient> applePayClient;
 
     protected final Supplier<TokensClient> tokensClient;
 
@@ -66,16 +67,18 @@ public class BasisTheoryApiClient {
 
     protected final Supplier<AccountUpdaterClient> accountUpdaterClient;
 
+    protected final Supplier<ConnectionClient> connectionClient;
+
     protected final Supplier<TenantsClient> tenantsClient;
 
     protected final Supplier<ThreedsClient> threedsClient;
 
     public BasisTheoryApiClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
-        this.applePayClient = Suppliers.memoize(() -> new ApplePayClient(clientOptions));
         this.applicationsClient = Suppliers.memoize(() -> new ApplicationsClient(clientOptions));
         this.applicationKeysClient = Suppliers.memoize(() -> new ApplicationKeysClient(clientOptions));
         this.applicationTemplatesClient = Suppliers.memoize(() -> new ApplicationTemplatesClient(clientOptions));
+        this.applePayClient = Suppliers.memoize(() -> new ApplePayClient(clientOptions));
         this.tokensClient = Suppliers.memoize(() -> new TokensClient(clientOptions));
         this.enrichmentsClient = Suppliers.memoize(() -> new EnrichmentsClient(clientOptions));
         this.googlepayClient = Suppliers.memoize(() -> new GooglepayClient(clientOptions));
@@ -90,12 +93,9 @@ public class BasisTheoryApiClient {
         this.tokenIntentsClient = Suppliers.memoize(() -> new TokenIntentsClient(clientOptions));
         this.webhooksClient = Suppliers.memoize(() -> new WebhooksClient(clientOptions));
         this.accountUpdaterClient = Suppliers.memoize(() -> new AccountUpdaterClient(clientOptions));
+        this.connectionClient = Suppliers.memoize(() -> new ConnectionClient(clientOptions));
         this.tenantsClient = Suppliers.memoize(() -> new TenantsClient(clientOptions));
         this.threedsClient = Suppliers.memoize(() -> new ThreedsClient(clientOptions));
-    }
-
-    public ApplePayClient applePay() {
-        return this.applePayClient.get();
     }
 
     public ApplicationsClient applications() {
@@ -108,6 +108,10 @@ public class BasisTheoryApiClient {
 
     public ApplicationTemplatesClient applicationTemplates() {
         return this.applicationTemplatesClient.get();
+    }
+
+    public ApplePayClient applePay() {
+        return this.applePayClient.get();
     }
 
     public TokensClient tokens() {
@@ -164,6 +168,10 @@ public class BasisTheoryApiClient {
 
     public AccountUpdaterClient accountUpdater() {
         return this.accountUpdaterClient.get();
+    }
+
+    public ConnectionClient connection() {
+        return this.connectionClient.get();
     }
 
     public TenantsClient tenants() {
