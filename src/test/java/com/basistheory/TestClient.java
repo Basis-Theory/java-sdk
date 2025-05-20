@@ -14,6 +14,7 @@ import com.basistheory.resources.applications.ApplicationsClient;
 import com.basistheory.resources.applications.requests.CreateApplicationRequest;
 import com.basistheory.resources.googlepay.GooglepayClient;
 import com.basistheory.resources.googlepay.requests.GooglePayTokenizeRequest;
+import com.basistheory.resources.keys.AsyncKeysClient;
 import com.basistheory.resources.proxies.ProxiesClient;
 import com.basistheory.resources.proxies.requests.CreateProxyRequest;
 import com.basistheory.resources.proxies.requests.PatchProxyRequest;
@@ -177,6 +178,38 @@ public final class TestClient {
          }
      }
 
+    @Test
+    public void shouldSupportKeysLifecycle() {
+        AsyncKeysClient keysClient = new AsyncKeysClient(managementClientOptions());
+
+        try {
+            ClientEncryptionKeyResponse createdKey = keysClient.create().join();
+            assertTrue(createdKey.getId().isPresent(), "Key ID should be present");
+            String keyId = createdKey.getId().get();
+            assertTrue(createdKey.getPublicKeyPem().isPresent(), "Key value should not be null");
+
+            ClientEncryptionKeyMetadataResponse retrievedKey = keysClient.get(keyId).join();
+            assertTrue(retrievedKey.getId().isPresent(), "Retrieved key ID should be present");
+            assertEquals(keyId, retrievedKey.getId().get(), "Retrieved key ID should match created key ID");
+            assertTrue(retrievedKey.getExpiresAt().isPresent(), "Created at timestamp should not be null");
+
+            List<ClientEncryptionKeyMetadataResponse> keys = keysClient.list().join();
+            assertTrue(keys.stream().anyMatch(k -> k.getId().get().equals(keyId)), 
+                "Created key should be in the list of keys");
+
+            keysClient.delete(keyId).join();
+
+            try {
+                keysClient.get(keyId).join();
+                fail("Should have raised NotFoundError");
+            } catch (Exception e) {
+                assertInstanceOf(NotFoundError.class, e.getCause(), "Exception should be NotFoundError");
+            }
+        } catch (Exception e) {
+            fail("Test failed with exception: " + e.getMessage());
+        }
+    }
+
     @NotNull
     private static ClientOptions managementClientOptions() {
         return ClientOptions.builder()
@@ -322,4 +355,5 @@ public final class TestClient {
             assertTrue(true);
         }
     }
+
 }
