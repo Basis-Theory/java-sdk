@@ -1,3 +1,20 @@
+## [2.0.0](https://github.com/Basis-Theory/java-sdk/compare/1.6.0...2.0.0) (2025-05-20)
+
+
+### ⚠ BREAKING CHANGES
+
+* The old methods for using Apple Pay and Token Intents have moved to the connection namespace.
+
+### Features
+
+* Add Apple Pay Token support ([1646589](https://github.com/Basis-Theory/java-sdk/commit/16465892c39f193d8703ccdd0340f0e862f53913))
+
+
+### Tests
+
+* **eng-8307:** add life cycle test for client encryption keys ([#57](https://github.com/Basis-Theory/java-sdk/issues/57)) ([271481b](https://github.com/Basis-Theory/java-sdk/commit/271481b4d82a3d235d717704f1b7e8708226ece3))
+
+
 ## [1.6.0](https://github.com/Basis-Theory/java-sdk/compare/1.5.0...1.6.0) (2025-05-07)
 
 
