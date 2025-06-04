@@ -58,6 +58,14 @@ public class AsyncApplePayClient {
         return this.rawClient.get(id, requestOptions).thenApply(response -> response.body());
     }
 
+    public CompletableFuture<String> unlink(String id) {
+        return this.rawClient.unlink(id).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<String> unlink(String id, RequestOptions requestOptions) {
+        return this.rawClient.unlink(id, requestOptions).thenApply(response -> response.body());
+    }
+
     public AsyncDomainClient domain() {
         return this.domainClient.get();
     }

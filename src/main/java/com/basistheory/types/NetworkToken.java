@@ -27,6 +27,8 @@ public final class NetworkToken {
 
     private final Optional<Card> data;
 
+    private final Optional<CardDetails> card;
+
     private final Optional<CardDetails> networkToken;
 
     private final Optional<String> status;
@@ -34,6 +36,10 @@ public final class NetworkToken {
     private final Optional<String> createdBy;
 
     private final Optional<OffsetDateTime> createdAt;
+
+    private final Optional<String> modifiedBy;
+
+    private final Optional<OffsetDateTime> modifiedAt;
 
     private final Optional<String> tokenId;
 
@@ -45,20 +51,26 @@ public final class NetworkToken {
             Optional<String> id,
             Optional<String> tenantId,
             Optional<Card> data,
+            Optional<CardDetails> card,
             Optional<CardDetails> networkToken,
             Optional<String> status,
             Optional<String> createdBy,
             Optional<OffsetDateTime> createdAt,
+            Optional<String> modifiedBy,
+            Optional<OffsetDateTime> modifiedAt,
             Optional<String> tokenId,
             Optional<String> tokenIntentId,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.tenantId = tenantId;
         this.data = data;
+        this.card = card;
         this.networkToken = networkToken;
         this.status = status;
         this.createdBy = createdBy;
         this.createdAt = createdAt;
+        this.modifiedBy = modifiedBy;
+        this.modifiedAt = modifiedAt;
         this.tokenId = tokenId;
         this.tokenIntentId = tokenIntentId;
         this.additionalProperties = additionalProperties;
@@ -79,6 +91,11 @@ public final class NetworkToken {
         return data;
     }
 
+    @JsonProperty("card")
+    public Optional<CardDetails> getCard() {
+        return card;
+    }
+
     @JsonProperty("network_token")
     public Optional<CardDetails> getNetworkToken() {
         return networkToken;
@@ -97,6 +114,16 @@ public final class NetworkToken {
     @JsonProperty("created_at")
     public Optional<OffsetDateTime> getCreatedAt() {
         return createdAt;
+    }
+
+    @JsonProperty("modified_by")
+    public Optional<String> getModifiedBy() {
+        return modifiedBy;
+    }
+
+    @JsonProperty("modified_at")
+    public Optional<OffsetDateTime> getModifiedAt() {
+        return modifiedAt;
     }
 
     @JsonProperty("token_id")
@@ -124,10 +151,13 @@ public final class NetworkToken {
         return id.equals(other.id)
                 && tenantId.equals(other.tenantId)
                 && data.equals(other.data)
+                && card.equals(other.card)
                 && networkToken.equals(other.networkToken)
                 && status.equals(other.status)
                 && createdBy.equals(other.createdBy)
                 && createdAt.equals(other.createdAt)
+                && modifiedBy.equals(other.modifiedBy)
+                && modifiedAt.equals(other.modifiedAt)
                 && tokenId.equals(other.tokenId)
                 && tokenIntentId.equals(other.tokenIntentId);
     }
@@ -138,10 +168,13 @@ public final class NetworkToken {
                 this.id,
                 this.tenantId,
                 this.data,
+                this.card,
                 this.networkToken,
                 this.status,
                 this.createdBy,
                 this.createdAt,
+                this.modifiedBy,
+                this.modifiedAt,
                 this.tokenId,
                 this.tokenIntentId);
     }
@@ -163,6 +196,8 @@ public final class NetworkToken {
 
         private Optional<Card> data = Optional.empty();
 
+        private Optional<CardDetails> card = Optional.empty();
+
         private Optional<CardDetails> networkToken = Optional.empty();
 
         private Optional<String> status = Optional.empty();
@@ -170,6 +205,10 @@ public final class NetworkToken {
         private Optional<String> createdBy = Optional.empty();
 
         private Optional<OffsetDateTime> createdAt = Optional.empty();
+
+        private Optional<String> modifiedBy = Optional.empty();
+
+        private Optional<OffsetDateTime> modifiedAt = Optional.empty();
 
         private Optional<String> tokenId = Optional.empty();
 
@@ -184,10 +223,13 @@ public final class NetworkToken {
             id(other.getId());
             tenantId(other.getTenantId());
             data(other.getData());
+            card(other.getCard());
             networkToken(other.getNetworkToken());
             status(other.getStatus());
             createdBy(other.getCreatedBy());
             createdAt(other.getCreatedAt());
+            modifiedBy(other.getModifiedBy());
+            modifiedAt(other.getModifiedAt());
             tokenId(other.getTokenId());
             tokenIntentId(other.getTokenIntentId());
             return this;
@@ -223,6 +265,17 @@ public final class NetworkToken {
 
         public Builder data(Card data) {
             this.data = Optional.ofNullable(data);
+            return this;
+        }
+
+        @JsonSetter(value = "card", nulls = Nulls.SKIP)
+        public Builder card(Optional<CardDetails> card) {
+            this.card = card;
+            return this;
+        }
+
+        public Builder card(CardDetails card) {
+            this.card = Optional.ofNullable(card);
             return this;
         }
 
@@ -270,6 +323,28 @@ public final class NetworkToken {
             return this;
         }
 
+        @JsonSetter(value = "modified_by", nulls = Nulls.SKIP)
+        public Builder modifiedBy(Optional<String> modifiedBy) {
+            this.modifiedBy = modifiedBy;
+            return this;
+        }
+
+        public Builder modifiedBy(String modifiedBy) {
+            this.modifiedBy = Optional.ofNullable(modifiedBy);
+            return this;
+        }
+
+        @JsonSetter(value = "modified_at", nulls = Nulls.SKIP)
+        public Builder modifiedAt(Optional<OffsetDateTime> modifiedAt) {
+            this.modifiedAt = modifiedAt;
+            return this;
+        }
+
+        public Builder modifiedAt(OffsetDateTime modifiedAt) {
+            this.modifiedAt = Optional.ofNullable(modifiedAt);
+            return this;
+        }
+
         @JsonSetter(value = "token_id", nulls = Nulls.SKIP)
         public Builder tokenId(Optional<String> tokenId) {
             this.tokenId = tokenId;
@@ -297,10 +372,13 @@ public final class NetworkToken {
                     id,
                     tenantId,
                     data,
+                    card,
                     networkToken,
                     status,
                     createdBy,
                     createdAt,
+                    modifiedBy,
+                    modifiedAt,
                     tokenId,
                     tokenIntentId,
                     additionalProperties);
