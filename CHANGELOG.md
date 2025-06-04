@@ -1,3 +1,11 @@
+## [2.1.0](https://github.com/Basis-Theory/java-sdk/compare/2.0.0...2.1.0) (2025-06-04)
+
+
+### Features
+
+* Add Apple Pay unlink support ([ef140f5](https://github.com/Basis-Theory/java-sdk/commit/ef140f5d744a6c676ea3daede2d1dc6af727c5b1))
+
+
 ## [2.0.0](https://github.com/Basis-Theory/java-sdk/compare/1.6.0...2.0.0) (2025-05-20)
 
 
