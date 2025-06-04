@@ -35,6 +35,10 @@ public final class ApplePayToken {
 
     private final Optional<OffsetDateTime> createdAt;
 
+    private final Optional<String> modifiedBy;
+
+    private final Optional<OffsetDateTime> modifiedAt;
+
     private final Optional<CardDetails> card;
 
     private final Optional<Object> data;
@@ -51,6 +55,8 @@ public final class ApplePayToken {
             Optional<OffsetDateTime> expiresAt,
             Optional<String> createdBy,
             Optional<OffsetDateTime> createdAt,
+            Optional<String> modifiedBy,
+            Optional<OffsetDateTime> modifiedAt,
             Optional<CardDetails> card,
             Optional<Object> data,
             Optional<Authentication> authentication,
@@ -62,6 +68,8 @@ public final class ApplePayToken {
         this.expiresAt = expiresAt;
         this.createdBy = createdBy;
         this.createdAt = createdAt;
+        this.modifiedBy = modifiedBy;
+        this.modifiedAt = modifiedAt;
         this.card = card;
         this.data = data;
         this.authentication = authentication;
@@ -103,6 +111,16 @@ public final class ApplePayToken {
         return createdAt;
     }
 
+    @JsonProperty("modified_by")
+    public Optional<String> getModifiedBy() {
+        return modifiedBy;
+    }
+
+    @JsonProperty("modified_at")
+    public Optional<OffsetDateTime> getModifiedAt() {
+        return modifiedAt;
+    }
+
     @JsonProperty("card")
     public Optional<CardDetails> getCard() {
         return card;
@@ -137,6 +155,8 @@ public final class ApplePayToken {
                 && expiresAt.equals(other.expiresAt)
                 && createdBy.equals(other.createdBy)
                 && createdAt.equals(other.createdAt)
+                && modifiedBy.equals(other.modifiedBy)
+                && modifiedAt.equals(other.modifiedAt)
                 && card.equals(other.card)
                 && data.equals(other.data)
                 && authentication.equals(other.authentication);
@@ -152,6 +172,8 @@ public final class ApplePayToken {
                 this.expiresAt,
                 this.createdBy,
                 this.createdAt,
+                this.modifiedBy,
+                this.modifiedAt,
                 this.card,
                 this.data,
                 this.authentication);
@@ -182,6 +204,10 @@ public final class ApplePayToken {
 
         private Optional<OffsetDateTime> createdAt = Optional.empty();
 
+        private Optional<String> modifiedBy = Optional.empty();
+
+        private Optional<OffsetDateTime> modifiedAt = Optional.empty();
+
         private Optional<CardDetails> card = Optional.empty();
 
         private Optional<Object> data = Optional.empty();
@@ -201,6 +227,8 @@ public final class ApplePayToken {
             expiresAt(other.getExpiresAt());
             createdBy(other.getCreatedBy());
             createdAt(other.getCreatedAt());
+            modifiedBy(other.getModifiedBy());
+            modifiedAt(other.getModifiedAt());
             card(other.getCard());
             data(other.getData());
             authentication(other.getAuthentication());
@@ -284,6 +312,28 @@ public final class ApplePayToken {
             return this;
         }
 
+        @JsonSetter(value = "modified_by", nulls = Nulls.SKIP)
+        public Builder modifiedBy(Optional<String> modifiedBy) {
+            this.modifiedBy = modifiedBy;
+            return this;
+        }
+
+        public Builder modifiedBy(String modifiedBy) {
+            this.modifiedBy = Optional.ofNullable(modifiedBy);
+            return this;
+        }
+
+        @JsonSetter(value = "modified_at", nulls = Nulls.SKIP)
+        public Builder modifiedAt(Optional<OffsetDateTime> modifiedAt) {
+            this.modifiedAt = modifiedAt;
+            return this;
+        }
+
+        public Builder modifiedAt(OffsetDateTime modifiedAt) {
+            this.modifiedAt = Optional.ofNullable(modifiedAt);
+            return this;
+        }
+
         @JsonSetter(value = "card", nulls = Nulls.SKIP)
         public Builder card(Optional<CardDetails> card) {
             this.card = card;
@@ -326,6 +376,8 @@ public final class ApplePayToken {
                     expiresAt,
                     createdBy,
                     createdAt,
+                    modifiedBy,
+                    modifiedAt,
                     card,
                     data,
                     authentication,

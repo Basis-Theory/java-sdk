@@ -56,6 +56,14 @@ public class ApplePayClient {
         return this.rawClient.get(id, requestOptions).body();
     }
 
+    public String unlink(String id) {
+        return this.rawClient.unlink(id).body();
+    }
+
+    public String unlink(String id, RequestOptions requestOptions) {
+        return this.rawClient.unlink(id, requestOptions).body();
+    }
+
     public DomainClient domain() {
         return this.domainClient.get();
     }
