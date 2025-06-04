@@ -28,6 +28,8 @@ public final class CreateTokenRequest {
 
     private final Optional<Object> data;
 
+    private final Optional<String> encrypted;
+
     private final Optional<Privacy> privacy;
 
     private final Optional<Map<String, Optional<String>>> metadata;
@@ -52,6 +54,7 @@ public final class CreateTokenRequest {
             Optional<String> id,
             Optional<String> type,
             Optional<Object> data,
+            Optional<String> encrypted,
             Optional<Privacy> privacy,
             Optional<Map<String, Optional<String>>> metadata,
             Optional<List<String>> searchIndexes,
@@ -65,6 +68,7 @@ public final class CreateTokenRequest {
         this.id = id;
         this.type = type;
         this.data = data;
+        this.encrypted = encrypted;
         this.privacy = privacy;
         this.metadata = metadata;
         this.searchIndexes = searchIndexes;
@@ -90,6 +94,11 @@ public final class CreateTokenRequest {
     @JsonProperty("data")
     public Optional<Object> getData() {
         return data;
+    }
+
+    @JsonProperty("encrypted")
+    public Optional<String> getEncrypted() {
+        return encrypted;
     }
 
     @JsonProperty("privacy")
@@ -152,6 +161,7 @@ public final class CreateTokenRequest {
         return id.equals(other.id)
                 && type.equals(other.type)
                 && data.equals(other.data)
+                && encrypted.equals(other.encrypted)
                 && privacy.equals(other.privacy)
                 && metadata.equals(other.metadata)
                 && searchIndexes.equals(other.searchIndexes)
@@ -169,6 +179,7 @@ public final class CreateTokenRequest {
                 this.id,
                 this.type,
                 this.data,
+                this.encrypted,
                 this.privacy,
                 this.metadata,
                 this.searchIndexes,
@@ -197,6 +208,8 @@ public final class CreateTokenRequest {
 
         private Optional<Object> data = Optional.empty();
 
+        private Optional<String> encrypted = Optional.empty();
+
         private Optional<Privacy> privacy = Optional.empty();
 
         private Optional<Map<String, Optional<String>>> metadata = Optional.empty();
@@ -224,6 +237,7 @@ public final class CreateTokenRequest {
             id(other.getId());
             type(other.getType());
             data(other.getData());
+            encrypted(other.getEncrypted());
             privacy(other.getPrivacy());
             metadata(other.getMetadata());
             searchIndexes(other.getSearchIndexes());
@@ -266,6 +280,17 @@ public final class CreateTokenRequest {
 
         public Builder data(Object data) {
             this.data = Optional.ofNullable(data);
+            return this;
+        }
+
+        @JsonSetter(value = "encrypted", nulls = Nulls.SKIP)
+        public Builder encrypted(Optional<String> encrypted) {
+            this.encrypted = encrypted;
+            return this;
+        }
+
+        public Builder encrypted(String encrypted) {
+            this.encrypted = Optional.ofNullable(encrypted);
             return this;
         }
 
@@ -373,6 +398,7 @@ public final class CreateTokenRequest {
                     id,
                     type,
                     data,
+                    encrypted,
                     privacy,
                     metadata,
                     searchIndexes,

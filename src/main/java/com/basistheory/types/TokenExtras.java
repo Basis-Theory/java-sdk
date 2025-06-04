@@ -29,6 +29,8 @@ public final class TokenExtras {
 
     private final Optional<List<String>> networkTokenIds;
 
+    private final Optional<Boolean> decryptedPayload;
+
     private final Map<String, Object> additionalProperties;
 
     private TokenExtras(
@@ -36,11 +38,13 @@ public final class TokenExtras {
             Optional<TokenServiceProviderDetails> tspDetails,
             Optional<String> deduplicationBehavior,
             Optional<List<String>> networkTokenIds,
+            Optional<Boolean> decryptedPayload,
             Map<String, Object> additionalProperties) {
         this.deduplicated = deduplicated;
         this.tspDetails = tspDetails;
         this.deduplicationBehavior = deduplicationBehavior;
         this.networkTokenIds = networkTokenIds;
+        this.decryptedPayload = decryptedPayload;
         this.additionalProperties = additionalProperties;
     }
 
@@ -64,6 +68,11 @@ public final class TokenExtras {
         return networkTokenIds;
     }
 
+    @JsonProperty("decrypted_payload")
+    public Optional<Boolean> getDecryptedPayload() {
+        return decryptedPayload;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -79,12 +88,18 @@ public final class TokenExtras {
         return deduplicated.equals(other.deduplicated)
                 && tspDetails.equals(other.tspDetails)
                 && deduplicationBehavior.equals(other.deduplicationBehavior)
-                && networkTokenIds.equals(other.networkTokenIds);
+                && networkTokenIds.equals(other.networkTokenIds)
+                && decryptedPayload.equals(other.decryptedPayload);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.deduplicated, this.tspDetails, this.deduplicationBehavior, this.networkTokenIds);
+        return Objects.hash(
+                this.deduplicated,
+                this.tspDetails,
+                this.deduplicationBehavior,
+                this.networkTokenIds,
+                this.decryptedPayload);
     }
 
     @java.lang.Override
@@ -106,6 +121,8 @@ public final class TokenExtras {
 
         private Optional<List<String>> networkTokenIds = Optional.empty();
 
+        private Optional<Boolean> decryptedPayload = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -116,6 +133,7 @@ public final class TokenExtras {
             tspDetails(other.getTspDetails());
             deduplicationBehavior(other.getDeduplicationBehavior());
             networkTokenIds(other.getNetworkTokenIds());
+            decryptedPayload(other.getDecryptedPayload());
             return this;
         }
 
@@ -163,9 +181,25 @@ public final class TokenExtras {
             return this;
         }
 
+        @JsonSetter(value = "decrypted_payload", nulls = Nulls.SKIP)
+        public Builder decryptedPayload(Optional<Boolean> decryptedPayload) {
+            this.decryptedPayload = decryptedPayload;
+            return this;
+        }
+
+        public Builder decryptedPayload(Boolean decryptedPayload) {
+            this.decryptedPayload = Optional.ofNullable(decryptedPayload);
+            return this;
+        }
+
         public TokenExtras build() {
             return new TokenExtras(
-                    deduplicated, tspDetails, deduplicationBehavior, networkTokenIds, additionalProperties);
+                    deduplicated,
+                    tspDetails,
+                    deduplicationBehavior,
+                    networkTokenIds,
+                    decryptedPayload,
+                    additionalProperties);
         }
     }
 }
