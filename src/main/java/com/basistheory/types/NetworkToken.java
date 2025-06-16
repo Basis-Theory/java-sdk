@@ -45,6 +45,8 @@ public final class NetworkToken {
 
     private final Optional<String> tokenIntentId;
 
+    private final Optional<NetworkTokenExtras> extras;
+
     private final Map<String, Object> additionalProperties;
 
     private NetworkToken(
@@ -60,6 +62,7 @@ public final class NetworkToken {
             Optional<OffsetDateTime> modifiedAt,
             Optional<String> tokenId,
             Optional<String> tokenIntentId,
+            Optional<NetworkTokenExtras> extras,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.tenantId = tenantId;
@@ -73,6 +76,7 @@ public final class NetworkToken {
         this.modifiedAt = modifiedAt;
         this.tokenId = tokenId;
         this.tokenIntentId = tokenIntentId;
+        this.extras = extras;
         this.additionalProperties = additionalProperties;
     }
 
@@ -136,6 +140,11 @@ public final class NetworkToken {
         return tokenIntentId;
     }
 
+    @JsonProperty("_extras")
+    public Optional<NetworkTokenExtras> getExtras() {
+        return extras;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -159,7 +168,8 @@ public final class NetworkToken {
                 && modifiedBy.equals(other.modifiedBy)
                 && modifiedAt.equals(other.modifiedAt)
                 && tokenId.equals(other.tokenId)
-                && tokenIntentId.equals(other.tokenIntentId);
+                && tokenIntentId.equals(other.tokenIntentId)
+                && extras.equals(other.extras);
     }
 
     @java.lang.Override
@@ -176,7 +186,8 @@ public final class NetworkToken {
                 this.modifiedBy,
                 this.modifiedAt,
                 this.tokenId,
-                this.tokenIntentId);
+                this.tokenIntentId,
+                this.extras);
     }
 
     @java.lang.Override
@@ -214,6 +225,8 @@ public final class NetworkToken {
 
         private Optional<String> tokenIntentId = Optional.empty();
 
+        private Optional<NetworkTokenExtras> extras = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -232,6 +245,7 @@ public final class NetworkToken {
             modifiedAt(other.getModifiedAt());
             tokenId(other.getTokenId());
             tokenIntentId(other.getTokenIntentId());
+            extras(other.getExtras());
             return this;
         }
 
@@ -367,6 +381,17 @@ public final class NetworkToken {
             return this;
         }
 
+        @JsonSetter(value = "_extras", nulls = Nulls.SKIP)
+        public Builder extras(Optional<NetworkTokenExtras> extras) {
+            this.extras = extras;
+            return this;
+        }
+
+        public Builder extras(NetworkTokenExtras extras) {
+            this.extras = Optional.ofNullable(extras);
+            return this;
+        }
+
         public NetworkToken build() {
             return new NetworkToken(
                     id,
@@ -381,6 +406,7 @@ public final class NetworkToken {
                     modifiedAt,
                     tokenId,
                     tokenIntentId,
+                    extras,
                     additionalProperties);
         }
     }
