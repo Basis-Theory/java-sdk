@@ -11,9 +11,11 @@ import com.basistheory.core.MediaTypes;
 import com.basistheory.core.ObjectMappers;
 import com.basistheory.core.RequestOptions;
 import com.basistheory.errors.BadRequestError;
+import com.basistheory.errors.ConflictError;
 import com.basistheory.errors.ForbiddenError;
 import com.basistheory.errors.InternalServerError;
 import com.basistheory.errors.NotFoundError;
+import com.basistheory.errors.ServiceUnavailableError;
 import com.basistheory.errors.UnauthorizedError;
 import com.basistheory.errors.UnprocessableEntityError;
 import com.basistheory.resources.networktokens.requests.CreateNetworkTokenRequest;
@@ -278,6 +280,134 @@ public class RawNetworkTokensClient {
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                     case 500:
                         throw new InternalServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new BasisTheoryApiApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                    response);
+        } catch (IOException e) {
+            throw new BasisTheoryException("Network error executing HTTP request", e);
+        }
+    }
+
+    public BasisTheoryApiHttpResponse<NetworkToken> suspend(String id) {
+        return suspend(id, null);
+    }
+
+    public BasisTheoryApiHttpResponse<NetworkToken> suspend(String id, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("network-tokens")
+                .addPathSegment(id)
+                .addPathSegments("suspend")
+                .build();
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("PUT", RequestBody.create("", null))
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return new BasisTheoryApiHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), NetworkToken.class), response);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                response);
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                    case 409:
+                        throw new ConflictError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                response);
+                    case 503:
+                        throw new ServiceUnavailableError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new BasisTheoryApiApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                    response);
+        } catch (IOException e) {
+            throw new BasisTheoryException("Network error executing HTTP request", e);
+        }
+    }
+
+    public BasisTheoryApiHttpResponse<NetworkToken> resume(String id) {
+        return resume(id, null);
+    }
+
+    public BasisTheoryApiHttpResponse<NetworkToken> resume(String id, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("network-tokens")
+                .addPathSegment(id)
+                .addPathSegments("resume")
+                .build();
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("PUT", RequestBody.create("", null))
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return new BasisTheoryApiHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), NetworkToken.class), response);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 401:
+                        throw new UnauthorizedError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                response);
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                    case 409:
+                        throw new ConflictError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                response);
+                    case 503:
+                        throw new ServiceUnavailableError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
                                 response);
                 }

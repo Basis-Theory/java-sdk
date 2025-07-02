@@ -37,6 +37,8 @@ public final class CreateThreeDsSessionResponse {
 
     private final Optional<String> recommendedVersion;
 
+    private final Optional<String> redirectUrl;
+
     private final Map<String, Object> additionalProperties;
 
     private CreateThreeDsSessionResponse(
@@ -48,6 +50,7 @@ public final class CreateThreeDsSessionResponse {
             Optional<String> methodNotificationUrl,
             Optional<String> directoryServerId,
             Optional<String> recommendedVersion,
+            Optional<String> redirectUrl,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.type = type;
@@ -57,6 +60,7 @@ public final class CreateThreeDsSessionResponse {
         this.methodNotificationUrl = methodNotificationUrl;
         this.directoryServerId = directoryServerId;
         this.recommendedVersion = recommendedVersion;
+        this.redirectUrl = redirectUrl;
         this.additionalProperties = additionalProperties;
     }
 
@@ -100,6 +104,11 @@ public final class CreateThreeDsSessionResponse {
         return recommendedVersion;
     }
 
+    @JsonProperty("redirect_url")
+    public Optional<String> getRedirectUrl() {
+        return redirectUrl;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -119,7 +128,8 @@ public final class CreateThreeDsSessionResponse {
                 && methodUrl.equals(other.methodUrl)
                 && methodNotificationUrl.equals(other.methodNotificationUrl)
                 && directoryServerId.equals(other.directoryServerId)
-                && recommendedVersion.equals(other.recommendedVersion);
+                && recommendedVersion.equals(other.recommendedVersion)
+                && redirectUrl.equals(other.redirectUrl);
     }
 
     @java.lang.Override
@@ -132,7 +142,8 @@ public final class CreateThreeDsSessionResponse {
                 this.methodUrl,
                 this.methodNotificationUrl,
                 this.directoryServerId,
-                this.recommendedVersion);
+                this.recommendedVersion,
+                this.redirectUrl);
     }
 
     @java.lang.Override
@@ -162,6 +173,8 @@ public final class CreateThreeDsSessionResponse {
 
         private Optional<String> recommendedVersion = Optional.empty();
 
+        private Optional<String> redirectUrl = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -176,6 +189,7 @@ public final class CreateThreeDsSessionResponse {
             methodNotificationUrl(other.getMethodNotificationUrl());
             directoryServerId(other.getDirectoryServerId());
             recommendedVersion(other.getRecommendedVersion());
+            redirectUrl(other.getRedirectUrl());
             return this;
         }
 
@@ -267,6 +281,17 @@ public final class CreateThreeDsSessionResponse {
             return this;
         }
 
+        @JsonSetter(value = "redirect_url", nulls = Nulls.SKIP)
+        public Builder redirectUrl(Optional<String> redirectUrl) {
+            this.redirectUrl = redirectUrl;
+            return this;
+        }
+
+        public Builder redirectUrl(String redirectUrl) {
+            this.redirectUrl = Optional.ofNullable(redirectUrl);
+            return this;
+        }
+
         public CreateThreeDsSessionResponse build() {
             return new CreateThreeDsSessionResponse(
                     id,
@@ -277,6 +302,7 @@ public final class CreateThreeDsSessionResponse {
                     methodNotificationUrl,
                     directoryServerId,
                     recommendedVersion,
+                    redirectUrl,
                     additionalProperties);
         }
     }

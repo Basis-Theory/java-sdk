@@ -62,4 +62,20 @@ public class AsyncNetworkTokensClient {
     public CompletableFuture<Void> delete(String id, RequestOptions requestOptions) {
         return this.rawClient.delete(id, requestOptions).thenApply(response -> response.body());
     }
+
+    public CompletableFuture<NetworkToken> suspend(String id) {
+        return this.rawClient.suspend(id).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<NetworkToken> suspend(String id, RequestOptions requestOptions) {
+        return this.rawClient.suspend(id, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<NetworkToken> resume(String id) {
+        return this.rawClient.resume(id).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<NetworkToken> resume(String id, RequestOptions requestOptions) {
+        return this.rawClient.resume(id, requestOptions).thenApply(response -> response.body());
+    }
 }

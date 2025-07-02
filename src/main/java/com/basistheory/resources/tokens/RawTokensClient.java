@@ -19,7 +19,6 @@ import com.basistheory.errors.ForbiddenError;
 import com.basistheory.errors.NotFoundError;
 import com.basistheory.errors.UnauthorizedError;
 import com.basistheory.resources.tokens.requests.CreateTokenRequest;
-import com.basistheory.resources.tokens.requests.SearchTokensRequest;
 import com.basistheory.resources.tokens.requests.SearchTokensRequestV2;
 import com.basistheory.resources.tokens.requests.TokensListRequest;
 import com.basistheory.resources.tokens.requests.TokensListV2Request;
@@ -323,83 +322,6 @@ public class RawTokensClient {
                                 response);
                     case 409:
                         throw new ConflictError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
-                                response);
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new BasisTheoryApiApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
-        } catch (IOException e) {
-            throw new BasisTheoryException("Network error executing HTTP request", e);
-        }
-    }
-
-    public BasisTheoryApiHttpResponse<SyncPagingIterable<Token>> search() {
-        return search(SearchTokensRequest.builder().build());
-    }
-
-    public BasisTheoryApiHttpResponse<SyncPagingIterable<Token>> search(SearchTokensRequest request) {
-        return search(request, null);
-    }
-
-    public BasisTheoryApiHttpResponse<SyncPagingIterable<Token>> search(
-            SearchTokensRequest request, IdempotentRequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("tokens/search")
-                .build();
-        RequestBody body;
-        try {
-            body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
-        } catch (JsonProcessingException e) {
-            throw new BasisTheoryException("Failed to serialize request", e);
-        }
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("POST", body)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .addHeader("Accept", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                TokenPaginatedList parsedResponse =
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), TokenPaginatedList.class);
-                int newPageNumber = request.getPage().map(page -> page + 1).orElse(1);
-                SearchTokensRequest nextRequest = SearchTokensRequest.builder()
-                        .from(request)
-                        .page(newPageNumber)
-                        .build();
-                List<Token> result = parsedResponse.getData().orElse(Collections.emptyList());
-                return new BasisTheoryApiHttpResponse<>(
-                        new SyncPagingIterable<Token>(true, result, () -> search(nextRequest, requestOptions)
-                                .body()),
-                        response);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                switch (response.code()) {
-                    case 400:
-                        throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ValidationProblemDetails.class),
-                                response);
-                    case 401:
-                        throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
-                                response);
-                    case 403:
-                        throw new ForbiddenError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
                                 response);
                 }

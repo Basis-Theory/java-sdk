@@ -61,4 +61,20 @@ public class NetworkTokensClient {
     public void delete(String id, RequestOptions requestOptions) {
         this.rawClient.delete(id, requestOptions).body();
     }
+
+    public NetworkToken suspend(String id) {
+        return this.rawClient.suspend(id).body();
+    }
+
+    public NetworkToken suspend(String id, RequestOptions requestOptions) {
+        return this.rawClient.suspend(id, requestOptions).body();
+    }
+
+    public NetworkToken resume(String id) {
+        return this.rawClient.resume(id).body();
+    }
+
+    public NetworkToken resume(String id, RequestOptions requestOptions) {
+        return this.rawClient.resume(id, requestOptions).body();
+    }
 }
