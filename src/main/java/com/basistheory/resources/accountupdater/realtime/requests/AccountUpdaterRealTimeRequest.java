@@ -27,16 +27,20 @@ public final class AccountUpdaterRealTimeRequest {
 
     private final Optional<Integer> expirationMonth;
 
+    private final Optional<Boolean> deduplicateToken;
+
     private final Map<String, Object> additionalProperties;
 
     private AccountUpdaterRealTimeRequest(
             String tokenId,
             Optional<Integer> expirationYear,
             Optional<Integer> expirationMonth,
+            Optional<Boolean> deduplicateToken,
             Map<String, Object> additionalProperties) {
         this.tokenId = tokenId;
         this.expirationYear = expirationYear;
         this.expirationMonth = expirationMonth;
+        this.deduplicateToken = deduplicateToken;
         this.additionalProperties = additionalProperties;
     }
 
@@ -64,6 +68,14 @@ public final class AccountUpdaterRealTimeRequest {
         return expirationMonth;
     }
 
+    /**
+     * @return Whether deduplication should be enabled when creating the new token. Uses the value of the Deduplicate Tokens setting on the tenant if not set.
+     */
+    @JsonProperty("deduplicate_token")
+    public Optional<Boolean> getDeduplicateToken() {
+        return deduplicateToken;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -78,12 +90,13 @@ public final class AccountUpdaterRealTimeRequest {
     private boolean equalTo(AccountUpdaterRealTimeRequest other) {
         return tokenId.equals(other.tokenId)
                 && expirationYear.equals(other.expirationYear)
-                && expirationMonth.equals(other.expirationMonth);
+                && expirationMonth.equals(other.expirationMonth)
+                && deduplicateToken.equals(other.deduplicateToken);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.tokenId, this.expirationYear, this.expirationMonth);
+        return Objects.hash(this.tokenId, this.expirationYear, this.expirationMonth, this.deduplicateToken);
     }
 
     @java.lang.Override
@@ -111,11 +124,17 @@ public final class AccountUpdaterRealTimeRequest {
         _FinalStage expirationMonth(Optional<Integer> expirationMonth);
 
         _FinalStage expirationMonth(Integer expirationMonth);
+
+        _FinalStage deduplicateToken(Optional<Boolean> deduplicateToken);
+
+        _FinalStage deduplicateToken(Boolean deduplicateToken);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements TokenIdStage, _FinalStage {
         private String tokenId;
+
+        private Optional<Boolean> deduplicateToken = Optional.empty();
 
         private Optional<Integer> expirationMonth = Optional.empty();
 
@@ -131,6 +150,7 @@ public final class AccountUpdaterRealTimeRequest {
             tokenId(other.getTokenId());
             expirationYear(other.getExpirationYear());
             expirationMonth(other.getExpirationMonth());
+            deduplicateToken(other.getDeduplicateToken());
             return this;
         }
 
@@ -142,6 +162,23 @@ public final class AccountUpdaterRealTimeRequest {
         @JsonSetter("token_id")
         public _FinalStage tokenId(@NotNull String tokenId) {
             this.tokenId = Objects.requireNonNull(tokenId, "tokenId must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Whether deduplication should be enabled when creating the new token. Uses the value of the Deduplicate Tokens setting on the tenant if not set.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage deduplicateToken(Boolean deduplicateToken) {
+            this.deduplicateToken = Optional.ofNullable(deduplicateToken);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "deduplicate_token", nulls = Nulls.SKIP)
+        public _FinalStage deduplicateToken(Optional<Boolean> deduplicateToken) {
+            this.deduplicateToken = deduplicateToken;
             return this;
         }
 
@@ -181,7 +218,8 @@ public final class AccountUpdaterRealTimeRequest {
 
         @java.lang.Override
         public AccountUpdaterRealTimeRequest build() {
-            return new AccountUpdaterRealTimeRequest(tokenId, expirationYear, expirationMonth, additionalProperties);
+            return new AccountUpdaterRealTimeRequest(
+                    tokenId, expirationYear, expirationMonth, deduplicateToken, additionalProperties);
         }
     }
 }

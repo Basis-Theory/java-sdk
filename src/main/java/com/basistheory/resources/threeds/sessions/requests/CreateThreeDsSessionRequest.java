@@ -5,6 +5,7 @@ package com.basistheory.resources.threeds.sessions.requests;
 
 import com.basistheory.core.ObjectMappers;
 import com.basistheory.types.AuthenticateThreeDsSessionRequest;
+import com.basistheory.types.ThreeDsCallbackUrls;
 import com.basistheory.types.ThreeDsDeviceInfo;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -38,6 +39,8 @@ public final class CreateThreeDsSessionRequest {
 
     private final Optional<AuthenticateThreeDsSessionRequest> authenticationRequest;
 
+    private final Optional<ThreeDsCallbackUrls> callbackUrls;
+
     private final Map<String, Object> additionalProperties;
 
     private CreateThreeDsSessionRequest(
@@ -49,6 +52,7 @@ public final class CreateThreeDsSessionRequest {
             Optional<String> webChallengeMode,
             Optional<ThreeDsDeviceInfo> deviceInfo,
             Optional<AuthenticateThreeDsSessionRequest> authenticationRequest,
+            Optional<ThreeDsCallbackUrls> callbackUrls,
             Map<String, Object> additionalProperties) {
         this.pan = pan;
         this.tokenId = tokenId;
@@ -58,6 +62,7 @@ public final class CreateThreeDsSessionRequest {
         this.webChallengeMode = webChallengeMode;
         this.deviceInfo = deviceInfo;
         this.authenticationRequest = authenticationRequest;
+        this.callbackUrls = callbackUrls;
         this.additionalProperties = additionalProperties;
     }
 
@@ -101,6 +106,11 @@ public final class CreateThreeDsSessionRequest {
         return authenticationRequest;
     }
 
+    @JsonProperty("callback_urls")
+    public Optional<ThreeDsCallbackUrls> getCallbackUrls() {
+        return callbackUrls;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -120,7 +130,8 @@ public final class CreateThreeDsSessionRequest {
                 && device.equals(other.device)
                 && webChallengeMode.equals(other.webChallengeMode)
                 && deviceInfo.equals(other.deviceInfo)
-                && authenticationRequest.equals(other.authenticationRequest);
+                && authenticationRequest.equals(other.authenticationRequest)
+                && callbackUrls.equals(other.callbackUrls);
     }
 
     @java.lang.Override
@@ -133,7 +144,8 @@ public final class CreateThreeDsSessionRequest {
                 this.device,
                 this.webChallengeMode,
                 this.deviceInfo,
-                this.authenticationRequest);
+                this.authenticationRequest,
+                this.callbackUrls);
     }
 
     @java.lang.Override
@@ -163,6 +175,8 @@ public final class CreateThreeDsSessionRequest {
 
         private Optional<AuthenticateThreeDsSessionRequest> authenticationRequest = Optional.empty();
 
+        private Optional<ThreeDsCallbackUrls> callbackUrls = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -177,6 +191,7 @@ public final class CreateThreeDsSessionRequest {
             webChallengeMode(other.getWebChallengeMode());
             deviceInfo(other.getDeviceInfo());
             authenticationRequest(other.getAuthenticationRequest());
+            callbackUrls(other.getCallbackUrls());
             return this;
         }
 
@@ -268,6 +283,17 @@ public final class CreateThreeDsSessionRequest {
             return this;
         }
 
+        @JsonSetter(value = "callback_urls", nulls = Nulls.SKIP)
+        public Builder callbackUrls(Optional<ThreeDsCallbackUrls> callbackUrls) {
+            this.callbackUrls = callbackUrls;
+            return this;
+        }
+
+        public Builder callbackUrls(ThreeDsCallbackUrls callbackUrls) {
+            this.callbackUrls = Optional.ofNullable(callbackUrls);
+            return this;
+        }
+
         public CreateThreeDsSessionRequest build() {
             return new CreateThreeDsSessionRequest(
                     pan,
@@ -278,6 +304,7 @@ public final class CreateThreeDsSessionRequest {
                     webChallengeMode,
                     deviceInfo,
                     authenticationRequest,
+                    callbackUrls,
                     additionalProperties);
         }
     }

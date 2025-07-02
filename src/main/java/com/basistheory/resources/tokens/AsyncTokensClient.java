@@ -8,7 +8,6 @@ import com.basistheory.core.IdempotentRequestOptions;
 import com.basistheory.core.RequestOptions;
 import com.basistheory.core.pagination.SyncPagingIterable;
 import com.basistheory.resources.tokens.requests.CreateTokenRequest;
-import com.basistheory.resources.tokens.requests.SearchTokensRequest;
 import com.basistheory.resources.tokens.requests.SearchTokensRequestV2;
 import com.basistheory.resources.tokens.requests.TokensListRequest;
 import com.basistheory.resources.tokens.requests.TokensListV2Request;
@@ -71,19 +70,6 @@ public class AsyncTokensClient {
 
     public CompletableFuture<Token> create(CreateTokenRequest request, IdempotentRequestOptions requestOptions) {
         return this.rawClient.create(request, requestOptions).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<SyncPagingIterable<Token>> search() {
-        return this.rawClient.search().thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<SyncPagingIterable<Token>> search(SearchTokensRequest request) {
-        return this.rawClient.search(request).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<SyncPagingIterable<Token>> search(
-            SearchTokensRequest request, IdempotentRequestOptions requestOptions) {
-        return this.rawClient.search(request, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<Token> get(String id) {
