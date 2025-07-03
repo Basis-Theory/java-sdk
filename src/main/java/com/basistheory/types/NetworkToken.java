@@ -31,6 +31,8 @@ public final class NetworkToken {
 
     private final Optional<CardDetails> networkToken;
 
+    private final Optional<String> par;
+
     private final Optional<String> status;
 
     private final Optional<String> createdBy;
@@ -55,6 +57,7 @@ public final class NetworkToken {
             Optional<Card> data,
             Optional<CardDetails> card,
             Optional<CardDetails> networkToken,
+            Optional<String> par,
             Optional<String> status,
             Optional<String> createdBy,
             Optional<OffsetDateTime> createdAt,
@@ -69,6 +72,7 @@ public final class NetworkToken {
         this.data = data;
         this.card = card;
         this.networkToken = networkToken;
+        this.par = par;
         this.status = status;
         this.createdBy = createdBy;
         this.createdAt = createdAt;
@@ -103,6 +107,11 @@ public final class NetworkToken {
     @JsonProperty("network_token")
     public Optional<CardDetails> getNetworkToken() {
         return networkToken;
+    }
+
+    @JsonProperty("par")
+    public Optional<String> getPar() {
+        return par;
     }
 
     @JsonProperty("status")
@@ -162,6 +171,7 @@ public final class NetworkToken {
                 && data.equals(other.data)
                 && card.equals(other.card)
                 && networkToken.equals(other.networkToken)
+                && par.equals(other.par)
                 && status.equals(other.status)
                 && createdBy.equals(other.createdBy)
                 && createdAt.equals(other.createdAt)
@@ -180,6 +190,7 @@ public final class NetworkToken {
                 this.data,
                 this.card,
                 this.networkToken,
+                this.par,
                 this.status,
                 this.createdBy,
                 this.createdAt,
@@ -211,6 +222,8 @@ public final class NetworkToken {
 
         private Optional<CardDetails> networkToken = Optional.empty();
 
+        private Optional<String> par = Optional.empty();
+
         private Optional<String> status = Optional.empty();
 
         private Optional<String> createdBy = Optional.empty();
@@ -238,6 +251,7 @@ public final class NetworkToken {
             data(other.getData());
             card(other.getCard());
             networkToken(other.getNetworkToken());
+            par(other.getPar());
             status(other.getStatus());
             createdBy(other.getCreatedBy());
             createdAt(other.getCreatedAt());
@@ -301,6 +315,17 @@ public final class NetworkToken {
 
         public Builder networkToken(CardDetails networkToken) {
             this.networkToken = Optional.ofNullable(networkToken);
+            return this;
+        }
+
+        @JsonSetter(value = "par", nulls = Nulls.SKIP)
+        public Builder par(Optional<String> par) {
+            this.par = par;
+            return this;
+        }
+
+        public Builder par(String par) {
+            this.par = Optional.ofNullable(par);
             return this;
         }
 
@@ -399,6 +424,7 @@ public final class NetworkToken {
                     data,
                     card,
                     networkToken,
+                    par,
                     status,
                     createdBy,
                     createdAt,
