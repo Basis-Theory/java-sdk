@@ -18,30 +18,27 @@ import java.util.Objects;
 import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = CreateAccountUpdaterJobRequest.Builder.class)
-public final class CreateAccountUpdaterJobRequest {
-    private final Optional<Boolean> deduplicateTokens;
+@JsonDeserialize(builder = CreateDocumentRequest.Builder.class)
+public final class CreateDocumentRequest {
+    private final Optional<Map<String, Optional<String>>> metadata;
 
     private final Map<String, Object> additionalProperties;
 
-    private CreateAccountUpdaterJobRequest(
-            Optional<Boolean> deduplicateTokens, Map<String, Object> additionalProperties) {
-        this.deduplicateTokens = deduplicateTokens;
+    private CreateDocumentRequest(
+            Optional<Map<String, Optional<String>>> metadata, Map<String, Object> additionalProperties) {
+        this.metadata = metadata;
         this.additionalProperties = additionalProperties;
     }
 
-    /**
-     * @return Whether deduplication should be enabled when creating new tokens. Uses the value of the Deduplicate Tokens setting on the tenant if not set.
-     */
-    @JsonProperty("deduplicate_tokens")
-    public Optional<Boolean> getDeduplicateTokens() {
-        return deduplicateTokens;
+    @JsonProperty("metadata")
+    public Optional<Map<String, Optional<String>>> getMetadata() {
+        return metadata;
     }
 
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof CreateAccountUpdaterJobRequest && equalTo((CreateAccountUpdaterJobRequest) other);
+        return other instanceof CreateDocumentRequest && equalTo((CreateDocumentRequest) other);
     }
 
     @JsonAnyGetter
@@ -49,13 +46,13 @@ public final class CreateAccountUpdaterJobRequest {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(CreateAccountUpdaterJobRequest other) {
-        return deduplicateTokens.equals(other.deduplicateTokens);
+    private boolean equalTo(CreateDocumentRequest other) {
+        return metadata.equals(other.metadata);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.deduplicateTokens);
+        return Objects.hash(this.metadata);
     }
 
     @java.lang.Override
@@ -69,31 +66,31 @@ public final class CreateAccountUpdaterJobRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<Boolean> deduplicateTokens = Optional.empty();
+        private Optional<Map<String, Optional<String>>> metadata = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        public Builder from(CreateAccountUpdaterJobRequest other) {
-            deduplicateTokens(other.getDeduplicateTokens());
+        public Builder from(CreateDocumentRequest other) {
+            metadata(other.getMetadata());
             return this;
         }
 
-        @JsonSetter(value = "deduplicate_tokens", nulls = Nulls.SKIP)
-        public Builder deduplicateTokens(Optional<Boolean> deduplicateTokens) {
-            this.deduplicateTokens = deduplicateTokens;
+        @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
+        public Builder metadata(Optional<Map<String, Optional<String>>> metadata) {
+            this.metadata = metadata;
             return this;
         }
 
-        public Builder deduplicateTokens(Boolean deduplicateTokens) {
-            this.deduplicateTokens = Optional.ofNullable(deduplicateTokens);
+        public Builder metadata(Map<String, Optional<String>> metadata) {
+            this.metadata = Optional.ofNullable(metadata);
             return this;
         }
 
-        public CreateAccountUpdaterJobRequest build() {
-            return new CreateAccountUpdaterJobRequest(deduplicateTokens, additionalProperties);
+        public CreateDocumentRequest build() {
+            return new CreateDocumentRequest(metadata, additionalProperties);
         }
     }
 }
