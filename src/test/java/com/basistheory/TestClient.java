@@ -12,6 +12,8 @@ import com.basistheory.errors.NotFoundError;
 import com.basistheory.errors.UnprocessableEntityError;
 import com.basistheory.resources.applications.ApplicationsClient;
 import com.basistheory.resources.applications.requests.CreateApplicationRequest;
+import com.basistheory.resources.documents.DocumentsClient;
+import com.basistheory.resources.documents.requests.DocumentsUploadRequest;
 import com.basistheory.resources.googlepay.GooglepayClient;
 import com.basistheory.resources.googlepay.requests.GooglePayTokenizeRequest;
 import com.basistheory.resources.keys.AsyncKeysClient;
@@ -33,9 +35,14 @@ import com.basistheory.resources.webhooks.requests.UpdateWebhookRequest;
 import com.basistheory.types.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -208,6 +215,56 @@ public final class TestClient {
         } catch (Exception e) {
             fail("Test failed with exception: " + e.getMessage());
         }
+    }
+
+    @Test
+    public void shouldSupportDocumentsLifecycle() throws IOException {
+        BasisTheoryApiClient client = getPrivateApplicationClient();
+
+        // Upload
+        File tempFile = Files.createTempFile("test", ".txt").toFile();
+        String originalContent = "Hello World";
+        try (FileWriter writer = new FileWriter(tempFile)) {
+            writer.write(originalContent);
+        }
+        Map<String, Optional<String>> metadata = new HashMap<>();
+        metadata.put("attribute 1", Optional.of("value 1"));
+        DocumentsUploadRequest request = DocumentsUploadRequest.builder()
+                .request(CreateDocumentRequest.builder()
+                        .metadata(metadata).build()).build();
+        Document uploaded = client.documents().upload(Optional.of(tempFile), request);
+
+        // GET info
+        Document retrieved = client.documents().get(uploaded.getId().get());
+        assertEquals(uploaded.getId().get(), retrieved.getId().get());
+        assertEquals("text/plain", retrieved.getContentType().get());
+        assertEquals("value 1", retrieved.getMetadata().get().get("attribute 1").get());
+
+        // Get data
+        InputStream dataStream = client.documents().data().get(uploaded.getId().get());
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = dataStream.read(buffer)) != -1) {
+            result.write(buffer, 0, length);
+        }
+        String actualData = result.toString("UTF-8");
+        assertEquals(originalContent, actualData);
+
+        // DELETE
+        client.documents().delete(uploaded.getId().get());
+
+        try {
+            client.documents().get(uploaded.getId().get());
+            fail("Should have raised NotFoundError");
+        } catch (NotFoundError e) {
+            assertTrue(true);
+        }
+    }
+
+    @NotNull
+    private static BasisTheoryApiClient getPrivateApplicationClient() {
+        return new BasisTheoryApiClient(privateClientOptions());
     }
 
     @NotNull
