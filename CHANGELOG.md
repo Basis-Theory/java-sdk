@@ -1,3 +1,11 @@
+## [2.2.0](https://github.com/Basis-Theory/java-sdk/compare/2.1.0...2.2.0) (2025-07-22)
+
+
+### Features
+
+* Add documents ([#69](https://github.com/Basis-Theory/java-sdk/issues/69)) ([ed4908f](https://github.com/Basis-Theory/java-sdk/commit/ed4908f275536c492da1ab79a7000296b848d0ae))
+
+
 ## [2.1.0](https://github.com/Basis-Theory/java-sdk/compare/2.0.0...2.1.0) (2025-06-04)
 
 
