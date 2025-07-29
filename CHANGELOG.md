@@ -1,3 +1,11 @@
+### [2.3.1](https://github.com/Basis-Theory/java-sdk/compare/2.3.0...2.3.1) (2025-07-29)
+
+
+### Bug Fixes
+
+* javadoc publishing error ([6a82133](https://github.com/Basis-Theory/java-sdk/commit/6a82133cd558cd379df71105c3d67b9f2dae2e4e))
+
+
 ## [2.2.0](https://github.com/Basis-Theory/java-sdk/compare/2.1.0...2.2.0) (2025-07-22)
 
 
