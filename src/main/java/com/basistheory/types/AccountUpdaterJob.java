@@ -175,28 +175,46 @@ public final class AccountUpdaterJob {
     }
 
     public interface StatusStage {
+        /**
+         * <p>The current status of the job</p>
+         */
         UploadUrlStage status(@NotNull AccountUpdaterJobStatus status);
     }
 
     public interface UploadUrlStage {
+        /**
+         * <p>Pre-signed URL for uploading job data</p>
+         */
         CreatedByStage uploadUrl(@NotNull String uploadUrl);
     }
 
     public interface CreatedByStage {
+        /**
+         * <p>Application id that created the job</p>
+         */
         CreatedAtStage createdBy(@NotNull String createdBy);
     }
 
     public interface CreatedAtStage {
+        /**
+         * <p>Date and time when the job was created</p>
+         */
         _FinalStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface _FinalStage {
         AccountUpdaterJob build();
 
+        /**
+         * <p>Date and time when the job expires if no data is uploaded</p>
+         */
         _FinalStage expiresAt(Optional<OffsetDateTime> expiresAt);
 
         _FinalStage expiresAt(OffsetDateTime expiresAt);
 
+        /**
+         * <p>List of errors encountered during processing</p>
+         */
         _FinalStage errors(Optional<List<String>> errors);
 
         _FinalStage errors(List<String> errors);
@@ -261,6 +279,7 @@ public final class AccountUpdaterJob {
 
         /**
          * <p>The current status of the job</p>
+         * <p>The current status of the job</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -271,6 +290,7 @@ public final class AccountUpdaterJob {
         }
 
         /**
+         * <p>Pre-signed URL for uploading job data</p>
          * <p>Pre-signed URL for uploading job data</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -283,6 +303,7 @@ public final class AccountUpdaterJob {
 
         /**
          * <p>Application id that created the job</p>
+         * <p>Application id that created the job</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -293,6 +314,7 @@ public final class AccountUpdaterJob {
         }
 
         /**
+         * <p>Date and time when the job was created</p>
          * <p>Date and time when the job was created</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -313,6 +335,9 @@ public final class AccountUpdaterJob {
             return this;
         }
 
+        /**
+         * <p>List of errors encountered during processing</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "errors", nulls = Nulls.SKIP)
         public _FinalStage errors(Optional<List<String>> errors) {
@@ -330,6 +355,9 @@ public final class AccountUpdaterJob {
             return this;
         }
 
+        /**
+         * <p>Date and time when the job expires if no data is uploaded</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "expiresAt", nulls = Nulls.SKIP)
         public _FinalStage expiresAt(Optional<OffsetDateTime> expiresAt) {

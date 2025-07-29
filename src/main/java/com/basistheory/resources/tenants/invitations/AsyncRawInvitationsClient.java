@@ -63,11 +63,11 @@ public class AsyncRawInvitationsClient {
                 .addPathSegments("tenants/self/invitations");
         if (request.getStatus().isPresent()) {
             QueryStringMapper.addQueryParameter(
-                    httpUrl, "status", request.getStatus().get().toString(), false);
+                    httpUrl, "status", request.getStatus().get(), false);
         }
         if (request.getPage().isPresent()) {
             QueryStringMapper.addQueryParameter(
-                    httpUrl, "page", request.getPage().get().toString(), false);
+                    httpUrl, "page", request.getPage().get(), false);
         }
         if (request.getStart().isPresent()) {
             QueryStringMapper.addQueryParameter(
@@ -75,13 +75,12 @@ public class AsyncRawInvitationsClient {
         }
         if (request.getSize().isPresent()) {
             QueryStringMapper.addQueryParameter(
-                    httpUrl, "size", request.getSize().get().toString(), false);
+                    httpUrl, "size", request.getSize().get(), false);
         }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json");
         Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
@@ -97,8 +96,9 @@ public class AsyncRawInvitationsClient {
                     if (response.isSuccessful()) {
                         TenantInvitationResponsePaginatedList parsedResponse = ObjectMappers.JSON_MAPPER.readValue(
                                 responseBody.string(), TenantInvitationResponsePaginatedList.class);
-                        int newPageNumber =
-                                request.getPage().map(page -> page + 1).orElse(1);
+                        int newPageNumber = request.getPage()
+                                .map((Integer page) -> page + 1)
+                                .orElse(1);
                         InvitationsListRequest nextRequest = InvitationsListRequest.builder()
                                 .from(request)
                                 .page(newPageNumber)
@@ -253,7 +253,6 @@ public class AsyncRawInvitationsClient {
                 .url(httpUrl)
                 .method("POST", RequestBody.create("", null))
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
@@ -329,7 +328,6 @@ public class AsyncRawInvitationsClient {
                 .url(httpUrl)
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();

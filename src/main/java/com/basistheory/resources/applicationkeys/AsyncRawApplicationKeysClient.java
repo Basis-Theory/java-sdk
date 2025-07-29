@@ -58,18 +58,16 @@ public class AsyncRawApplicationKeysClient {
                 .addPathSegment(id)
                 .addPathSegments("keys");
         if (request.getId().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "id", request.getId().get().toString(), false);
+            QueryStringMapper.addQueryParameter(httpUrl, "id", request.getId().get(), true);
         }
         if (request.getType().isPresent()) {
             QueryStringMapper.addQueryParameter(
-                    httpUrl, "type", request.getType().get().toString(), false);
+                    httpUrl, "type", request.getType().get(), true);
         }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json");
         Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
@@ -145,7 +143,6 @@ public class AsyncRawApplicationKeysClient {
                 .url(httpUrl)
                 .method("POST", RequestBody.create("", null))
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
@@ -221,7 +218,6 @@ public class AsyncRawApplicationKeysClient {
                 .url(httpUrl)
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();

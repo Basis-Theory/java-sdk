@@ -111,22 +111,34 @@ public final class UpdateWebhookRequest {
     }
 
     public interface NameStage {
+        /**
+         * <p>The name of the webhook</p>
+         */
         UrlStage name(@NotNull String name);
 
         Builder from(UpdateWebhookRequest other);
     }
 
     public interface UrlStage {
+        /**
+         * <p>The URL to which the webhook will send events</p>
+         */
         _FinalStage url(@NotNull String url);
     }
 
     public interface _FinalStage {
         UpdateWebhookRequest build();
 
+        /**
+         * <p>The email address to use for management notification events. Ie: webhook disabled</p>
+         */
         _FinalStage notifyEmail(Optional<String> notifyEmail);
 
         _FinalStage notifyEmail(String notifyEmail);
 
+        /**
+         * <p>An array of event types that the webhook will listen for</p>
+         */
         _FinalStage events(List<String> events);
 
         _FinalStage addEvents(String events);
@@ -160,6 +172,7 @@ public final class UpdateWebhookRequest {
 
         /**
          * <p>The name of the webhook</p>
+         * <p>The name of the webhook</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -170,6 +183,7 @@ public final class UpdateWebhookRequest {
         }
 
         /**
+         * <p>The URL to which the webhook will send events</p>
          * <p>The URL to which the webhook will send events</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -200,6 +214,9 @@ public final class UpdateWebhookRequest {
             return this;
         }
 
+        /**
+         * <p>An array of event types that the webhook will listen for</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "events", nulls = Nulls.SKIP)
         public _FinalStage events(List<String> events) {
@@ -218,6 +235,9 @@ public final class UpdateWebhookRequest {
             return this;
         }
 
+        /**
+         * <p>The email address to use for management notification events. Ie: webhook disabled</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "notify_email", nulls = Nulls.SKIP)
         public _FinalStage notifyEmail(Optional<String> notifyEmail) {
