@@ -20,7 +20,7 @@ jobs:
           architecture: x64
 
       - name: Compile
-        run: ./gradlew compileJava
+        run: ./gradlew compileJava javadoc
 
   test:
     needs: [ compile ]
