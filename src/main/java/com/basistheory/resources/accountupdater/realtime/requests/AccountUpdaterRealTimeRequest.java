@@ -109,6 +109,9 @@ public final class AccountUpdaterRealTimeRequest {
     }
 
     public interface TokenIdStage {
+        /**
+         * <p>Card Token identifier</p>
+         */
         _FinalStage tokenId(@NotNull String tokenId);
 
         Builder from(AccountUpdaterRealTimeRequest other);
@@ -117,14 +120,23 @@ public final class AccountUpdaterRealTimeRequest {
     public interface _FinalStage {
         AccountUpdaterRealTimeRequest build();
 
+        /**
+         * <p>The 4-digit expiration year of the account number. Not required if the card token already stores this value.</p>
+         */
         _FinalStage expirationYear(Optional<Integer> expirationYear);
 
         _FinalStage expirationYear(Integer expirationYear);
 
+        /**
+         * <p>The 2-digit expiration month of the account number. Not required if the card token already stores this value.</p>
+         */
         _FinalStage expirationMonth(Optional<Integer> expirationMonth);
 
         _FinalStage expirationMonth(Integer expirationMonth);
 
+        /**
+         * <p>Whether deduplication should be enabled when creating the new token. Uses the value of the Deduplicate Tokens setting on the tenant if not set.</p>
+         */
         _FinalStage deduplicateToken(Optional<Boolean> deduplicateToken);
 
         _FinalStage deduplicateToken(Boolean deduplicateToken);
@@ -156,6 +168,7 @@ public final class AccountUpdaterRealTimeRequest {
 
         /**
          * <p>Card Token identifier</p>
+         * <p>Card Token identifier</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -175,6 +188,9 @@ public final class AccountUpdaterRealTimeRequest {
             return this;
         }
 
+        /**
+         * <p>Whether deduplication should be enabled when creating the new token. Uses the value of the Deduplicate Tokens setting on the tenant if not set.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "deduplicate_token", nulls = Nulls.SKIP)
         public _FinalStage deduplicateToken(Optional<Boolean> deduplicateToken) {
@@ -192,6 +208,9 @@ public final class AccountUpdaterRealTimeRequest {
             return this;
         }
 
+        /**
+         * <p>The 2-digit expiration month of the account number. Not required if the card token already stores this value.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "expiration_month", nulls = Nulls.SKIP)
         public _FinalStage expirationMonth(Optional<Integer> expirationMonth) {
@@ -209,6 +228,9 @@ public final class AccountUpdaterRealTimeRequest {
             return this;
         }
 
+        /**
+         * <p>The 4-digit expiration year of the account number. Not required if the card token already stores this value.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "expiration_year", nulls = Nulls.SKIP)
         public _FinalStage expirationYear(Optional<Integer> expirationYear) {

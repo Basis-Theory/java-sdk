@@ -53,7 +53,7 @@ public class RawMembersClient {
                 .addPathSegments("tenants/self/members");
         if (request.getPage().isPresent()) {
             QueryStringMapper.addQueryParameter(
-                    httpUrl, "page", request.getPage().get().toString(), false);
+                    httpUrl, "page", request.getPage().get(), false);
         }
         if (request.getStart().isPresent()) {
             QueryStringMapper.addQueryParameter(
@@ -61,17 +61,16 @@ public class RawMembersClient {
         }
         if (request.getSize().isPresent()) {
             QueryStringMapper.addQueryParameter(
-                    httpUrl, "size", request.getSize().get().toString(), false);
+                    httpUrl, "size", request.getSize().get(), false);
         }
         if (request.getUserId().isPresent()) {
             QueryStringMapper.addQueryParameter(
-                    httpUrl, "user_id", request.getUserId().get().toString(), false);
+                    httpUrl, "user_id", request.getUserId().get(), true);
         }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json");
         Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();

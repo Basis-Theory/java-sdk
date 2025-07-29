@@ -69,7 +69,7 @@ public class AsyncRawProxiesClient {
         }
         if (request.getPage().isPresent()) {
             QueryStringMapper.addQueryParameter(
-                    httpUrl, "page", request.getPage().get().toString(), false);
+                    httpUrl, "page", request.getPage().get(), false);
         }
         if (request.getStart().isPresent()) {
             QueryStringMapper.addQueryParameter(
@@ -77,17 +77,15 @@ public class AsyncRawProxiesClient {
         }
         if (request.getSize().isPresent()) {
             QueryStringMapper.addQueryParameter(
-                    httpUrl, "size", request.getSize().get().toString(), false);
+                    httpUrl, "size", request.getSize().get(), false);
         }
         if (request.getId().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "id", request.getId().get().toString(), false);
+            QueryStringMapper.addQueryParameter(httpUrl, "id", request.getId().get(), true);
         }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json");
         Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
@@ -102,8 +100,9 @@ public class AsyncRawProxiesClient {
                     if (response.isSuccessful()) {
                         ProxyPaginatedList parsedResponse =
                                 ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ProxyPaginatedList.class);
-                        int newPageNumber =
-                                request.getPage().map(page -> page + 1).orElse(1);
+                        int newPageNumber = request.getPage()
+                                .map((Integer page) -> page + 1)
+                                .orElse(1);
                         ProxiesListRequest nextRequest = ProxiesListRequest.builder()
                                 .from(request)
                                 .page(newPageNumber)
@@ -257,7 +256,6 @@ public class AsyncRawProxiesClient {
                 .url(httpUrl)
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();

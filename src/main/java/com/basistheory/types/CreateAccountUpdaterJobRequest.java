@@ -81,6 +81,9 @@ public final class CreateAccountUpdaterJobRequest {
             return this;
         }
 
+        /**
+         * <p>Whether deduplication should be enabled when creating new tokens. Uses the value of the Deduplicate Tokens setting on the tenant if not set.</p>
+         */
         @JsonSetter(value = "deduplicate_tokens", nulls = Nulls.SKIP)
         public Builder deduplicateTokens(Optional<Boolean> deduplicateTokens) {
             this.deduplicateTokens = deduplicateTokens;

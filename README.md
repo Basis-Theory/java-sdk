@@ -1,6 +1,7 @@
 # BasisTheory Java Library
 
 [![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=https%3A%2F%2Fgithub.com%2FBasis-Theory%2Fjava-sdk)
+[![Maven Central](https://img.shields.io/maven-central/v/dev.basis-theory/basis-theory-java-sdk)](https://central.sonatype.com/artifact/dev.basis-theory/basis-theory-java-sdk)
 
 The BasisTheory Java library provides convenient access to the BasisTheory API from Java.
 
@@ -92,27 +93,24 @@ BasisTheoryApiClient client = BasisTheoryApiClient
 ### Retries
 
 The SDK is instrumented with automatic retries with exponential backoff. A request will be retried as long
-as the request is deemed retriable and the number of retry attempts has not grown larger than the configured
+as the request is deemed retryable and the number of retry attempts has not grown larger than the configured
 retry limit (default: 2).
 
-A request is deemed retriable when any of the following HTTP status codes is returned:
+A request is deemed retryable when any of the following HTTP status codes is returned:
 
 - [408](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/408) (Timeout)
 - [429](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429) (Too Many Requests)
 - [5XX](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500) (Internal Server Errors)
 
-Use the `maxRetries` request option to configure this behavior.
+Use the `maxRetries` client option to configure this behavior.
 
 ```java
-import com.basistheory.core.RequestOptions;
+import com.basistheory.BasisTheoryApiClient;
 
-client.tenants().self().get(
-    ...,
-    RequestOptions
-        .builder()
-        .maxRetries(1)
-        .build()
-);
+BasisTheoryApiClient client = BasisTheoryApiClient
+    .builder()
+    .maxRetries(1)
+    .build();
 ```
 
 ### Timeouts
@@ -126,7 +124,7 @@ import com.basistheory.core.RequestOptions;
 // Client level
 BasisTheoryApiClient client = BasisTheoryApiClient
     .builder()
-    .tiemout(10)
+    .timeout(10)
     .build();
 
 // Request level
@@ -148,3 +146,26 @@ a proof of concept, but know that we will not be able to merge it as-is. We sugg
 an issue first to discuss with us!
 
 On the other hand, contributions to the README are always very welcome!
+## Installation
+
+### Gradle
+
+Add the dependency in your `build.gradle` file:
+
+```groovy
+dependencies {
+  implementation 'dev.basis-theory:basis-theory-java-sdk'
+}
+```
+
+### Maven
+
+Add the dependency in your `pom.xml` file:
+
+```xml
+<dependency>
+  <groupId>dev.basis-theory</groupId>
+  <artifactId>basis-theory-java-sdk</artifactId>
+  <version>0.0.1</version>
+</dependency>
+```

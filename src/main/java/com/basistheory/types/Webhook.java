@@ -216,6 +216,9 @@ public final class Webhook {
     public interface _FinalStage {
         Webhook build();
 
+        /**
+         * <p>The email address to use for management notification events. Ie: webhook disabled</p>
+         */
         _FinalStage notifyEmail(Optional<String> notifyEmail);
 
         _FinalStage notifyEmail(String notifyEmail);
@@ -393,6 +396,9 @@ public final class Webhook {
             return this;
         }
 
+        /**
+         * <p>The email address to use for management notification events. Ie: webhook disabled</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "notify_email", nulls = Nulls.SKIP)
         public _FinalStage notifyEmail(Optional<String> notifyEmail) {
