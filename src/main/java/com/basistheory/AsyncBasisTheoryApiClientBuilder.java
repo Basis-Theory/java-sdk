@@ -5,16 +5,21 @@ package com.basistheory;
 
 import com.basistheory.core.ClientOptions;
 import com.basistheory.core.Environment;
+import java.util.Optional;
 import okhttp3.OkHttpClient;
 
-public final class AsyncBasisTheoryApiClientBuilder {
-    private ClientOptions.Builder clientOptionsBuilder = ClientOptions.builder();
+public class AsyncBasisTheoryApiClientBuilder {
+    private Optional<Integer> timeout = Optional.empty();
+
+    private Optional<Integer> maxRetries = Optional.empty();
 
     private String apiKey = System.getenv("BT-API-KEY");
 
     private String correlationId = null;
 
     private Environment environment = Environment.DEFAULT;
+
+    private OkHttpClient httpClient;
 
     /**
      * Sets apiKey.
@@ -47,7 +52,7 @@ public final class AsyncBasisTheoryApiClientBuilder {
      * Sets the timeout (in seconds) for the client. Defaults to 60 seconds.
      */
     public AsyncBasisTheoryApiClientBuilder timeout(int timeout) {
-        this.clientOptionsBuilder.timeout(timeout);
+        this.timeout = Optional.of(timeout);
         return this;
     }
 
@@ -55,7 +60,7 @@ public final class AsyncBasisTheoryApiClientBuilder {
      * Sets the maximum number of retries for the client. Defaults to 2 retries.
      */
     public AsyncBasisTheoryApiClientBuilder maxRetries(int maxRetries) {
-        this.clientOptionsBuilder.maxRetries(maxRetries);
+        this.maxRetries = Optional.of(maxRetries);
         return this;
     }
 
@@ -63,19 +68,149 @@ public final class AsyncBasisTheoryApiClientBuilder {
      * Sets the underlying OkHttp client
      */
     public AsyncBasisTheoryApiClientBuilder httpClient(OkHttpClient httpClient) {
-        this.clientOptionsBuilder.httpClient(httpClient);
+        this.httpClient = httpClient;
         return this;
     }
+
+    protected ClientOptions buildClientOptions() {
+        ClientOptions.Builder builder = ClientOptions.builder();
+        setEnvironment(builder);
+        setAuthentication(builder);
+        setCustomHeaders(builder);
+        setHttpClient(builder);
+        setTimeouts(builder);
+        setRetries(builder);
+        setAdditional(builder);
+        return builder.build();
+    }
+
+    /**
+     * Sets the environment configuration for the client.
+     * Override this method to modify URLs or add environment-specific logic.
+     *
+     * @param builder The ClientOptions.Builder to configure
+     */
+    protected void setEnvironment(ClientOptions.Builder builder) {
+        builder.environment(this.environment);
+    }
+
+    /**
+     * Override this method to customize authentication.
+     * This method is called during client options construction to set up authentication headers.
+     *
+     * @param builder The ClientOptions.Builder to configure
+     *
+     * Example:
+     * <pre>{@code
+     * @Override
+     * protected void setAuthentication(ClientOptions.Builder builder) {
+     *     super.setAuthentication(builder); // Keep existing auth
+     *     builder.addHeader("X-API-Key", this.apiKey);
+     * }
+     * }</pre>
+     */
+    protected void setAuthentication(ClientOptions.Builder builder) {
+        builder.addHeader("BT-API-KEY", this.apiKey);
+    }
+
+    /**
+     * Override this method to add or modify custom headers.
+     * This method is called during client options construction to set up custom headers defined in the API.
+     *
+     * @param builder The ClientOptions.Builder to configure
+     *
+     * Example:
+     * <pre>{@code
+     * @Override
+     * protected void setCustomHeaders(ClientOptions.Builder builder) {
+     *     super.setCustomHeaders(builder); // Keep existing headers
+     *     builder.addHeader("X-Trace-ID", generateTraceId());
+     * }
+     * }</pre>
+     */
+    protected void setCustomHeaders(ClientOptions.Builder builder) {
+        if (this.correlationId != null) {
+            builder.addHeader("BT-TRACE-ID", this.correlationId);
+        }
+    }
+
+    /**
+     * Sets the request timeout configuration.
+     * Override this method to customize timeout behavior.
+     *
+     * @param builder The ClientOptions.Builder to configure
+     */
+    protected void setTimeouts(ClientOptions.Builder builder) {
+        if (this.timeout.isPresent()) {
+            builder.timeout(this.timeout.get());
+        }
+    }
+
+    /**
+     * Sets the retry configuration for failed requests.
+     * Override this method to implement custom retry strategies.
+     *
+     * @param builder The ClientOptions.Builder to configure
+     */
+    protected void setRetries(ClientOptions.Builder builder) {
+        if (this.maxRetries.isPresent()) {
+            builder.maxRetries(this.maxRetries.get());
+        }
+    }
+
+    /**
+     * Sets the OkHttp client configuration.
+     * Override this method to customize HTTP client behavior (interceptors, connection pools, etc).
+     *
+     * @param builder The ClientOptions.Builder to configure
+     */
+    protected void setHttpClient(ClientOptions.Builder builder) {
+        if (this.httpClient != null) {
+            builder.httpClient(this.httpClient);
+        }
+    }
+
+    /**
+     * Override this method to add any additional configuration to the client.
+     * This method is called at the end of the configuration chain, allowing you to add
+     * custom headers, modify settings, or perform any other client customization.
+     *
+     * @param builder The ClientOptions.Builder to configure
+     *
+     * Example:
+     * <pre>{@code
+     * @Override
+     * protected void setAdditional(ClientOptions.Builder builder) {
+     *     builder.addHeader("X-Request-ID", () -> UUID.randomUUID().toString());
+     *     builder.addHeader("X-Client-Version", "1.0.0");
+     * }
+     * }</pre>
+     */
+    protected void setAdditional(ClientOptions.Builder builder) {}
+
+    /**
+     * Override this method to add custom validation logic before the client is built.
+     * This method is called at the beginning of the build() method to ensure the configuration is valid.
+     * Throw an exception to prevent client creation if validation fails.
+     *
+     * Example:
+     * <pre>{@code
+     * @Override
+     * protected void validateConfiguration() {
+     *     super.validateConfiguration(); // Run parent validations
+     *     if (tenantId == null || tenantId.isEmpty()) {
+     *         throw new IllegalStateException("tenantId is required");
+     *     }
+     * }
+     * }</pre>
+     */
+    protected void validateConfiguration() {}
 
     public AsyncBasisTheoryApiClient build() {
         if (apiKey == null) {
             throw new RuntimeException("Please provide apiKey or set the BT-API-KEY environment variable.");
         }
-        this.clientOptionsBuilder.addHeader("BT-API-KEY", this.apiKey);
-        if (correlationId != null) {
-            this.clientOptionsBuilder.addHeader("BT-TRACE-ID", this.correlationId);
-        }
-        clientOptionsBuilder.environment(this.environment);
-        return new AsyncBasisTheoryApiClient(clientOptionsBuilder.build());
+        validateConfiguration();
+        return new AsyncBasisTheoryApiClient(buildClientOptions());
     }
 }

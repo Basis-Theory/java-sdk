@@ -103,6 +103,9 @@ public final class AccountUpdaterRealTimeResponse {
             return this;
         }
 
+        /**
+         * <p>The account updater result code</p>
+         */
         @JsonSetter(value = "result_code", nulls = Nulls.SKIP)
         public Builder resultCode(Optional<String> resultCode) {
             this.resultCode = resultCode;

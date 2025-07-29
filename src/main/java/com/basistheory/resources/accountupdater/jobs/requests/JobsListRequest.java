@@ -94,6 +94,9 @@ public final class JobsListRequest {
             return this;
         }
 
+        /**
+         * <p>The maximum number of jobs to return</p>
+         */
         @JsonSetter(value = "size", nulls = Nulls.SKIP)
         public Builder size(Optional<Integer> size) {
             this.size = size;
@@ -105,6 +108,9 @@ public final class JobsListRequest {
             return this;
         }
 
+        /**
+         * <p>Cursor for pagination</p>
+         */
         @JsonSetter(value = "start", nulls = Nulls.SKIP)
         public Builder start(Optional<String> start) {
             this.start = start;

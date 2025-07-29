@@ -60,7 +60,6 @@ public class AsyncRawJobsClient {
                 .url(httpUrl)
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
@@ -143,7 +142,7 @@ public class AsyncRawJobsClient {
                 .addPathSegments("account-updater/jobs");
         if (request.getSize().isPresent()) {
             QueryStringMapper.addQueryParameter(
-                    httpUrl, "size", request.getSize().get().toString(), false);
+                    httpUrl, "size", request.getSize().get(), false);
         }
         if (request.getStart().isPresent()) {
             QueryStringMapper.addQueryParameter(
@@ -153,7 +152,6 @@ public class AsyncRawJobsClient {
                 .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json");
         Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
@@ -226,7 +224,6 @@ public class AsyncRawJobsClient {
                 .url(httpUrl)
                 .method("POST", RequestBody.create("", null))
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();

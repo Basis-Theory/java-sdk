@@ -67,7 +67,7 @@ public class AsyncRawDocumentsClient {
                 body.addFormDataPart(
                         "document",
                         document.get().getName(),
-                        RequestBody.create(documentMimeTypeMediaType, document.get()));
+                        RequestBody.create(document.get(), documentMimeTypeMediaType));
             }
             if (request.getRequest().isPresent()) {
                 body.addFormDataPart(
@@ -154,7 +154,6 @@ public class AsyncRawDocumentsClient {
                 .url(httpUrl)
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
