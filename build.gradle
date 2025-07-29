@@ -35,6 +35,10 @@ java {
     withJavadocJar()
 }
 
+javadoc {
+    options.addStringOption('Xdoclint:none', '-quiet') // Ignore error when `<pre>{@code` is in the javadoc
+}
+
 test {
     useJUnitPlatform()
     testLogging {
