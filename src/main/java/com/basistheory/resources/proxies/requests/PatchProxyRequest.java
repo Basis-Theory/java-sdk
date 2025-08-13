@@ -15,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -30,6 +31,10 @@ public final class PatchProxyRequest {
 
     private final Optional<ProxyTransform> responseTransform;
 
+    private final Optional<List<ProxyTransform>> requestTransforms;
+
+    private final Optional<List<ProxyTransform>> responseTransforms;
+
     private final Optional<Application> application;
 
     private final Optional<Map<String, Optional<String>>> configuration;
@@ -43,6 +48,8 @@ public final class PatchProxyRequest {
             Optional<String> destinationUrl,
             Optional<ProxyTransform> requestTransform,
             Optional<ProxyTransform> responseTransform,
+            Optional<List<ProxyTransform>> requestTransforms,
+            Optional<List<ProxyTransform>> responseTransforms,
             Optional<Application> application,
             Optional<Map<String, Optional<String>>> configuration,
             Optional<Boolean> requireAuth,
@@ -51,6 +58,8 @@ public final class PatchProxyRequest {
         this.destinationUrl = destinationUrl;
         this.requestTransform = requestTransform;
         this.responseTransform = responseTransform;
+        this.requestTransforms = requestTransforms;
+        this.responseTransforms = responseTransforms;
         this.application = application;
         this.configuration = configuration;
         this.requireAuth = requireAuth;
@@ -75,6 +84,16 @@ public final class PatchProxyRequest {
     @JsonProperty("response_transform")
     public Optional<ProxyTransform> getResponseTransform() {
         return responseTransform;
+    }
+
+    @JsonProperty("request_transforms")
+    public Optional<List<ProxyTransform>> getRequestTransforms() {
+        return requestTransforms;
+    }
+
+    @JsonProperty("response_transforms")
+    public Optional<List<ProxyTransform>> getResponseTransforms() {
+        return responseTransforms;
     }
 
     @JsonProperty("application")
@@ -108,6 +127,8 @@ public final class PatchProxyRequest {
                 && destinationUrl.equals(other.destinationUrl)
                 && requestTransform.equals(other.requestTransform)
                 && responseTransform.equals(other.responseTransform)
+                && requestTransforms.equals(other.requestTransforms)
+                && responseTransforms.equals(other.responseTransforms)
                 && application.equals(other.application)
                 && configuration.equals(other.configuration)
                 && requireAuth.equals(other.requireAuth);
@@ -120,6 +141,8 @@ public final class PatchProxyRequest {
                 this.destinationUrl,
                 this.requestTransform,
                 this.responseTransform,
+                this.requestTransforms,
+                this.responseTransforms,
                 this.application,
                 this.configuration,
                 this.requireAuth);
@@ -144,6 +167,10 @@ public final class PatchProxyRequest {
 
         private Optional<ProxyTransform> responseTransform = Optional.empty();
 
+        private Optional<List<ProxyTransform>> requestTransforms = Optional.empty();
+
+        private Optional<List<ProxyTransform>> responseTransforms = Optional.empty();
+
         private Optional<Application> application = Optional.empty();
 
         private Optional<Map<String, Optional<String>>> configuration = Optional.empty();
@@ -160,6 +187,8 @@ public final class PatchProxyRequest {
             destinationUrl(other.getDestinationUrl());
             requestTransform(other.getRequestTransform());
             responseTransform(other.getResponseTransform());
+            requestTransforms(other.getRequestTransforms());
+            responseTransforms(other.getResponseTransforms());
             application(other.getApplication());
             configuration(other.getConfiguration());
             requireAuth(other.getRequireAuth());
@@ -210,6 +239,28 @@ public final class PatchProxyRequest {
             return this;
         }
 
+        @JsonSetter(value = "request_transforms", nulls = Nulls.SKIP)
+        public Builder requestTransforms(Optional<List<ProxyTransform>> requestTransforms) {
+            this.requestTransforms = requestTransforms;
+            return this;
+        }
+
+        public Builder requestTransforms(List<ProxyTransform> requestTransforms) {
+            this.requestTransforms = Optional.ofNullable(requestTransforms);
+            return this;
+        }
+
+        @JsonSetter(value = "response_transforms", nulls = Nulls.SKIP)
+        public Builder responseTransforms(Optional<List<ProxyTransform>> responseTransforms) {
+            this.responseTransforms = responseTransforms;
+            return this;
+        }
+
+        public Builder responseTransforms(List<ProxyTransform> responseTransforms) {
+            this.responseTransforms = Optional.ofNullable(responseTransforms);
+            return this;
+        }
+
         @JsonSetter(value = "application", nulls = Nulls.SKIP)
         public Builder application(Optional<Application> application) {
             this.application = application;
@@ -249,6 +300,8 @@ public final class PatchProxyRequest {
                     destinationUrl,
                     requestTransform,
                     responseTransform,
+                    requestTransforms,
+                    responseTransforms,
                     application,
                     configuration,
                     requireAuth,
