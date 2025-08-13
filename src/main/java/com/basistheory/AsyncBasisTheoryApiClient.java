@@ -10,10 +10,9 @@ import com.basistheory.resources.applepay.AsyncApplePayClient;
 import com.basistheory.resources.applicationkeys.AsyncApplicationKeysClient;
 import com.basistheory.resources.applications.AsyncApplicationsClient;
 import com.basistheory.resources.applicationtemplates.AsyncApplicationTemplatesClient;
-import com.basistheory.resources.connection.AsyncConnectionClient;
 import com.basistheory.resources.documents.AsyncDocumentsClient;
 import com.basistheory.resources.enrichments.AsyncEnrichmentsClient;
-import com.basistheory.resources.googlepay.AsyncGooglepayClient;
+import com.basistheory.resources.googlepay.AsyncGooglePayClient;
 import com.basistheory.resources.keys.AsyncKeysClient;
 import com.basistheory.resources.logs.AsyncLogsClient;
 import com.basistheory.resources.networktokens.AsyncNetworkTokensClient;
@@ -40,13 +39,13 @@ public class AsyncBasisTheoryApiClient {
 
     protected final Supplier<AsyncApplePayClient> applePayClient;
 
+    protected final Supplier<AsyncGooglePayClient> googlePayClient;
+
     protected final Supplier<AsyncDocumentsClient> documentsClient;
 
     protected final Supplier<AsyncTokensClient> tokensClient;
 
     protected final Supplier<AsyncEnrichmentsClient> enrichmentsClient;
-
-    protected final Supplier<AsyncGooglepayClient> googlepayClient;
 
     protected final Supplier<AsyncKeysClient> keysClient;
 
@@ -70,8 +69,6 @@ public class AsyncBasisTheoryApiClient {
 
     protected final Supplier<AsyncAccountUpdaterClient> accountUpdaterClient;
 
-    protected final Supplier<AsyncConnectionClient> connectionClient;
-
     protected final Supplier<AsyncTenantsClient> tenantsClient;
 
     protected final Supplier<AsyncThreedsClient> threedsClient;
@@ -82,10 +79,10 @@ public class AsyncBasisTheoryApiClient {
         this.applicationKeysClient = Suppliers.memoize(() -> new AsyncApplicationKeysClient(clientOptions));
         this.applicationTemplatesClient = Suppliers.memoize(() -> new AsyncApplicationTemplatesClient(clientOptions));
         this.applePayClient = Suppliers.memoize(() -> new AsyncApplePayClient(clientOptions));
+        this.googlePayClient = Suppliers.memoize(() -> new AsyncGooglePayClient(clientOptions));
         this.documentsClient = Suppliers.memoize(() -> new AsyncDocumentsClient(clientOptions));
         this.tokensClient = Suppliers.memoize(() -> new AsyncTokensClient(clientOptions));
         this.enrichmentsClient = Suppliers.memoize(() -> new AsyncEnrichmentsClient(clientOptions));
-        this.googlepayClient = Suppliers.memoize(() -> new AsyncGooglepayClient(clientOptions));
         this.keysClient = Suppliers.memoize(() -> new AsyncKeysClient(clientOptions));
         this.logsClient = Suppliers.memoize(() -> new AsyncLogsClient(clientOptions));
         this.networkTokensClient = Suppliers.memoize(() -> new AsyncNetworkTokensClient(clientOptions));
@@ -97,7 +94,6 @@ public class AsyncBasisTheoryApiClient {
         this.tokenIntentsClient = Suppliers.memoize(() -> new AsyncTokenIntentsClient(clientOptions));
         this.webhooksClient = Suppliers.memoize(() -> new AsyncWebhooksClient(clientOptions));
         this.accountUpdaterClient = Suppliers.memoize(() -> new AsyncAccountUpdaterClient(clientOptions));
-        this.connectionClient = Suppliers.memoize(() -> new AsyncConnectionClient(clientOptions));
         this.tenantsClient = Suppliers.memoize(() -> new AsyncTenantsClient(clientOptions));
         this.threedsClient = Suppliers.memoize(() -> new AsyncThreedsClient(clientOptions));
     }
@@ -118,6 +114,10 @@ public class AsyncBasisTheoryApiClient {
         return this.applePayClient.get();
     }
 
+    public AsyncGooglePayClient googlePay() {
+        return this.googlePayClient.get();
+    }
+
     public AsyncDocumentsClient documents() {
         return this.documentsClient.get();
     }
@@ -128,10 +128,6 @@ public class AsyncBasisTheoryApiClient {
 
     public AsyncEnrichmentsClient enrichments() {
         return this.enrichmentsClient.get();
-    }
-
-    public AsyncGooglepayClient googlepay() {
-        return this.googlepayClient.get();
     }
 
     public AsyncKeysClient keys() {
@@ -176,10 +172,6 @@ public class AsyncBasisTheoryApiClient {
 
     public AsyncAccountUpdaterClient accountUpdater() {
         return this.accountUpdaterClient.get();
-    }
-
-    public AsyncConnectionClient connection() {
-        return this.connectionClient.get();
     }
 
     public AsyncTenantsClient tenants() {

@@ -10,10 +10,9 @@ import com.basistheory.resources.applepay.ApplePayClient;
 import com.basistheory.resources.applicationkeys.ApplicationKeysClient;
 import com.basistheory.resources.applications.ApplicationsClient;
 import com.basistheory.resources.applicationtemplates.ApplicationTemplatesClient;
-import com.basistheory.resources.connection.ConnectionClient;
 import com.basistheory.resources.documents.DocumentsClient;
 import com.basistheory.resources.enrichments.EnrichmentsClient;
-import com.basistheory.resources.googlepay.GooglepayClient;
+import com.basistheory.resources.googlepay.GooglePayClient;
 import com.basistheory.resources.keys.KeysClient;
 import com.basistheory.resources.logs.LogsClient;
 import com.basistheory.resources.networktokens.NetworkTokensClient;
@@ -40,13 +39,13 @@ public class BasisTheoryApiClient {
 
     protected final Supplier<ApplePayClient> applePayClient;
 
+    protected final Supplier<GooglePayClient> googlePayClient;
+
     protected final Supplier<DocumentsClient> documentsClient;
 
     protected final Supplier<TokensClient> tokensClient;
 
     protected final Supplier<EnrichmentsClient> enrichmentsClient;
-
-    protected final Supplier<GooglepayClient> googlepayClient;
 
     protected final Supplier<KeysClient> keysClient;
 
@@ -70,8 +69,6 @@ public class BasisTheoryApiClient {
 
     protected final Supplier<AccountUpdaterClient> accountUpdaterClient;
 
-    protected final Supplier<ConnectionClient> connectionClient;
-
     protected final Supplier<TenantsClient> tenantsClient;
 
     protected final Supplier<ThreedsClient> threedsClient;
@@ -82,10 +79,10 @@ public class BasisTheoryApiClient {
         this.applicationKeysClient = Suppliers.memoize(() -> new ApplicationKeysClient(clientOptions));
         this.applicationTemplatesClient = Suppliers.memoize(() -> new ApplicationTemplatesClient(clientOptions));
         this.applePayClient = Suppliers.memoize(() -> new ApplePayClient(clientOptions));
+        this.googlePayClient = Suppliers.memoize(() -> new GooglePayClient(clientOptions));
         this.documentsClient = Suppliers.memoize(() -> new DocumentsClient(clientOptions));
         this.tokensClient = Suppliers.memoize(() -> new TokensClient(clientOptions));
         this.enrichmentsClient = Suppliers.memoize(() -> new EnrichmentsClient(clientOptions));
-        this.googlepayClient = Suppliers.memoize(() -> new GooglepayClient(clientOptions));
         this.keysClient = Suppliers.memoize(() -> new KeysClient(clientOptions));
         this.logsClient = Suppliers.memoize(() -> new LogsClient(clientOptions));
         this.networkTokensClient = Suppliers.memoize(() -> new NetworkTokensClient(clientOptions));
@@ -97,7 +94,6 @@ public class BasisTheoryApiClient {
         this.tokenIntentsClient = Suppliers.memoize(() -> new TokenIntentsClient(clientOptions));
         this.webhooksClient = Suppliers.memoize(() -> new WebhooksClient(clientOptions));
         this.accountUpdaterClient = Suppliers.memoize(() -> new AccountUpdaterClient(clientOptions));
-        this.connectionClient = Suppliers.memoize(() -> new ConnectionClient(clientOptions));
         this.tenantsClient = Suppliers.memoize(() -> new TenantsClient(clientOptions));
         this.threedsClient = Suppliers.memoize(() -> new ThreedsClient(clientOptions));
     }
@@ -118,6 +114,10 @@ public class BasisTheoryApiClient {
         return this.applePayClient.get();
     }
 
+    public GooglePayClient googlePay() {
+        return this.googlePayClient.get();
+    }
+
     public DocumentsClient documents() {
         return this.documentsClient.get();
     }
@@ -128,10 +128,6 @@ public class BasisTheoryApiClient {
 
     public EnrichmentsClient enrichments() {
         return this.enrichmentsClient.get();
-    }
-
-    public GooglepayClient googlepay() {
-        return this.googlepayClient.get();
     }
 
     public KeysClient keys() {
@@ -176,10 +172,6 @@ public class BasisTheoryApiClient {
 
     public AccountUpdaterClient accountUpdater() {
         return this.accountUpdaterClient.get();
-    }
-
-    public ConnectionClient connection() {
-        return this.connectionClient.get();
     }
 
     public TenantsClient tenants() {
