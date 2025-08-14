@@ -6,7 +6,9 @@ package com.basistheory.resources.enrichments;
 import com.basistheory.core.ClientOptions;
 import com.basistheory.core.RequestOptions;
 import com.basistheory.resources.enrichments.requests.BankVerificationRequest;
+import com.basistheory.resources.enrichments.requests.EnrichmentsGetCardDetailsRequest;
 import com.basistheory.types.BankVerificationResponse;
+import com.basistheory.types.CardDetailsResponse;
 import java.util.concurrent.CompletableFuture;
 
 public class AsyncEnrichmentsClient {
@@ -33,5 +35,14 @@ public class AsyncEnrichmentsClient {
     public CompletableFuture<BankVerificationResponse> bankAccountVerify(
             BankVerificationRequest request, RequestOptions requestOptions) {
         return this.rawClient.bankAccountVerify(request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CardDetailsResponse> getcarddetails(EnrichmentsGetCardDetailsRequest request) {
+        return this.rawClient.getcarddetails(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<CardDetailsResponse> getcarddetails(
+            EnrichmentsGetCardDetailsRequest request, RequestOptions requestOptions) {
+        return this.rawClient.getcarddetails(request, requestOptions).thenApply(response -> response.body());
     }
 }

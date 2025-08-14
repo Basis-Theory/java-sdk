@@ -18,8 +18,8 @@ import java.util.Objects;
 import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = GooglePaymentMethodToken.Builder.class)
-public final class GooglePaymentMethodToken {
+@JsonDeserialize(builder = GooglePayMethodToken.Builder.class)
+public final class GooglePayMethodToken {
     private final Optional<String> protocolVersion;
 
     private final Optional<String> signature;
@@ -30,7 +30,7 @@ public final class GooglePaymentMethodToken {
 
     private final Map<String, Object> additionalProperties;
 
-    private GooglePaymentMethodToken(
+    private GooglePayMethodToken(
             Optional<String> protocolVersion,
             Optional<String> signature,
             Optional<IntermediateSigningKey> intermediateSigningKey,
@@ -66,7 +66,7 @@ public final class GooglePaymentMethodToken {
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof GooglePaymentMethodToken && equalTo((GooglePaymentMethodToken) other);
+        return other instanceof GooglePayMethodToken && equalTo((GooglePayMethodToken) other);
     }
 
     @JsonAnyGetter
@@ -74,7 +74,7 @@ public final class GooglePaymentMethodToken {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(GooglePaymentMethodToken other) {
+    private boolean equalTo(GooglePayMethodToken other) {
         return protocolVersion.equals(other.protocolVersion)
                 && signature.equals(other.signature)
                 && intermediateSigningKey.equals(other.intermediateSigningKey)
@@ -110,7 +110,7 @@ public final class GooglePaymentMethodToken {
 
         private Builder() {}
 
-        public Builder from(GooglePaymentMethodToken other) {
+        public Builder from(GooglePayMethodToken other) {
             protocolVersion(other.getProtocolVersion());
             signature(other.getSignature());
             intermediateSigningKey(other.getIntermediateSigningKey());
@@ -162,8 +162,8 @@ public final class GooglePaymentMethodToken {
             return this;
         }
 
-        public GooglePaymentMethodToken build() {
-            return new GooglePaymentMethodToken(
+        public GooglePayMethodToken build() {
+            return new GooglePayMethodToken(
                     protocolVersion, signature, intermediateSigningKey, signedMessage, additionalProperties);
         }
     }

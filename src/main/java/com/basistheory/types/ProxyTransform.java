@@ -30,6 +30,8 @@ public final class ProxyTransform {
 
     private final Optional<String> replacement;
 
+    private final Optional<ProxyTransformOptions> options;
+
     private final Map<String, Object> additionalProperties;
 
     private ProxyTransform(
@@ -38,12 +40,14 @@ public final class ProxyTransform {
             Optional<String> matcher,
             Optional<String> expression,
             Optional<String> replacement,
+            Optional<ProxyTransformOptions> options,
             Map<String, Object> additionalProperties) {
         this.type = type;
         this.code = code;
         this.matcher = matcher;
         this.expression = expression;
         this.replacement = replacement;
+        this.options = options;
         this.additionalProperties = additionalProperties;
     }
 
@@ -72,6 +76,11 @@ public final class ProxyTransform {
         return replacement;
     }
 
+    @JsonProperty("options")
+    public Optional<ProxyTransformOptions> getOptions() {
+        return options;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -88,12 +97,13 @@ public final class ProxyTransform {
                 && code.equals(other.code)
                 && matcher.equals(other.matcher)
                 && expression.equals(other.expression)
-                && replacement.equals(other.replacement);
+                && replacement.equals(other.replacement)
+                && options.equals(other.options);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.type, this.code, this.matcher, this.expression, this.replacement);
+        return Objects.hash(this.type, this.code, this.matcher, this.expression, this.replacement, this.options);
     }
 
     @java.lang.Override
@@ -117,6 +127,8 @@ public final class ProxyTransform {
 
         private Optional<String> replacement = Optional.empty();
 
+        private Optional<ProxyTransformOptions> options = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -128,6 +140,7 @@ public final class ProxyTransform {
             matcher(other.getMatcher());
             expression(other.getExpression());
             replacement(other.getReplacement());
+            options(other.getOptions());
             return this;
         }
 
@@ -186,8 +199,19 @@ public final class ProxyTransform {
             return this;
         }
 
+        @JsonSetter(value = "options", nulls = Nulls.SKIP)
+        public Builder options(Optional<ProxyTransformOptions> options) {
+            this.options = options;
+            return this;
+        }
+
+        public Builder options(ProxyTransformOptions options) {
+            this.options = Optional.ofNullable(options);
+            return this;
+        }
+
         public ProxyTransform build() {
-            return new ProxyTransform(type, code, matcher, expression, replacement, additionalProperties);
+            return new ProxyTransform(type, code, matcher, expression, replacement, options, additionalProperties);
         }
     }
 }

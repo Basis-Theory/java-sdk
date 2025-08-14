@@ -5,7 +5,7 @@ package com.basistheory.resources.applepay.session;
 
 import com.basistheory.core.ClientOptions;
 import com.basistheory.core.RequestOptions;
-import com.basistheory.types.ApplePaySessionRequest;
+import com.basistheory.resources.applepay.session.requests.ApplePaySessionRequest;
 
 public class SessionClient {
     protected final ClientOptions clientOptions;

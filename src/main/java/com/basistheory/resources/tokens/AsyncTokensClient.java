@@ -7,11 +7,11 @@ import com.basistheory.core.ClientOptions;
 import com.basistheory.core.IdempotentRequestOptions;
 import com.basistheory.core.RequestOptions;
 import com.basistheory.core.pagination.SyncPagingIterable;
-import com.basistheory.resources.tokens.requests.CreateTokenRequest;
 import com.basistheory.resources.tokens.requests.SearchTokensRequestV2;
 import com.basistheory.resources.tokens.requests.TokensListRequest;
 import com.basistheory.resources.tokens.requests.TokensListV2Request;
 import com.basistheory.resources.tokens.requests.UpdateTokenRequest;
+import com.basistheory.types.CreateTokenRequest;
 import com.basistheory.types.Token;
 import java.util.concurrent.CompletableFuture;
 

@@ -15,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -35,6 +36,10 @@ public final class UpdateProxyRequest {
 
     private final Optional<ProxyTransform> responseTransform;
 
+    private final Optional<List<ProxyTransform>> requestTransforms;
+
+    private final Optional<List<ProxyTransform>> responseTransforms;
+
     private final Optional<Application> application;
 
     private final Optional<Map<String, Optional<String>>> configuration;
@@ -50,6 +55,8 @@ public final class UpdateProxyRequest {
             Optional<String> responseReactorId,
             Optional<ProxyTransform> requestTransform,
             Optional<ProxyTransform> responseTransform,
+            Optional<List<ProxyTransform>> requestTransforms,
+            Optional<List<ProxyTransform>> responseTransforms,
             Optional<Application> application,
             Optional<Map<String, Optional<String>>> configuration,
             Optional<Boolean> requireAuth,
@@ -60,6 +67,8 @@ public final class UpdateProxyRequest {
         this.responseReactorId = responseReactorId;
         this.requestTransform = requestTransform;
         this.responseTransform = responseTransform;
+        this.requestTransforms = requestTransforms;
+        this.responseTransforms = responseTransforms;
         this.application = application;
         this.configuration = configuration;
         this.requireAuth = requireAuth;
@@ -96,6 +105,16 @@ public final class UpdateProxyRequest {
         return responseTransform;
     }
 
+    @JsonProperty("request_transforms")
+    public Optional<List<ProxyTransform>> getRequestTransforms() {
+        return requestTransforms;
+    }
+
+    @JsonProperty("response_transforms")
+    public Optional<List<ProxyTransform>> getResponseTransforms() {
+        return responseTransforms;
+    }
+
     @JsonProperty("application")
     public Optional<Application> getApplication() {
         return application;
@@ -129,6 +148,8 @@ public final class UpdateProxyRequest {
                 && responseReactorId.equals(other.responseReactorId)
                 && requestTransform.equals(other.requestTransform)
                 && responseTransform.equals(other.responseTransform)
+                && requestTransforms.equals(other.requestTransforms)
+                && responseTransforms.equals(other.responseTransforms)
                 && application.equals(other.application)
                 && configuration.equals(other.configuration)
                 && requireAuth.equals(other.requireAuth);
@@ -143,6 +164,8 @@ public final class UpdateProxyRequest {
                 this.responseReactorId,
                 this.requestTransform,
                 this.responseTransform,
+                this.requestTransforms,
+                this.responseTransforms,
                 this.application,
                 this.configuration,
                 this.requireAuth);
@@ -186,6 +209,14 @@ public final class UpdateProxyRequest {
 
         _FinalStage responseTransform(ProxyTransform responseTransform);
 
+        _FinalStage requestTransforms(Optional<List<ProxyTransform>> requestTransforms);
+
+        _FinalStage requestTransforms(List<ProxyTransform> requestTransforms);
+
+        _FinalStage responseTransforms(Optional<List<ProxyTransform>> responseTransforms);
+
+        _FinalStage responseTransforms(List<ProxyTransform> responseTransforms);
+
         _FinalStage application(Optional<Application> application);
 
         _FinalStage application(Application application);
@@ -211,6 +242,10 @@ public final class UpdateProxyRequest {
 
         private Optional<Application> application = Optional.empty();
 
+        private Optional<List<ProxyTransform>> responseTransforms = Optional.empty();
+
+        private Optional<List<ProxyTransform>> requestTransforms = Optional.empty();
+
         private Optional<ProxyTransform> responseTransform = Optional.empty();
 
         private Optional<ProxyTransform> requestTransform = Optional.empty();
@@ -232,6 +267,8 @@ public final class UpdateProxyRequest {
             responseReactorId(other.getResponseReactorId());
             requestTransform(other.getRequestTransform());
             responseTransform(other.getResponseTransform());
+            requestTransforms(other.getRequestTransforms());
+            responseTransforms(other.getResponseTransforms());
             application(other.getApplication());
             configuration(other.getConfiguration());
             requireAuth(other.getRequireAuth());
@@ -288,6 +325,32 @@ public final class UpdateProxyRequest {
         @JsonSetter(value = "application", nulls = Nulls.SKIP)
         public _FinalStage application(Optional<Application> application) {
             this.application = application;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage responseTransforms(List<ProxyTransform> responseTransforms) {
+            this.responseTransforms = Optional.ofNullable(responseTransforms);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "response_transforms", nulls = Nulls.SKIP)
+        public _FinalStage responseTransforms(Optional<List<ProxyTransform>> responseTransforms) {
+            this.responseTransforms = responseTransforms;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage requestTransforms(List<ProxyTransform> requestTransforms) {
+            this.requestTransforms = Optional.ofNullable(requestTransforms);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "request_transforms", nulls = Nulls.SKIP)
+        public _FinalStage requestTransforms(Optional<List<ProxyTransform>> requestTransforms) {
+            this.requestTransforms = requestTransforms;
             return this;
         }
 
@@ -352,6 +415,8 @@ public final class UpdateProxyRequest {
                     responseReactorId,
                     requestTransform,
                     responseTransform,
+                    requestTransforms,
+                    responseTransforms,
                     application,
                     configuration,
                     requireAuth,
