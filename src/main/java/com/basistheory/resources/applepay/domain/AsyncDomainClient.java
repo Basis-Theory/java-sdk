@@ -5,9 +5,9 @@ package com.basistheory.resources.applepay.domain;
 
 import com.basistheory.core.ClientOptions;
 import com.basistheory.core.RequestOptions;
-import com.basistheory.types.ApplePayDomainDeregistrationRequest;
-import com.basistheory.types.ApplePayDomainRegistrationListRequest;
-import com.basistheory.types.ApplePayDomainRegistrationRequest;
+import com.basistheory.resources.applepay.domain.requests.ApplePayDomainDeregistrationRequest;
+import com.basistheory.resources.applepay.domain.requests.ApplePayDomainRegistrationListRequest;
+import com.basistheory.resources.applepay.domain.requests.ApplePayDomainRegistrationRequest;
 import com.basistheory.types.ApplePayDomainRegistrationResponse;
 import java.util.concurrent.CompletableFuture;
 

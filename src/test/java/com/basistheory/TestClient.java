@@ -12,10 +12,9 @@ import com.basistheory.errors.NotFoundError;
 import com.basistheory.errors.UnprocessableEntityError;
 import com.basistheory.resources.applications.ApplicationsClient;
 import com.basistheory.resources.applications.requests.CreateApplicationRequest;
-import com.basistheory.resources.documents.DocumentsClient;
 import com.basistheory.resources.documents.requests.DocumentsUploadRequest;
-import com.basistheory.resources.googlepay.GooglepayClient;
-import com.basistheory.resources.googlepay.requests.GooglePayTokenizeRequest;
+import com.basistheory.resources.googlepay.GooglePayClient;
+import com.basistheory.resources.googlepay.requests.GooglePayCreateRequest;
 import com.basistheory.resources.keys.AsyncKeysClient;
 import com.basistheory.resources.proxies.ProxiesClient;
 import com.basistheory.resources.proxies.requests.CreateProxyRequest;
@@ -26,7 +25,6 @@ import com.basistheory.resources.reactors.requests.PatchReactorRequest;
 import com.basistheory.resources.reactors.requests.ReactRequest;
 import com.basistheory.resources.tenants.TenantsClient;
 import com.basistheory.resources.tokens.TokensClient;
-import com.basistheory.resources.tokens.requests.CreateTokenRequest;
 import com.basistheory.resources.tokens.requests.TokensListV2Request;
 import com.basistheory.resources.tokens.requests.UpdateTokenRequest;
 import com.basistheory.resources.webhooks.WebhooksClient;
@@ -169,13 +167,13 @@ public final class TestClient {
 
      @Test
      public void shouldSupportGooglePay() throws JsonProcessingException {
-         GooglepayClient client = new GooglepayClient(privateTestTenantClientOptions());
-         GooglePaymentMethodToken googlePayToken = ObjectMappers.JSON_MAPPER.readValue(
+         GooglePayClient client = new GooglePayClient(privateTestTenantClientOptions());
+         GooglePayMethodToken googlePayToken = ObjectMappers.JSON_MAPPER.readValue(
              "{\"signature\":\"MEQCIBnz8wKrUi3qrLSn6KSrTcNIo6YcOzrfre7X49S27MrKAiBMF70q7EHe0Bw8uva77pclggSiPMRTFRFl7TZILyACOQ\\u003d\\u003d\",\"intermediateSigningKey\":{\"signedKey\":\"{\\\"keyValue\\\":\\\"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEnK9rrDl5FJalSwcoZD3qB5EYcA/sYVTH2Nbh6y/EZArFvvBRQA1eI3BIv1iZeCkBLd/A2nU1ve7xENoPOfp7+Q\\\\u003d\\\\u003d\\\",\\\"keyExpiration\\\":\\\"1737724267469\\\"}\",\"signatures\":[\"MEQCIHugFzQtVBVNizwkMhG/POcZAmRRXyeiZpt3aFwBzt5cAiBSOY4pfT4tQGWzZjkldbYkpBwWGpSasxRmlt7XPNOaLQ\\u003d\\u003d\"]},\"protocolVersion\":\"ECv2\",\"signedMessage\":\"{\\\"encryptedMessage\\\":\\\"XURDnvPAIhAKT9rARBV9RT0/yVTesT/w0UniXCJflwu2TkE54UnP7ZmWBo0gKjTJIU3j8D1Rntw2Ywr2UDLbZor+UoeZltzZOAv6iAR4MfvCLSzlh3HcjechwqZM8oxSF2iZoD2XrNqOgaYbOY1EaYoLx1JpftZDuTqSDLYa+szsoPjAUgzBO5TJZTDIa3zDNAdK3UtAPwutL1M4pTyuFhUKOC12J3RzZdaGFANbKSc8vdfqnR1hqsvsEt1sWPf2O3yty91klSA7FDckvwlKfRoNyQMDhaDkEvYUi75uxcjCRHE0Jjbj61bZriSTXiG2KWNF2OKpz7l61kgPJxCpK7A7TV3P4pBLwW7DYbRusO6FupLehxOZl9nBpVfApytCZGjaSXT7QfPpxdBv8j2VfKsodOf/dwv2Thrra9a6ZzFWsUz4l7Jbr4MCBLhXH4lSuxKrlA2Rf/CVPTgz8b88cYpEDZyqLJxDstwy74/Nl7Mjc4V7thzmdskAeYSuZXKXyyeo3BHqkguRkeagEwuHiZoem2V4W2qWOF8hYn14KY3cXXNcVA\\\\u003d\\\\u003d\\\",\\\"ephemeralPublicKey\\\":\\\"BHBDKlM3tik4o9leEkHu+875bHbORaCK7dDeXFCRmv4bzWJw/4bsvtBtaBH3SW5JXkE/6pkRYAtjFzQmHMRQYvc\\\\u003d\\\",\\\"tag\\\":\\\"Hle3Oafx5sfUc3U3sCQgV0tRPhCAvPlVLYiqvbPyTYY\\\\u003d\\\"}\"}",
-                 GooglePaymentMethodToken.class);
+                 GooglePayMethodToken.class);
 
          try {
-             client.tokenize(GooglePayTokenizeRequest.builder().googlePaymentMethodToken(googlePayToken).build());
+             client.create(GooglePayCreateRequest.builder().googlePaymentData(googlePayToken).build());
              fail("Should have thrown exception");
          } catch (UnprocessableEntityError e) {
              assertTrue(true);

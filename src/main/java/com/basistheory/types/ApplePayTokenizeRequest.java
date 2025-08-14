@@ -13,34 +13,32 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = ApplePayDomainRegistrationListRequest.Builder.class)
-public final class ApplePayDomainRegistrationListRequest {
-    private final Optional<List<String>> domains;
+@JsonDeserialize(builder = ApplePayTokenizeRequest.Builder.class)
+public final class ApplePayTokenizeRequest {
+    private final Optional<ApplePayMethodToken> applePaymentMethodToken;
 
     private final Map<String, Object> additionalProperties;
 
-    private ApplePayDomainRegistrationListRequest(
-            Optional<List<String>> domains, Map<String, Object> additionalProperties) {
-        this.domains = domains;
+    private ApplePayTokenizeRequest(
+            Optional<ApplePayMethodToken> applePaymentMethodToken, Map<String, Object> additionalProperties) {
+        this.applePaymentMethodToken = applePaymentMethodToken;
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("domains")
-    public Optional<List<String>> getDomains() {
-        return domains;
+    @JsonProperty("apple_payment_method_token")
+    public Optional<ApplePayMethodToken> getApplePaymentMethodToken() {
+        return applePaymentMethodToken;
     }
 
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof ApplePayDomainRegistrationListRequest
-                && equalTo((ApplePayDomainRegistrationListRequest) other);
+        return other instanceof ApplePayTokenizeRequest && equalTo((ApplePayTokenizeRequest) other);
     }
 
     @JsonAnyGetter
@@ -48,13 +46,13 @@ public final class ApplePayDomainRegistrationListRequest {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(ApplePayDomainRegistrationListRequest other) {
-        return domains.equals(other.domains);
+    private boolean equalTo(ApplePayTokenizeRequest other) {
+        return applePaymentMethodToken.equals(other.applePaymentMethodToken);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.domains);
+        return Objects.hash(this.applePaymentMethodToken);
     }
 
     @java.lang.Override
@@ -68,31 +66,31 @@ public final class ApplePayDomainRegistrationListRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<List<String>> domains = Optional.empty();
+        private Optional<ApplePayMethodToken> applePaymentMethodToken = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        public Builder from(ApplePayDomainRegistrationListRequest other) {
-            domains(other.getDomains());
+        public Builder from(ApplePayTokenizeRequest other) {
+            applePaymentMethodToken(other.getApplePaymentMethodToken());
             return this;
         }
 
-        @JsonSetter(value = "domains", nulls = Nulls.SKIP)
-        public Builder domains(Optional<List<String>> domains) {
-            this.domains = domains;
+        @JsonSetter(value = "apple_payment_method_token", nulls = Nulls.SKIP)
+        public Builder applePaymentMethodToken(Optional<ApplePayMethodToken> applePaymentMethodToken) {
+            this.applePaymentMethodToken = applePaymentMethodToken;
             return this;
         }
 
-        public Builder domains(List<String> domains) {
-            this.domains = Optional.ofNullable(domains);
+        public Builder applePaymentMethodToken(ApplePayMethodToken applePaymentMethodToken) {
+            this.applePaymentMethodToken = Optional.ofNullable(applePaymentMethodToken);
             return this;
         }
 
-        public ApplePayDomainRegistrationListRequest build() {
-            return new ApplePayDomainRegistrationListRequest(domains, additionalProperties);
+        public ApplePayTokenizeRequest build() {
+            return new ApplePayTokenizeRequest(applePaymentMethodToken, additionalProperties);
         }
     }
 }

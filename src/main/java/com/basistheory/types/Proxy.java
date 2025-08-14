@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -40,6 +41,10 @@ public final class Proxy {
     private final Optional<ProxyTransform> requestTransform;
 
     private final Optional<ProxyTransform> responseTransform;
+
+    private final Optional<List<ProxyTransform>> requestTransforms;
+
+    private final Optional<List<ProxyTransform>> responseTransforms;
 
     private final Optional<String> applicationId;
 
@@ -72,6 +77,8 @@ public final class Proxy {
             Optional<Boolean> requireAuth,
             Optional<ProxyTransform> requestTransform,
             Optional<ProxyTransform> responseTransform,
+            Optional<List<ProxyTransform>> requestTransforms,
+            Optional<List<ProxyTransform>> responseTransforms,
             Optional<String> applicationId,
             Optional<Map<String, Optional<String>>> configuration,
             Optional<String> proxyHost,
@@ -92,6 +99,8 @@ public final class Proxy {
         this.requireAuth = requireAuth;
         this.requestTransform = requestTransform;
         this.responseTransform = responseTransform;
+        this.requestTransforms = requestTransforms;
+        this.responseTransforms = responseTransforms;
         this.applicationId = applicationId;
         this.configuration = configuration;
         this.proxyHost = proxyHost;
@@ -152,6 +161,16 @@ public final class Proxy {
     @JsonProperty("response_transform")
     public Optional<ProxyTransform> getResponseTransform() {
         return responseTransform;
+    }
+
+    @JsonProperty("request_transforms")
+    public Optional<List<ProxyTransform>> getRequestTransforms() {
+        return requestTransforms;
+    }
+
+    @JsonProperty("response_transforms")
+    public Optional<List<ProxyTransform>> getResponseTransforms() {
+        return responseTransforms;
     }
 
     @JsonProperty("application_id")
@@ -221,6 +240,8 @@ public final class Proxy {
                 && requireAuth.equals(other.requireAuth)
                 && requestTransform.equals(other.requestTransform)
                 && responseTransform.equals(other.responseTransform)
+                && requestTransforms.equals(other.requestTransforms)
+                && responseTransforms.equals(other.responseTransforms)
                 && applicationId.equals(other.applicationId)
                 && configuration.equals(other.configuration)
                 && proxyHost.equals(other.proxyHost)
@@ -245,6 +266,8 @@ public final class Proxy {
                 this.requireAuth,
                 this.requestTransform,
                 this.responseTransform,
+                this.requestTransforms,
+                this.responseTransforms,
                 this.applicationId,
                 this.configuration,
                 this.proxyHost,
@@ -287,6 +310,10 @@ public final class Proxy {
 
         private Optional<ProxyTransform> responseTransform = Optional.empty();
 
+        private Optional<List<ProxyTransform>> requestTransforms = Optional.empty();
+
+        private Optional<List<ProxyTransform>> responseTransforms = Optional.empty();
+
         private Optional<String> applicationId = Optional.empty();
 
         private Optional<Map<String, Optional<String>>> configuration = Optional.empty();
@@ -321,6 +348,8 @@ public final class Proxy {
             requireAuth(other.getRequireAuth());
             requestTransform(other.getRequestTransform());
             responseTransform(other.getResponseTransform());
+            requestTransforms(other.getRequestTransforms());
+            responseTransforms(other.getResponseTransforms());
             applicationId(other.getApplicationId());
             configuration(other.getConfiguration());
             proxyHost(other.getProxyHost());
@@ -443,6 +472,28 @@ public final class Proxy {
             return this;
         }
 
+        @JsonSetter(value = "request_transforms", nulls = Nulls.SKIP)
+        public Builder requestTransforms(Optional<List<ProxyTransform>> requestTransforms) {
+            this.requestTransforms = requestTransforms;
+            return this;
+        }
+
+        public Builder requestTransforms(List<ProxyTransform> requestTransforms) {
+            this.requestTransforms = Optional.ofNullable(requestTransforms);
+            return this;
+        }
+
+        @JsonSetter(value = "response_transforms", nulls = Nulls.SKIP)
+        public Builder responseTransforms(Optional<List<ProxyTransform>> responseTransforms) {
+            this.responseTransforms = responseTransforms;
+            return this;
+        }
+
+        public Builder responseTransforms(List<ProxyTransform> responseTransforms) {
+            this.responseTransforms = Optional.ofNullable(responseTransforms);
+            return this;
+        }
+
         @JsonSetter(value = "application_id", nulls = Nulls.SKIP)
         public Builder applicationId(Optional<String> applicationId) {
             this.applicationId = applicationId;
@@ -554,6 +605,8 @@ public final class Proxy {
                     requireAuth,
                     requestTransform,
                     responseTransform,
+                    requestTransforms,
+                    responseTransforms,
                     applicationId,
                     configuration,
                     proxyHost,
