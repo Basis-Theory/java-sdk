@@ -1,3 +1,15 @@
+## [3.0.0](https://github.com/Basis-Theory/java-sdk/compare/2.3.1...3.0.0) (2025-08-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* Deprecating old Google Pay and Apple Pay endpoints
+
+### Features
+
+* Add Google Pay endpoints ([b090131](https://github.com/Basis-Theory/java-sdk/commit/b0901314638c5015a160aaddc727b49a89df9f5a))
+
+
 ### [2.3.1](https://github.com/Basis-Theory/java-sdk/compare/2.3.0...2.3.1) (2025-07-29)
 
 
