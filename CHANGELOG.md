@@ -1,3 +1,11 @@
+## [3.1.0](https://github.com/Basis-Theory/java-sdk/compare/3.0.0...3.1.0) (2025-08-22)
+
+
+### Features
+
+* Add DELETE endpoint for ApplePay ([6a5b5e2](https://github.com/Basis-Theory/java-sdk/commit/6a5b5e2d0e1a22a62bf439db60ed9d707e8dae0d))
+
+
 ## [3.0.0](https://github.com/Basis-Theory/java-sdk/compare/2.3.1...3.0.0) (2025-08-14)
 
 
