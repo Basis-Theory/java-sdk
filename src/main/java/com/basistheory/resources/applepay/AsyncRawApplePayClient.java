@@ -204,20 +204,19 @@ public class AsyncRawApplePayClient {
         return future;
     }
 
-    public CompletableFuture<BasisTheoryApiHttpResponse<String>> unlink(String id) {
-        return unlink(id, null);
+    public CompletableFuture<BasisTheoryApiHttpResponse<String>> delete(String id) {
+        return delete(id, null);
     }
 
-    public CompletableFuture<BasisTheoryApiHttpResponse<String>> unlink(String id, RequestOptions requestOptions) {
+    public CompletableFuture<BasisTheoryApiHttpResponse<String>> delete(String id, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("apple-pay")
                 .addPathSegment(id)
-                .addPathSegments("unlink")
                 .build();
         Request okhttpRequest = new Request.Builder()
                 .url(httpUrl)
-                .method("POST", RequestBody.create("", null))
+                .method("DELETE", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Accept", "application/json")
                 .build();
@@ -248,9 +247,9 @@ public class AsyncRawApplePayClient {
                                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
                                         response));
                                 return;
-                            case 422:
-                                future.completeExceptionally(new UnprocessableEntityError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                         }
