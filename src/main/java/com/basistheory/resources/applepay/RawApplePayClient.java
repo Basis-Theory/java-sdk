@@ -163,20 +163,19 @@ public class RawApplePayClient {
         }
     }
 
-    public BasisTheoryApiHttpResponse<String> unlink(String id) {
-        return unlink(id, null);
+    public BasisTheoryApiHttpResponse<String> delete(String id) {
+        return delete(id, null);
     }
 
-    public BasisTheoryApiHttpResponse<String> unlink(String id, RequestOptions requestOptions) {
+    public BasisTheoryApiHttpResponse<String> delete(String id, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("apple-pay")
                 .addPathSegment(id)
-                .addPathSegments("unlink")
                 .build();
         Request okhttpRequest = new Request.Builder()
                 .url(httpUrl)
-                .method("POST", RequestBody.create("", null))
+                .method("DELETE", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Accept", "application/json")
                 .build();
@@ -201,10 +200,9 @@ public class RawApplePayClient {
                         throw new ForbiddenError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
                                 response);
-                    case 422:
-                        throw new UnprocessableEntityError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
-                                response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error

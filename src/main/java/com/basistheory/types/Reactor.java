@@ -43,6 +43,10 @@ public final class Reactor {
 
     private final Optional<Map<String, Optional<String>>> configuration;
 
+    private final Optional<Map<String, Optional<String>>> dependencies;
+
+    private final Optional<String> runtime;
+
     private final Map<String, Object> additionalProperties;
 
     private Reactor(
@@ -57,6 +61,8 @@ public final class Reactor {
             Optional<String> modifiedBy,
             Optional<OffsetDateTime> modifiedAt,
             Optional<Map<String, Optional<String>>> configuration,
+            Optional<Map<String, Optional<String>>> dependencies,
+            Optional<String> runtime,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.tenantId = tenantId;
@@ -69,6 +75,8 @@ public final class Reactor {
         this.modifiedBy = modifiedBy;
         this.modifiedAt = modifiedAt;
         this.configuration = configuration;
+        this.dependencies = dependencies;
+        this.runtime = runtime;
         this.additionalProperties = additionalProperties;
     }
 
@@ -127,6 +135,16 @@ public final class Reactor {
         return configuration;
     }
 
+    @JsonProperty("dependencies")
+    public Optional<Map<String, Optional<String>>> getDependencies() {
+        return dependencies;
+    }
+
+    @JsonProperty("runtime")
+    public Optional<String> getRuntime() {
+        return runtime;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -149,7 +167,9 @@ public final class Reactor {
                 && createdAt.equals(other.createdAt)
                 && modifiedBy.equals(other.modifiedBy)
                 && modifiedAt.equals(other.modifiedAt)
-                && configuration.equals(other.configuration);
+                && configuration.equals(other.configuration)
+                && dependencies.equals(other.dependencies)
+                && runtime.equals(other.runtime);
     }
 
     @java.lang.Override
@@ -165,7 +185,9 @@ public final class Reactor {
                 this.createdAt,
                 this.modifiedBy,
                 this.modifiedAt,
-                this.configuration);
+                this.configuration,
+                this.dependencies,
+                this.runtime);
     }
 
     @java.lang.Override
@@ -201,6 +223,10 @@ public final class Reactor {
 
         private Optional<Map<String, Optional<String>>> configuration = Optional.empty();
 
+        private Optional<Map<String, Optional<String>>> dependencies = Optional.empty();
+
+        private Optional<String> runtime = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -218,6 +244,8 @@ public final class Reactor {
             modifiedBy(other.getModifiedBy());
             modifiedAt(other.getModifiedAt());
             configuration(other.getConfiguration());
+            dependencies(other.getDependencies());
+            runtime(other.getRuntime());
             return this;
         }
 
@@ -342,6 +370,28 @@ public final class Reactor {
             return this;
         }
 
+        @JsonSetter(value = "dependencies", nulls = Nulls.SKIP)
+        public Builder dependencies(Optional<Map<String, Optional<String>>> dependencies) {
+            this.dependencies = dependencies;
+            return this;
+        }
+
+        public Builder dependencies(Map<String, Optional<String>> dependencies) {
+            this.dependencies = Optional.ofNullable(dependencies);
+            return this;
+        }
+
+        @JsonSetter(value = "runtime", nulls = Nulls.SKIP)
+        public Builder runtime(Optional<String> runtime) {
+            this.runtime = runtime;
+            return this;
+        }
+
+        public Builder runtime(String runtime) {
+            this.runtime = Optional.ofNullable(runtime);
+            return this;
+        }
+
         public Reactor build() {
             return new Reactor(
                     id,
@@ -355,6 +405,8 @@ public final class Reactor {
                     modifiedBy,
                     modifiedAt,
                     configuration,
+                    dependencies,
+                    runtime,
                     additionalProperties);
         }
     }

@@ -30,6 +30,10 @@ public final class CreateReactorRequest {
 
     private final Optional<Map<String, Optional<String>>> configuration;
 
+    private final Optional<Map<String, Optional<String>>> dependencies;
+
+    private final Optional<String> runtime;
+
     private final Map<String, Object> additionalProperties;
 
     private CreateReactorRequest(
@@ -37,11 +41,15 @@ public final class CreateReactorRequest {
             String code,
             Optional<Application> application,
             Optional<Map<String, Optional<String>>> configuration,
+            Optional<Map<String, Optional<String>>> dependencies,
+            Optional<String> runtime,
             Map<String, Object> additionalProperties) {
         this.name = name;
         this.code = code;
         this.application = application;
         this.configuration = configuration;
+        this.dependencies = dependencies;
+        this.runtime = runtime;
         this.additionalProperties = additionalProperties;
     }
 
@@ -65,6 +73,16 @@ public final class CreateReactorRequest {
         return configuration;
     }
 
+    @JsonProperty("dependencies")
+    public Optional<Map<String, Optional<String>>> getDependencies() {
+        return dependencies;
+    }
+
+    @JsonProperty("runtime")
+    public Optional<String> getRuntime() {
+        return runtime;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -80,12 +98,15 @@ public final class CreateReactorRequest {
         return name.equals(other.name)
                 && code.equals(other.code)
                 && application.equals(other.application)
-                && configuration.equals(other.configuration);
+                && configuration.equals(other.configuration)
+                && dependencies.equals(other.dependencies)
+                && runtime.equals(other.runtime);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.name, this.code, this.application, this.configuration);
+        return Objects.hash(
+                this.name, this.code, this.application, this.configuration, this.dependencies, this.runtime);
     }
 
     @java.lang.Override
@@ -117,6 +138,14 @@ public final class CreateReactorRequest {
         _FinalStage configuration(Optional<Map<String, Optional<String>>> configuration);
 
         _FinalStage configuration(Map<String, Optional<String>> configuration);
+
+        _FinalStage dependencies(Optional<Map<String, Optional<String>>> dependencies);
+
+        _FinalStage dependencies(Map<String, Optional<String>> dependencies);
+
+        _FinalStage runtime(Optional<String> runtime);
+
+        _FinalStage runtime(String runtime);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -124,6 +153,10 @@ public final class CreateReactorRequest {
         private String name;
 
         private String code;
+
+        private Optional<String> runtime = Optional.empty();
+
+        private Optional<Map<String, Optional<String>>> dependencies = Optional.empty();
 
         private Optional<Map<String, Optional<String>>> configuration = Optional.empty();
 
@@ -140,6 +173,8 @@ public final class CreateReactorRequest {
             code(other.getCode());
             application(other.getApplication());
             configuration(other.getConfiguration());
+            dependencies(other.getDependencies());
+            runtime(other.getRuntime());
             return this;
         }
 
@@ -154,6 +189,32 @@ public final class CreateReactorRequest {
         @JsonSetter("code")
         public _FinalStage code(@NotNull String code) {
             this.code = Objects.requireNonNull(code, "code must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage runtime(String runtime) {
+            this.runtime = Optional.ofNullable(runtime);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "runtime", nulls = Nulls.SKIP)
+        public _FinalStage runtime(Optional<String> runtime) {
+            this.runtime = runtime;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage dependencies(Map<String, Optional<String>> dependencies) {
+            this.dependencies = Optional.ofNullable(dependencies);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "dependencies", nulls = Nulls.SKIP)
+        public _FinalStage dependencies(Optional<Map<String, Optional<String>>> dependencies) {
+            this.dependencies = dependencies;
             return this;
         }
 
@@ -185,7 +246,8 @@ public final class CreateReactorRequest {
 
         @java.lang.Override
         public CreateReactorRequest build() {
-            return new CreateReactorRequest(name, code, application, configuration, additionalProperties);
+            return new CreateReactorRequest(
+                    name, code, application, configuration, dependencies, runtime, additionalProperties);
         }
     }
 }
