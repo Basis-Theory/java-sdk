@@ -189,13 +189,13 @@ public final class TestClient {
 
         try {
             ClientEncryptionKeyResponse createdKey = keysClient.create().join();
-            assertTrue(createdKey.getId().isPresent(), "Key ID should be present");
-            String keyId = createdKey.getId().get();
+            assertTrue(createdKey.getKeyId().isPresent(), "Key ID should be present");
+            String keyId = createdKey.getKeyId().get();
             assertTrue(createdKey.getPublicKeyPem().isPresent(), "Key value should not be null");
 
             ClientEncryptionKeyMetadataResponse retrievedKey = keysClient.get(keyId).join();
-            assertTrue(retrievedKey.getId().isPresent(), "Retrieved key ID should be present");
-            assertEquals(keyId, retrievedKey.getId().get(), "Retrieved key ID should match created key ID");
+            assertTrue(retrievedKey.getKeyId().isPresent(), "Retrieved key ID should be present");
+            assertEquals(keyId, retrievedKey.getKeyId().get(), "Retrieved key ID should match created key ID");
             assertTrue(retrievedKey.getExpiresAt().isPresent(), "Created at timestamp should not be null");
 
             List<ClientEncryptionKeyMetadataResponse> keys = keysClient.list().join();
