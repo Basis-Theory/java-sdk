@@ -28,6 +28,10 @@ public final class ProxyTransformOptions {
 
     private final Optional<String> location;
 
+    private final Optional<String> runtime;
+
+    private final Optional<Map<String, Optional<String>>> dependencies;
+
     private final Map<String, Object> additionalProperties;
 
     private ProxyTransformOptions(
@@ -35,11 +39,15 @@ public final class ProxyTransformOptions {
             Optional<String> identifier,
             Optional<String> value,
             Optional<String> location,
+            Optional<String> runtime,
+            Optional<Map<String, Optional<String>>> dependencies,
             Map<String, Object> additionalProperties) {
         this.token = token;
         this.identifier = identifier;
         this.value = value;
         this.location = location;
+        this.runtime = runtime;
+        this.dependencies = dependencies;
         this.additionalProperties = additionalProperties;
     }
 
@@ -63,6 +71,16 @@ public final class ProxyTransformOptions {
         return location;
     }
 
+    @JsonProperty("runtime")
+    public Optional<String> getRuntime() {
+        return runtime;
+    }
+
+    @JsonProperty("dependencies")
+    public Optional<Map<String, Optional<String>>> getDependencies() {
+        return dependencies;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -78,12 +96,14 @@ public final class ProxyTransformOptions {
         return token.equals(other.token)
                 && identifier.equals(other.identifier)
                 && value.equals(other.value)
-                && location.equals(other.location);
+                && location.equals(other.location)
+                && runtime.equals(other.runtime)
+                && dependencies.equals(other.dependencies);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.token, this.identifier, this.value, this.location);
+        return Objects.hash(this.token, this.identifier, this.value, this.location, this.runtime, this.dependencies);
     }
 
     @java.lang.Override
@@ -105,6 +125,10 @@ public final class ProxyTransformOptions {
 
         private Optional<String> location = Optional.empty();
 
+        private Optional<String> runtime = Optional.empty();
+
+        private Optional<Map<String, Optional<String>>> dependencies = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -115,6 +139,8 @@ public final class ProxyTransformOptions {
             identifier(other.getIdentifier());
             value(other.getValue());
             location(other.getLocation());
+            runtime(other.getRuntime());
+            dependencies(other.getDependencies());
             return this;
         }
 
@@ -162,8 +188,31 @@ public final class ProxyTransformOptions {
             return this;
         }
 
+        @JsonSetter(value = "runtime", nulls = Nulls.SKIP)
+        public Builder runtime(Optional<String> runtime) {
+            this.runtime = runtime;
+            return this;
+        }
+
+        public Builder runtime(String runtime) {
+            this.runtime = Optional.ofNullable(runtime);
+            return this;
+        }
+
+        @JsonSetter(value = "dependencies", nulls = Nulls.SKIP)
+        public Builder dependencies(Optional<Map<String, Optional<String>>> dependencies) {
+            this.dependencies = dependencies;
+            return this;
+        }
+
+        public Builder dependencies(Map<String, Optional<String>> dependencies) {
+            this.dependencies = Optional.ofNullable(dependencies);
+            return this;
+        }
+
         public ProxyTransformOptions build() {
-            return new ProxyTransformOptions(token, identifier, value, location, additionalProperties);
+            return new ProxyTransformOptions(
+                    token, identifier, value, location, runtime, dependencies, additionalProperties);
         }
     }
 }

@@ -19,44 +19,32 @@ import java.util.Objects;
 import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = GooglePayCreateTokenResponse.Builder.class)
-public final class GooglePayCreateTokenResponse {
+@JsonDeserialize(builder = ApplePayMerchant.Builder.class)
+public final class ApplePayMerchant {
     private final Optional<String> id;
 
     private final Optional<String> tenantId;
 
-    private final Optional<String> status;
-
-    private final Optional<OffsetDateTime> expiresAt;
+    private final Optional<String> merchantIdentifier;
 
     private final Optional<String> createdBy;
 
     private final Optional<OffsetDateTime> createdAt;
 
-    private final Optional<CardDetails> card;
-
-    private final Optional<TokenServiceProviderDetails> details;
-
     private final Map<String, Object> additionalProperties;
 
-    private GooglePayCreateTokenResponse(
+    private ApplePayMerchant(
             Optional<String> id,
             Optional<String> tenantId,
-            Optional<String> status,
-            Optional<OffsetDateTime> expiresAt,
+            Optional<String> merchantIdentifier,
             Optional<String> createdBy,
             Optional<OffsetDateTime> createdAt,
-            Optional<CardDetails> card,
-            Optional<TokenServiceProviderDetails> details,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.tenantId = tenantId;
-        this.status = status;
-        this.expiresAt = expiresAt;
+        this.merchantIdentifier = merchantIdentifier;
         this.createdBy = createdBy;
         this.createdAt = createdAt;
-        this.card = card;
-        this.details = details;
         this.additionalProperties = additionalProperties;
     }
 
@@ -70,14 +58,9 @@ public final class GooglePayCreateTokenResponse {
         return tenantId;
     }
 
-    @JsonProperty("status")
-    public Optional<String> getStatus() {
-        return status;
-    }
-
-    @JsonProperty("expires_at")
-    public Optional<OffsetDateTime> getExpiresAt() {
-        return expiresAt;
+    @JsonProperty("merchant_identifier")
+    public Optional<String> getMerchantIdentifier() {
+        return merchantIdentifier;
     }
 
     @JsonProperty("created_by")
@@ -90,20 +73,10 @@ public final class GooglePayCreateTokenResponse {
         return createdAt;
     }
 
-    @JsonProperty("card")
-    public Optional<CardDetails> getCard() {
-        return card;
-    }
-
-    @JsonProperty("details")
-    public Optional<TokenServiceProviderDetails> getDetails() {
-        return details;
-    }
-
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof GooglePayCreateTokenResponse && equalTo((GooglePayCreateTokenResponse) other);
+        return other instanceof ApplePayMerchant && equalTo((ApplePayMerchant) other);
     }
 
     @JsonAnyGetter
@@ -111,28 +84,17 @@ public final class GooglePayCreateTokenResponse {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(GooglePayCreateTokenResponse other) {
+    private boolean equalTo(ApplePayMerchant other) {
         return id.equals(other.id)
                 && tenantId.equals(other.tenantId)
-                && status.equals(other.status)
-                && expiresAt.equals(other.expiresAt)
+                && merchantIdentifier.equals(other.merchantIdentifier)
                 && createdBy.equals(other.createdBy)
-                && createdAt.equals(other.createdAt)
-                && card.equals(other.card)
-                && details.equals(other.details);
+                && createdAt.equals(other.createdAt);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(
-                this.id,
-                this.tenantId,
-                this.status,
-                this.expiresAt,
-                this.createdBy,
-                this.createdAt,
-                this.card,
-                this.details);
+        return Objects.hash(this.id, this.tenantId, this.merchantIdentifier, this.createdBy, this.createdAt);
     }
 
     @java.lang.Override
@@ -150,32 +112,23 @@ public final class GooglePayCreateTokenResponse {
 
         private Optional<String> tenantId = Optional.empty();
 
-        private Optional<String> status = Optional.empty();
-
-        private Optional<OffsetDateTime> expiresAt = Optional.empty();
+        private Optional<String> merchantIdentifier = Optional.empty();
 
         private Optional<String> createdBy = Optional.empty();
 
         private Optional<OffsetDateTime> createdAt = Optional.empty();
-
-        private Optional<CardDetails> card = Optional.empty();
-
-        private Optional<TokenServiceProviderDetails> details = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        public Builder from(GooglePayCreateTokenResponse other) {
+        public Builder from(ApplePayMerchant other) {
             id(other.getId());
             tenantId(other.getTenantId());
-            status(other.getStatus());
-            expiresAt(other.getExpiresAt());
+            merchantIdentifier(other.getMerchantIdentifier());
             createdBy(other.getCreatedBy());
             createdAt(other.getCreatedAt());
-            card(other.getCard());
-            details(other.getDetails());
             return this;
         }
 
@@ -201,25 +154,14 @@ public final class GooglePayCreateTokenResponse {
             return this;
         }
 
-        @JsonSetter(value = "status", nulls = Nulls.SKIP)
-        public Builder status(Optional<String> status) {
-            this.status = status;
+        @JsonSetter(value = "merchant_identifier", nulls = Nulls.SKIP)
+        public Builder merchantIdentifier(Optional<String> merchantIdentifier) {
+            this.merchantIdentifier = merchantIdentifier;
             return this;
         }
 
-        public Builder status(String status) {
-            this.status = Optional.ofNullable(status);
-            return this;
-        }
-
-        @JsonSetter(value = "expires_at", nulls = Nulls.SKIP)
-        public Builder expiresAt(Optional<OffsetDateTime> expiresAt) {
-            this.expiresAt = expiresAt;
-            return this;
-        }
-
-        public Builder expiresAt(OffsetDateTime expiresAt) {
-            this.expiresAt = Optional.ofNullable(expiresAt);
+        public Builder merchantIdentifier(String merchantIdentifier) {
+            this.merchantIdentifier = Optional.ofNullable(merchantIdentifier);
             return this;
         }
 
@@ -245,31 +187,8 @@ public final class GooglePayCreateTokenResponse {
             return this;
         }
 
-        @JsonSetter(value = "card", nulls = Nulls.SKIP)
-        public Builder card(Optional<CardDetails> card) {
-            this.card = card;
-            return this;
-        }
-
-        public Builder card(CardDetails card) {
-            this.card = Optional.ofNullable(card);
-            return this;
-        }
-
-        @JsonSetter(value = "details", nulls = Nulls.SKIP)
-        public Builder details(Optional<TokenServiceProviderDetails> details) {
-            this.details = details;
-            return this;
-        }
-
-        public Builder details(TokenServiceProviderDetails details) {
-            this.details = Optional.ofNullable(details);
-            return this;
-        }
-
-        public GooglePayCreateTokenResponse build() {
-            return new GooglePayCreateTokenResponse(
-                    id, tenantId, status, expiresAt, createdBy, createdAt, card, details, additionalProperties);
+        public ApplePayMerchant build() {
+            return new ApplePayMerchant(id, tenantId, merchantIdentifier, createdBy, createdAt, additionalProperties);
         }
     }
 }

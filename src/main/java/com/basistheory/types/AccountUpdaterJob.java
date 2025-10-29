@@ -39,6 +39,10 @@ public final class AccountUpdaterJob {
 
     private final Optional<List<String>> errors;
 
+    private final Optional<Integer> requests;
+
+    private final Optional<Map<String, Integer>> results;
+
     private final Map<String, Object> additionalProperties;
 
     private AccountUpdaterJob(
@@ -50,6 +54,8 @@ public final class AccountUpdaterJob {
             OffsetDateTime createdAt,
             Optional<OffsetDateTime> expiresAt,
             Optional<List<String>> errors,
+            Optional<Integer> requests,
+            Optional<Map<String, Integer>> results,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.tenantId = tenantId;
@@ -59,6 +65,8 @@ public final class AccountUpdaterJob {
         this.createdAt = createdAt;
         this.expiresAt = expiresAt;
         this.errors = errors;
+        this.requests = requests;
+        this.results = results;
         this.additionalProperties = additionalProperties;
     }
 
@@ -120,6 +128,22 @@ public final class AccountUpdaterJob {
         return errors;
     }
 
+    /**
+     * @return Total number of requests processed
+     */
+    @JsonProperty("requests")
+    public Optional<Integer> getRequests() {
+        return requests;
+    }
+
+    /**
+     * @return Summary count breakdown by result code for all processed rows
+     */
+    @JsonProperty("results")
+    public Optional<Map<String, Integer>> getResults() {
+        return results;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -139,7 +163,9 @@ public final class AccountUpdaterJob {
                 && createdBy.equals(other.createdBy)
                 && createdAt.equals(other.createdAt)
                 && expiresAt.equals(other.expiresAt)
-                && errors.equals(other.errors);
+                && errors.equals(other.errors)
+                && requests.equals(other.requests)
+                && results.equals(other.results);
     }
 
     @java.lang.Override
@@ -152,7 +178,9 @@ public final class AccountUpdaterJob {
                 this.createdBy,
                 this.createdAt,
                 this.expiresAt,
-                this.errors);
+                this.errors,
+                this.requests,
+                this.results);
     }
 
     @java.lang.Override
@@ -218,6 +246,20 @@ public final class AccountUpdaterJob {
         _FinalStage errors(Optional<List<String>> errors);
 
         _FinalStage errors(List<String> errors);
+
+        /**
+         * <p>Total number of requests processed</p>
+         */
+        _FinalStage requests(Optional<Integer> requests);
+
+        _FinalStage requests(Integer requests);
+
+        /**
+         * <p>Summary count breakdown by result code for all processed rows</p>
+         */
+        _FinalStage results(Optional<Map<String, Integer>> results);
+
+        _FinalStage results(Map<String, Integer> results);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -241,6 +283,10 @@ public final class AccountUpdaterJob {
 
         private OffsetDateTime createdAt;
 
+        private Optional<Map<String, Integer>> results = Optional.empty();
+
+        private Optional<Integer> requests = Optional.empty();
+
         private Optional<List<String>> errors = Optional.empty();
 
         private Optional<OffsetDateTime> expiresAt = Optional.empty();
@@ -260,6 +306,8 @@ public final class AccountUpdaterJob {
             createdAt(other.getCreatedAt());
             expiresAt(other.getExpiresAt());
             errors(other.getErrors());
+            requests(other.getRequests());
+            results(other.getResults());
             return this;
         }
 
@@ -326,6 +374,46 @@ public final class AccountUpdaterJob {
         }
 
         /**
+         * <p>Summary count breakdown by result code for all processed rows</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage results(Map<String, Integer> results) {
+            this.results = Optional.ofNullable(results);
+            return this;
+        }
+
+        /**
+         * <p>Summary count breakdown by result code for all processed rows</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "results", nulls = Nulls.SKIP)
+        public _FinalStage results(Optional<Map<String, Integer>> results) {
+            this.results = results;
+            return this;
+        }
+
+        /**
+         * <p>Total number of requests processed</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage requests(Integer requests) {
+            this.requests = Optional.ofNullable(requests);
+            return this;
+        }
+
+        /**
+         * <p>Total number of requests processed</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "requests", nulls = Nulls.SKIP)
+        public _FinalStage requests(Optional<Integer> requests) {
+            this.requests = requests;
+            return this;
+        }
+
+        /**
          * <p>List of errors encountered during processing</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -368,7 +456,17 @@ public final class AccountUpdaterJob {
         @java.lang.Override
         public AccountUpdaterJob build() {
             return new AccountUpdaterJob(
-                    id, tenantId, status, uploadUrl, createdBy, createdAt, expiresAt, errors, additionalProperties);
+                    id,
+                    tenantId,
+                    status,
+                    uploadUrl,
+                    createdBy,
+                    createdAt,
+                    expiresAt,
+                    errors,
+                    requests,
+                    results,
+                    additionalProperties);
         }
     }
 }

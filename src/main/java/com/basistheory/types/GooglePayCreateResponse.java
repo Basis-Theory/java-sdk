@@ -20,14 +20,14 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = GooglePayCreateResponse.Builder.class)
 public final class GooglePayCreateResponse {
-    private final Optional<GooglePayCreateTokenResponse> googlePay;
+    private final Optional<GooglePayToken> googlePay;
 
     private final Optional<CreateTokenIntentResponse> tokenIntent;
 
     private final Map<String, Object> additionalProperties;
 
     private GooglePayCreateResponse(
-            Optional<GooglePayCreateTokenResponse> googlePay,
+            Optional<GooglePayToken> googlePay,
             Optional<CreateTokenIntentResponse> tokenIntent,
             Map<String, Object> additionalProperties) {
         this.googlePay = googlePay;
@@ -36,7 +36,7 @@ public final class GooglePayCreateResponse {
     }
 
     @JsonProperty("google_pay")
-    public Optional<GooglePayCreateTokenResponse> getGooglePay() {
+    public Optional<GooglePayToken> getGooglePay() {
         return googlePay;
     }
 
@@ -76,7 +76,7 @@ public final class GooglePayCreateResponse {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<GooglePayCreateTokenResponse> googlePay = Optional.empty();
+        private Optional<GooglePayToken> googlePay = Optional.empty();
 
         private Optional<CreateTokenIntentResponse> tokenIntent = Optional.empty();
 
@@ -92,12 +92,12 @@ public final class GooglePayCreateResponse {
         }
 
         @JsonSetter(value = "google_pay", nulls = Nulls.SKIP)
-        public Builder googlePay(Optional<GooglePayCreateTokenResponse> googlePay) {
+        public Builder googlePay(Optional<GooglePayToken> googlePay) {
             this.googlePay = googlePay;
             return this;
         }
 
-        public Builder googlePay(GooglePayCreateTokenResponse googlePay) {
+        public Builder googlePay(GooglePayToken googlePay) {
             this.googlePay = Optional.ofNullable(googlePay);
             return this;
         }

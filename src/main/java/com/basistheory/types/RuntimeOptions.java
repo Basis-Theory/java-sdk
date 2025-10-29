@@ -18,26 +18,27 @@ import java.util.Objects;
 import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = ApplePayCreateResponse.Builder.class)
-public final class ApplePayCreateResponse {
-    private final Optional<ApplePayToken> applePay;
+@JsonDeserialize(builder = RuntimeOptions.Builder.class)
+public final class RuntimeOptions {
+    private final Optional<Map<String, Optional<String>>> dependencies;
 
     private final Map<String, Object> additionalProperties;
 
-    private ApplePayCreateResponse(Optional<ApplePayToken> applePay, Map<String, Object> additionalProperties) {
-        this.applePay = applePay;
+    private RuntimeOptions(
+            Optional<Map<String, Optional<String>>> dependencies, Map<String, Object> additionalProperties) {
+        this.dependencies = dependencies;
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("apple_pay")
-    public Optional<ApplePayToken> getApplePay() {
-        return applePay;
+    @JsonProperty("dependencies")
+    public Optional<Map<String, Optional<String>>> getDependencies() {
+        return dependencies;
     }
 
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof ApplePayCreateResponse && equalTo((ApplePayCreateResponse) other);
+        return other instanceof RuntimeOptions && equalTo((RuntimeOptions) other);
     }
 
     @JsonAnyGetter
@@ -45,13 +46,13 @@ public final class ApplePayCreateResponse {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(ApplePayCreateResponse other) {
-        return applePay.equals(other.applePay);
+    private boolean equalTo(RuntimeOptions other) {
+        return dependencies.equals(other.dependencies);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.applePay);
+        return Objects.hash(this.dependencies);
     }
 
     @java.lang.Override
@@ -65,31 +66,31 @@ public final class ApplePayCreateResponse {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<ApplePayToken> applePay = Optional.empty();
+        private Optional<Map<String, Optional<String>>> dependencies = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        public Builder from(ApplePayCreateResponse other) {
-            applePay(other.getApplePay());
+        public Builder from(RuntimeOptions other) {
+            dependencies(other.getDependencies());
             return this;
         }
 
-        @JsonSetter(value = "apple_pay", nulls = Nulls.SKIP)
-        public Builder applePay(Optional<ApplePayToken> applePay) {
-            this.applePay = applePay;
+        @JsonSetter(value = "dependencies", nulls = Nulls.SKIP)
+        public Builder dependencies(Optional<Map<String, Optional<String>>> dependencies) {
+            this.dependencies = dependencies;
             return this;
         }
 
-        public Builder applePay(ApplePayToken applePay) {
-            this.applePay = Optional.ofNullable(applePay);
+        public Builder dependencies(Map<String, Optional<String>> dependencies) {
+            this.dependencies = Optional.ofNullable(dependencies);
             return this;
         }
 
-        public ApplePayCreateResponse build() {
-            return new ApplePayCreateResponse(applePay, additionalProperties);
+        public RuntimeOptions build() {
+            return new RuntimeOptions(dependencies, additionalProperties);
         }
     }
 }

@@ -29,6 +29,8 @@ public final class Reactor {
 
     private final Optional<ReactorFormula> formula;
 
+    private final Optional<String> state;
+
     private final Optional<String> code;
 
     private final Optional<Application> application;
@@ -43,9 +45,9 @@ public final class Reactor {
 
     private final Optional<Map<String, Optional<String>>> configuration;
 
-    private final Optional<Map<String, Optional<String>>> dependencies;
-
     private final Optional<String> runtime;
+
+    private final Optional<RuntimeOptions> options;
 
     private final Map<String, Object> additionalProperties;
 
@@ -54,6 +56,7 @@ public final class Reactor {
             Optional<String> tenantId,
             Optional<String> name,
             Optional<ReactorFormula> formula,
+            Optional<String> state,
             Optional<String> code,
             Optional<Application> application,
             Optional<String> createdBy,
@@ -61,13 +64,14 @@ public final class Reactor {
             Optional<String> modifiedBy,
             Optional<OffsetDateTime> modifiedAt,
             Optional<Map<String, Optional<String>>> configuration,
-            Optional<Map<String, Optional<String>>> dependencies,
             Optional<String> runtime,
+            Optional<RuntimeOptions> options,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.tenantId = tenantId;
         this.name = name;
         this.formula = formula;
+        this.state = state;
         this.code = code;
         this.application = application;
         this.createdBy = createdBy;
@@ -75,8 +79,8 @@ public final class Reactor {
         this.modifiedBy = modifiedBy;
         this.modifiedAt = modifiedAt;
         this.configuration = configuration;
-        this.dependencies = dependencies;
         this.runtime = runtime;
+        this.options = options;
         this.additionalProperties = additionalProperties;
     }
 
@@ -98,6 +102,11 @@ public final class Reactor {
     @JsonProperty("formula")
     public Optional<ReactorFormula> getFormula() {
         return formula;
+    }
+
+    @JsonProperty("state")
+    public Optional<String> getState() {
+        return state;
     }
 
     @JsonProperty("code")
@@ -135,14 +144,14 @@ public final class Reactor {
         return configuration;
     }
 
-    @JsonProperty("dependencies")
-    public Optional<Map<String, Optional<String>>> getDependencies() {
-        return dependencies;
-    }
-
     @JsonProperty("runtime")
     public Optional<String> getRuntime() {
         return runtime;
+    }
+
+    @JsonProperty("options")
+    public Optional<RuntimeOptions> getOptions() {
+        return options;
     }
 
     @java.lang.Override
@@ -161,6 +170,7 @@ public final class Reactor {
                 && tenantId.equals(other.tenantId)
                 && name.equals(other.name)
                 && formula.equals(other.formula)
+                && state.equals(other.state)
                 && code.equals(other.code)
                 && application.equals(other.application)
                 && createdBy.equals(other.createdBy)
@@ -168,8 +178,8 @@ public final class Reactor {
                 && modifiedBy.equals(other.modifiedBy)
                 && modifiedAt.equals(other.modifiedAt)
                 && configuration.equals(other.configuration)
-                && dependencies.equals(other.dependencies)
-                && runtime.equals(other.runtime);
+                && runtime.equals(other.runtime)
+                && options.equals(other.options);
     }
 
     @java.lang.Override
@@ -179,6 +189,7 @@ public final class Reactor {
                 this.tenantId,
                 this.name,
                 this.formula,
+                this.state,
                 this.code,
                 this.application,
                 this.createdBy,
@@ -186,8 +197,8 @@ public final class Reactor {
                 this.modifiedBy,
                 this.modifiedAt,
                 this.configuration,
-                this.dependencies,
-                this.runtime);
+                this.runtime,
+                this.options);
     }
 
     @java.lang.Override
@@ -209,6 +220,8 @@ public final class Reactor {
 
         private Optional<ReactorFormula> formula = Optional.empty();
 
+        private Optional<String> state = Optional.empty();
+
         private Optional<String> code = Optional.empty();
 
         private Optional<Application> application = Optional.empty();
@@ -223,9 +236,9 @@ public final class Reactor {
 
         private Optional<Map<String, Optional<String>>> configuration = Optional.empty();
 
-        private Optional<Map<String, Optional<String>>> dependencies = Optional.empty();
-
         private Optional<String> runtime = Optional.empty();
+
+        private Optional<RuntimeOptions> options = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -237,6 +250,7 @@ public final class Reactor {
             tenantId(other.getTenantId());
             name(other.getName());
             formula(other.getFormula());
+            state(other.getState());
             code(other.getCode());
             application(other.getApplication());
             createdBy(other.getCreatedBy());
@@ -244,8 +258,8 @@ public final class Reactor {
             modifiedBy(other.getModifiedBy());
             modifiedAt(other.getModifiedAt());
             configuration(other.getConfiguration());
-            dependencies(other.getDependencies());
             runtime(other.getRuntime());
+            options(other.getOptions());
             return this;
         }
 
@@ -290,6 +304,17 @@ public final class Reactor {
 
         public Builder formula(ReactorFormula formula) {
             this.formula = Optional.ofNullable(formula);
+            return this;
+        }
+
+        @JsonSetter(value = "state", nulls = Nulls.SKIP)
+        public Builder state(Optional<String> state) {
+            this.state = state;
+            return this;
+        }
+
+        public Builder state(String state) {
+            this.state = Optional.ofNullable(state);
             return this;
         }
 
@@ -370,17 +395,6 @@ public final class Reactor {
             return this;
         }
 
-        @JsonSetter(value = "dependencies", nulls = Nulls.SKIP)
-        public Builder dependencies(Optional<Map<String, Optional<String>>> dependencies) {
-            this.dependencies = dependencies;
-            return this;
-        }
-
-        public Builder dependencies(Map<String, Optional<String>> dependencies) {
-            this.dependencies = Optional.ofNullable(dependencies);
-            return this;
-        }
-
         @JsonSetter(value = "runtime", nulls = Nulls.SKIP)
         public Builder runtime(Optional<String> runtime) {
             this.runtime = runtime;
@@ -392,12 +406,24 @@ public final class Reactor {
             return this;
         }
 
+        @JsonSetter(value = "options", nulls = Nulls.SKIP)
+        public Builder options(Optional<RuntimeOptions> options) {
+            this.options = options;
+            return this;
+        }
+
+        public Builder options(RuntimeOptions options) {
+            this.options = Optional.ofNullable(options);
+            return this;
+        }
+
         public Reactor build() {
             return new Reactor(
                     id,
                     tenantId,
                     name,
                     formula,
+                    state,
                     code,
                     application,
                     createdBy,
@@ -405,8 +431,8 @@ public final class Reactor {
                     modifiedBy,
                     modifiedAt,
                     configuration,
-                    dependencies,
                     runtime,
+                    options,
                     additionalProperties);
         }
     }

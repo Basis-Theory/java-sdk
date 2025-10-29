@@ -45,6 +45,8 @@ public final class GooglePayToken {
 
     private final Optional<TokenServiceProviderDetails> details;
 
+    private final Optional<String> fingerprint;
+
     private final Map<String, Object> additionalProperties;
 
     private GooglePayToken(
@@ -60,6 +62,7 @@ public final class GooglePayToken {
             Optional<Object> data,
             Optional<TokenAuthentication> authentication,
             Optional<TokenServiceProviderDetails> details,
+            Optional<String> fingerprint,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.tenantId = tenantId;
@@ -73,6 +76,7 @@ public final class GooglePayToken {
         this.data = data;
         this.authentication = authentication;
         this.details = details;
+        this.fingerprint = fingerprint;
         this.additionalProperties = additionalProperties;
     }
 
@@ -136,6 +140,11 @@ public final class GooglePayToken {
         return details;
     }
 
+    @JsonProperty("fingerprint")
+    public Optional<String> getFingerprint() {
+        return fingerprint;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -159,7 +168,8 @@ public final class GooglePayToken {
                 && card.equals(other.card)
                 && data.equals(other.data)
                 && authentication.equals(other.authentication)
-                && details.equals(other.details);
+                && details.equals(other.details)
+                && fingerprint.equals(other.fingerprint);
     }
 
     @java.lang.Override
@@ -176,7 +186,8 @@ public final class GooglePayToken {
                 this.card,
                 this.data,
                 this.authentication,
-                this.details);
+                this.details,
+                this.fingerprint);
     }
 
     @java.lang.Override
@@ -214,6 +225,8 @@ public final class GooglePayToken {
 
         private Optional<TokenServiceProviderDetails> details = Optional.empty();
 
+        private Optional<String> fingerprint = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -232,6 +245,7 @@ public final class GooglePayToken {
             data(other.getData());
             authentication(other.getAuthentication());
             details(other.getDetails());
+            fingerprint(other.getFingerprint());
             return this;
         }
 
@@ -367,6 +381,17 @@ public final class GooglePayToken {
             return this;
         }
 
+        @JsonSetter(value = "fingerprint", nulls = Nulls.SKIP)
+        public Builder fingerprint(Optional<String> fingerprint) {
+            this.fingerprint = fingerprint;
+            return this;
+        }
+
+        public Builder fingerprint(String fingerprint) {
+            this.fingerprint = Optional.ofNullable(fingerprint);
+            return this;
+        }
+
         public GooglePayToken build() {
             return new GooglePayToken(
                     id,
@@ -381,6 +406,7 @@ public final class GooglePayToken {
                     data,
                     authentication,
                     details,
+                    fingerprint,
                     additionalProperties);
         }
     }

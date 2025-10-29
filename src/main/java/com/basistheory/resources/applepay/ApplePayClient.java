@@ -7,6 +7,7 @@ import com.basistheory.core.ClientOptions;
 import com.basistheory.core.RequestOptions;
 import com.basistheory.core.Suppliers;
 import com.basistheory.resources.applepay.domain.DomainClient;
+import com.basistheory.resources.applepay.merchant.MerchantClient;
 import com.basistheory.resources.applepay.requests.ApplePayCreateRequest;
 import com.basistheory.resources.applepay.session.SessionClient;
 import com.basistheory.types.ApplePayCreateResponse;
@@ -18,6 +19,8 @@ public class ApplePayClient {
 
     private final RawApplePayClient rawClient;
 
+    protected final Supplier<MerchantClient> merchantClient;
+
     protected final Supplier<DomainClient> domainClient;
 
     protected final Supplier<SessionClient> sessionClient;
@@ -25,6 +28,7 @@ public class ApplePayClient {
     public ApplePayClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
         this.rawClient = new RawApplePayClient(clientOptions);
+        this.merchantClient = Suppliers.memoize(() -> new MerchantClient(clientOptions));
         this.domainClient = Suppliers.memoize(() -> new DomainClient(clientOptions));
         this.sessionClient = Suppliers.memoize(() -> new SessionClient(clientOptions));
     }
@@ -62,6 +66,10 @@ public class ApplePayClient {
 
     public String delete(String id, RequestOptions requestOptions) {
         return this.rawClient.delete(id, requestOptions).body();
+    }
+
+    public MerchantClient merchant() {
+        return this.merchantClient.get();
     }
 
     public DomainClient domain() {

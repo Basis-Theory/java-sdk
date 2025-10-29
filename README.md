@@ -3,7 +3,7 @@
 [![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=https%3A%2F%2Fgithub.com%2FBasis-Theory%2Fjava-sdk)
 [![Maven Central](https://img.shields.io/maven-central/v/dev.basis-theory/basis-theory-java-sdk)](https://central.sonatype.com/artifact/dev.basis-theory/basis-theory-java-sdk)
 
-The BasisTheory Java library provides convenient access to the BasisTheory API from Java.
+The BasisTheory Java library provides convenient access to the BasisTheory APIs from Java.
 
 ## Documentation
 

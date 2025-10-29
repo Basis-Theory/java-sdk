@@ -7,6 +7,7 @@ import com.basistheory.core.ClientOptions;
 import com.basistheory.core.RequestOptions;
 import com.basistheory.core.Suppliers;
 import com.basistheory.resources.applepay.domain.AsyncDomainClient;
+import com.basistheory.resources.applepay.merchant.AsyncMerchantClient;
 import com.basistheory.resources.applepay.requests.ApplePayCreateRequest;
 import com.basistheory.resources.applepay.session.AsyncSessionClient;
 import com.basistheory.types.ApplePayCreateResponse;
@@ -19,6 +20,8 @@ public class AsyncApplePayClient {
 
     private final AsyncRawApplePayClient rawClient;
 
+    protected final Supplier<AsyncMerchantClient> merchantClient;
+
     protected final Supplier<AsyncDomainClient> domainClient;
 
     protected final Supplier<AsyncSessionClient> sessionClient;
@@ -26,6 +29,7 @@ public class AsyncApplePayClient {
     public AsyncApplePayClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
         this.rawClient = new AsyncRawApplePayClient(clientOptions);
+        this.merchantClient = Suppliers.memoize(() -> new AsyncMerchantClient(clientOptions));
         this.domainClient = Suppliers.memoize(() -> new AsyncDomainClient(clientOptions));
         this.sessionClient = Suppliers.memoize(() -> new AsyncSessionClient(clientOptions));
     }
@@ -64,6 +68,10 @@ public class AsyncApplePayClient {
 
     public CompletableFuture<String> delete(String id, RequestOptions requestOptions) {
         return this.rawClient.delete(id, requestOptions).thenApply(response -> response.body());
+    }
+
+    public AsyncMerchantClient merchant() {
+        return this.merchantClient.get();
     }
 
     public AsyncDomainClient domain() {
