@@ -199,7 +199,7 @@ public final class TestClient {
             assertTrue(retrievedKey.getExpiresAt().isPresent(), "Created at timestamp should not be null");
 
             List<ClientEncryptionKeyMetadataResponse> keys = keysClient.list().join();
-            assertTrue(keys.stream().anyMatch(k -> k.getId().get().equals(keyId)), 
+            assertTrue(keys.stream().anyMatch(k -> k.getKeyId().get().equals(keyId)), 
                 "Created key should be in the list of keys");
 
             keysClient.delete(keyId).join();
