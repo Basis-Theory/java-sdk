@@ -33,6 +33,8 @@ public final class ThreeDsAuthentication {
 
     private final Optional<String> acsTransactionId;
 
+    private final Optional<String> acsOperatorId;
+
     private final Optional<String> dsTransactionId;
 
     private final Optional<String> sdkTransactionId;
@@ -96,6 +98,7 @@ public final class ThreeDsAuthentication {
             Optional<String> sessionId,
             Optional<String> threedsVersion,
             Optional<String> acsTransactionId,
+            Optional<String> acsOperatorId,
             Optional<String> dsTransactionId,
             Optional<String> sdkTransactionId,
             Optional<String> acsReferenceNumber,
@@ -130,6 +133,7 @@ public final class ThreeDsAuthentication {
         this.sessionId = sessionId;
         this.threedsVersion = threedsVersion;
         this.acsTransactionId = acsTransactionId;
+        this.acsOperatorId = acsOperatorId;
         this.dsTransactionId = dsTransactionId;
         this.sdkTransactionId = sdkTransactionId;
         this.acsReferenceNumber = acsReferenceNumber;
@@ -188,6 +192,11 @@ public final class ThreeDsAuthentication {
     @JsonProperty("acs_transaction_id")
     public Optional<String> getAcsTransactionId() {
         return acsTransactionId;
+    }
+
+    @JsonProperty("acs_operator_id")
+    public Optional<String> getAcsOperatorId() {
+        return acsOperatorId;
     }
 
     @JsonProperty("ds_transaction_id")
@@ -343,6 +352,7 @@ public final class ThreeDsAuthentication {
                 && sessionId.equals(other.sessionId)
                 && threedsVersion.equals(other.threedsVersion)
                 && acsTransactionId.equals(other.acsTransactionId)
+                && acsOperatorId.equals(other.acsOperatorId)
                 && dsTransactionId.equals(other.dsTransactionId)
                 && sdkTransactionId.equals(other.sdkTransactionId)
                 && acsReferenceNumber.equals(other.acsReferenceNumber)
@@ -381,6 +391,7 @@ public final class ThreeDsAuthentication {
                 this.sessionId,
                 this.threedsVersion,
                 this.acsTransactionId,
+                this.acsOperatorId,
                 this.dsTransactionId,
                 this.sdkTransactionId,
                 this.acsReferenceNumber,
@@ -432,6 +443,8 @@ public final class ThreeDsAuthentication {
         private Optional<String> threedsVersion = Optional.empty();
 
         private Optional<String> acsTransactionId = Optional.empty();
+
+        private Optional<String> acsOperatorId = Optional.empty();
 
         private Optional<String> dsTransactionId = Optional.empty();
 
@@ -499,6 +512,7 @@ public final class ThreeDsAuthentication {
             sessionId(other.getSessionId());
             threedsVersion(other.getThreedsVersion());
             acsTransactionId(other.getAcsTransactionId());
+            acsOperatorId(other.getAcsOperatorId());
             dsTransactionId(other.getDsTransactionId());
             sdkTransactionId(other.getSdkTransactionId());
             acsReferenceNumber(other.getAcsReferenceNumber());
@@ -592,6 +606,17 @@ public final class ThreeDsAuthentication {
 
         public Builder acsTransactionId(String acsTransactionId) {
             this.acsTransactionId = Optional.ofNullable(acsTransactionId);
+            return this;
+        }
+
+        @JsonSetter(value = "acs_operator_id", nulls = Nulls.SKIP)
+        public Builder acsOperatorId(Optional<String> acsOperatorId) {
+            this.acsOperatorId = acsOperatorId;
+            return this;
+        }
+
+        public Builder acsOperatorId(String acsOperatorId) {
+            this.acsOperatorId = Optional.ofNullable(acsOperatorId);
             return this;
         }
 
@@ -900,6 +925,7 @@ public final class ThreeDsAuthentication {
                     sessionId,
                     threedsVersion,
                     acsTransactionId,
+                    acsOperatorId,
                     dsTransactionId,
                     sdkTransactionId,
                     acsReferenceNumber,

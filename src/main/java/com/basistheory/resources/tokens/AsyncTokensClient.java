@@ -8,7 +8,6 @@ import com.basistheory.core.IdempotentRequestOptions;
 import com.basistheory.core.RequestOptions;
 import com.basistheory.core.pagination.SyncPagingIterable;
 import com.basistheory.resources.tokens.requests.SearchTokensRequestV2;
-import com.basistheory.resources.tokens.requests.TokensListRequest;
 import com.basistheory.resources.tokens.requests.TokensListV2Request;
 import com.basistheory.resources.tokens.requests.UpdateTokenRequest;
 import com.basistheory.types.CreateTokenRequest;
@@ -48,30 +47,6 @@ public class AsyncTokensClient {
         return this.rawClient.tokenize(request, requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<SyncPagingIterable<Token>> list() {
-        return this.rawClient.list().thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<SyncPagingIterable<Token>> list(TokensListRequest request) {
-        return this.rawClient.list(request).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<SyncPagingIterable<Token>> list(TokensListRequest request, RequestOptions requestOptions) {
-        return this.rawClient.list(request, requestOptions).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<Token> create() {
-        return this.rawClient.create().thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<Token> create(CreateTokenRequest request) {
-        return this.rawClient.create(request).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<Token> create(CreateTokenRequest request, IdempotentRequestOptions requestOptions) {
-        return this.rawClient.create(request, requestOptions).thenApply(response -> response.body());
-    }
-
     public CompletableFuture<Token> get(String id) {
         return this.rawClient.get(id).thenApply(response -> response.body());
     }
@@ -99,6 +74,18 @@ public class AsyncTokensClient {
     public CompletableFuture<Token> update(
             String id, UpdateTokenRequest request, IdempotentRequestOptions requestOptions) {
         return this.rawClient.update(id, request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<Token> create() {
+        return this.rawClient.create().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<Token> create(CreateTokenRequest request) {
+        return this.rawClient.create(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<Token> create(CreateTokenRequest request, IdempotentRequestOptions requestOptions) {
+        return this.rawClient.create(request, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<SyncPagingIterable<Token>> listV2() {

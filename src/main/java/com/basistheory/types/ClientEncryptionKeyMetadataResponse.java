@@ -39,7 +39,7 @@ public final class ClientEncryptionKeyMetadataResponse {
         return id;
     }
 
-    @JsonProperty("expiresAt")
+    @JsonProperty("expires_at")
     public Optional<OffsetDateTime> getExpiresAt() {
         return expiresAt;
     }
@@ -102,7 +102,7 @@ public final class ClientEncryptionKeyMetadataResponse {
             return this;
         }
 
-        @JsonSetter(value = "expiresAt", nulls = Nulls.SKIP)
+        @JsonSetter(value = "expires_at", nulls = Nulls.SKIP)
         public Builder expiresAt(Optional<OffsetDateTime> expiresAt) {
             this.expiresAt = expiresAt;
             return this;

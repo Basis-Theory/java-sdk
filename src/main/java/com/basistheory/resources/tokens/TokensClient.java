@@ -8,7 +8,6 @@ import com.basistheory.core.IdempotentRequestOptions;
 import com.basistheory.core.RequestOptions;
 import com.basistheory.core.pagination.SyncPagingIterable;
 import com.basistheory.resources.tokens.requests.SearchTokensRequestV2;
-import com.basistheory.resources.tokens.requests.TokensListRequest;
 import com.basistheory.resources.tokens.requests.TokensListV2Request;
 import com.basistheory.resources.tokens.requests.UpdateTokenRequest;
 import com.basistheory.types.CreateTokenRequest;
@@ -47,30 +46,6 @@ public class TokensClient {
         return this.rawClient.tokenize(request, requestOptions).body();
     }
 
-    public SyncPagingIterable<Token> list() {
-        return this.rawClient.list().body();
-    }
-
-    public SyncPagingIterable<Token> list(TokensListRequest request) {
-        return this.rawClient.list(request).body();
-    }
-
-    public SyncPagingIterable<Token> list(TokensListRequest request, RequestOptions requestOptions) {
-        return this.rawClient.list(request, requestOptions).body();
-    }
-
-    public Token create() {
-        return this.rawClient.create().body();
-    }
-
-    public Token create(CreateTokenRequest request) {
-        return this.rawClient.create(request).body();
-    }
-
-    public Token create(CreateTokenRequest request, IdempotentRequestOptions requestOptions) {
-        return this.rawClient.create(request, requestOptions).body();
-    }
-
     public Token get(String id) {
         return this.rawClient.get(id).body();
     }
@@ -97,6 +72,18 @@ public class TokensClient {
 
     public Token update(String id, UpdateTokenRequest request, IdempotentRequestOptions requestOptions) {
         return this.rawClient.update(id, request, requestOptions).body();
+    }
+
+    public Token create() {
+        return this.rawClient.create().body();
+    }
+
+    public Token create(CreateTokenRequest request) {
+        return this.rawClient.create(request).body();
+    }
+
+    public Token create(CreateTokenRequest request, IdempotentRequestOptions requestOptions) {
+        return this.rawClient.create(request, requestOptions).body();
     }
 
     public SyncPagingIterable<Token> listV2() {

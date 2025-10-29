@@ -21,7 +21,7 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ClientEncryptionKeyResponse.Builder.class)
 public final class ClientEncryptionKeyResponse {
-    private final Optional<String> id;
+    private final Optional<String> keyId;
 
     private final Optional<String> publicKeyPem;
 
@@ -30,27 +30,27 @@ public final class ClientEncryptionKeyResponse {
     private final Map<String, Object> additionalProperties;
 
     private ClientEncryptionKeyResponse(
-            Optional<String> id,
+            Optional<String> keyId,
             Optional<String> publicKeyPem,
             Optional<OffsetDateTime> expiresAt,
             Map<String, Object> additionalProperties) {
-        this.id = id;
+        this.keyId = keyId;
         this.publicKeyPem = publicKeyPem;
         this.expiresAt = expiresAt;
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("id")
-    public Optional<String> getId() {
-        return id;
+    @JsonProperty("key_id")
+    public Optional<String> getKeyId() {
+        return keyId;
     }
 
-    @JsonProperty("publicKeyPEM")
+    @JsonProperty("public_key_pem")
     public Optional<String> getPublicKeyPem() {
         return publicKeyPem;
     }
 
-    @JsonProperty("expiresAt")
+    @JsonProperty("expires_at")
     public Optional<OffsetDateTime> getExpiresAt() {
         return expiresAt;
     }
@@ -67,12 +67,14 @@ public final class ClientEncryptionKeyResponse {
     }
 
     private boolean equalTo(ClientEncryptionKeyResponse other) {
-        return id.equals(other.id) && publicKeyPem.equals(other.publicKeyPem) && expiresAt.equals(other.expiresAt);
+        return keyId.equals(other.keyId)
+                && publicKeyPem.equals(other.publicKeyPem)
+                && expiresAt.equals(other.expiresAt);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.id, this.publicKeyPem, this.expiresAt);
+        return Objects.hash(this.keyId, this.publicKeyPem, this.expiresAt);
     }
 
     @java.lang.Override
@@ -86,7 +88,7 @@ public final class ClientEncryptionKeyResponse {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<String> id = Optional.empty();
+        private Optional<String> keyId = Optional.empty();
 
         private Optional<String> publicKeyPem = Optional.empty();
 
@@ -98,24 +100,24 @@ public final class ClientEncryptionKeyResponse {
         private Builder() {}
 
         public Builder from(ClientEncryptionKeyResponse other) {
-            id(other.getId());
+            keyId(other.getKeyId());
             publicKeyPem(other.getPublicKeyPem());
             expiresAt(other.getExpiresAt());
             return this;
         }
 
-        @JsonSetter(value = "id", nulls = Nulls.SKIP)
-        public Builder id(Optional<String> id) {
-            this.id = id;
+        @JsonSetter(value = "key_id", nulls = Nulls.SKIP)
+        public Builder keyId(Optional<String> keyId) {
+            this.keyId = keyId;
             return this;
         }
 
-        public Builder id(String id) {
-            this.id = Optional.ofNullable(id);
+        public Builder keyId(String keyId) {
+            this.keyId = Optional.ofNullable(keyId);
             return this;
         }
 
-        @JsonSetter(value = "publicKeyPEM", nulls = Nulls.SKIP)
+        @JsonSetter(value = "public_key_pem", nulls = Nulls.SKIP)
         public Builder publicKeyPem(Optional<String> publicKeyPem) {
             this.publicKeyPem = publicKeyPem;
             return this;
@@ -126,7 +128,7 @@ public final class ClientEncryptionKeyResponse {
             return this;
         }
 
-        @JsonSetter(value = "expiresAt", nulls = Nulls.SKIP)
+        @JsonSetter(value = "expires_at", nulls = Nulls.SKIP)
         public Builder expiresAt(Optional<OffsetDateTime> expiresAt) {
             this.expiresAt = expiresAt;
             return this;
@@ -138,7 +140,7 @@ public final class ClientEncryptionKeyResponse {
         }
 
         public ClientEncryptionKeyResponse build() {
-            return new ClientEncryptionKeyResponse(id, publicKeyPem, expiresAt, additionalProperties);
+            return new ClientEncryptionKeyResponse(keyId, publicKeyPem, expiresAt, additionalProperties);
         }
     }
 }
