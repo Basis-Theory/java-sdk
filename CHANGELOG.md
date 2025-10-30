@@ -1,3 +1,15 @@
+## [4.0.0](https://github.com/Basis-Theory/java-sdk/compare/3.1.0...4.0.0) (2025-10-30)
+
+
+### ⚠ BREAKING CHANGES
+
+* The get tokens v1 endpoint was removed, and the properties ofthe  keys endpoint were renamed
+
+### Features
+
+* renaming keys endpoint properties, and removing get tokens v1 ([#78](https://github.com/Basis-Theory/java-sdk/issues/78)) ([837f346](https://github.com/Basis-Theory/java-sdk/commit/837f3467d4f24d9599298271c63db3c4aa233e94))
+
+
 ## [3.1.0](https://github.com/Basis-Theory/java-sdk/compare/3.0.0...3.1.0) (2025-08-22)
 
 
