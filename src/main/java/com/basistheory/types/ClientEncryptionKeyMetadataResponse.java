@@ -21,25 +21,25 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ClientEncryptionKeyMetadataResponse.Builder.class)
 public final class ClientEncryptionKeyMetadataResponse {
-    private final Optional<String> id;
+    private final Optional<String> keyId;
 
     private final Optional<OffsetDateTime> expiresAt;
 
     private final Map<String, Object> additionalProperties;
 
     private ClientEncryptionKeyMetadataResponse(
-            Optional<String> id, Optional<OffsetDateTime> expiresAt, Map<String, Object> additionalProperties) {
-        this.id = id;
+            Optional<String> keyId, Optional<OffsetDateTime> expiresAt, Map<String, Object> additionalProperties) {
+        this.keyId = keyId;
         this.expiresAt = expiresAt;
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("id")
-    public Optional<String> getId() {
-        return id;
+    @JsonProperty("key_id")
+    public Optional<String> getKeyId() {
+        return keyId;
     }
 
-    @JsonProperty("expiresAt")
+    @JsonProperty("expires_at")
     public Optional<OffsetDateTime> getExpiresAt() {
         return expiresAt;
     }
@@ -57,12 +57,12 @@ public final class ClientEncryptionKeyMetadataResponse {
     }
 
     private boolean equalTo(ClientEncryptionKeyMetadataResponse other) {
-        return id.equals(other.id) && expiresAt.equals(other.expiresAt);
+        return keyId.equals(other.keyId) && expiresAt.equals(other.expiresAt);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.id, this.expiresAt);
+        return Objects.hash(this.keyId, this.expiresAt);
     }
 
     @java.lang.Override
@@ -76,7 +76,7 @@ public final class ClientEncryptionKeyMetadataResponse {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<String> id = Optional.empty();
+        private Optional<String> keyId = Optional.empty();
 
         private Optional<OffsetDateTime> expiresAt = Optional.empty();
 
@@ -86,23 +86,23 @@ public final class ClientEncryptionKeyMetadataResponse {
         private Builder() {}
 
         public Builder from(ClientEncryptionKeyMetadataResponse other) {
-            id(other.getId());
+            keyId(other.getKeyId());
             expiresAt(other.getExpiresAt());
             return this;
         }
 
-        @JsonSetter(value = "id", nulls = Nulls.SKIP)
-        public Builder id(Optional<String> id) {
-            this.id = id;
+        @JsonSetter(value = "key_id", nulls = Nulls.SKIP)
+        public Builder keyId(Optional<String> keyId) {
+            this.keyId = keyId;
             return this;
         }
 
-        public Builder id(String id) {
-            this.id = Optional.ofNullable(id);
+        public Builder keyId(String keyId) {
+            this.keyId = Optional.ofNullable(keyId);
             return this;
         }
 
-        @JsonSetter(value = "expiresAt", nulls = Nulls.SKIP)
+        @JsonSetter(value = "expires_at", nulls = Nulls.SKIP)
         public Builder expiresAt(Optional<OffsetDateTime> expiresAt) {
             this.expiresAt = expiresAt;
             return this;
@@ -114,7 +114,7 @@ public final class ClientEncryptionKeyMetadataResponse {
         }
 
         public ClientEncryptionKeyMetadataResponse build() {
-            return new ClientEncryptionKeyMetadataResponse(id, expiresAt, additionalProperties);
+            return new ClientEncryptionKeyMetadataResponse(keyId, expiresAt, additionalProperties);
         }
     }
 }

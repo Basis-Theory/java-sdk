@@ -32,6 +32,8 @@ public final class Proxy {
 
     private final Optional<String> destinationUrl;
 
+    private final Optional<String> state;
+
     private final Optional<String> requestReactorId;
 
     private final Optional<String> responseReactorId;
@@ -72,6 +74,7 @@ public final class Proxy {
             Optional<String> tenantId,
             Optional<String> name,
             Optional<String> destinationUrl,
+            Optional<String> state,
             Optional<String> requestReactorId,
             Optional<String> responseReactorId,
             Optional<Boolean> requireAuth,
@@ -94,6 +97,7 @@ public final class Proxy {
         this.tenantId = tenantId;
         this.name = name;
         this.destinationUrl = destinationUrl;
+        this.state = state;
         this.requestReactorId = requestReactorId;
         this.responseReactorId = responseReactorId;
         this.requireAuth = requireAuth;
@@ -136,6 +140,11 @@ public final class Proxy {
     @JsonProperty("destination_url")
     public Optional<String> getDestinationUrl() {
         return destinationUrl;
+    }
+
+    @JsonProperty("state")
+    public Optional<String> getState() {
+        return state;
     }
 
     @JsonProperty("request_reactor_id")
@@ -235,6 +244,7 @@ public final class Proxy {
                 && tenantId.equals(other.tenantId)
                 && name.equals(other.name)
                 && destinationUrl.equals(other.destinationUrl)
+                && state.equals(other.state)
                 && requestReactorId.equals(other.requestReactorId)
                 && responseReactorId.equals(other.responseReactorId)
                 && requireAuth.equals(other.requireAuth)
@@ -261,6 +271,7 @@ public final class Proxy {
                 this.tenantId,
                 this.name,
                 this.destinationUrl,
+                this.state,
                 this.requestReactorId,
                 this.responseReactorId,
                 this.requireAuth,
@@ -299,6 +310,8 @@ public final class Proxy {
         private Optional<String> name = Optional.empty();
 
         private Optional<String> destinationUrl = Optional.empty();
+
+        private Optional<String> state = Optional.empty();
 
         private Optional<String> requestReactorId = Optional.empty();
 
@@ -343,6 +356,7 @@ public final class Proxy {
             tenantId(other.getTenantId());
             name(other.getName());
             destinationUrl(other.getDestinationUrl());
+            state(other.getState());
             requestReactorId(other.getRequestReactorId());
             responseReactorId(other.getResponseReactorId());
             requireAuth(other.getRequireAuth());
@@ -414,6 +428,17 @@ public final class Proxy {
 
         public Builder destinationUrl(String destinationUrl) {
             this.destinationUrl = Optional.ofNullable(destinationUrl);
+            return this;
+        }
+
+        @JsonSetter(value = "state", nulls = Nulls.SKIP)
+        public Builder state(Optional<String> state) {
+            this.state = state;
+            return this;
+        }
+
+        public Builder state(String state) {
+            this.state = Optional.ofNullable(state);
             return this;
         }
 
@@ -600,6 +625,7 @@ public final class Proxy {
                     tenantId,
                     name,
                     destinationUrl,
+                    state,
                     requestReactorId,
                     responseReactorId,
                     requireAuth,
