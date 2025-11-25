@@ -17,7 +17,7 @@ public class AsyncBasisTheoryApiClientBuilder {
 
     private String correlationId = null;
 
-    private Environment environment = Environment.DEFAULT;
+    private Environment environment = Environment.PRODUCTION;
 
     private OkHttpClient httpClient;
 

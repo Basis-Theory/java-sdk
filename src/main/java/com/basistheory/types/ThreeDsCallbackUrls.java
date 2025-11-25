@@ -24,12 +24,18 @@ public final class ThreeDsCallbackUrls {
 
     private final Optional<String> failure;
 
+    private final Optional<ThreeDsBrandingOptions> branding;
+
     private final Map<String, Object> additionalProperties;
 
     private ThreeDsCallbackUrls(
-            Optional<String> success, Optional<String> failure, Map<String, Object> additionalProperties) {
+            Optional<String> success,
+            Optional<String> failure,
+            Optional<ThreeDsBrandingOptions> branding,
+            Map<String, Object> additionalProperties) {
         this.success = success;
         this.failure = failure;
+        this.branding = branding;
         this.additionalProperties = additionalProperties;
     }
 
@@ -41,6 +47,11 @@ public final class ThreeDsCallbackUrls {
     @JsonProperty("failure")
     public Optional<String> getFailure() {
         return failure;
+    }
+
+    @JsonProperty("branding")
+    public Optional<ThreeDsBrandingOptions> getBranding() {
+        return branding;
     }
 
     @java.lang.Override
@@ -55,12 +66,12 @@ public final class ThreeDsCallbackUrls {
     }
 
     private boolean equalTo(ThreeDsCallbackUrls other) {
-        return success.equals(other.success) && failure.equals(other.failure);
+        return success.equals(other.success) && failure.equals(other.failure) && branding.equals(other.branding);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.success, this.failure);
+        return Objects.hash(this.success, this.failure, this.branding);
     }
 
     @java.lang.Override
@@ -78,6 +89,8 @@ public final class ThreeDsCallbackUrls {
 
         private Optional<String> failure = Optional.empty();
 
+        private Optional<ThreeDsBrandingOptions> branding = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -86,6 +99,7 @@ public final class ThreeDsCallbackUrls {
         public Builder from(ThreeDsCallbackUrls other) {
             success(other.getSuccess());
             failure(other.getFailure());
+            branding(other.getBranding());
             return this;
         }
 
@@ -111,8 +125,19 @@ public final class ThreeDsCallbackUrls {
             return this;
         }
 
+        @JsonSetter(value = "branding", nulls = Nulls.SKIP)
+        public Builder branding(Optional<ThreeDsBrandingOptions> branding) {
+            this.branding = branding;
+            return this;
+        }
+
+        public Builder branding(ThreeDsBrandingOptions branding) {
+            this.branding = Optional.ofNullable(branding);
+            return this;
+        }
+
         public ThreeDsCallbackUrls build() {
-            return new ThreeDsCallbackUrls(success, failure, additionalProperties);
+            return new ThreeDsCallbackUrls(success, failure, branding, additionalProperties);
         }
     }
 }

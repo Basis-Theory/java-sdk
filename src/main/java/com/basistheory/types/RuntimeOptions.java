@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -22,17 +23,36 @@ import java.util.Optional;
 public final class RuntimeOptions {
     private final Optional<Map<String, Optional<String>>> dependencies;
 
+    private final Optional<Integer> warmConcurrency;
+
+    private final Optional<List<String>> permissions;
+
     private final Map<String, Object> additionalProperties;
 
     private RuntimeOptions(
-            Optional<Map<String, Optional<String>>> dependencies, Map<String, Object> additionalProperties) {
+            Optional<Map<String, Optional<String>>> dependencies,
+            Optional<Integer> warmConcurrency,
+            Optional<List<String>> permissions,
+            Map<String, Object> additionalProperties) {
         this.dependencies = dependencies;
+        this.warmConcurrency = warmConcurrency;
+        this.permissions = permissions;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("dependencies")
     public Optional<Map<String, Optional<String>>> getDependencies() {
         return dependencies;
+    }
+
+    @JsonProperty("warm_concurrency")
+    public Optional<Integer> getWarmConcurrency() {
+        return warmConcurrency;
+    }
+
+    @JsonProperty("permissions")
+    public Optional<List<String>> getPermissions() {
+        return permissions;
     }
 
     @java.lang.Override
@@ -47,12 +67,14 @@ public final class RuntimeOptions {
     }
 
     private boolean equalTo(RuntimeOptions other) {
-        return dependencies.equals(other.dependencies);
+        return dependencies.equals(other.dependencies)
+                && warmConcurrency.equals(other.warmConcurrency)
+                && permissions.equals(other.permissions);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.dependencies);
+        return Objects.hash(this.dependencies, this.warmConcurrency, this.permissions);
     }
 
     @java.lang.Override
@@ -68,6 +90,10 @@ public final class RuntimeOptions {
     public static final class Builder {
         private Optional<Map<String, Optional<String>>> dependencies = Optional.empty();
 
+        private Optional<Integer> warmConcurrency = Optional.empty();
+
+        private Optional<List<String>> permissions = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -75,6 +101,8 @@ public final class RuntimeOptions {
 
         public Builder from(RuntimeOptions other) {
             dependencies(other.getDependencies());
+            warmConcurrency(other.getWarmConcurrency());
+            permissions(other.getPermissions());
             return this;
         }
 
@@ -89,8 +117,30 @@ public final class RuntimeOptions {
             return this;
         }
 
+        @JsonSetter(value = "warm_concurrency", nulls = Nulls.SKIP)
+        public Builder warmConcurrency(Optional<Integer> warmConcurrency) {
+            this.warmConcurrency = warmConcurrency;
+            return this;
+        }
+
+        public Builder warmConcurrency(Integer warmConcurrency) {
+            this.warmConcurrency = Optional.ofNullable(warmConcurrency);
+            return this;
+        }
+
+        @JsonSetter(value = "permissions", nulls = Nulls.SKIP)
+        public Builder permissions(Optional<List<String>> permissions) {
+            this.permissions = permissions;
+            return this;
+        }
+
+        public Builder permissions(List<String> permissions) {
+            this.permissions = Optional.ofNullable(permissions);
+            return this;
+        }
+
         public RuntimeOptions build() {
-            return new RuntimeOptions(dependencies, additionalProperties);
+            return new RuntimeOptions(dependencies, warmConcurrency, permissions, additionalProperties);
         }
     }
 }
