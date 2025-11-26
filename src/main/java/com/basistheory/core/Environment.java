@@ -6,6 +6,10 @@ package com.basistheory.core;
 public final class Environment {
     public static final Environment DEFAULT = new Environment("https://api.basistheory.com");
 
+    public static final Environment PRODUCTION = new Environment("https://api.basistheory.com");
+
+    public static final Environment TEST = new Environment("https://api.test.basistheory.com");
+
     private final String url;
 
     private Environment(String url) {
