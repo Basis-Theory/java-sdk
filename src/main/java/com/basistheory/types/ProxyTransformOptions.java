@@ -32,6 +32,8 @@ public final class ProxyTransformOptions {
 
     private final Optional<Map<String, Optional<String>>> dependencies;
 
+    private final Optional<Integer> warmConcurrency;
+
     private final Map<String, Object> additionalProperties;
 
     private ProxyTransformOptions(
@@ -41,6 +43,7 @@ public final class ProxyTransformOptions {
             Optional<String> location,
             Optional<String> runtime,
             Optional<Map<String, Optional<String>>> dependencies,
+            Optional<Integer> warmConcurrency,
             Map<String, Object> additionalProperties) {
         this.token = token;
         this.identifier = identifier;
@@ -48,6 +51,7 @@ public final class ProxyTransformOptions {
         this.location = location;
         this.runtime = runtime;
         this.dependencies = dependencies;
+        this.warmConcurrency = warmConcurrency;
         this.additionalProperties = additionalProperties;
     }
 
@@ -81,6 +85,11 @@ public final class ProxyTransformOptions {
         return dependencies;
     }
 
+    @JsonProperty("warm_concurrency")
+    public Optional<Integer> getWarmConcurrency() {
+        return warmConcurrency;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -98,12 +107,20 @@ public final class ProxyTransformOptions {
                 && value.equals(other.value)
                 && location.equals(other.location)
                 && runtime.equals(other.runtime)
-                && dependencies.equals(other.dependencies);
+                && dependencies.equals(other.dependencies)
+                && warmConcurrency.equals(other.warmConcurrency);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.token, this.identifier, this.value, this.location, this.runtime, this.dependencies);
+        return Objects.hash(
+                this.token,
+                this.identifier,
+                this.value,
+                this.location,
+                this.runtime,
+                this.dependencies,
+                this.warmConcurrency);
     }
 
     @java.lang.Override
@@ -129,6 +146,8 @@ public final class ProxyTransformOptions {
 
         private Optional<Map<String, Optional<String>>> dependencies = Optional.empty();
 
+        private Optional<Integer> warmConcurrency = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -141,6 +160,7 @@ public final class ProxyTransformOptions {
             location(other.getLocation());
             runtime(other.getRuntime());
             dependencies(other.getDependencies());
+            warmConcurrency(other.getWarmConcurrency());
             return this;
         }
 
@@ -210,9 +230,20 @@ public final class ProxyTransformOptions {
             return this;
         }
 
+        @JsonSetter(value = "warm_concurrency", nulls = Nulls.SKIP)
+        public Builder warmConcurrency(Optional<Integer> warmConcurrency) {
+            this.warmConcurrency = warmConcurrency;
+            return this;
+        }
+
+        public Builder warmConcurrency(Integer warmConcurrency) {
+            this.warmConcurrency = Optional.ofNullable(warmConcurrency);
+            return this;
+        }
+
         public ProxyTransformOptions build() {
             return new ProxyTransformOptions(
-                    token, identifier, value, location, runtime, dependencies, additionalProperties);
+                    token, identifier, value, location, runtime, dependencies, warmConcurrency, additionalProperties);
         }
     }
 }

@@ -5,6 +5,20 @@
 
 The BasisTheory Java library provides convenient access to the BasisTheory APIs from Java.
 
+## Table of Contents
+
+- [Documentation](#documentation)
+- [Usage](#usage)
+- [Environments](#environments)
+- [Base Url](#base-url)
+- [Exception Handling](#exception-handling)
+- [Advanced](#advanced)
+  - [Custom Client](#custom-client)
+  - [Retries](#retries)
+  - [Timeouts](#timeouts)
+- [Contributing](#contributing)
+- [Installation](#installation)
+
 ## Documentation
 
 API reference documentation is available [here](https://api.basistheory.com).
@@ -40,7 +54,7 @@ import com.basistheory.core.Environment;
 
 BasisTheoryApiClient client = BasisTheoryApiClient
     .builder()
-    .environment(Environment.Default)
+    .environment(Environment.Production)
     .build();
 ```
 
