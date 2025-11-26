@@ -771,6 +771,14 @@ client.googlePay().create(
     
 </dd>
 </dl>
+
+<dl>
+<dd>
+
+**merchantRegistrationId:** `Optional<String>` 
+    
+</dd>
+</dl>
 </dd>
 </dl>
 
@@ -4085,7 +4093,7 @@ client.accountUpdater().realTime().invoke(
 </details>
 
 ## ApplePay Merchant
-<details><summary><code>client.applePay.merchant.get(id) -> ApplePayToken</code></summary>
+<details><summary><code>client.applePay.merchant.get(id) -> ApplePayMerchant</code></summary>
 <dl>
 <dd>
 
@@ -4430,6 +4438,188 @@ client.applePay().session().create(
 </dl>
 </details>
 
+## ApplePay Merchant Certificates
+<details><summary><code>client.applePay.merchant.certificates.get(merchantId, id) -> ApplePayMerchantCertificates</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.applePay().merchant().certificates().get("merchantId", "id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**merchantId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**id:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.applePay.merchant.certificates.delete(merchantId, id)</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.applePay().merchant().certificates().delete("merchantId", "id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**merchantId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**id:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.applePay.merchant.certificates.create(merchantId, request) -> ApplePayMerchantCertificates</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.applePay().merchant().certificates().create(
+    "merchantId",
+    ApplePayMerchantCertificatesRegisterRequest
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**merchantId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**merchantCertificateData:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**merchantCertificatePassword:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**paymentProcessorCertificateData:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**paymentProcessorCertificatePassword:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**domain:** `Optional<String>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Documents Data
 <details><summary><code>client.documents.data.get(documentId) -> InputStream</code></summary>
 <dl>
@@ -4460,6 +4650,289 @@ client.documents().data().get("documentId");
 <dd>
 
 **documentId:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## GooglePay Merchant
+<details><summary><code>client.googlePay.merchant.get(id) -> GooglePayMerchant</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.googlePay().merchant().get("id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.googlePay.merchant.delete(id)</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.googlePay().merchant().delete("id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.googlePay.merchant.create(request) -> GooglePayMerchant</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.googlePay().merchant().create(
+    GooglePayMerchantRegisterRequest
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**merchantIdentifier:** `Optional<String>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## GooglePay Merchant Certificates
+<details><summary><code>client.googlePay.merchant.certificates.get(merchantId, id) -> GooglePayMerchantCertificates</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.googlePay().merchant().certificates().get("merchantId", "id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**merchantId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**id:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.googlePay.merchant.certificates.delete(merchantId, id)</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.googlePay().merchant().certificates().delete("merchantId", "id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**merchantId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**id:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.googlePay.merchant.certificates.create(merchantId, request) -> GooglePayMerchantCertificates</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.googlePay().merchant().certificates().create(
+    "merchantId",
+    GooglePayMerchantCertificatesRegisterRequest
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**merchantId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**merchantCertificateData:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**merchantCertificatePassword:** `Optional<String>` 
     
 </dd>
 </dl>
