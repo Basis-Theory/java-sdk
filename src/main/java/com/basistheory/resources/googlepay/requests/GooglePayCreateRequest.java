@@ -25,14 +25,18 @@ public final class GooglePayCreateRequest {
 
     private final Optional<GooglePayMethodToken> googlePaymentData;
 
+    private final Optional<String> merchantRegistrationId;
+
     private final Map<String, Object> additionalProperties;
 
     private GooglePayCreateRequest(
             Optional<String> expiresAt,
             Optional<GooglePayMethodToken> googlePaymentData,
+            Optional<String> merchantRegistrationId,
             Map<String, Object> additionalProperties) {
         this.expiresAt = expiresAt;
         this.googlePaymentData = googlePaymentData;
+        this.merchantRegistrationId = merchantRegistrationId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -44,6 +48,11 @@ public final class GooglePayCreateRequest {
     @JsonProperty("google_payment_data")
     public Optional<GooglePayMethodToken> getGooglePaymentData() {
         return googlePaymentData;
+    }
+
+    @JsonProperty("merchant_registration_id")
+    public Optional<String> getMerchantRegistrationId() {
+        return merchantRegistrationId;
     }
 
     @java.lang.Override
@@ -58,12 +67,14 @@ public final class GooglePayCreateRequest {
     }
 
     private boolean equalTo(GooglePayCreateRequest other) {
-        return expiresAt.equals(other.expiresAt) && googlePaymentData.equals(other.googlePaymentData);
+        return expiresAt.equals(other.expiresAt)
+                && googlePaymentData.equals(other.googlePaymentData)
+                && merchantRegistrationId.equals(other.merchantRegistrationId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.expiresAt, this.googlePaymentData);
+        return Objects.hash(this.expiresAt, this.googlePaymentData, this.merchantRegistrationId);
     }
 
     @java.lang.Override
@@ -81,6 +92,8 @@ public final class GooglePayCreateRequest {
 
         private Optional<GooglePayMethodToken> googlePaymentData = Optional.empty();
 
+        private Optional<String> merchantRegistrationId = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -89,6 +102,7 @@ public final class GooglePayCreateRequest {
         public Builder from(GooglePayCreateRequest other) {
             expiresAt(other.getExpiresAt());
             googlePaymentData(other.getGooglePaymentData());
+            merchantRegistrationId(other.getMerchantRegistrationId());
             return this;
         }
 
@@ -114,8 +128,20 @@ public final class GooglePayCreateRequest {
             return this;
         }
 
+        @JsonSetter(value = "merchant_registration_id", nulls = Nulls.SKIP)
+        public Builder merchantRegistrationId(Optional<String> merchantRegistrationId) {
+            this.merchantRegistrationId = merchantRegistrationId;
+            return this;
+        }
+
+        public Builder merchantRegistrationId(String merchantRegistrationId) {
+            this.merchantRegistrationId = Optional.ofNullable(merchantRegistrationId);
+            return this;
+        }
+
         public GooglePayCreateRequest build() {
-            return new GooglePayCreateRequest(expiresAt, googlePaymentData, additionalProperties);
+            return new GooglePayCreateRequest(
+                    expiresAt, googlePaymentData, merchantRegistrationId, additionalProperties);
         }
     }
 }

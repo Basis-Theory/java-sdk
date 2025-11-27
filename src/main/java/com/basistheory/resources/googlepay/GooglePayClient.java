@@ -5,18 +5,24 @@ package com.basistheory.resources.googlepay;
 
 import com.basistheory.core.ClientOptions;
 import com.basistheory.core.RequestOptions;
+import com.basistheory.core.Suppliers;
+import com.basistheory.resources.googlepay.merchant.MerchantClient;
 import com.basistheory.resources.googlepay.requests.GooglePayCreateRequest;
 import com.basistheory.types.GooglePayCreateResponse;
 import com.basistheory.types.GooglePayToken;
+import java.util.function.Supplier;
 
 public class GooglePayClient {
     protected final ClientOptions clientOptions;
 
     private final RawGooglePayClient rawClient;
 
+    protected final Supplier<MerchantClient> merchantClient;
+
     public GooglePayClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
         this.rawClient = new RawGooglePayClient(clientOptions);
+        this.merchantClient = Suppliers.memoize(() -> new MerchantClient(clientOptions));
     }
 
     /**
@@ -52,5 +58,9 @@ public class GooglePayClient {
 
     public String delete(String id, RequestOptions requestOptions) {
         return this.rawClient.delete(id, requestOptions).body();
+    }
+
+    public MerchantClient merchant() {
+        return this.merchantClient.get();
     }
 }
