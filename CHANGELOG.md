@@ -1,3 +1,11 @@
+## [4.1.0](https://github.com/Basis-Theory/java-sdk/compare/4.0.0...4.1.0) (2025-12-02)
+
+
+### Features
+
+* supporting new environments ([c89d349](https://github.com/Basis-Theory/java-sdk/commit/c89d34972afc037871ca2dd7ada8845efa69b9f5))
+
+
 ## [4.0.0](https://github.com/Basis-Theory/java-sdk/compare/3.1.0...4.0.0) (2025-10-30)
 
 
