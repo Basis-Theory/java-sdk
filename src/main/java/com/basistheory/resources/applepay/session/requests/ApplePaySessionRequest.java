@@ -26,16 +26,20 @@ public final class ApplePaySessionRequest {
 
     private final Optional<String> domain;
 
+    private final Optional<String> merchantRegistrationId;
+
     private final Map<String, Object> additionalProperties;
 
     private ApplePaySessionRequest(
             Optional<String> validationUrl,
             Optional<String> displayName,
             Optional<String> domain,
+            Optional<String> merchantRegistrationId,
             Map<String, Object> additionalProperties) {
         this.validationUrl = validationUrl;
         this.displayName = displayName;
         this.domain = domain;
+        this.merchantRegistrationId = merchantRegistrationId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -54,6 +58,11 @@ public final class ApplePaySessionRequest {
         return domain;
     }
 
+    @JsonProperty("merchant_registration_id")
+    public Optional<String> getMerchantRegistrationId() {
+        return merchantRegistrationId;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -68,12 +77,13 @@ public final class ApplePaySessionRequest {
     private boolean equalTo(ApplePaySessionRequest other) {
         return validationUrl.equals(other.validationUrl)
                 && displayName.equals(other.displayName)
-                && domain.equals(other.domain);
+                && domain.equals(other.domain)
+                && merchantRegistrationId.equals(other.merchantRegistrationId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.validationUrl, this.displayName, this.domain);
+        return Objects.hash(this.validationUrl, this.displayName, this.domain, this.merchantRegistrationId);
     }
 
     @java.lang.Override
@@ -93,6 +103,8 @@ public final class ApplePaySessionRequest {
 
         private Optional<String> domain = Optional.empty();
 
+        private Optional<String> merchantRegistrationId = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -102,6 +114,7 @@ public final class ApplePaySessionRequest {
             validationUrl(other.getValidationUrl());
             displayName(other.getDisplayName());
             domain(other.getDomain());
+            merchantRegistrationId(other.getMerchantRegistrationId());
             return this;
         }
 
@@ -138,8 +151,20 @@ public final class ApplePaySessionRequest {
             return this;
         }
 
+        @JsonSetter(value = "merchant_registration_id", nulls = Nulls.SKIP)
+        public Builder merchantRegistrationId(Optional<String> merchantRegistrationId) {
+            this.merchantRegistrationId = merchantRegistrationId;
+            return this;
+        }
+
+        public Builder merchantRegistrationId(String merchantRegistrationId) {
+            this.merchantRegistrationId = Optional.ofNullable(merchantRegistrationId);
+            return this;
+        }
+
         public ApplePaySessionRequest build() {
-            return new ApplePaySessionRequest(validationUrl, displayName, domain, additionalProperties);
+            return new ApplePaySessionRequest(
+                    validationUrl, displayName, domain, merchantRegistrationId, additionalProperties);
         }
     }
 }

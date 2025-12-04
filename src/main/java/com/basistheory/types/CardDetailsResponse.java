@@ -29,6 +29,8 @@ public final class CardDetailsResponse {
 
     private final Optional<CardIssuerDetails> issuer;
 
+    private final Optional<List<CardBinRange>> binRange;
+
     private final Optional<List<AdditionalCardDetail>> additional;
 
     private final Map<String, Object> additionalProperties;
@@ -38,12 +40,14 @@ public final class CardDetailsResponse {
             Optional<String> funding,
             Optional<String> segment,
             Optional<CardIssuerDetails> issuer,
+            Optional<List<CardBinRange>> binRange,
             Optional<List<AdditionalCardDetail>> additional,
             Map<String, Object> additionalProperties) {
         this.brand = brand;
         this.funding = funding;
         this.segment = segment;
         this.issuer = issuer;
+        this.binRange = binRange;
         this.additional = additional;
         this.additionalProperties = additionalProperties;
     }
@@ -68,6 +72,11 @@ public final class CardDetailsResponse {
         return issuer;
     }
 
+    @JsonProperty("binRange")
+    public Optional<List<CardBinRange>> getBinRange() {
+        return binRange;
+    }
+
     @JsonProperty("additional")
     public Optional<List<AdditionalCardDetail>> getAdditional() {
         return additional;
@@ -89,12 +98,13 @@ public final class CardDetailsResponse {
                 && funding.equals(other.funding)
                 && segment.equals(other.segment)
                 && issuer.equals(other.issuer)
+                && binRange.equals(other.binRange)
                 && additional.equals(other.additional);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.brand, this.funding, this.segment, this.issuer, this.additional);
+        return Objects.hash(this.brand, this.funding, this.segment, this.issuer, this.binRange, this.additional);
     }
 
     @java.lang.Override
@@ -116,6 +126,8 @@ public final class CardDetailsResponse {
 
         private Optional<CardIssuerDetails> issuer = Optional.empty();
 
+        private Optional<List<CardBinRange>> binRange = Optional.empty();
+
         private Optional<List<AdditionalCardDetail>> additional = Optional.empty();
 
         @JsonAnySetter
@@ -128,6 +140,7 @@ public final class CardDetailsResponse {
             funding(other.getFunding());
             segment(other.getSegment());
             issuer(other.getIssuer());
+            binRange(other.getBinRange());
             additional(other.getAdditional());
             return this;
         }
@@ -176,6 +189,17 @@ public final class CardDetailsResponse {
             return this;
         }
 
+        @JsonSetter(value = "binRange", nulls = Nulls.SKIP)
+        public Builder binRange(Optional<List<CardBinRange>> binRange) {
+            this.binRange = binRange;
+            return this;
+        }
+
+        public Builder binRange(List<CardBinRange> binRange) {
+            this.binRange = Optional.ofNullable(binRange);
+            return this;
+        }
+
         @JsonSetter(value = "additional", nulls = Nulls.SKIP)
         public Builder additional(Optional<List<AdditionalCardDetail>> additional) {
             this.additional = additional;
@@ -188,7 +212,7 @@ public final class CardDetailsResponse {
         }
 
         public CardDetailsResponse build() {
-            return new CardDetailsResponse(brand, funding, segment, issuer, additional, additionalProperties);
+            return new CardDetailsResponse(brand, funding, segment, issuer, binRange, additional, additionalProperties);
         }
     }
 }
