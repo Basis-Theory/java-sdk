@@ -25,14 +25,18 @@ public final class ApplePayCreateRequest {
 
     private final Optional<ApplePayMethodToken> applePaymentData;
 
+    private final Optional<String> merchantRegistrationId;
+
     private final Map<String, Object> additionalProperties;
 
     private ApplePayCreateRequest(
             Optional<String> expiresAt,
             Optional<ApplePayMethodToken> applePaymentData,
+            Optional<String> merchantRegistrationId,
             Map<String, Object> additionalProperties) {
         this.expiresAt = expiresAt;
         this.applePaymentData = applePaymentData;
+        this.merchantRegistrationId = merchantRegistrationId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -44,6 +48,11 @@ public final class ApplePayCreateRequest {
     @JsonProperty("apple_payment_data")
     public Optional<ApplePayMethodToken> getApplePaymentData() {
         return applePaymentData;
+    }
+
+    @JsonProperty("merchant_registration_id")
+    public Optional<String> getMerchantRegistrationId() {
+        return merchantRegistrationId;
     }
 
     @java.lang.Override
@@ -58,12 +67,14 @@ public final class ApplePayCreateRequest {
     }
 
     private boolean equalTo(ApplePayCreateRequest other) {
-        return expiresAt.equals(other.expiresAt) && applePaymentData.equals(other.applePaymentData);
+        return expiresAt.equals(other.expiresAt)
+                && applePaymentData.equals(other.applePaymentData)
+                && merchantRegistrationId.equals(other.merchantRegistrationId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.expiresAt, this.applePaymentData);
+        return Objects.hash(this.expiresAt, this.applePaymentData, this.merchantRegistrationId);
     }
 
     @java.lang.Override
@@ -81,6 +92,8 @@ public final class ApplePayCreateRequest {
 
         private Optional<ApplePayMethodToken> applePaymentData = Optional.empty();
 
+        private Optional<String> merchantRegistrationId = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -89,6 +102,7 @@ public final class ApplePayCreateRequest {
         public Builder from(ApplePayCreateRequest other) {
             expiresAt(other.getExpiresAt());
             applePaymentData(other.getApplePaymentData());
+            merchantRegistrationId(other.getMerchantRegistrationId());
             return this;
         }
 
@@ -114,8 +128,19 @@ public final class ApplePayCreateRequest {
             return this;
         }
 
+        @JsonSetter(value = "merchant_registration_id", nulls = Nulls.SKIP)
+        public Builder merchantRegistrationId(Optional<String> merchantRegistrationId) {
+            this.merchantRegistrationId = merchantRegistrationId;
+            return this;
+        }
+
+        public Builder merchantRegistrationId(String merchantRegistrationId) {
+            this.merchantRegistrationId = Optional.ofNullable(merchantRegistrationId);
+            return this;
+        }
+
         public ApplePayCreateRequest build() {
-            return new ApplePayCreateRequest(expiresAt, applePaymentData, additionalProperties);
+            return new ApplePayCreateRequest(expiresAt, applePaymentData, merchantRegistrationId, additionalProperties);
         }
     }
 }

@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -28,6 +29,8 @@ public final class AdditionalCardDetail {
 
     private final Optional<CardIssuerDetails> issuer;
 
+    private final Optional<List<CardBinRange>> binRange;
+
     private final Map<String, Object> additionalProperties;
 
     private AdditionalCardDetail(
@@ -35,11 +38,13 @@ public final class AdditionalCardDetail {
             Optional<String> funding,
             Optional<String> segment,
             Optional<CardIssuerDetails> issuer,
+            Optional<List<CardBinRange>> binRange,
             Map<String, Object> additionalProperties) {
         this.brand = brand;
         this.funding = funding;
         this.segment = segment;
         this.issuer = issuer;
+        this.binRange = binRange;
         this.additionalProperties = additionalProperties;
     }
 
@@ -63,6 +68,11 @@ public final class AdditionalCardDetail {
         return issuer;
     }
 
+    @JsonProperty("binRange")
+    public Optional<List<CardBinRange>> getBinRange() {
+        return binRange;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -78,12 +88,13 @@ public final class AdditionalCardDetail {
         return brand.equals(other.brand)
                 && funding.equals(other.funding)
                 && segment.equals(other.segment)
-                && issuer.equals(other.issuer);
+                && issuer.equals(other.issuer)
+                && binRange.equals(other.binRange);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.brand, this.funding, this.segment, this.issuer);
+        return Objects.hash(this.brand, this.funding, this.segment, this.issuer, this.binRange);
     }
 
     @java.lang.Override
@@ -105,6 +116,8 @@ public final class AdditionalCardDetail {
 
         private Optional<CardIssuerDetails> issuer = Optional.empty();
 
+        private Optional<List<CardBinRange>> binRange = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -115,6 +128,7 @@ public final class AdditionalCardDetail {
             funding(other.getFunding());
             segment(other.getSegment());
             issuer(other.getIssuer());
+            binRange(other.getBinRange());
             return this;
         }
 
@@ -162,8 +176,19 @@ public final class AdditionalCardDetail {
             return this;
         }
 
+        @JsonSetter(value = "binRange", nulls = Nulls.SKIP)
+        public Builder binRange(Optional<List<CardBinRange>> binRange) {
+            this.binRange = binRange;
+            return this;
+        }
+
+        public Builder binRange(List<CardBinRange> binRange) {
+            this.binRange = Optional.ofNullable(binRange);
+            return this;
+        }
+
         public AdditionalCardDetail build() {
-            return new AdditionalCardDetail(brand, funding, segment, issuer, additionalProperties);
+            return new AdditionalCardDetail(brand, funding, segment, issuer, binRange, additionalProperties);
         }
     }
 }

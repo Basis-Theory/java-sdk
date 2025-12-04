@@ -638,6 +638,14 @@ client.applePay().create(
     
 </dd>
 </dl>
+
+<dl>
+<dd>
+
+**merchantRegistrationId:** `Optional<String>` 
+    
+</dd>
+</dl>
 </dd>
 </dl>
 
@@ -4427,6 +4435,14 @@ client.applePay().session().create(
 <dd>
 
 **domain:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**merchantRegistrationId:** `Optional<String>` 
     
 </dd>
 </dl>
