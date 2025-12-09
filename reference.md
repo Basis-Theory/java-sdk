@@ -2822,15 +2822,7 @@ client.reactors().create(
 <dl>
 <dd>
 
-**runtime:** `Optional<String>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**options:** `Optional<RuntimeOptions>` 
+**runtime:** `Optional<Runtime>` 
     
 </dd>
 </dl>
@@ -2957,15 +2949,7 @@ client.reactors().update(
 <dl>
 <dd>
 
-**runtime:** `Optional<String>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**options:** `Optional<RuntimeOptions>` 
+**runtime:** `Optional<Runtime>` 
     
 </dd>
 </dl>
@@ -3090,15 +3074,7 @@ client.reactors().patch(
 <dl>
 <dd>
 
-**runtime:** `Optional<String>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**options:** `Optional<RuntimeOptions>` 
+**runtime:** `Optional<Runtime>` 
     
 </dd>
 </dl>
