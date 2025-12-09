@@ -1,3 +1,11 @@
+## [4.2.0](https://github.com/Basis-Theory/java-sdk/compare/4.1.0...4.2.0) (2025-12-09)
+
+
+### Features
+
+* Change Reactor Runtime to object ([350d9c9](https://github.com/Basis-Theory/java-sdk/commit/350d9c935ac9a993c736a88cc724b12fabd9c1a2))
+
+
 ## [4.1.0](https://github.com/Basis-Theory/java-sdk/compare/4.0.0...4.1.0) (2025-12-02)
 
 
