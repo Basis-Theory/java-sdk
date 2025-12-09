@@ -45,9 +45,7 @@ public final class Reactor {
 
     private final Optional<Map<String, Optional<String>>> configuration;
 
-    private final Optional<String> runtime;
-
-    private final Optional<RuntimeOptions> options;
+    private final Optional<Runtime> runtime;
 
     private final Map<String, Object> additionalProperties;
 
@@ -64,8 +62,7 @@ public final class Reactor {
             Optional<String> modifiedBy,
             Optional<OffsetDateTime> modifiedAt,
             Optional<Map<String, Optional<String>>> configuration,
-            Optional<String> runtime,
-            Optional<RuntimeOptions> options,
+            Optional<Runtime> runtime,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.tenantId = tenantId;
@@ -80,7 +77,6 @@ public final class Reactor {
         this.modifiedAt = modifiedAt;
         this.configuration = configuration;
         this.runtime = runtime;
-        this.options = options;
         this.additionalProperties = additionalProperties;
     }
 
@@ -145,13 +141,8 @@ public final class Reactor {
     }
 
     @JsonProperty("runtime")
-    public Optional<String> getRuntime() {
+    public Optional<Runtime> getRuntime() {
         return runtime;
-    }
-
-    @JsonProperty("options")
-    public Optional<RuntimeOptions> getOptions() {
-        return options;
     }
 
     @java.lang.Override
@@ -178,8 +169,7 @@ public final class Reactor {
                 && modifiedBy.equals(other.modifiedBy)
                 && modifiedAt.equals(other.modifiedAt)
                 && configuration.equals(other.configuration)
-                && runtime.equals(other.runtime)
-                && options.equals(other.options);
+                && runtime.equals(other.runtime);
     }
 
     @java.lang.Override
@@ -197,8 +187,7 @@ public final class Reactor {
                 this.modifiedBy,
                 this.modifiedAt,
                 this.configuration,
-                this.runtime,
-                this.options);
+                this.runtime);
     }
 
     @java.lang.Override
@@ -236,9 +225,7 @@ public final class Reactor {
 
         private Optional<Map<String, Optional<String>>> configuration = Optional.empty();
 
-        private Optional<String> runtime = Optional.empty();
-
-        private Optional<RuntimeOptions> options = Optional.empty();
+        private Optional<Runtime> runtime = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -259,7 +246,6 @@ public final class Reactor {
             modifiedAt(other.getModifiedAt());
             configuration(other.getConfiguration());
             runtime(other.getRuntime());
-            options(other.getOptions());
             return this;
         }
 
@@ -396,24 +382,13 @@ public final class Reactor {
         }
 
         @JsonSetter(value = "runtime", nulls = Nulls.SKIP)
-        public Builder runtime(Optional<String> runtime) {
+        public Builder runtime(Optional<Runtime> runtime) {
             this.runtime = runtime;
             return this;
         }
 
-        public Builder runtime(String runtime) {
+        public Builder runtime(Runtime runtime) {
             this.runtime = Optional.ofNullable(runtime);
-            return this;
-        }
-
-        @JsonSetter(value = "options", nulls = Nulls.SKIP)
-        public Builder options(Optional<RuntimeOptions> options) {
-            this.options = options;
-            return this;
-        }
-
-        public Builder options(RuntimeOptions options) {
-            this.options = Optional.ofNullable(options);
             return this;
         }
 
@@ -432,7 +407,6 @@ public final class Reactor {
                     modifiedAt,
                     configuration,
                     runtime,
-                    options,
                     additionalProperties);
         }
     }

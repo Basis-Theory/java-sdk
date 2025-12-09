@@ -19,8 +19,10 @@ import java.util.Objects;
 import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = RuntimeOptions.Builder.class)
-public final class RuntimeOptions {
+@JsonDeserialize(builder = Runtime.Builder.class)
+public final class Runtime {
+    private final Optional<String> image;
+
     private final Optional<Map<String, Optional<String>>> dependencies;
 
     private final Optional<Integer> warmConcurrency;
@@ -33,19 +35,26 @@ public final class RuntimeOptions {
 
     private final Map<String, Object> additionalProperties;
 
-    private RuntimeOptions(
+    private Runtime(
+            Optional<String> image,
             Optional<Map<String, Optional<String>>> dependencies,
             Optional<Integer> warmConcurrency,
             Optional<Integer> timeout,
             Optional<String> resources,
             Optional<List<String>> permissions,
             Map<String, Object> additionalProperties) {
+        this.image = image;
         this.dependencies = dependencies;
         this.warmConcurrency = warmConcurrency;
         this.timeout = timeout;
         this.resources = resources;
         this.permissions = permissions;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("image")
+    public Optional<String> getImage() {
+        return image;
     }
 
     @JsonProperty("dependencies")
@@ -76,7 +85,7 @@ public final class RuntimeOptions {
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof RuntimeOptions && equalTo((RuntimeOptions) other);
+        return other instanceof Runtime && equalTo((Runtime) other);
     }
 
     @JsonAnyGetter
@@ -84,8 +93,9 @@ public final class RuntimeOptions {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(RuntimeOptions other) {
-        return dependencies.equals(other.dependencies)
+    private boolean equalTo(Runtime other) {
+        return image.equals(other.image)
+                && dependencies.equals(other.dependencies)
                 && warmConcurrency.equals(other.warmConcurrency)
                 && timeout.equals(other.timeout)
                 && resources.equals(other.resources)
@@ -94,7 +104,8 @@ public final class RuntimeOptions {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.dependencies, this.warmConcurrency, this.timeout, this.resources, this.permissions);
+        return Objects.hash(
+                this.image, this.dependencies, this.warmConcurrency, this.timeout, this.resources, this.permissions);
     }
 
     @java.lang.Override
@@ -108,6 +119,8 @@ public final class RuntimeOptions {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<String> image = Optional.empty();
+
         private Optional<Map<String, Optional<String>>> dependencies = Optional.empty();
 
         private Optional<Integer> warmConcurrency = Optional.empty();
@@ -123,12 +136,24 @@ public final class RuntimeOptions {
 
         private Builder() {}
 
-        public Builder from(RuntimeOptions other) {
+        public Builder from(Runtime other) {
+            image(other.getImage());
             dependencies(other.getDependencies());
             warmConcurrency(other.getWarmConcurrency());
             timeout(other.getTimeout());
             resources(other.getResources());
             permissions(other.getPermissions());
+            return this;
+        }
+
+        @JsonSetter(value = "image", nulls = Nulls.SKIP)
+        public Builder image(Optional<String> image) {
+            this.image = image;
+            return this;
+        }
+
+        public Builder image(String image) {
+            this.image = Optional.ofNullable(image);
             return this;
         }
 
@@ -187,9 +212,9 @@ public final class RuntimeOptions {
             return this;
         }
 
-        public RuntimeOptions build() {
-            return new RuntimeOptions(
-                    dependencies, warmConcurrency, timeout, resources, permissions, additionalProperties);
+        public Runtime build() {
+            return new Runtime(
+                    image, dependencies, warmConcurrency, timeout, resources, permissions, additionalProperties);
         }
     }
 }
