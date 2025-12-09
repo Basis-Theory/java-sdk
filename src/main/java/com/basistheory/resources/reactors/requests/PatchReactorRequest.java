@@ -5,7 +5,7 @@ package com.basistheory.resources.reactors.requests;
 
 import com.basistheory.core.ObjectMappers;
 import com.basistheory.types.Application;
-import com.basistheory.types.RuntimeOptions;
+import com.basistheory.types.Runtime;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -30,9 +30,7 @@ public final class PatchReactorRequest {
 
     private final Optional<Map<String, Optional<String>>> configuration;
 
-    private final Optional<String> runtime;
-
-    private final Optional<RuntimeOptions> options;
+    private final Optional<Runtime> runtime;
 
     private final Map<String, Object> additionalProperties;
 
@@ -41,15 +39,13 @@ public final class PatchReactorRequest {
             Optional<Application> application,
             Optional<String> code,
             Optional<Map<String, Optional<String>>> configuration,
-            Optional<String> runtime,
-            Optional<RuntimeOptions> options,
+            Optional<Runtime> runtime,
             Map<String, Object> additionalProperties) {
         this.name = name;
         this.application = application;
         this.code = code;
         this.configuration = configuration;
         this.runtime = runtime;
-        this.options = options;
         this.additionalProperties = additionalProperties;
     }
 
@@ -74,13 +70,8 @@ public final class PatchReactorRequest {
     }
 
     @JsonProperty("runtime")
-    public Optional<String> getRuntime() {
+    public Optional<Runtime> getRuntime() {
         return runtime;
-    }
-
-    @JsonProperty("options")
-    public Optional<RuntimeOptions> getOptions() {
-        return options;
     }
 
     @java.lang.Override
@@ -99,13 +90,12 @@ public final class PatchReactorRequest {
                 && application.equals(other.application)
                 && code.equals(other.code)
                 && configuration.equals(other.configuration)
-                && runtime.equals(other.runtime)
-                && options.equals(other.options);
+                && runtime.equals(other.runtime);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.name, this.application, this.code, this.configuration, this.runtime, this.options);
+        return Objects.hash(this.name, this.application, this.code, this.configuration, this.runtime);
     }
 
     @java.lang.Override
@@ -127,9 +117,7 @@ public final class PatchReactorRequest {
 
         private Optional<Map<String, Optional<String>>> configuration = Optional.empty();
 
-        private Optional<String> runtime = Optional.empty();
-
-        private Optional<RuntimeOptions> options = Optional.empty();
+        private Optional<Runtime> runtime = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -142,7 +130,6 @@ public final class PatchReactorRequest {
             code(other.getCode());
             configuration(other.getConfiguration());
             runtime(other.getRuntime());
-            options(other.getOptions());
             return this;
         }
 
@@ -191,30 +178,18 @@ public final class PatchReactorRequest {
         }
 
         @JsonSetter(value = "runtime", nulls = Nulls.SKIP)
-        public Builder runtime(Optional<String> runtime) {
+        public Builder runtime(Optional<Runtime> runtime) {
             this.runtime = runtime;
             return this;
         }
 
-        public Builder runtime(String runtime) {
+        public Builder runtime(Runtime runtime) {
             this.runtime = Optional.ofNullable(runtime);
             return this;
         }
 
-        @JsonSetter(value = "options", nulls = Nulls.SKIP)
-        public Builder options(Optional<RuntimeOptions> options) {
-            this.options = options;
-            return this;
-        }
-
-        public Builder options(RuntimeOptions options) {
-            this.options = Optional.ofNullable(options);
-            return this;
-        }
-
         public PatchReactorRequest build() {
-            return new PatchReactorRequest(
-                    name, application, code, configuration, runtime, options, additionalProperties);
+            return new PatchReactorRequest(name, application, code, configuration, runtime, additionalProperties);
         }
     }
 }

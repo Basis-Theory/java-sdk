@@ -13,7 +13,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -29,17 +28,7 @@ public final class ProxyTransformOptions {
 
     private final Optional<String> location;
 
-    private final Optional<String> runtime;
-
-    private final Optional<Map<String, Optional<String>>> dependencies;
-
-    private final Optional<List<String>> permissions;
-
-    private final Optional<Integer> warmConcurrency;
-
-    private final Optional<Integer> timeout;
-
-    private final Optional<String> resources;
+    private final Optional<Runtime> runtime;
 
     private final Map<String, Object> additionalProperties;
 
@@ -48,23 +37,13 @@ public final class ProxyTransformOptions {
             Optional<String> identifier,
             Optional<String> value,
             Optional<String> location,
-            Optional<String> runtime,
-            Optional<Map<String, Optional<String>>> dependencies,
-            Optional<List<String>> permissions,
-            Optional<Integer> warmConcurrency,
-            Optional<Integer> timeout,
-            Optional<String> resources,
+            Optional<Runtime> runtime,
             Map<String, Object> additionalProperties) {
         this.token = token;
         this.identifier = identifier;
         this.value = value;
         this.location = location;
         this.runtime = runtime;
-        this.dependencies = dependencies;
-        this.permissions = permissions;
-        this.warmConcurrency = warmConcurrency;
-        this.timeout = timeout;
-        this.resources = resources;
         this.additionalProperties = additionalProperties;
     }
 
@@ -89,33 +68,8 @@ public final class ProxyTransformOptions {
     }
 
     @JsonProperty("runtime")
-    public Optional<String> getRuntime() {
+    public Optional<Runtime> getRuntime() {
         return runtime;
-    }
-
-    @JsonProperty("dependencies")
-    public Optional<Map<String, Optional<String>>> getDependencies() {
-        return dependencies;
-    }
-
-    @JsonProperty("permissions")
-    public Optional<List<String>> getPermissions() {
-        return permissions;
-    }
-
-    @JsonProperty("warm_concurrency")
-    public Optional<Integer> getWarmConcurrency() {
-        return warmConcurrency;
-    }
-
-    @JsonProperty("timeout")
-    public Optional<Integer> getTimeout() {
-        return timeout;
-    }
-
-    @JsonProperty("resources")
-    public Optional<String> getResources() {
-        return resources;
     }
 
     @java.lang.Override
@@ -134,27 +88,12 @@ public final class ProxyTransformOptions {
                 && identifier.equals(other.identifier)
                 && value.equals(other.value)
                 && location.equals(other.location)
-                && runtime.equals(other.runtime)
-                && dependencies.equals(other.dependencies)
-                && permissions.equals(other.permissions)
-                && warmConcurrency.equals(other.warmConcurrency)
-                && timeout.equals(other.timeout)
-                && resources.equals(other.resources);
+                && runtime.equals(other.runtime);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(
-                this.token,
-                this.identifier,
-                this.value,
-                this.location,
-                this.runtime,
-                this.dependencies,
-                this.permissions,
-                this.warmConcurrency,
-                this.timeout,
-                this.resources);
+        return Objects.hash(this.token, this.identifier, this.value, this.location, this.runtime);
     }
 
     @java.lang.Override
@@ -176,17 +115,7 @@ public final class ProxyTransformOptions {
 
         private Optional<String> location = Optional.empty();
 
-        private Optional<String> runtime = Optional.empty();
-
-        private Optional<Map<String, Optional<String>>> dependencies = Optional.empty();
-
-        private Optional<List<String>> permissions = Optional.empty();
-
-        private Optional<Integer> warmConcurrency = Optional.empty();
-
-        private Optional<Integer> timeout = Optional.empty();
-
-        private Optional<String> resources = Optional.empty();
+        private Optional<Runtime> runtime = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -199,11 +128,6 @@ public final class ProxyTransformOptions {
             value(other.getValue());
             location(other.getLocation());
             runtime(other.getRuntime());
-            dependencies(other.getDependencies());
-            permissions(other.getPermissions());
-            warmConcurrency(other.getWarmConcurrency());
-            timeout(other.getTimeout());
-            resources(other.getResources());
             return this;
         }
 
@@ -252,84 +176,18 @@ public final class ProxyTransformOptions {
         }
 
         @JsonSetter(value = "runtime", nulls = Nulls.SKIP)
-        public Builder runtime(Optional<String> runtime) {
+        public Builder runtime(Optional<Runtime> runtime) {
             this.runtime = runtime;
             return this;
         }
 
-        public Builder runtime(String runtime) {
+        public Builder runtime(Runtime runtime) {
             this.runtime = Optional.ofNullable(runtime);
             return this;
         }
 
-        @JsonSetter(value = "dependencies", nulls = Nulls.SKIP)
-        public Builder dependencies(Optional<Map<String, Optional<String>>> dependencies) {
-            this.dependencies = dependencies;
-            return this;
-        }
-
-        public Builder dependencies(Map<String, Optional<String>> dependencies) {
-            this.dependencies = Optional.ofNullable(dependencies);
-            return this;
-        }
-
-        @JsonSetter(value = "permissions", nulls = Nulls.SKIP)
-        public Builder permissions(Optional<List<String>> permissions) {
-            this.permissions = permissions;
-            return this;
-        }
-
-        public Builder permissions(List<String> permissions) {
-            this.permissions = Optional.ofNullable(permissions);
-            return this;
-        }
-
-        @JsonSetter(value = "warm_concurrency", nulls = Nulls.SKIP)
-        public Builder warmConcurrency(Optional<Integer> warmConcurrency) {
-            this.warmConcurrency = warmConcurrency;
-            return this;
-        }
-
-        public Builder warmConcurrency(Integer warmConcurrency) {
-            this.warmConcurrency = Optional.ofNullable(warmConcurrency);
-            return this;
-        }
-
-        @JsonSetter(value = "timeout", nulls = Nulls.SKIP)
-        public Builder timeout(Optional<Integer> timeout) {
-            this.timeout = timeout;
-            return this;
-        }
-
-        public Builder timeout(Integer timeout) {
-            this.timeout = Optional.ofNullable(timeout);
-            return this;
-        }
-
-        @JsonSetter(value = "resources", nulls = Nulls.SKIP)
-        public Builder resources(Optional<String> resources) {
-            this.resources = resources;
-            return this;
-        }
-
-        public Builder resources(String resources) {
-            this.resources = Optional.ofNullable(resources);
-            return this;
-        }
-
         public ProxyTransformOptions build() {
-            return new ProxyTransformOptions(
-                    token,
-                    identifier,
-                    value,
-                    location,
-                    runtime,
-                    dependencies,
-                    permissions,
-                    warmConcurrency,
-                    timeout,
-                    resources,
-                    additionalProperties);
+            return new ProxyTransformOptions(token, identifier, value, location, runtime, additionalProperties);
         }
     }
 }
