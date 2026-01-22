@@ -22,7 +22,6 @@ import com.basistheory.resources.proxies.requests.PatchProxyRequest;
 import com.basistheory.resources.reactors.ReactorsClient;
 import com.basistheory.resources.reactors.requests.CreateReactorRequest;
 import com.basistheory.resources.reactors.requests.PatchReactorRequest;
-import com.basistheory.resources.reactors.requests.ReactRequest;
 import com.basistheory.resources.tenants.TenantsClient;
 import com.basistheory.resources.tokens.TokensClient;
 import com.basistheory.resources.tokens.requests.TokensListV2Request;
@@ -371,7 +370,9 @@ public final class TestClient {
             put("Key1", "Key1-" + UUID.randomUUID());
             put("Key2", "Key2-" + UUID.randomUUID());
         }};
-        ReactResponse react = reactorsClient.react(reactorId, ReactRequest.builder().args(expected).build());
+        Map<String, Object> request = new HashMap<>();
+        request.put("args", expected);
+        ReactResponse react = reactorsClient.react(reactorId, request);
         assertEquals(expected.get("Key1"), ((Map)react.getRaw().get()).get("Key1"));
         assertEquals(expected.get("Key2"), ((Map)react.getRaw().get()).get("Key2"));
     }
