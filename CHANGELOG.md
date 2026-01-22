@@ -1,3 +1,15 @@
+## [5.0.0](https://github.com/Basis-Theory/java-sdk/compare/4.2.0...5.0.0) (2026-01-22)
+
+
+### ⚠ BREAKING CHANGES
+
+* This version removes the existing Reactors Request objects for Reactors and Reactors Async, allowing the use of dynamic objects
+
+### Features
+
+* Updating Reactor Request objects ([c2a02b4](https://github.com/Basis-Theory/java-sdk/commit/c2a02b4c6113205f1254f916b0b98c5dbcaf45fa))
+
+
 ## [4.2.0](https://github.com/Basis-Theory/java-sdk/compare/4.1.0...4.2.0) (2025-12-09)
 
 
