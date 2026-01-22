@@ -10,8 +10,6 @@ import com.basistheory.core.Suppliers;
 import com.basistheory.core.pagination.SyncPagingIterable;
 import com.basistheory.resources.reactors.requests.CreateReactorRequest;
 import com.basistheory.resources.reactors.requests.PatchReactorRequest;
-import com.basistheory.resources.reactors.requests.ReactRequest;
-import com.basistheory.resources.reactors.requests.ReactRequestAsync;
 import com.basistheory.resources.reactors.requests.ReactorsListRequest;
 import com.basistheory.resources.reactors.requests.UpdateReactorRequest;
 import com.basistheory.resources.reactors.results.AsyncResultsClient;
@@ -100,28 +98,19 @@ public class AsyncReactorsClient {
         return this.rawClient.patch(id, request, requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<ReactResponse> react(String id) {
-        return this.rawClient.react(id).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<ReactResponse> react(String id, ReactRequest request) {
+    public CompletableFuture<ReactResponse> react(String id, Object request) {
         return this.rawClient.react(id, request).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<ReactResponse> react(String id, ReactRequest request, RequestOptions requestOptions) {
+    public CompletableFuture<ReactResponse> react(String id, Object request, RequestOptions requestOptions) {
         return this.rawClient.react(id, request, requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<AsyncReactResponse> reactAsync(String id) {
-        return this.rawClient.reactAsync(id).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<AsyncReactResponse> reactAsync(String id, ReactRequestAsync request) {
+    public CompletableFuture<AsyncReactResponse> reactAsync(String id, Object request) {
         return this.rawClient.reactAsync(id, request).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<AsyncReactResponse> reactAsync(
-            String id, ReactRequestAsync request, RequestOptions requestOptions) {
+    public CompletableFuture<AsyncReactResponse> reactAsync(String id, Object request, RequestOptions requestOptions) {
         return this.rawClient.reactAsync(id, request, requestOptions).thenApply(response -> response.body());
     }
 

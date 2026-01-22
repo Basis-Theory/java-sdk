@@ -20,8 +20,6 @@ import com.basistheory.errors.UnauthorizedError;
 import com.basistheory.errors.UnprocessableEntityError;
 import com.basistheory.resources.reactors.requests.CreateReactorRequest;
 import com.basistheory.resources.reactors.requests.PatchReactorRequest;
-import com.basistheory.resources.reactors.requests.ReactRequest;
-import com.basistheory.resources.reactors.requests.ReactRequestAsync;
 import com.basistheory.resources.reactors.requests.ReactorsListRequest;
 import com.basistheory.resources.reactors.requests.UpdateReactorRequest;
 import com.basistheory.types.AsyncReactResponse;
@@ -445,16 +443,11 @@ public class RawReactorsClient {
         }
     }
 
-    public BasisTheoryApiHttpResponse<ReactResponse> react(String id) {
-        return react(id, ReactRequest.builder().build());
-    }
-
-    public BasisTheoryApiHttpResponse<ReactResponse> react(String id, ReactRequest request) {
+    public BasisTheoryApiHttpResponse<ReactResponse> react(String id, Object request) {
         return react(id, request, null);
     }
 
-    public BasisTheoryApiHttpResponse<ReactResponse> react(
-            String id, ReactRequest request, RequestOptions requestOptions) {
+    public BasisTheoryApiHttpResponse<ReactResponse> react(String id, Object request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("reactors")
@@ -521,16 +514,12 @@ public class RawReactorsClient {
         }
     }
 
-    public BasisTheoryApiHttpResponse<AsyncReactResponse> reactAsync(String id) {
-        return reactAsync(id, ReactRequestAsync.builder().build());
-    }
-
-    public BasisTheoryApiHttpResponse<AsyncReactResponse> reactAsync(String id, ReactRequestAsync request) {
+    public BasisTheoryApiHttpResponse<AsyncReactResponse> reactAsync(String id, Object request) {
         return reactAsync(id, request, null);
     }
 
     public BasisTheoryApiHttpResponse<AsyncReactResponse> reactAsync(
-            String id, ReactRequestAsync request, RequestOptions requestOptions) {
+            String id, Object request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("reactors")

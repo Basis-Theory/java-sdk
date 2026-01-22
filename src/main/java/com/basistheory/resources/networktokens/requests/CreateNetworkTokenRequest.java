@@ -30,6 +30,8 @@ public final class CreateNetworkTokenRequest {
 
     private final Optional<CardholderInfo> cardholderInfo;
 
+    private final Optional<String> merchantId;
+
     private final Map<String, Object> additionalProperties;
 
     private CreateNetworkTokenRequest(
@@ -37,11 +39,13 @@ public final class CreateNetworkTokenRequest {
             Optional<String> tokenId,
             Optional<String> tokenIntentId,
             Optional<CardholderInfo> cardholderInfo,
+            Optional<String> merchantId,
             Map<String, Object> additionalProperties) {
         this.data = data;
         this.tokenId = tokenId;
         this.tokenIntentId = tokenIntentId;
         this.cardholderInfo = cardholderInfo;
+        this.merchantId = merchantId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -65,6 +69,11 @@ public final class CreateNetworkTokenRequest {
         return cardholderInfo;
     }
 
+    @JsonProperty("merchant_id")
+    public Optional<String> getMerchantId() {
+        return merchantId;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -80,12 +89,13 @@ public final class CreateNetworkTokenRequest {
         return data.equals(other.data)
                 && tokenId.equals(other.tokenId)
                 && tokenIntentId.equals(other.tokenIntentId)
-                && cardholderInfo.equals(other.cardholderInfo);
+                && cardholderInfo.equals(other.cardholderInfo)
+                && merchantId.equals(other.merchantId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.data, this.tokenId, this.tokenIntentId, this.cardholderInfo);
+        return Objects.hash(this.data, this.tokenId, this.tokenIntentId, this.cardholderInfo, this.merchantId);
     }
 
     @java.lang.Override
@@ -107,6 +117,8 @@ public final class CreateNetworkTokenRequest {
 
         private Optional<CardholderInfo> cardholderInfo = Optional.empty();
 
+        private Optional<String> merchantId = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -117,6 +129,7 @@ public final class CreateNetworkTokenRequest {
             tokenId(other.getTokenId());
             tokenIntentId(other.getTokenIntentId());
             cardholderInfo(other.getCardholderInfo());
+            merchantId(other.getMerchantId());
             return this;
         }
 
@@ -164,8 +177,20 @@ public final class CreateNetworkTokenRequest {
             return this;
         }
 
+        @JsonSetter(value = "merchant_id", nulls = Nulls.SKIP)
+        public Builder merchantId(Optional<String> merchantId) {
+            this.merchantId = merchantId;
+            return this;
+        }
+
+        public Builder merchantId(String merchantId) {
+            this.merchantId = Optional.ofNullable(merchantId);
+            return this;
+        }
+
         public CreateNetworkTokenRequest build() {
-            return new CreateNetworkTokenRequest(data, tokenId, tokenIntentId, cardholderInfo, additionalProperties);
+            return new CreateNetworkTokenRequest(
+                    data, tokenId, tokenIntentId, cardholderInfo, merchantId, additionalProperties);
         }
     }
 }

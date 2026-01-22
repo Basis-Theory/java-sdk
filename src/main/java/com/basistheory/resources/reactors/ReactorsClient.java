@@ -10,8 +10,6 @@ import com.basistheory.core.Suppliers;
 import com.basistheory.core.pagination.SyncPagingIterable;
 import com.basistheory.resources.reactors.requests.CreateReactorRequest;
 import com.basistheory.resources.reactors.requests.PatchReactorRequest;
-import com.basistheory.resources.reactors.requests.ReactRequest;
-import com.basistheory.resources.reactors.requests.ReactRequestAsync;
 import com.basistheory.resources.reactors.requests.ReactorsListRequest;
 import com.basistheory.resources.reactors.requests.UpdateReactorRequest;
 import com.basistheory.resources.reactors.results.ResultsClient;
@@ -96,27 +94,19 @@ public class ReactorsClient {
         this.rawClient.patch(id, request, requestOptions).body();
     }
 
-    public ReactResponse react(String id) {
-        return this.rawClient.react(id).body();
-    }
-
-    public ReactResponse react(String id, ReactRequest request) {
+    public ReactResponse react(String id, Object request) {
         return this.rawClient.react(id, request).body();
     }
 
-    public ReactResponse react(String id, ReactRequest request, RequestOptions requestOptions) {
+    public ReactResponse react(String id, Object request, RequestOptions requestOptions) {
         return this.rawClient.react(id, request, requestOptions).body();
     }
 
-    public AsyncReactResponse reactAsync(String id) {
-        return this.rawClient.reactAsync(id).body();
-    }
-
-    public AsyncReactResponse reactAsync(String id, ReactRequestAsync request) {
+    public AsyncReactResponse reactAsync(String id, Object request) {
         return this.rawClient.reactAsync(id, request).body();
     }
 
-    public AsyncReactResponse reactAsync(String id, ReactRequestAsync request, RequestOptions requestOptions) {
+    public AsyncReactResponse reactAsync(String id, Object request, RequestOptions requestOptions) {
         return this.rawClient.reactAsync(id, request, requestOptions).body();
     }
 

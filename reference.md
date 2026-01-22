@@ -330,7 +330,7 @@ client.applications().getByKey();
 </details>
 
 ## ApplicationKeys
-<details><summary><code>client.applicationKeys.list(id) -> List&lt;ApplicationKey&gt;</code></summary>
+<details><summary><code>client.applicationKeys.list(id) -> List&amp;lt;ApplicationKey&amp;gt;</code></summary>
 <dl>
 <dd>
 
@@ -528,7 +528,7 @@ client.applicationKeys().delete("id", "keyId");
 </details>
 
 ## ApplicationTemplates
-<details><summary><code>client.applicationTemplates.list() -> List&lt;ApplicationTemplate&gt;</code></summary>
+<details><summary><code>client.applicationTemplates.list() -> List&amp;lt;ApplicationTemplate&amp;gt;</code></summary>
 <dl>
 <dd>
 
@@ -1563,7 +1563,7 @@ client.enrichments().getcarddetails(
 </details>
 
 ## Keys
-<details><summary><code>client.keys.list() -> List&lt;ClientEncryptionKeyMetadataResponse&gt;</code></summary>
+<details><summary><code>client.keys.list() -> List&amp;lt;ClientEncryptionKeyMetadataResponse&amp;gt;</code></summary>
 <dl>
 <dd>
 
@@ -1805,7 +1805,7 @@ client.logs().list(
 </dl>
 </details>
 
-<details><summary><code>client.logs.getEntityTypes() -> List&lt;LogEntityType&gt;</code></summary>
+<details><summary><code>client.logs.getEntityTypes() -> List&amp;lt;LogEntityType&amp;gt;</code></summary>
 <dl>
 <dd>
 
@@ -1888,6 +1888,14 @@ client.networkTokens().create(
 <dd>
 
 **cardholderInfo:** `Optional<CardholderInfo>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**merchantId:** `Optional<String>` 
     
 </dd>
 </dl>
@@ -2100,7 +2108,7 @@ client.networkTokens().resume("id");
 </details>
 
 ## Permissions
-<details><summary><code>client.permissions.list() -> List&lt;Permission&gt;</code></summary>
+<details><summary><code>client.permissions.list() -> List&amp;lt;Permission&amp;gt;</code></summary>
 <dl>
 <dd>
 
@@ -3099,12 +3107,9 @@ client.reactors().patch(
 <dd>
 
 ```java
-client.reactors().react(
-    "id",
-    ReactRequest
-        .builder()
-        .build()
-);
+client.reactors().react("id", new 
+HashMap<String, Object>() {{put("key", "value");
+}});
 ```
 </dd>
 </dl>
@@ -3127,15 +3132,7 @@ client.reactors().react(
 <dl>
 <dd>
 
-**args:** `Optional<Object>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**callbackUrl:** `Optional<String>` 
+**request:** `Object` 
     
 </dd>
 </dl>
@@ -3160,12 +3157,9 @@ client.reactors().react(
 <dd>
 
 ```java
-client.reactors().reactAsync(
-    "id",
-    ReactRequestAsync
-        .builder()
-        .build()
-);
+client.reactors().reactAsync("id", new 
+HashMap<String, Object>() {{put("key", "value");
+}});
 ```
 </dd>
 </dl>
@@ -3188,7 +3182,7 @@ client.reactors().reactAsync(
 <dl>
 <dd>
 
-**args:** `Optional<Object>` 
+**request:** `Object` 
     
 </dd>
 </dl>
@@ -3201,7 +3195,7 @@ client.reactors().reactAsync(
 </details>
 
 ## Roles
-<details><summary><code>client.roles.list() -> List&lt;Role&gt;</code></summary>
+<details><summary><code>client.roles.list() -> List&amp;lt;Role&amp;gt;</code></summary>
 <dl>
 <dd>
 
@@ -5874,7 +5868,7 @@ client.threeds().sessions().get("id");
 </details>
 
 ## Webhooks Events
-<details><summary><code>client.webhooks.events.list() -> List&lt;String&gt;</code></summary>
+<details><summary><code>client.webhooks.events.list() -> List&amp;lt;String&amp;gt;</code></summary>
 <dl>
 <dd>
 

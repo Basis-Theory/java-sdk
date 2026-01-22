@@ -47,6 +47,8 @@ public final class Reactor {
 
     private final Optional<Runtime> runtime;
 
+    private final Optional<RequestedReactor> requested;
+
     private final Map<String, Object> additionalProperties;
 
     private Reactor(
@@ -63,6 +65,7 @@ public final class Reactor {
             Optional<OffsetDateTime> modifiedAt,
             Optional<Map<String, Optional<String>>> configuration,
             Optional<Runtime> runtime,
+            Optional<RequestedReactor> requested,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.tenantId = tenantId;
@@ -77,6 +80,7 @@ public final class Reactor {
         this.modifiedAt = modifiedAt;
         this.configuration = configuration;
         this.runtime = runtime;
+        this.requested = requested;
         this.additionalProperties = additionalProperties;
     }
 
@@ -145,6 +149,11 @@ public final class Reactor {
         return runtime;
     }
 
+    @JsonProperty("requested")
+    public Optional<RequestedReactor> getRequested() {
+        return requested;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -169,7 +178,8 @@ public final class Reactor {
                 && modifiedBy.equals(other.modifiedBy)
                 && modifiedAt.equals(other.modifiedAt)
                 && configuration.equals(other.configuration)
-                && runtime.equals(other.runtime);
+                && runtime.equals(other.runtime)
+                && requested.equals(other.requested);
     }
 
     @java.lang.Override
@@ -187,7 +197,8 @@ public final class Reactor {
                 this.modifiedBy,
                 this.modifiedAt,
                 this.configuration,
-                this.runtime);
+                this.runtime,
+                this.requested);
     }
 
     @java.lang.Override
@@ -227,6 +238,8 @@ public final class Reactor {
 
         private Optional<Runtime> runtime = Optional.empty();
 
+        private Optional<RequestedReactor> requested = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -246,6 +259,7 @@ public final class Reactor {
             modifiedAt(other.getModifiedAt());
             configuration(other.getConfiguration());
             runtime(other.getRuntime());
+            requested(other.getRequested());
             return this;
         }
 
@@ -392,6 +406,17 @@ public final class Reactor {
             return this;
         }
 
+        @JsonSetter(value = "requested", nulls = Nulls.SKIP)
+        public Builder requested(Optional<RequestedReactor> requested) {
+            this.requested = requested;
+            return this;
+        }
+
+        public Builder requested(RequestedReactor requested) {
+            this.requested = Optional.ofNullable(requested);
+            return this;
+        }
+
         public Reactor build() {
             return new Reactor(
                     id,
@@ -407,6 +432,7 @@ public final class Reactor {
                     modifiedAt,
                     configuration,
                     runtime,
+                    requested,
                     additionalProperties);
         }
     }
