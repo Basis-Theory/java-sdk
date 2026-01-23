@@ -56,6 +56,8 @@ public final class Proxy {
 
     private final Optional<Integer> timeout;
 
+    private final Optional<Boolean> disableDetokenization;
+
     private final Optional<String> clientCertificate;
 
     private final Optional<RequestedProxy> requested;
@@ -88,6 +90,7 @@ public final class Proxy {
             Optional<Map<String, Optional<String>>> configuration,
             Optional<String> proxyHost,
             Optional<Integer> timeout,
+            Optional<Boolean> disableDetokenization,
             Optional<String> clientCertificate,
             Optional<RequestedProxy> requested,
             Optional<String> createdBy,
@@ -112,6 +115,7 @@ public final class Proxy {
         this.configuration = configuration;
         this.proxyHost = proxyHost;
         this.timeout = timeout;
+        this.disableDetokenization = disableDetokenization;
         this.clientCertificate = clientCertificate;
         this.requested = requested;
         this.createdBy = createdBy;
@@ -206,6 +210,11 @@ public final class Proxy {
         return timeout;
     }
 
+    @JsonProperty("disable_detokenization")
+    public Optional<Boolean> getDisableDetokenization() {
+        return disableDetokenization;
+    }
+
     @JsonProperty("client_certificate")
     public Optional<String> getClientCertificate() {
         return clientCertificate;
@@ -265,6 +274,7 @@ public final class Proxy {
                 && configuration.equals(other.configuration)
                 && proxyHost.equals(other.proxyHost)
                 && timeout.equals(other.timeout)
+                && disableDetokenization.equals(other.disableDetokenization)
                 && clientCertificate.equals(other.clientCertificate)
                 && requested.equals(other.requested)
                 && createdBy.equals(other.createdBy)
@@ -293,6 +303,7 @@ public final class Proxy {
                 this.configuration,
                 this.proxyHost,
                 this.timeout,
+                this.disableDetokenization,
                 this.clientCertificate,
                 this.requested,
                 this.createdBy,
@@ -346,6 +357,8 @@ public final class Proxy {
 
         private Optional<Integer> timeout = Optional.empty();
 
+        private Optional<Boolean> disableDetokenization = Optional.empty();
+
         private Optional<String> clientCertificate = Optional.empty();
 
         private Optional<RequestedProxy> requested = Optional.empty();
@@ -381,6 +394,7 @@ public final class Proxy {
             configuration(other.getConfiguration());
             proxyHost(other.getProxyHost());
             timeout(other.getTimeout());
+            disableDetokenization(other.getDisableDetokenization());
             clientCertificate(other.getClientCertificate());
             requested(other.getRequested());
             createdBy(other.getCreatedBy());
@@ -577,6 +591,17 @@ public final class Proxy {
             return this;
         }
 
+        @JsonSetter(value = "disable_detokenization", nulls = Nulls.SKIP)
+        public Builder disableDetokenization(Optional<Boolean> disableDetokenization) {
+            this.disableDetokenization = disableDetokenization;
+            return this;
+        }
+
+        public Builder disableDetokenization(Boolean disableDetokenization) {
+            this.disableDetokenization = Optional.ofNullable(disableDetokenization);
+            return this;
+        }
+
         @JsonSetter(value = "client_certificate", nulls = Nulls.SKIP)
         public Builder clientCertificate(Optional<String> clientCertificate) {
             this.clientCertificate = clientCertificate;
@@ -662,6 +687,7 @@ public final class Proxy {
                     configuration,
                     proxyHost,
                     timeout,
+                    disableDetokenization,
                     clientCertificate,
                     requested,
                     createdBy,

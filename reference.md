@@ -2347,6 +2347,14 @@ client.proxies().create(
     
 </dd>
 </dl>
+
+<dl>
+<dd>
+
+**disableDetokenization:** `Optional<Boolean>` 
+    
+</dd>
+</dl>
 </dd>
 </dl>
 
@@ -2522,6 +2530,14 @@ client.proxies().update(
     
 </dd>
 </dl>
+
+<dl>
+<dd>
+
+**disableDetokenization:** `Optional<Boolean>` 
+    
+</dd>
+</dl>
 </dd>
 </dl>
 
@@ -2676,6 +2692,14 @@ client.proxies().patch(
 <dd>
 
 **requireAuth:** `Optional<Boolean>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**disableDetokenization:** `Optional<Boolean>` 
     
 </dd>
 </dl>
