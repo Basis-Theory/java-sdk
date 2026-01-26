@@ -41,6 +41,8 @@ public final class PatchProxyRequest {
 
     private final Optional<Boolean> requireAuth;
 
+    private final Optional<Boolean> disableDetokenization;
+
     private final Map<String, Object> additionalProperties;
 
     private PatchProxyRequest(
@@ -53,6 +55,7 @@ public final class PatchProxyRequest {
             Optional<Application> application,
             Optional<Map<String, Optional<String>>> configuration,
             Optional<Boolean> requireAuth,
+            Optional<Boolean> disableDetokenization,
             Map<String, Object> additionalProperties) {
         this.name = name;
         this.destinationUrl = destinationUrl;
@@ -63,6 +66,7 @@ public final class PatchProxyRequest {
         this.application = application;
         this.configuration = configuration;
         this.requireAuth = requireAuth;
+        this.disableDetokenization = disableDetokenization;
         this.additionalProperties = additionalProperties;
     }
 
@@ -111,6 +115,11 @@ public final class PatchProxyRequest {
         return requireAuth;
     }
 
+    @JsonProperty("disable_detokenization")
+    public Optional<Boolean> getDisableDetokenization() {
+        return disableDetokenization;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -131,7 +140,8 @@ public final class PatchProxyRequest {
                 && responseTransforms.equals(other.responseTransforms)
                 && application.equals(other.application)
                 && configuration.equals(other.configuration)
-                && requireAuth.equals(other.requireAuth);
+                && requireAuth.equals(other.requireAuth)
+                && disableDetokenization.equals(other.disableDetokenization);
     }
 
     @java.lang.Override
@@ -145,7 +155,8 @@ public final class PatchProxyRequest {
                 this.responseTransforms,
                 this.application,
                 this.configuration,
-                this.requireAuth);
+                this.requireAuth,
+                this.disableDetokenization);
     }
 
     @java.lang.Override
@@ -177,6 +188,8 @@ public final class PatchProxyRequest {
 
         private Optional<Boolean> requireAuth = Optional.empty();
 
+        private Optional<Boolean> disableDetokenization = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -192,6 +205,7 @@ public final class PatchProxyRequest {
             application(other.getApplication());
             configuration(other.getConfiguration());
             requireAuth(other.getRequireAuth());
+            disableDetokenization(other.getDisableDetokenization());
             return this;
         }
 
@@ -294,6 +308,17 @@ public final class PatchProxyRequest {
             return this;
         }
 
+        @JsonSetter(value = "disable_detokenization", nulls = Nulls.SKIP)
+        public Builder disableDetokenization(Optional<Boolean> disableDetokenization) {
+            this.disableDetokenization = disableDetokenization;
+            return this;
+        }
+
+        public Builder disableDetokenization(Boolean disableDetokenization) {
+            this.disableDetokenization = Optional.ofNullable(disableDetokenization);
+            return this;
+        }
+
         public PatchProxyRequest build() {
             return new PatchProxyRequest(
                     name,
@@ -305,6 +330,7 @@ public final class PatchProxyRequest {
                     application,
                     configuration,
                     requireAuth,
+                    disableDetokenization,
                     additionalProperties);
         }
     }

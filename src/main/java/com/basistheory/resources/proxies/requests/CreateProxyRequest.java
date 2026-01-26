@@ -46,6 +46,8 @@ public final class CreateProxyRequest {
 
     private final Optional<Boolean> requireAuth;
 
+    private final Optional<Boolean> disableDetokenization;
+
     private final Map<String, Object> additionalProperties;
 
     private CreateProxyRequest(
@@ -60,6 +62,7 @@ public final class CreateProxyRequest {
             Optional<Application> application,
             Optional<Map<String, Optional<String>>> configuration,
             Optional<Boolean> requireAuth,
+            Optional<Boolean> disableDetokenization,
             Map<String, Object> additionalProperties) {
         this.name = name;
         this.destinationUrl = destinationUrl;
@@ -72,6 +75,7 @@ public final class CreateProxyRequest {
         this.application = application;
         this.configuration = configuration;
         this.requireAuth = requireAuth;
+        this.disableDetokenization = disableDetokenization;
         this.additionalProperties = additionalProperties;
     }
 
@@ -130,6 +134,11 @@ public final class CreateProxyRequest {
         return requireAuth;
     }
 
+    @JsonProperty("disable_detokenization")
+    public Optional<Boolean> getDisableDetokenization() {
+        return disableDetokenization;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -152,7 +161,8 @@ public final class CreateProxyRequest {
                 && responseTransforms.equals(other.responseTransforms)
                 && application.equals(other.application)
                 && configuration.equals(other.configuration)
-                && requireAuth.equals(other.requireAuth);
+                && requireAuth.equals(other.requireAuth)
+                && disableDetokenization.equals(other.disableDetokenization);
     }
 
     @java.lang.Override
@@ -168,7 +178,8 @@ public final class CreateProxyRequest {
                 this.responseTransforms,
                 this.application,
                 this.configuration,
-                this.requireAuth);
+                this.requireAuth,
+                this.disableDetokenization);
     }
 
     @java.lang.Override
@@ -228,6 +239,10 @@ public final class CreateProxyRequest {
         _FinalStage requireAuth(Optional<Boolean> requireAuth);
 
         _FinalStage requireAuth(Boolean requireAuth);
+
+        _FinalStage disableDetokenization(Optional<Boolean> disableDetokenization);
+
+        _FinalStage disableDetokenization(Boolean disableDetokenization);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -235,6 +250,8 @@ public final class CreateProxyRequest {
         private String name;
 
         private String destinationUrl;
+
+        private Optional<Boolean> disableDetokenization = Optional.empty();
 
         private Optional<Boolean> requireAuth = Optional.empty();
 
@@ -272,6 +289,7 @@ public final class CreateProxyRequest {
             application(other.getApplication());
             configuration(other.getConfiguration());
             requireAuth(other.getRequireAuth());
+            disableDetokenization(other.getDisableDetokenization());
             return this;
         }
 
@@ -286,6 +304,19 @@ public final class CreateProxyRequest {
         @JsonSetter("destination_url")
         public _FinalStage destinationUrl(@NotNull String destinationUrl) {
             this.destinationUrl = Objects.requireNonNull(destinationUrl, "destinationUrl must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage disableDetokenization(Boolean disableDetokenization) {
+            this.disableDetokenization = Optional.ofNullable(disableDetokenization);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "disable_detokenization", nulls = Nulls.SKIP)
+        public _FinalStage disableDetokenization(Optional<Boolean> disableDetokenization) {
+            this.disableDetokenization = disableDetokenization;
             return this;
         }
 
@@ -420,6 +451,7 @@ public final class CreateProxyRequest {
                     application,
                     configuration,
                     requireAuth,
+                    disableDetokenization,
                     additionalProperties);
         }
     }
