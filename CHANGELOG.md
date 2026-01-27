@@ -1,3 +1,11 @@
+## [5.1.0](https://github.com/Basis-Theory/java-sdk/compare/5.0.0...5.1.0) (2026-01-27)
+
+
+### Features
+
+* add disable_detokenization to proxy configuration  ([6e08dc2](https://github.com/Basis-Theory/java-sdk/commit/6e08dc259d266bb10786ef846a59973d0af999e8))
+
+
 ## [5.0.0](https://github.com/Basis-Theory/java-sdk/compare/4.2.0...5.0.0) (2026-01-22)
 
 
