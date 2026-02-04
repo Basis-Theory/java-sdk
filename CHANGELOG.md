@@ -1,3 +1,11 @@
+## [5.2.0](https://github.com/Basis-Theory/java-sdk/compare/5.1.0...5.2.0) (2026-02-04)
+
+
+### Features
+
+* Adding metadata attribute to 3DS ([#93](https://github.com/Basis-Theory/java-sdk/issues/93)) ([d1b5a6b](https://github.com/Basis-Theory/java-sdk/commit/d1b5a6b61684eb2811423617b8ffd43681d40d67))
+
+
 ## [5.1.0](https://github.com/Basis-Theory/java-sdk/compare/5.0.0...5.1.0) (2026-01-27)
 
 
