@@ -41,6 +41,8 @@ public final class CreateThreeDsSessionRequest {
 
     private final Optional<ThreeDsCallbackUrls> callbackUrls;
 
+    private final Optional<Map<String, Optional<String>>> metadata;
+
     private final Map<String, Object> additionalProperties;
 
     private CreateThreeDsSessionRequest(
@@ -53,6 +55,7 @@ public final class CreateThreeDsSessionRequest {
             Optional<ThreeDsDeviceInfo> deviceInfo,
             Optional<AuthenticateThreeDsSessionRequest> authenticationRequest,
             Optional<ThreeDsCallbackUrls> callbackUrls,
+            Optional<Map<String, Optional<String>>> metadata,
             Map<String, Object> additionalProperties) {
         this.pan = pan;
         this.tokenId = tokenId;
@@ -63,6 +66,7 @@ public final class CreateThreeDsSessionRequest {
         this.deviceInfo = deviceInfo;
         this.authenticationRequest = authenticationRequest;
         this.callbackUrls = callbackUrls;
+        this.metadata = metadata;
         this.additionalProperties = additionalProperties;
     }
 
@@ -111,6 +115,11 @@ public final class CreateThreeDsSessionRequest {
         return callbackUrls;
     }
 
+    @JsonProperty("metadata")
+    public Optional<Map<String, Optional<String>>> getMetadata() {
+        return metadata;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -131,7 +140,8 @@ public final class CreateThreeDsSessionRequest {
                 && webChallengeMode.equals(other.webChallengeMode)
                 && deviceInfo.equals(other.deviceInfo)
                 && authenticationRequest.equals(other.authenticationRequest)
-                && callbackUrls.equals(other.callbackUrls);
+                && callbackUrls.equals(other.callbackUrls)
+                && metadata.equals(other.metadata);
     }
 
     @java.lang.Override
@@ -145,7 +155,8 @@ public final class CreateThreeDsSessionRequest {
                 this.webChallengeMode,
                 this.deviceInfo,
                 this.authenticationRequest,
-                this.callbackUrls);
+                this.callbackUrls,
+                this.metadata);
     }
 
     @java.lang.Override
@@ -177,6 +188,8 @@ public final class CreateThreeDsSessionRequest {
 
         private Optional<ThreeDsCallbackUrls> callbackUrls = Optional.empty();
 
+        private Optional<Map<String, Optional<String>>> metadata = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -192,6 +205,7 @@ public final class CreateThreeDsSessionRequest {
             deviceInfo(other.getDeviceInfo());
             authenticationRequest(other.getAuthenticationRequest());
             callbackUrls(other.getCallbackUrls());
+            metadata(other.getMetadata());
             return this;
         }
 
@@ -294,6 +308,17 @@ public final class CreateThreeDsSessionRequest {
             return this;
         }
 
+        @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
+        public Builder metadata(Optional<Map<String, Optional<String>>> metadata) {
+            this.metadata = metadata;
+            return this;
+        }
+
+        public Builder metadata(Map<String, Optional<String>> metadata) {
+            this.metadata = Optional.ofNullable(metadata);
+            return this;
+        }
+
         public CreateThreeDsSessionRequest build() {
             return new CreateThreeDsSessionRequest(
                     pan,
@@ -305,6 +330,7 @@ public final class CreateThreeDsSessionRequest {
                     deviceInfo,
                     authenticationRequest,
                     callbackUrls,
+                    metadata,
                     additionalProperties);
         }
     }

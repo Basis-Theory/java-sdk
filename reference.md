@@ -4086,6 +4086,14 @@ client.accountUpdater().realTime().invoke(
     
 </dd>
 </dl>
+
+<dl>
+<dd>
+
+**merchantId:** `Optional<String>` — Tenant merchant identifier
+    
+</dd>
+</dl>
 </dd>
 </dl>
 
@@ -5745,6 +5753,14 @@ client.threeds().sessions().create(
 <dd>
 
 **callbackUrls:** `Optional<ThreeDsCallbackUrls>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**metadata:** `Optional<Map<String, Optional<String>>>` 
     
 </dd>
 </dl>

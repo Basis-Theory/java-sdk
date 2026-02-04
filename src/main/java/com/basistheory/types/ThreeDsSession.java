@@ -60,6 +60,8 @@ public final class ThreeDsSession {
 
     private final Optional<ThreeDsAuthentication> authentication;
 
+    private final Optional<Map<String, Optional<String>>> metadata;
+
     private final Map<String, Object> additionalProperties;
 
     private ThreeDsSession(
@@ -82,6 +84,7 @@ public final class ThreeDsSession {
             Optional<ThreeDsVersion> version,
             Optional<ThreeDsMethod> method,
             Optional<ThreeDsAuthentication> authentication,
+            Optional<Map<String, Optional<String>>> metadata,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.type = type;
@@ -102,6 +105,7 @@ public final class ThreeDsSession {
         this.version = version;
         this.method = method;
         this.authentication = authentication;
+        this.metadata = metadata;
         this.additionalProperties = additionalProperties;
     }
 
@@ -200,6 +204,11 @@ public final class ThreeDsSession {
         return authentication;
     }
 
+    @JsonProperty("metadata")
+    public Optional<Map<String, Optional<String>>> getMetadata() {
+        return metadata;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -230,7 +239,8 @@ public final class ThreeDsSession {
                 && webChallengeMode.equals(other.webChallengeMode)
                 && version.equals(other.version)
                 && method.equals(other.method)
-                && authentication.equals(other.authentication);
+                && authentication.equals(other.authentication)
+                && metadata.equals(other.metadata);
     }
 
     @java.lang.Override
@@ -254,7 +264,8 @@ public final class ThreeDsSession {
                 this.webChallengeMode,
                 this.version,
                 this.method,
-                this.authentication);
+                this.authentication,
+                this.metadata);
     }
 
     @java.lang.Override
@@ -306,6 +317,8 @@ public final class ThreeDsSession {
 
         private Optional<ThreeDsAuthentication> authentication = Optional.empty();
 
+        private Optional<Map<String, Optional<String>>> metadata = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -331,6 +344,7 @@ public final class ThreeDsSession {
             version(other.getVersion());
             method(other.getMethod());
             authentication(other.getAuthentication());
+            metadata(other.getMetadata());
             return this;
         }
 
@@ -543,6 +557,17 @@ public final class ThreeDsSession {
             return this;
         }
 
+        @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
+        public Builder metadata(Optional<Map<String, Optional<String>>> metadata) {
+            this.metadata = metadata;
+            return this;
+        }
+
+        public Builder metadata(Map<String, Optional<String>> metadata) {
+            this.metadata = Optional.ofNullable(metadata);
+            return this;
+        }
+
         public ThreeDsSession build() {
             return new ThreeDsSession(
                     id,
@@ -564,6 +589,7 @@ public final class ThreeDsSession {
                     version,
                     method,
                     authentication,
+                    metadata,
                     additionalProperties);
         }
     }

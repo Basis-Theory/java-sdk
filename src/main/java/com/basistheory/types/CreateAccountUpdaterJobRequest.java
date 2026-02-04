@@ -22,11 +22,16 @@ import java.util.Optional;
 public final class CreateAccountUpdaterJobRequest {
     private final Optional<Boolean> deduplicateTokens;
 
+    private final Optional<String> merchantId;
+
     private final Map<String, Object> additionalProperties;
 
     private CreateAccountUpdaterJobRequest(
-            Optional<Boolean> deduplicateTokens, Map<String, Object> additionalProperties) {
+            Optional<Boolean> deduplicateTokens,
+            Optional<String> merchantId,
+            Map<String, Object> additionalProperties) {
         this.deduplicateTokens = deduplicateTokens;
+        this.merchantId = merchantId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -36,6 +41,14 @@ public final class CreateAccountUpdaterJobRequest {
     @JsonProperty("deduplicate_tokens")
     public Optional<Boolean> getDeduplicateTokens() {
         return deduplicateTokens;
+    }
+
+    /**
+     * @return Tenant merchant identifier
+     */
+    @JsonProperty("merchant_id")
+    public Optional<String> getMerchantId() {
+        return merchantId;
     }
 
     @java.lang.Override
@@ -50,12 +63,12 @@ public final class CreateAccountUpdaterJobRequest {
     }
 
     private boolean equalTo(CreateAccountUpdaterJobRequest other) {
-        return deduplicateTokens.equals(other.deduplicateTokens);
+        return deduplicateTokens.equals(other.deduplicateTokens) && merchantId.equals(other.merchantId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.deduplicateTokens);
+        return Objects.hash(this.deduplicateTokens, this.merchantId);
     }
 
     @java.lang.Override
@@ -71,6 +84,8 @@ public final class CreateAccountUpdaterJobRequest {
     public static final class Builder {
         private Optional<Boolean> deduplicateTokens = Optional.empty();
 
+        private Optional<String> merchantId = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -78,6 +93,7 @@ public final class CreateAccountUpdaterJobRequest {
 
         public Builder from(CreateAccountUpdaterJobRequest other) {
             deduplicateTokens(other.getDeduplicateTokens());
+            merchantId(other.getMerchantId());
             return this;
         }
 
@@ -95,8 +111,22 @@ public final class CreateAccountUpdaterJobRequest {
             return this;
         }
 
+        /**
+         * <p>Tenant merchant identifier</p>
+         */
+        @JsonSetter(value = "merchant_id", nulls = Nulls.SKIP)
+        public Builder merchantId(Optional<String> merchantId) {
+            this.merchantId = merchantId;
+            return this;
+        }
+
+        public Builder merchantId(String merchantId) {
+            this.merchantId = Optional.ofNullable(merchantId);
+            return this;
+        }
+
         public CreateAccountUpdaterJobRequest build() {
-            return new CreateAccountUpdaterJobRequest(deduplicateTokens, additionalProperties);
+            return new CreateAccountUpdaterJobRequest(deduplicateTokens, merchantId, additionalProperties);
         }
     }
 }

@@ -39,6 +39,8 @@ public final class CreateThreeDsSessionResponse {
 
     private final Optional<String> redirectUrl;
 
+    private final Optional<Map<String, Optional<String>>> metadata;
+
     private final Map<String, Object> additionalProperties;
 
     private CreateThreeDsSessionResponse(
@@ -51,6 +53,7 @@ public final class CreateThreeDsSessionResponse {
             Optional<String> directoryServerId,
             Optional<String> recommendedVersion,
             Optional<String> redirectUrl,
+            Optional<Map<String, Optional<String>>> metadata,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.type = type;
@@ -61,6 +64,7 @@ public final class CreateThreeDsSessionResponse {
         this.directoryServerId = directoryServerId;
         this.recommendedVersion = recommendedVersion;
         this.redirectUrl = redirectUrl;
+        this.metadata = metadata;
         this.additionalProperties = additionalProperties;
     }
 
@@ -109,6 +113,11 @@ public final class CreateThreeDsSessionResponse {
         return redirectUrl;
     }
 
+    @JsonProperty("metadata")
+    public Optional<Map<String, Optional<String>>> getMetadata() {
+        return metadata;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -129,7 +138,8 @@ public final class CreateThreeDsSessionResponse {
                 && methodNotificationUrl.equals(other.methodNotificationUrl)
                 && directoryServerId.equals(other.directoryServerId)
                 && recommendedVersion.equals(other.recommendedVersion)
-                && redirectUrl.equals(other.redirectUrl);
+                && redirectUrl.equals(other.redirectUrl)
+                && metadata.equals(other.metadata);
     }
 
     @java.lang.Override
@@ -143,7 +153,8 @@ public final class CreateThreeDsSessionResponse {
                 this.methodNotificationUrl,
                 this.directoryServerId,
                 this.recommendedVersion,
-                this.redirectUrl);
+                this.redirectUrl,
+                this.metadata);
     }
 
     @java.lang.Override
@@ -175,6 +186,8 @@ public final class CreateThreeDsSessionResponse {
 
         private Optional<String> redirectUrl = Optional.empty();
 
+        private Optional<Map<String, Optional<String>>> metadata = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -190,6 +203,7 @@ public final class CreateThreeDsSessionResponse {
             directoryServerId(other.getDirectoryServerId());
             recommendedVersion(other.getRecommendedVersion());
             redirectUrl(other.getRedirectUrl());
+            metadata(other.getMetadata());
             return this;
         }
 
@@ -292,6 +306,17 @@ public final class CreateThreeDsSessionResponse {
             return this;
         }
 
+        @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
+        public Builder metadata(Optional<Map<String, Optional<String>>> metadata) {
+            this.metadata = metadata;
+            return this;
+        }
+
+        public Builder metadata(Map<String, Optional<String>> metadata) {
+            this.metadata = Optional.ofNullable(metadata);
+            return this;
+        }
+
         public CreateThreeDsSessionResponse build() {
             return new CreateThreeDsSessionResponse(
                     id,
@@ -303,6 +328,7 @@ public final class CreateThreeDsSessionResponse {
                     directoryServerId,
                     recommendedVersion,
                     redirectUrl,
+                    metadata,
                     additionalProperties);
         }
     }
