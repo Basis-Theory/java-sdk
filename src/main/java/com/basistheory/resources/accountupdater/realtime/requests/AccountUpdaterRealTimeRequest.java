@@ -29,6 +29,8 @@ public final class AccountUpdaterRealTimeRequest {
 
     private final Optional<Boolean> deduplicateToken;
 
+    private final Optional<String> merchantId;
+
     private final Map<String, Object> additionalProperties;
 
     private AccountUpdaterRealTimeRequest(
@@ -36,11 +38,13 @@ public final class AccountUpdaterRealTimeRequest {
             Optional<Integer> expirationYear,
             Optional<Integer> expirationMonth,
             Optional<Boolean> deduplicateToken,
+            Optional<String> merchantId,
             Map<String, Object> additionalProperties) {
         this.tokenId = tokenId;
         this.expirationYear = expirationYear;
         this.expirationMonth = expirationMonth;
         this.deduplicateToken = deduplicateToken;
+        this.merchantId = merchantId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -76,6 +80,14 @@ public final class AccountUpdaterRealTimeRequest {
         return deduplicateToken;
     }
 
+    /**
+     * @return Tenant merchant identifier
+     */
+    @JsonProperty("merchant_id")
+    public Optional<String> getMerchantId() {
+        return merchantId;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -91,12 +103,14 @@ public final class AccountUpdaterRealTimeRequest {
         return tokenId.equals(other.tokenId)
                 && expirationYear.equals(other.expirationYear)
                 && expirationMonth.equals(other.expirationMonth)
-                && deduplicateToken.equals(other.deduplicateToken);
+                && deduplicateToken.equals(other.deduplicateToken)
+                && merchantId.equals(other.merchantId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.tokenId, this.expirationYear, this.expirationMonth, this.deduplicateToken);
+        return Objects.hash(
+                this.tokenId, this.expirationYear, this.expirationMonth, this.deduplicateToken, this.merchantId);
     }
 
     @java.lang.Override
@@ -140,11 +154,20 @@ public final class AccountUpdaterRealTimeRequest {
         _FinalStage deduplicateToken(Optional<Boolean> deduplicateToken);
 
         _FinalStage deduplicateToken(Boolean deduplicateToken);
+
+        /**
+         * <p>Tenant merchant identifier</p>
+         */
+        _FinalStage merchantId(Optional<String> merchantId);
+
+        _FinalStage merchantId(String merchantId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements TokenIdStage, _FinalStage {
         private String tokenId;
+
+        private Optional<String> merchantId = Optional.empty();
 
         private Optional<Boolean> deduplicateToken = Optional.empty();
 
@@ -163,6 +186,7 @@ public final class AccountUpdaterRealTimeRequest {
             expirationYear(other.getExpirationYear());
             expirationMonth(other.getExpirationMonth());
             deduplicateToken(other.getDeduplicateToken());
+            merchantId(other.getMerchantId());
             return this;
         }
 
@@ -175,6 +199,26 @@ public final class AccountUpdaterRealTimeRequest {
         @JsonSetter("token_id")
         public _FinalStage tokenId(@NotNull String tokenId) {
             this.tokenId = Objects.requireNonNull(tokenId, "tokenId must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Tenant merchant identifier</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage merchantId(String merchantId) {
+            this.merchantId = Optional.ofNullable(merchantId);
+            return this;
+        }
+
+        /**
+         * <p>Tenant merchant identifier</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "merchant_id", nulls = Nulls.SKIP)
+        public _FinalStage merchantId(Optional<String> merchantId) {
+            this.merchantId = merchantId;
             return this;
         }
 
@@ -241,7 +285,7 @@ public final class AccountUpdaterRealTimeRequest {
         @java.lang.Override
         public AccountUpdaterRealTimeRequest build() {
             return new AccountUpdaterRealTimeRequest(
-                    tokenId, expirationYear, expirationMonth, deduplicateToken, additionalProperties);
+                    tokenId, expirationYear, expirationMonth, deduplicateToken, merchantId, additionalProperties);
         }
     }
 }
