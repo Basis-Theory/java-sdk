@@ -4,16 +4,22 @@
 package com.basistheory.resources.tenants;
 
 import com.basistheory.core.ClientOptions;
+import com.basistheory.core.RequestOptions;
 import com.basistheory.core.Suppliers;
 import com.basistheory.resources.tenants.connections.AsyncConnectionsClient;
 import com.basistheory.resources.tenants.invitations.AsyncInvitationsClient;
 import com.basistheory.resources.tenants.members.AsyncMembersClient;
 import com.basistheory.resources.tenants.owner.AsyncOwnerClient;
+import com.basistheory.resources.tenants.requests.SecurityContactEmailRequest;
 import com.basistheory.resources.tenants.self.AsyncSelfClient;
+import com.basistheory.types.SecurityContactEmailResponse;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 public class AsyncTenantsClient {
     protected final ClientOptions clientOptions;
+
+    private final AsyncRawTenantsClient rawClient;
 
     protected final Supplier<AsyncConnectionsClient> connectionsClient;
 
@@ -27,11 +33,36 @@ public class AsyncTenantsClient {
 
     public AsyncTenantsClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
+        this.rawClient = new AsyncRawTenantsClient(clientOptions);
         this.connectionsClient = Suppliers.memoize(() -> new AsyncConnectionsClient(clientOptions));
         this.invitationsClient = Suppliers.memoize(() -> new AsyncInvitationsClient(clientOptions));
         this.membersClient = Suppliers.memoize(() -> new AsyncMembersClient(clientOptions));
         this.ownerClient = Suppliers.memoize(() -> new AsyncOwnerClient(clientOptions));
         this.selfClient = Suppliers.memoize(() -> new AsyncSelfClient(clientOptions));
+    }
+
+    /**
+     * Get responses with HTTP metadata like headers
+     */
+    public AsyncRawTenantsClient withRawResponse() {
+        return this.rawClient;
+    }
+
+    public CompletableFuture<SecurityContactEmailResponse> getsecuritycontact() {
+        return this.rawClient.getsecuritycontact().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<SecurityContactEmailResponse> getsecuritycontact(RequestOptions requestOptions) {
+        return this.rawClient.getsecuritycontact(requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<SecurityContactEmailResponse> updatesecuritycontact(SecurityContactEmailRequest request) {
+        return this.rawClient.updatesecuritycontact(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<SecurityContactEmailResponse> updatesecuritycontact(
+            SecurityContactEmailRequest request, RequestOptions requestOptions) {
+        return this.rawClient.updatesecuritycontact(request, requestOptions).thenApply(response -> response.body());
     }
 
     public AsyncConnectionsClient connections() {

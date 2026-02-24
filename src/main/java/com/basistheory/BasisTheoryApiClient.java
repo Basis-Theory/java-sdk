@@ -61,6 +61,8 @@ public class BasisTheoryApiClient {
 
     protected final Supplier<RolesClient> rolesClient;
 
+    protected final Supplier<TenantsClient> tenantsClient;
+
     protected final Supplier<SessionsClient> sessionsClient;
 
     protected final Supplier<TokenIntentsClient> tokenIntentsClient;
@@ -68,8 +70,6 @@ public class BasisTheoryApiClient {
     protected final Supplier<WebhooksClient> webhooksClient;
 
     protected final Supplier<AccountUpdaterClient> accountUpdaterClient;
-
-    protected final Supplier<TenantsClient> tenantsClient;
 
     protected final Supplier<ThreedsClient> threedsClient;
 
@@ -90,11 +90,11 @@ public class BasisTheoryApiClient {
         this.proxiesClient = Suppliers.memoize(() -> new ProxiesClient(clientOptions));
         this.reactorsClient = Suppliers.memoize(() -> new ReactorsClient(clientOptions));
         this.rolesClient = Suppliers.memoize(() -> new RolesClient(clientOptions));
+        this.tenantsClient = Suppliers.memoize(() -> new TenantsClient(clientOptions));
         this.sessionsClient = Suppliers.memoize(() -> new SessionsClient(clientOptions));
         this.tokenIntentsClient = Suppliers.memoize(() -> new TokenIntentsClient(clientOptions));
         this.webhooksClient = Suppliers.memoize(() -> new WebhooksClient(clientOptions));
         this.accountUpdaterClient = Suppliers.memoize(() -> new AccountUpdaterClient(clientOptions));
-        this.tenantsClient = Suppliers.memoize(() -> new TenantsClient(clientOptions));
         this.threedsClient = Suppliers.memoize(() -> new ThreedsClient(clientOptions));
     }
 
@@ -158,6 +158,10 @@ public class BasisTheoryApiClient {
         return this.rolesClient.get();
     }
 
+    public TenantsClient tenants() {
+        return this.tenantsClient.get();
+    }
+
     public SessionsClient sessions() {
         return this.sessionsClient.get();
     }
@@ -172,10 +176,6 @@ public class BasisTheoryApiClient {
 
     public AccountUpdaterClient accountUpdater() {
         return this.accountUpdaterClient.get();
-    }
-
-    public TenantsClient tenants() {
-        return this.tenantsClient.get();
     }
 
     public ThreedsClient threeds() {

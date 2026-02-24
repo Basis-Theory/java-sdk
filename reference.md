@@ -3244,6 +3244,77 @@ client.roles().list();
 </dl>
 </details>
 
+## Tenants
+<details><summary><code>client.tenants.getsecuritycontact() -> SecurityContactEmailResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.tenants().getsecuritycontact();
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tenants.updatesecuritycontact(request) -> SecurityContactEmailResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.tenants().updatesecuritycontact(
+    SecurityContactEmailRequest
+        .builder()
+        .email("email")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**email:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Sessions
 <details><summary><code>client.sessions.create() -> CreateSessionResponse</code></summary>
 <dl>

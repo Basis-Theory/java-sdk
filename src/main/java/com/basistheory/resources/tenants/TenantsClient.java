@@ -4,16 +4,21 @@
 package com.basistheory.resources.tenants;
 
 import com.basistheory.core.ClientOptions;
+import com.basistheory.core.RequestOptions;
 import com.basistheory.core.Suppliers;
 import com.basistheory.resources.tenants.connections.ConnectionsClient;
 import com.basistheory.resources.tenants.invitations.InvitationsClient;
 import com.basistheory.resources.tenants.members.MembersClient;
 import com.basistheory.resources.tenants.owner.OwnerClient;
+import com.basistheory.resources.tenants.requests.SecurityContactEmailRequest;
 import com.basistheory.resources.tenants.self.SelfClient;
+import com.basistheory.types.SecurityContactEmailResponse;
 import java.util.function.Supplier;
 
 public class TenantsClient {
     protected final ClientOptions clientOptions;
+
+    private final RawTenantsClient rawClient;
 
     protected final Supplier<ConnectionsClient> connectionsClient;
 
@@ -27,11 +32,36 @@ public class TenantsClient {
 
     public TenantsClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
+        this.rawClient = new RawTenantsClient(clientOptions);
         this.connectionsClient = Suppliers.memoize(() -> new ConnectionsClient(clientOptions));
         this.invitationsClient = Suppliers.memoize(() -> new InvitationsClient(clientOptions));
         this.membersClient = Suppliers.memoize(() -> new MembersClient(clientOptions));
         this.ownerClient = Suppliers.memoize(() -> new OwnerClient(clientOptions));
         this.selfClient = Suppliers.memoize(() -> new SelfClient(clientOptions));
+    }
+
+    /**
+     * Get responses with HTTP metadata like headers
+     */
+    public RawTenantsClient withRawResponse() {
+        return this.rawClient;
+    }
+
+    public SecurityContactEmailResponse getsecuritycontact() {
+        return this.rawClient.getsecuritycontact().body();
+    }
+
+    public SecurityContactEmailResponse getsecuritycontact(RequestOptions requestOptions) {
+        return this.rawClient.getsecuritycontact(requestOptions).body();
+    }
+
+    public SecurityContactEmailResponse updatesecuritycontact(SecurityContactEmailRequest request) {
+        return this.rawClient.updatesecuritycontact(request).body();
+    }
+
+    public SecurityContactEmailResponse updatesecuritycontact(
+            SecurityContactEmailRequest request, RequestOptions requestOptions) {
+        return this.rawClient.updatesecuritycontact(request, requestOptions).body();
     }
 
     public ConnectionsClient connections() {
