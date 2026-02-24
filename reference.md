@@ -5011,6 +5011,77 @@ client.reactors().results().get("id", "requestId");
 </dl>
 </details>
 
+## Tenants SecurityContact
+<details><summary><code>client.tenants.securityContact.get() -> SecurityContactEmailResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.tenants().securityContact().get();
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tenants.securityContact.update(request) -> SecurityContactEmailResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.tenants().securityContact().update(
+    SecurityContactEmailRequest
+        .builder()
+        .email("email")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**email:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Tenants Connections
 <details><summary><code>client.tenants.connections.create(request) -> CreateTenantConnectionResponse</code></summary>
 <dl>

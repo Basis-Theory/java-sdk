@@ -9,11 +9,14 @@ import com.basistheory.resources.tenants.connections.ConnectionsClient;
 import com.basistheory.resources.tenants.invitations.InvitationsClient;
 import com.basistheory.resources.tenants.members.MembersClient;
 import com.basistheory.resources.tenants.owner.OwnerClient;
+import com.basistheory.resources.tenants.securitycontact.SecurityContactClient;
 import com.basistheory.resources.tenants.self.SelfClient;
 import java.util.function.Supplier;
 
 public class TenantsClient {
     protected final ClientOptions clientOptions;
+
+    protected final Supplier<SecurityContactClient> securityContactClient;
 
     protected final Supplier<ConnectionsClient> connectionsClient;
 
@@ -27,11 +30,16 @@ public class TenantsClient {
 
     public TenantsClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
+        this.securityContactClient = Suppliers.memoize(() -> new SecurityContactClient(clientOptions));
         this.connectionsClient = Suppliers.memoize(() -> new ConnectionsClient(clientOptions));
         this.invitationsClient = Suppliers.memoize(() -> new InvitationsClient(clientOptions));
         this.membersClient = Suppliers.memoize(() -> new MembersClient(clientOptions));
         this.ownerClient = Suppliers.memoize(() -> new OwnerClient(clientOptions));
         this.selfClient = Suppliers.memoize(() -> new SelfClient(clientOptions));
+    }
+
+    public SecurityContactClient securityContact() {
+        return this.securityContactClient.get();
     }
 
     public ConnectionsClient connections() {

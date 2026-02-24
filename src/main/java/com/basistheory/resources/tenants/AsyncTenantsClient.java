@@ -9,11 +9,14 @@ import com.basistheory.resources.tenants.connections.AsyncConnectionsClient;
 import com.basistheory.resources.tenants.invitations.AsyncInvitationsClient;
 import com.basistheory.resources.tenants.members.AsyncMembersClient;
 import com.basistheory.resources.tenants.owner.AsyncOwnerClient;
+import com.basistheory.resources.tenants.securitycontact.AsyncSecurityContactClient;
 import com.basistheory.resources.tenants.self.AsyncSelfClient;
 import java.util.function.Supplier;
 
 public class AsyncTenantsClient {
     protected final ClientOptions clientOptions;
+
+    protected final Supplier<AsyncSecurityContactClient> securityContactClient;
 
     protected final Supplier<AsyncConnectionsClient> connectionsClient;
 
@@ -27,11 +30,16 @@ public class AsyncTenantsClient {
 
     public AsyncTenantsClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
+        this.securityContactClient = Suppliers.memoize(() -> new AsyncSecurityContactClient(clientOptions));
         this.connectionsClient = Suppliers.memoize(() -> new AsyncConnectionsClient(clientOptions));
         this.invitationsClient = Suppliers.memoize(() -> new AsyncInvitationsClient(clientOptions));
         this.membersClient = Suppliers.memoize(() -> new AsyncMembersClient(clientOptions));
         this.ownerClient = Suppliers.memoize(() -> new AsyncOwnerClient(clientOptions));
         this.selfClient = Suppliers.memoize(() -> new AsyncSelfClient(clientOptions));
+    }
+
+    public AsyncSecurityContactClient securityContact() {
+        return this.securityContactClient.get();
     }
 
     public AsyncConnectionsClient connections() {
