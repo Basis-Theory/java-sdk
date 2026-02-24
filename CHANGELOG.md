@@ -1,3 +1,11 @@
+## [5.3.0](https://github.com/Basis-Theory/java-sdk/compare/5.2.0...5.3.0) (2026-02-24)
+
+
+### Features
+
+* Updating API contracts ([#95](https://github.com/Basis-Theory/java-sdk/issues/95)) ([c839e8c](https://github.com/Basis-Theory/java-sdk/commit/c839e8cf51bde3a74a601e466b1812e9b0e522ca))
+
+
 ## [5.2.0](https://github.com/Basis-Theory/java-sdk/compare/5.1.0...5.2.0) (2026-02-04)
 
 
