@@ -25,6 +25,8 @@ public final class Runtime {
 
     private final Optional<Map<String, Optional<String>>> dependencies;
 
+    private final Optional<Map<String, Optional<String>>> resolutions;
+
     private final Optional<Integer> warmConcurrency;
 
     private final Optional<Integer> timeout;
@@ -38,6 +40,7 @@ public final class Runtime {
     private Runtime(
             Optional<String> image,
             Optional<Map<String, Optional<String>>> dependencies,
+            Optional<Map<String, Optional<String>>> resolutions,
             Optional<Integer> warmConcurrency,
             Optional<Integer> timeout,
             Optional<String> resources,
@@ -45,6 +48,7 @@ public final class Runtime {
             Map<String, Object> additionalProperties) {
         this.image = image;
         this.dependencies = dependencies;
+        this.resolutions = resolutions;
         this.warmConcurrency = warmConcurrency;
         this.timeout = timeout;
         this.resources = resources;
@@ -60,6 +64,11 @@ public final class Runtime {
     @JsonProperty("dependencies")
     public Optional<Map<String, Optional<String>>> getDependencies() {
         return dependencies;
+    }
+
+    @JsonProperty("resolutions")
+    public Optional<Map<String, Optional<String>>> getResolutions() {
+        return resolutions;
     }
 
     @JsonProperty("warm_concurrency")
@@ -96,6 +105,7 @@ public final class Runtime {
     private boolean equalTo(Runtime other) {
         return image.equals(other.image)
                 && dependencies.equals(other.dependencies)
+                && resolutions.equals(other.resolutions)
                 && warmConcurrency.equals(other.warmConcurrency)
                 && timeout.equals(other.timeout)
                 && resources.equals(other.resources)
@@ -105,7 +115,13 @@ public final class Runtime {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.image, this.dependencies, this.warmConcurrency, this.timeout, this.resources, this.permissions);
+                this.image,
+                this.dependencies,
+                this.resolutions,
+                this.warmConcurrency,
+                this.timeout,
+                this.resources,
+                this.permissions);
     }
 
     @java.lang.Override
@@ -123,6 +139,8 @@ public final class Runtime {
 
         private Optional<Map<String, Optional<String>>> dependencies = Optional.empty();
 
+        private Optional<Map<String, Optional<String>>> resolutions = Optional.empty();
+
         private Optional<Integer> warmConcurrency = Optional.empty();
 
         private Optional<Integer> timeout = Optional.empty();
@@ -139,6 +157,7 @@ public final class Runtime {
         public Builder from(Runtime other) {
             image(other.getImage());
             dependencies(other.getDependencies());
+            resolutions(other.getResolutions());
             warmConcurrency(other.getWarmConcurrency());
             timeout(other.getTimeout());
             resources(other.getResources());
@@ -165,6 +184,17 @@ public final class Runtime {
 
         public Builder dependencies(Map<String, Optional<String>> dependencies) {
             this.dependencies = Optional.ofNullable(dependencies);
+            return this;
+        }
+
+        @JsonSetter(value = "resolutions", nulls = Nulls.SKIP)
+        public Builder resolutions(Optional<Map<String, Optional<String>>> resolutions) {
+            this.resolutions = resolutions;
+            return this;
+        }
+
+        public Builder resolutions(Map<String, Optional<String>> resolutions) {
+            this.resolutions = Optional.ofNullable(resolutions);
             return this;
         }
 
@@ -214,7 +244,14 @@ public final class Runtime {
 
         public Runtime build() {
             return new Runtime(
-                    image, dependencies, warmConcurrency, timeout, resources, permissions, additionalProperties);
+                    image,
+                    dependencies,
+                    resolutions,
+                    warmConcurrency,
+                    timeout,
+                    resources,
+                    permissions,
+                    additionalProperties);
         }
     }
 }
