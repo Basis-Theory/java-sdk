@@ -46,6 +46,8 @@ public final class AuthenticateThreeDsSessionRequest {
 
     private final Optional<List<ThreeDsMessageExtension>> messageExtensions;
 
+    private final Optional<Map<String, Optional<String>>> metadata;
+
     private final Map<String, Object> additionalProperties;
 
     private AuthenticateThreeDsSessionRequest(
@@ -61,6 +63,7 @@ public final class AuthenticateThreeDsSessionRequest {
             Optional<ThreeDsCardholderInfo> cardholderInfo,
             Optional<Object> broadcastInfo,
             Optional<List<ThreeDsMessageExtension>> messageExtensions,
+            Optional<Map<String, Optional<String>>> metadata,
             Map<String, Object> additionalProperties) {
         this.authenticationCategory = authenticationCategory;
         this.authenticationType = authenticationType;
@@ -74,6 +77,7 @@ public final class AuthenticateThreeDsSessionRequest {
         this.cardholderInfo = cardholderInfo;
         this.broadcastInfo = broadcastInfo;
         this.messageExtensions = messageExtensions;
+        this.metadata = metadata;
         this.additionalProperties = additionalProperties;
     }
 
@@ -137,6 +141,11 @@ public final class AuthenticateThreeDsSessionRequest {
         return messageExtensions;
     }
 
+    @JsonProperty("metadata")
+    public Optional<Map<String, Optional<String>>> getMetadata() {
+        return metadata;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -160,7 +169,8 @@ public final class AuthenticateThreeDsSessionRequest {
                 && requestorInfo.equals(other.requestorInfo)
                 && cardholderInfo.equals(other.cardholderInfo)
                 && broadcastInfo.equals(other.broadcastInfo)
-                && messageExtensions.equals(other.messageExtensions);
+                && messageExtensions.equals(other.messageExtensions)
+                && metadata.equals(other.metadata);
     }
 
     @java.lang.Override
@@ -177,7 +187,8 @@ public final class AuthenticateThreeDsSessionRequest {
                 this.requestorInfo,
                 this.cardholderInfo,
                 this.broadcastInfo,
-                this.messageExtensions);
+                this.messageExtensions,
+                this.metadata);
     }
 
     @java.lang.Override
@@ -241,6 +252,10 @@ public final class AuthenticateThreeDsSessionRequest {
         _FinalStage messageExtensions(Optional<List<ThreeDsMessageExtension>> messageExtensions);
 
         _FinalStage messageExtensions(List<ThreeDsMessageExtension> messageExtensions);
+
+        _FinalStage metadata(Optional<Map<String, Optional<String>>> metadata);
+
+        _FinalStage metadata(Map<String, Optional<String>> metadata);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -248,6 +263,8 @@ public final class AuthenticateThreeDsSessionRequest {
         private String authenticationCategory;
 
         private String authenticationType;
+
+        private Optional<Map<String, Optional<String>>> metadata = Optional.empty();
 
         private Optional<List<ThreeDsMessageExtension>> messageExtensions = Optional.empty();
 
@@ -288,6 +305,7 @@ public final class AuthenticateThreeDsSessionRequest {
             cardholderInfo(other.getCardholderInfo());
             broadcastInfo(other.getBroadcastInfo());
             messageExtensions(other.getMessageExtensions());
+            metadata(other.getMetadata());
             return this;
         }
 
@@ -303,6 +321,19 @@ public final class AuthenticateThreeDsSessionRequest {
         @JsonSetter("authentication_type")
         public _FinalStage authenticationType(@NotNull String authenticationType) {
             this.authenticationType = Objects.requireNonNull(authenticationType, "authenticationType must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage metadata(Map<String, Optional<String>> metadata) {
+            this.metadata = Optional.ofNullable(metadata);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
+        public _FinalStage metadata(Optional<Map<String, Optional<String>>> metadata) {
+            this.metadata = metadata;
             return this;
         }
 
@@ -451,6 +482,7 @@ public final class AuthenticateThreeDsSessionRequest {
                     cardholderInfo,
                     broadcastInfo,
                     messageExtensions,
+                    metadata,
                     additionalProperties);
         }
     }
