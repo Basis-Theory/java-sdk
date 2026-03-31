@@ -168,7 +168,7 @@ Add the dependency in your `build.gradle` file:
 
 ```groovy
 dependencies {
-  implementation 'dev.basis-theory:basis-theory-java-sdk'
+  implementation 'dev.basis-theory:basis-theory-java-sdk:0.0.1'
 }
 ```
 
