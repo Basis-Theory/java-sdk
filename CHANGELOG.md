@@ -1,3 +1,11 @@
+## [5.4.0](https://github.com/Basis-Theory/java-sdk/compare/5.3.0...5.4.0) (2026-03-31)
+
+
+### Features
+
+* Add metatdata to 3DS authenticate session ([f499559](https://github.com/Basis-Theory/java-sdk/commit/f49955947e29c4bd53c683118f24a315394dff88))
+
+
 ## [5.3.0](https://github.com/Basis-Theory/java-sdk/compare/5.2.0...5.3.0) (2026-02-24)
 
 
