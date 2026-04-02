@@ -14,6 +14,8 @@ public final class RequestOptions {
 
     private final String correlationId;
 
+    private final String btApiKey;
+
     private final Optional<Integer> timeout;
 
     private final TimeUnit timeoutTimeUnit;
@@ -25,12 +27,14 @@ public final class RequestOptions {
     private RequestOptions(
             String apiKey,
             String correlationId,
+            String btApiKey,
             Optional<Integer> timeout,
             TimeUnit timeoutTimeUnit,
             Map<String, String> headers,
             Map<String, Supplier<String>> headerSuppliers) {
         this.apiKey = apiKey;
         this.correlationId = correlationId;
+        this.btApiKey = btApiKey;
         this.timeout = timeout;
         this.timeoutTimeUnit = timeoutTimeUnit;
         this.headers = headers;
@@ -53,6 +57,9 @@ public final class RequestOptions {
         if (this.correlationId != null) {
             headers.put("BT-TRACE-ID", this.correlationId);
         }
+        if (this.btApiKey != null) {
+            headers.put("BT-API-KEY", this.btApiKey);
+        }
         headers.putAll(this.headers);
         this.headerSuppliers.forEach((key, supplier) -> {
             headers.put(key, supplier.get());
@@ -69,6 +76,8 @@ public final class RequestOptions {
 
         private String correlationId = null;
 
+        private String btApiKey = null;
+
         private Optional<Integer> timeout = Optional.empty();
 
         private TimeUnit timeoutTimeUnit = TimeUnit.SECONDS;
@@ -84,6 +93,11 @@ public final class RequestOptions {
 
         public Builder correlationId(String correlationId) {
             this.correlationId = correlationId;
+            return this;
+        }
+
+        public Builder btApiKey(String btApiKey) {
+            this.btApiKey = btApiKey;
             return this;
         }
 
@@ -109,7 +123,8 @@ public final class RequestOptions {
         }
 
         public RequestOptions build() {
-            return new RequestOptions(apiKey, correlationId, timeout, timeoutTimeUnit, headers, headerSuppliers);
+            return new RequestOptions(
+                    apiKey, correlationId, btApiKey, timeout, timeoutTimeUnit, headers, headerSuppliers);
         }
     }
 }

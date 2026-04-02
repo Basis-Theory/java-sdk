@@ -4,21 +4,20 @@
 package com.basistheory.errors;
 
 import com.basistheory.core.BasisTheoryApiApiException;
-import com.basistheory.types.ProblemDetails;
 import okhttp3.Response;
 
 public final class UnprocessableEntityError extends BasisTheoryApiApiException {
     /**
      * The body of the response that triggered the exception.
      */
-    private final ProblemDetails body;
+    private final Object body;
 
-    public UnprocessableEntityError(ProblemDetails body) {
+    public UnprocessableEntityError(Object body) {
         super("UnprocessableEntityError", 422, body);
         this.body = body;
     }
 
-    public UnprocessableEntityError(ProblemDetails body, Response rawResponse) {
+    public UnprocessableEntityError(Object body, Response rawResponse) {
         super("UnprocessableEntityError", 422, body, rawResponse);
         this.body = body;
     }
@@ -27,7 +26,7 @@ public final class UnprocessableEntityError extends BasisTheoryApiApiException {
      * @return the body
      */
     @java.lang.Override
-    public ProblemDetails body() {
+    public Object body() {
         return this.body;
     }
 }

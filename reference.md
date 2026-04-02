@@ -16,6 +16,9 @@
 client.applications().list(
     ApplicationsListRequest
         .builder()
+        .page(1)
+        .start("start")
+        .size(1)
         .build()
 );
 ```
@@ -1327,6 +1330,11 @@ client.tokens().create(
 client.tokens().listV2(
     TokensListV2Request
         .builder()
+        .type("type")
+        .container("container")
+        .fingerprint("fingerprint")
+        .start("start")
+        .size(1)
         .build()
 );
 ```
@@ -1729,6 +1737,13 @@ client.keys().delete("id");
 client.logs().list(
     LogsListRequest
         .builder()
+        .entityType("entity_type")
+        .entityId("entity_id")
+        .startDate(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .endDate(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .page(1)
+        .start("start")
+        .size(1)
         .build()
 );
 ```
@@ -2124,6 +2139,7 @@ client.networkTokens().resume("id");
 client.permissions().list(
     PermissionsListRequest
         .builder()
+        .applicationType("application_type")
         .build()
 );
 ```
@@ -2169,6 +2185,10 @@ client.permissions().list(
 client.proxies().list(
     ProxiesListRequest
         .builder()
+        .name("name")
+        .page(1)
+        .start("start")
+        .size(1)
         .build()
 );
 ```
@@ -2728,6 +2748,10 @@ client.proxies().patch(
 client.reactors().list(
     ReactorsListRequest
         .builder()
+        .name("name")
+        .page(1)
+        .start("start")
+        .size(1)
         .build()
 );
 ```
@@ -3850,6 +3874,334 @@ client.webhooks().create(
 </dl>
 </details>
 
+## Health
+<details><summary><code>client.health.healthCheck()</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Checks DynamoDB connectivity. Result is cached for 30 seconds.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.health().healthCheck();
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.health.ping()</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Simple liveness check that always returns 200.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.webhooks().ping();
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.health.getServiceVersion() -> VersionResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Returns the current service version (git SHA) and service name.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.health().getServiceVersion();
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Notifications
+<details><summary><code>client.notifications.mastercardDigitalCardUpdateNotification(request)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Receives digital card status change events from Mastercard SRC. No API key authentication (relies on network-level security). Always returns 200 for Mastercard retry semantics.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.notifications().mastercardDigitalCardUpdateNotification(
+    PostNotificationsMastercardCardRequest
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**digitalCardUpdateNotifications:** `Optional<List<PostNotificationsMastercardCardRequestDigitalCardUpdateNotificationsItem>>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.notifications.visaTokenStatusUpdateNotification(request)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Receives token lifecycle events from Visa Token Service. Authenticated via x-pay-token HMAC signature (not BT-API-KEY). Always returns 200 for Visa retry semantics.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.notifications().visaTokenStatusUpdateNotification(
+    PostNotificationsVisaProvisionedTokenRequest
+        .builder()
+        .apiKey("apiKey")
+        .eventType("TOKEN_STATUS_UPDATED")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**apiKey:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**eventType:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**vProvisionedTokenId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**messageType:** `Optional<PostNotificationsVisaProvisionedTokenRequestMessageType>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.notifications.visaPanMetadataUpdateNotification(request)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Receives PAN lifecycle events from Visa Token Service when card metadata changes (e.g. reissued card). Authenticated via x-pay-token HMAC signature (not BT-API-KEY). Always returns 200 for Visa retry semantics.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.notifications().visaPanMetadataUpdateNotification(
+    PostNotificationsVisaPanMetadataRequest
+        .builder()
+        .apiKey("apiKey")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**apiKey:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**vPanEnrollmentId:** `Optional<String>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## AccountUpdater Jobs
 <details><summary><code>client.accountUpdater.jobs.get(id) -> AccountUpdaterJob</code></summary>
 <dl>
@@ -3935,6 +4287,8 @@ Returns a list of account updater batch jobs
 client.accountUpdater().jobs().list(
     JobsListRequest
         .builder()
+        .size(1)
+        .start("start")
         .build()
 );
 ```
@@ -4091,6 +4445,1506 @@ client.accountUpdater().realTime().invoke(
 <dd>
 
 **merchantId:** `Optional<String>` — Tenant merchant identifier
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Agentic Agents
+<details><summary><code>client.agentic.agents.create(request) -> Agent</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.agentic().agents().create(
+    CreateAgentRequest
+        .builder()
+        .name("name")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**name:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**enrollmentIds:** `Optional<List<String>>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**instanceDetails:** `Optional<InstanceDetails>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agentic.agents.get(agentId) -> Agent</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.agentic().agents().get("agent_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**agentId:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agentic.agents.delete(agentId)</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.agentic().agents().delete("agent_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**agentId:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agentic.agents.update(agentId, request) -> Agent</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.agentic().agents().update(
+    "agent_id",
+    UpdateAgentRequest
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**agentId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**name:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**enrollmentIds:** `Optional<List<String>>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**instanceDetails:** `Optional<InstanceDetails>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Agentic Enrollments
+<details><summary><code>client.agentic.enrollments.list() -> EnrollmentList</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List all enrollments for the current tenant with cursor-based pagination.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.agentic().enrollments().list(
+    EnrollmentsListRequest
+        .builder()
+        .limit(1)
+        .cursor("cursor")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**limit:** `Optional<Integer>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**cursor:** `Optional<String>` — Pagination cursor from a previous response
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agentic.enrollments.create(request) -> Enrollment</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Enroll a card token with a card network (Visa or Mastercard).
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.agentic().enrollments().create(
+    CreateEnrollmentRequest
+        .builder()
+        .tokenId("token_id")
+        .consumer(
+            Consumer
+                .builder()
+                .email("email")
+                .build()
+        )
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**tokenId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**consumer:** `Consumer` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agentId:** `Optional<String>` — Single agent ID (mutually exclusive with agent_ids)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agentIds:** `Optional<List<String>>` — Multiple agent IDs (mutually exclusive with agent_id)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agentic.enrollments.get(enrollmentId) -> Enrollment</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.agentic().enrollments().get("enrollment_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**enrollmentId:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agentic.enrollments.delete(enrollmentId)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Soft-deletes the enrollment by marking its status as deleted.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.agentic().enrollments().delete("enrollment_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**enrollmentId:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agentic.enrollments.retry(enrollmentId) -> Enrollment</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retry enrolling a card that previously failed. Only failed enrollments can be retried.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.agentic().enrollments().retry("enrollment_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**enrollmentId:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Agentic Agents Instructions
+<details><summary><code>client.agentic.agents.instructions.list(agentId) -> InstructionList</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List all purchase instructions for an agent with cursor-based pagination and optional enrollment filter.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.agentic().agents().instructions().list(
+    "agent_id",
+    InstructionsListRequest
+        .builder()
+        .enrollmentId("enrollment_id")
+        .limit(1)
+        .cursor("cursor")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**agentId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**enrollmentId:** `Optional<String>` — Filter instructions by enrollment ID
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `Optional<Integer>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**cursor:** `Optional<String>` — Pagination cursor from a previous response
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agentic.agents.instructions.create(agentId, request) -> Instruction</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create a new payment instruction for an agent, linked to an enrollment.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.agentic().agents().instructions().create(
+    "agent_id",
+    CreateInstructionRequest
+        .builder()
+        .enrollmentId("enrollment_id")
+        .amount(
+            Amount
+                .builder()
+                .value("100.00")
+                .build()
+        )
+        .description("description")
+        .expiresAt(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**agentId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**enrollmentId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**amount:** `Amount` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**description:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**expiresAt:** `OffsetDateTime` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**assuranceData:** `Optional<Map<String, Object>>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**recurring:** `Optional<Recurring>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**instanceDetails:** `Optional<InstanceDetails>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agentic.agents.instructions.get(agentId, instructionId) -> Instruction</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.agentic().agents().instructions().get("agent_id", "instruction_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**agentId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**instructionId:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agentic.agents.instructions.delete(agentId, instructionId)</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.agentic().agents().instructions().delete("agent_id", "instruction_id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**agentId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**instructionId:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agentic.agents.instructions.update(agentId, instructionId, request) -> Instruction</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.agentic().agents().instructions().update(
+    "agent_id",
+    "instruction_id",
+    UpdateInstructionRequest
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**agentId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**instructionId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**amount:** `Optional<Amount>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**description:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**expiresAt:** `Optional<OffsetDateTime>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Agentic Agents Instructions Credentials
+<details><summary><code>client.agentic.agents.instructions.credentials.create(agentId, instructionId, request) -> Credentials</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve payment credentials (card number, expiration, CVC) for a purchase instruction.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.agentic().agents().instructions().credentials().create(
+    "agent_id",
+    "instruction_id",
+    GetCredentialsRequest
+        .builder()
+        .merchant(
+            Merchant
+                .builder()
+                .name("name")
+                .url("url")
+                .countryCode("country_code")
+                .build()
+        )
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**agentId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**instructionId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**products:** `Optional<List<Product>>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**merchant:** `Merchant` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**amount:** `Optional<Amount>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**deliveryMethod:** `Optional<DeliveryMethod>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**shippingAddress:** `Optional<ShippingAddress>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Agentic Agents Instructions Verify
+<details><summary><code>client.agentic.agents.instructions.verify.start(agentId, instructionId, request) -> VerificationResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Initiate cardholder verification for a purchase instruction that requires it.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.agentic().agents().instructions().verify().start(
+    "agent_id",
+    "instruction_id",
+    StartVerificationRequest
+        .builder()
+        .deviceContext(
+            DeviceContext
+                .builder()
+                .screenHeight(1)
+                .screenWidth(1)
+                .userAgentString("user_agent_string")
+                .languageCode("language_code")
+                .timeZone("time_zone")
+                .javaScriptEnabled(true)
+                .clientDeviceId("client_device_id")
+                .clientReferenceId("client_reference_id")
+                .platformType(DeviceContextPlatformType.WEB)
+                .build()
+        )
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**agentId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**instructionId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `StartVerificationRequest` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agentic.agents.instructions.verify.passkey(agentId, instructionId, request) -> Instruction</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Submit passkey/FIDO assertion data to complete instruction verification.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.agentic().agents().instructions().verify().passkey(
+    "agent_id",
+    "instruction_id",
+    SubmitPasskeyRequest
+        .builder()
+        .assuranceData(
+            new HashMap<String, Object>() {{
+                put("key", "value");
+            }}
+        )
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**agentId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**instructionId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**assuranceData:** `Map<String, Object>` — Visa format (identifier, dfp_session_id, fido_assertion_data) or Mastercard format (flexible object)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**srcCorrelationId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**flowId:** `Optional<String>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Agentic Enrollments Verify
+<details><summary><code>client.agentic.enrollments.verify.start(enrollmentId, request) -> VerificationResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Initiates the cardholder verification flow for a pending enrollment.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.agentic().enrollments().verify().start(
+    "enrollment_id",
+    StartVerificationRequest
+        .builder()
+        .deviceContext(
+            DeviceContext
+                .builder()
+                .screenHeight(1)
+                .screenWidth(1)
+                .userAgentString("user_agent_string")
+                .languageCode("language_code")
+                .timeZone("time_zone")
+                .javaScriptEnabled(true)
+                .clientDeviceId("client_device_id")
+                .clientReferenceId("client_reference_id")
+                .platformType(DeviceContextPlatformType.WEB)
+                .build()
+        )
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**enrollmentId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `StartVerificationRequest` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agentic.enrollments.verify.method(enrollmentId, request) -> VerificationResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Choose the OTP delivery method (SMS, email, etc.) for enrollment verification.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.agentic().enrollments().verify().method(
+    "enrollment_id",
+    SelectMethodRequest
+        .builder()
+        .methodId("method_id")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**enrollmentId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**methodId:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agentic.enrollments.verify.otp(enrollmentId, request) -> Enrollment</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Submit the one-time password received by the cardholder.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.agentic().enrollments().verify().otp(
+    "enrollment_id",
+    SubmitOtpRequest
+        .builder()
+        .otpCode("otp_code")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**enrollmentId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**otpCode:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agentic.enrollments.verify.complete(enrollmentId, request) -> Enrollment</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Complete the verification flow (e.g. after passkey creation). Body is optional — Visa sends empty body, Mastercard sends assurance_data.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.agentic().enrollments().verify().complete(
+    "enrollment_id",
+    CompleteVerificationRequest
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**enrollmentId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**assuranceData:** `Optional<Map<String, Object>>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**srcCorrelationId:** `Optional<String>` 
     
 </dd>
 </dl>
@@ -5183,6 +7037,10 @@ client.tenants().connections().delete();
 client.tenants().invitations().list(
     InvitationsListRequest
         .builder()
+        .status(TenantInvitationStatus.PENDING)
+        .page(1)
+        .start("start")
+        .size(1)
         .build()
 );
 ```
@@ -5425,6 +7283,9 @@ client.tenants().invitations().delete("invitationId");
 client.tenants().members().list(
     MembersListRequest
         .builder()
+        .page(1)
+        .start("start")
+        .size(1)
         .build()
 );
 ```

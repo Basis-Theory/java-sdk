@@ -23,11 +23,9 @@ import com.basistheory.resources.reactors.requests.PatchReactorRequest;
 import com.basistheory.resources.reactors.requests.ReactorsListRequest;
 import com.basistheory.resources.reactors.requests.UpdateReactorRequest;
 import com.basistheory.types.AsyncReactResponse;
-import com.basistheory.types.ProblemDetails;
 import com.basistheory.types.ReactResponse;
 import com.basistheory.types.Reactor;
 import com.basistheory.types.ReactorPaginatedList;
-import com.basistheory.types.ValidationProblemDetails;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import java.util.Collections;
@@ -130,12 +128,12 @@ public class AsyncRawReactorsClient {
                         switch (response.code()) {
                             case 401:
                                 future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 403:
                                 future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 404:
@@ -209,18 +207,17 @@ public class AsyncRawReactorsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, ValidationProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 401:
                                 future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 403:
                                 future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                         }
@@ -281,12 +278,12 @@ public class AsyncRawReactorsClient {
                         switch (response.code()) {
                             case 401:
                                 future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 403:
                                 future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 404:
@@ -361,18 +358,17 @@ public class AsyncRawReactorsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, ValidationProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 401:
                                 future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 403:
                                 future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 404:
@@ -437,12 +433,12 @@ public class AsyncRawReactorsClient {
                         switch (response.code()) {
                             case 401:
                                 future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 403:
                                 future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 404:
@@ -521,18 +517,17 @@ public class AsyncRawReactorsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, ValidationProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 401:
                                 future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 403:
                                 future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 404:
@@ -609,18 +604,17 @@ public class AsyncRawReactorsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, ValidationProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 401:
                                 future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 403:
                                 future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 404:
@@ -630,7 +624,7 @@ public class AsyncRawReactorsClient {
                                 return;
                             case 422:
                                 future.completeExceptionally(new UnprocessableEntityError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                         }
@@ -702,18 +696,17 @@ public class AsyncRawReactorsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, ValidationProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 401:
                                 future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 403:
                                 future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 404:
@@ -723,7 +716,7 @@ public class AsyncRawReactorsClient {
                                 return;
                             case 422:
                                 future.completeExceptionally(new UnprocessableEntityError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                         }

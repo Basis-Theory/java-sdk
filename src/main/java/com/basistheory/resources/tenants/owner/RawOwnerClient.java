@@ -12,7 +12,6 @@ import com.basistheory.core.RequestOptions;
 import com.basistheory.errors.ForbiddenError;
 import com.basistheory.errors.NotFoundError;
 import com.basistheory.errors.UnauthorizedError;
-import com.basistheory.types.ProblemDetails;
 import com.basistheory.types.TenantMemberResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
@@ -61,12 +60,10 @@ public class RawOwnerClient {
                 switch (response.code()) {
                     case 401:
                         throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
-                                response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                     case 403:
                         throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
-                                response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                     case 404:
                         throw new NotFoundError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);

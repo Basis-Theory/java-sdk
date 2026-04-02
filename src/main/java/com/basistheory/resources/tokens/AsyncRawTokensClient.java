@@ -23,10 +23,8 @@ import com.basistheory.resources.tokens.requests.TokensListV2Request;
 import com.basistheory.resources.tokens.requests.UpdateTokenRequest;
 import com.basistheory.types.CreateTokenRequest;
 import com.basistheory.types.CursorPagination;
-import com.basistheory.types.ProblemDetails;
 import com.basistheory.types.Token;
 import com.basistheory.types.TokenCursorPaginatedList;
-import com.basistheory.types.ValidationProblemDetails;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import java.util.Collections;
@@ -96,23 +94,22 @@ public class AsyncRawTokensClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, ValidationProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 401:
                                 future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 403:
                                 future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 409:
                                 future.completeExceptionally(new ConflictError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                         }
@@ -181,23 +178,22 @@ public class AsyncRawTokensClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, ValidationProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 401:
                                 future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 403:
                                 future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 409:
                                 future.completeExceptionally(new ConflictError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                         }
@@ -258,12 +254,12 @@ public class AsyncRawTokensClient {
                         switch (response.code()) {
                             case 401:
                                 future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 403:
                                 future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 404:
@@ -328,18 +324,17 @@ public class AsyncRawTokensClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, ValidationProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 401:
                                 future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 403:
                                 future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 404:
@@ -419,18 +414,17 @@ public class AsyncRawTokensClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, ValidationProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 401:
                                 future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 403:
                                 future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 404:
@@ -440,7 +434,7 @@ public class AsyncRawTokensClient {
                                 return;
                             case 409:
                                 future.completeExceptionally(new ConflictError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                         }
@@ -513,23 +507,22 @@ public class AsyncRawTokensClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, ValidationProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 401:
                                 future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 403:
                                 future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 409:
                                 future.completeExceptionally(new ConflictError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                         }
@@ -636,12 +629,12 @@ public class AsyncRawTokensClient {
                         switch (response.code()) {
                             case 401:
                                 future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 403:
                                 future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                         }
@@ -733,18 +726,17 @@ public class AsyncRawTokensClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, ValidationProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 401:
                                 future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 403:
                                 future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                         }

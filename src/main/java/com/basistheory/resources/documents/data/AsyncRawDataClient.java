@@ -13,7 +13,6 @@ import com.basistheory.core.ResponseBodyInputStream;
 import com.basistheory.errors.ForbiddenError;
 import com.basistheory.errors.NotFoundError;
 import com.basistheory.errors.UnauthorizedError;
-import com.basistheory.types.ProblemDetails;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -73,12 +72,12 @@ public class AsyncRawDataClient {
                         switch (response.code()) {
                             case 401:
                                 future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 403:
                                 future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 404:

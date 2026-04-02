@@ -14,6 +14,8 @@ public final class IdempotentRequestOptions {
 
     private final String correlationId;
 
+    private final String btApiKey;
+
     private final String idempotencyKey;
 
     private final Optional<Integer> timeout;
@@ -27,6 +29,7 @@ public final class IdempotentRequestOptions {
     private IdempotentRequestOptions(
             String apiKey,
             String correlationId,
+            String btApiKey,
             String idempotencyKey,
             Optional<Integer> timeout,
             TimeUnit timeoutTimeUnit,
@@ -34,6 +37,7 @@ public final class IdempotentRequestOptions {
             Map<String, Supplier<String>> headerSuppliers) {
         this.apiKey = apiKey;
         this.correlationId = correlationId;
+        this.btApiKey = btApiKey;
         this.idempotencyKey = idempotencyKey;
         this.timeout = timeout;
         this.timeoutTimeUnit = timeoutTimeUnit;
@@ -57,6 +61,9 @@ public final class IdempotentRequestOptions {
         if (this.correlationId != null) {
             headers.put("BT-TRACE-ID", this.correlationId);
         }
+        if (this.btApiKey != null) {
+            headers.put("BT-API-KEY", this.btApiKey);
+        }
         if (this.idempotencyKey != null) {
             headers.put("BT-IDEMPOTENCY-KEY", this.idempotencyKey);
         }
@@ -76,6 +83,8 @@ public final class IdempotentRequestOptions {
 
         private String correlationId = null;
 
+        private String btApiKey = null;
+
         private String idempotencyKey = null;
 
         private Optional<Integer> timeout = Optional.empty();
@@ -93,6 +102,11 @@ public final class IdempotentRequestOptions {
 
         public Builder correlationId(String correlationId) {
             this.correlationId = correlationId;
+            return this;
+        }
+
+        public Builder btApiKey(String btApiKey) {
+            this.btApiKey = btApiKey;
             return this;
         }
 
@@ -124,7 +138,14 @@ public final class IdempotentRequestOptions {
 
         public IdempotentRequestOptions build() {
             return new IdempotentRequestOptions(
-                    apiKey, correlationId, idempotencyKey, timeout, timeoutTimeUnit, headers, headerSuppliers);
+                    apiKey,
+                    correlationId,
+                    btApiKey,
+                    idempotencyKey,
+                    timeout,
+                    timeoutTimeUnit,
+                    headers,
+                    headerSuppliers);
         }
     }
 }

@@ -21,10 +21,8 @@ import com.basistheory.resources.proxies.requests.CreateProxyRequest;
 import com.basistheory.resources.proxies.requests.PatchProxyRequest;
 import com.basistheory.resources.proxies.requests.ProxiesListRequest;
 import com.basistheory.resources.proxies.requests.UpdateProxyRequest;
-import com.basistheory.types.ProblemDetails;
 import com.basistheory.types.Proxy;
 import com.basistheory.types.ProxyPaginatedList;
-import com.basistheory.types.ValidationProblemDetails;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import java.util.Collections;
@@ -126,12 +124,12 @@ public class AsyncRawProxiesClient {
                         switch (response.code()) {
                             case 401:
                                 future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 403:
                                 future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 404:
@@ -205,18 +203,17 @@ public class AsyncRawProxiesClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, ValidationProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 401:
                                 future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 403:
                                 future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                         }
@@ -277,12 +274,12 @@ public class AsyncRawProxiesClient {
                         switch (response.code()) {
                             case 401:
                                 future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 403:
                                 future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 404:
@@ -357,18 +354,17 @@ public class AsyncRawProxiesClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, ValidationProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 401:
                                 future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 403:
                                 future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 404:
@@ -433,12 +429,12 @@ public class AsyncRawProxiesClient {
                         switch (response.code()) {
                             case 401:
                                 future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 403:
                                 future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 404:
@@ -517,18 +513,17 @@ public class AsyncRawProxiesClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, ValidationProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 401:
                                 future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 403:
                                 future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 404:

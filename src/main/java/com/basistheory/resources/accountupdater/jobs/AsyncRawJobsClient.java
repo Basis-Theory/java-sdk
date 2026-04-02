@@ -17,7 +17,6 @@ import com.basistheory.errors.UnprocessableEntityError;
 import com.basistheory.resources.accountupdater.jobs.requests.JobsListRequest;
 import com.basistheory.types.AccountUpdaterJob;
 import com.basistheory.types.AccountUpdaterJobList;
-import com.basistheory.types.ProblemDetails;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
@@ -82,12 +81,12 @@ public class AsyncRawJobsClient {
                         switch (response.code()) {
                             case 401:
                                 future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 403:
                                 future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 404:
@@ -174,12 +173,12 @@ public class AsyncRawJobsClient {
                         switch (response.code()) {
                             case 401:
                                 future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 403:
                                 future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                         }
@@ -246,17 +245,17 @@ public class AsyncRawJobsClient {
                         switch (response.code()) {
                             case 401:
                                 future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 403:
                                 future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 422:
                                 future.completeExceptionally(new UnprocessableEntityError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                         }

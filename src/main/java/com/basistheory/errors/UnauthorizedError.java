@@ -4,21 +4,20 @@
 package com.basistheory.errors;
 
 import com.basistheory.core.BasisTheoryApiApiException;
-import com.basistheory.types.ProblemDetails;
 import okhttp3.Response;
 
 public final class UnauthorizedError extends BasisTheoryApiApiException {
     /**
      * The body of the response that triggered the exception.
      */
-    private final ProblemDetails body;
+    private final Object body;
 
-    public UnauthorizedError(ProblemDetails body) {
+    public UnauthorizedError(Object body) {
         super("UnauthorizedError", 401, body);
         this.body = body;
     }
 
-    public UnauthorizedError(ProblemDetails body, Response rawResponse) {
+    public UnauthorizedError(Object body, Response rawResponse) {
         super("UnauthorizedError", 401, body, rawResponse);
         this.body = body;
     }
@@ -27,7 +26,7 @@ public final class UnauthorizedError extends BasisTheoryApiApiException {
      * @return the body
      */
     @java.lang.Override
-    public ProblemDetails body() {
+    public Object body() {
         return this.body;
     }
 }

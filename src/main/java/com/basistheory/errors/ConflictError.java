@@ -4,21 +4,20 @@
 package com.basistheory.errors;
 
 import com.basistheory.core.BasisTheoryApiApiException;
-import com.basistheory.types.ProblemDetails;
 import okhttp3.Response;
 
 public final class ConflictError extends BasisTheoryApiApiException {
     /**
      * The body of the response that triggered the exception.
      */
-    private final ProblemDetails body;
+    private final Object body;
 
-    public ConflictError(ProblemDetails body) {
+    public ConflictError(Object body) {
         super("ConflictError", 409, body);
         this.body = body;
     }
 
-    public ConflictError(ProblemDetails body, Response rawResponse) {
+    public ConflictError(Object body, Response rawResponse) {
         super("ConflictError", 409, body, rawResponse);
         this.body = body;
     }
@@ -27,7 +26,7 @@ public final class ConflictError extends BasisTheoryApiApiException {
      * @return the body
      */
     @java.lang.Override
-    public ProblemDetails body() {
+    public Object body() {
         return this.body;
     }
 }

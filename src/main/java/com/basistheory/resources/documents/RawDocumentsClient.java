@@ -15,8 +15,6 @@ import com.basistheory.errors.NotFoundError;
 import com.basistheory.errors.UnauthorizedError;
 import com.basistheory.resources.documents.requests.DocumentsUploadRequest;
 import com.basistheory.types.Document;
-import com.basistheory.types.ProblemDetails;
-import com.basistheory.types.ValidationProblemDetails;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.File;
 import java.io.IOException;
@@ -94,16 +92,13 @@ public class RawDocumentsClient {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ValidationProblemDetails.class),
-                                response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                     case 401:
                         throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
-                                response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                     case 403:
                         throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
-                                response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -149,12 +144,10 @@ public class RawDocumentsClient {
                 switch (response.code()) {
                     case 401:
                         throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
-                                response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                     case 403:
                         throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
-                                response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                     case 404:
                         throw new NotFoundError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
@@ -202,12 +195,10 @@ public class RawDocumentsClient {
                 switch (response.code()) {
                     case 401:
                         throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
-                                response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                     case 403:
                         throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
-                                response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error

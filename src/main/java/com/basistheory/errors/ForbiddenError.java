@@ -4,21 +4,20 @@
 package com.basistheory.errors;
 
 import com.basistheory.core.BasisTheoryApiApiException;
-import com.basistheory.types.ProblemDetails;
 import okhttp3.Response;
 
 public final class ForbiddenError extends BasisTheoryApiApiException {
     /**
      * The body of the response that triggered the exception.
      */
-    private final ProblemDetails body;
+    private final Object body;
 
-    public ForbiddenError(ProblemDetails body) {
+    public ForbiddenError(Object body) {
         super("ForbiddenError", 403, body);
         this.body = body;
     }
 
-    public ForbiddenError(ProblemDetails body, Response rawResponse) {
+    public ForbiddenError(Object body, Response rawResponse) {
         super("ForbiddenError", 403, body, rawResponse);
         this.body = body;
     }
@@ -27,7 +26,7 @@ public final class ForbiddenError extends BasisTheoryApiApiException {
      * @return the body
      */
     @java.lang.Override
-    public ProblemDetails body() {
+    public Object body() {
         return this.body;
     }
 }

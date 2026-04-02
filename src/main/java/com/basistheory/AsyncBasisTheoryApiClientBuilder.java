@@ -17,6 +17,8 @@ public class AsyncBasisTheoryApiClientBuilder {
 
     private String correlationId = null;
 
+    private String btApiKey = null;
+
     private Environment environment = Environment.DEFAULT;
 
     private OkHttpClient httpClient;
@@ -35,6 +37,14 @@ public class AsyncBasisTheoryApiClientBuilder {
      */
     public AsyncBasisTheoryApiClientBuilder correlationId(String correlationId) {
         this.correlationId = correlationId;
+        return this;
+    }
+
+    /**
+     * Sets btApiKey
+     */
+    public AsyncBasisTheoryApiClientBuilder btApiKey(String btApiKey) {
+        this.btApiKey = btApiKey;
         return this;
     }
 
@@ -132,6 +142,7 @@ public class AsyncBasisTheoryApiClientBuilder {
         if (this.correlationId != null) {
             builder.addHeader("BT-TRACE-ID", this.correlationId);
         }
+        builder.addHeader("BT-API-KEY", this.btApiKey);
     }
 
     /**
@@ -209,6 +220,9 @@ public class AsyncBasisTheoryApiClientBuilder {
     public AsyncBasisTheoryApiClient build() {
         if (apiKey == null) {
             throw new RuntimeException("Please provide apiKey or set the BT-API-KEY environment variable.");
+        }
+        if (btApiKey == null) {
+            throw new RuntimeException("Please provide btApiKey");
         }
         validateConfiguration();
         return new AsyncBasisTheoryApiClient(buildClientOptions());

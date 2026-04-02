@@ -12,6 +12,8 @@ public final class Environment {
 
     public static final Environment TEST = new Environment("https://api.test.basistheory.com");
 
+    public static final Environment PRODUCTION = new Environment("https://api.basistheory.com/agentic");
+
     private final String url;
 
     private Environment(String url) {

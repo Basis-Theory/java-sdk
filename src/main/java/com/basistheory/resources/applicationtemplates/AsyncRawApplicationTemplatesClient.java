@@ -12,7 +12,6 @@ import com.basistheory.core.RequestOptions;
 import com.basistheory.errors.NotFoundError;
 import com.basistheory.errors.UnauthorizedError;
 import com.basistheory.types.ApplicationTemplate;
-import com.basistheory.types.ProblemDetails;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.IOException;
@@ -72,7 +71,7 @@ public class AsyncRawApplicationTemplatesClient {
                         switch (response.code()) {
                             case 401:
                                 future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 404:
@@ -140,7 +139,7 @@ public class AsyncRawApplicationTemplatesClient {
                         switch (response.code()) {
                             case 401:
                                 future.completeExceptionally(new UnauthorizedError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 404:

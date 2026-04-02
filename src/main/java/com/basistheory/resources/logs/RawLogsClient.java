@@ -18,8 +18,6 @@ import com.basistheory.resources.logs.requests.LogsListRequest;
 import com.basistheory.types.Log;
 import com.basistheory.types.LogEntityType;
 import com.basistheory.types.LogPaginatedList;
-import com.basistheory.types.ProblemDetails;
-import com.basistheory.types.ValidationProblemDetails;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.IOException;
@@ -112,16 +110,13 @@ public class RawLogsClient {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ValidationProblemDetails.class),
-                                response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                     case 401:
                         throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
-                                response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                     case 403:
                         throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
-                                response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -168,12 +163,10 @@ public class RawLogsClient {
                 switch (response.code()) {
                     case 401:
                         throw new UnauthorizedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
-                                response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                     case 403:
                         throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
-                                response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
