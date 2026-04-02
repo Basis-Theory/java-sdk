@@ -13,6 +13,7 @@ import com.basistheory.core.RequestOptions;
 import com.basistheory.errors.BadRequestError;
 import com.basistheory.errors.ForbiddenError;
 import com.basistheory.errors.NotFoundError;
+import com.basistheory.errors.ServiceUnavailableError;
 import com.basistheory.errors.UnauthorizedError;
 import com.basistheory.resources.tenants.securitycontact.requests.SecurityContactEmailRequest;
 import com.basistheory.types.ProblemDetails;
@@ -72,6 +73,9 @@ public class RawSecurityContactClient {
                         throw new ForbiddenError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
                                 response);
+                    case 503:
+                        throw new ServiceUnavailableError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
