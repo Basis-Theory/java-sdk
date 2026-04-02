@@ -200,8 +200,7 @@ public class RawDomainClient {
                                 response);
                     case 503:
                         throw new ServiceUnavailableError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
-                                response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -278,8 +277,7 @@ public class RawDomainClient {
                                 response);
                     case 503:
                         throw new ServiceUnavailableError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
-                                response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error

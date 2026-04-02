@@ -246,7 +246,7 @@ public class AsyncRawDomainClient {
                                 return;
                             case 503:
                                 future.completeExceptionally(new ServiceUnavailableError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                         }
@@ -344,7 +344,7 @@ public class AsyncRawDomainClient {
                                 return;
                             case 503:
                                 future.completeExceptionally(new ServiceUnavailableError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                         }

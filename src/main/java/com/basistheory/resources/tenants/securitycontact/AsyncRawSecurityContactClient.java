@@ -13,6 +13,7 @@ import com.basistheory.core.RequestOptions;
 import com.basistheory.errors.BadRequestError;
 import com.basistheory.errors.ForbiddenError;
 import com.basistheory.errors.NotFoundError;
+import com.basistheory.errors.ServiceUnavailableError;
 import com.basistheory.errors.UnauthorizedError;
 import com.basistheory.resources.tenants.securitycontact.requests.SecurityContactEmailRequest;
 import com.basistheory.types.ProblemDetails;
@@ -82,6 +83,11 @@ public class AsyncRawSecurityContactClient {
                             case 403:
                                 future.completeExceptionally(new ForbiddenError(
                                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                        response));
+                                return;
+                            case 503:
+                                future.completeExceptionally(new ServiceUnavailableError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                         }
