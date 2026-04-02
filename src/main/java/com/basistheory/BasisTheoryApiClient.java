@@ -6,6 +6,7 @@ package com.basistheory;
 import com.basistheory.core.ClientOptions;
 import com.basistheory.core.Suppliers;
 import com.basistheory.resources.accountupdater.AccountUpdaterClient;
+import com.basistheory.resources.agentic.AgenticClient;
 import com.basistheory.resources.applepay.ApplePayClient;
 import com.basistheory.resources.applicationkeys.ApplicationKeysClient;
 import com.basistheory.resources.applications.ApplicationsClient;
@@ -69,6 +70,8 @@ public class BasisTheoryApiClient {
 
     protected final Supplier<AccountUpdaterClient> accountUpdaterClient;
 
+    protected final Supplier<AgenticClient> agenticClient;
+
     protected final Supplier<TenantsClient> tenantsClient;
 
     protected final Supplier<ThreedsClient> threedsClient;
@@ -94,6 +97,7 @@ public class BasisTheoryApiClient {
         this.tokenIntentsClient = Suppliers.memoize(() -> new TokenIntentsClient(clientOptions));
         this.webhooksClient = Suppliers.memoize(() -> new WebhooksClient(clientOptions));
         this.accountUpdaterClient = Suppliers.memoize(() -> new AccountUpdaterClient(clientOptions));
+        this.agenticClient = Suppliers.memoize(() -> new AgenticClient(clientOptions));
         this.tenantsClient = Suppliers.memoize(() -> new TenantsClient(clientOptions));
         this.threedsClient = Suppliers.memoize(() -> new ThreedsClient(clientOptions));
     }
@@ -172,6 +176,10 @@ public class BasisTheoryApiClient {
 
     public AccountUpdaterClient accountUpdater() {
         return this.accountUpdaterClient.get();
+    }
+
+    public AgenticClient agentic() {
+        return this.agenticClient.get();
     }
 
     public TenantsClient tenants() {
