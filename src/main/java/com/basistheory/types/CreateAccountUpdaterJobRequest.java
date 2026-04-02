@@ -24,14 +24,18 @@ public final class CreateAccountUpdaterJobRequest {
 
     private final Optional<String> merchantId;
 
+    private final Optional<CreateAccountUpdaterJobRequestResultVersion> resultVersion;
+
     private final Map<String, Object> additionalProperties;
 
     private CreateAccountUpdaterJobRequest(
             Optional<Boolean> deduplicateTokens,
             Optional<String> merchantId,
+            Optional<CreateAccountUpdaterJobRequestResultVersion> resultVersion,
             Map<String, Object> additionalProperties) {
         this.deduplicateTokens = deduplicateTokens;
         this.merchantId = merchantId;
+        this.resultVersion = resultVersion;
         this.additionalProperties = additionalProperties;
     }
 
@@ -51,6 +55,14 @@ public final class CreateAccountUpdaterJobRequest {
         return merchantId;
     }
 
+    /**
+     * @return Version of the result CSV format. Version '1' returns base columns. Version '1.1' adds new_fingerprint and new_brand columns.
+     */
+    @JsonProperty("result_version")
+    public Optional<CreateAccountUpdaterJobRequestResultVersion> getResultVersion() {
+        return resultVersion;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -63,12 +75,14 @@ public final class CreateAccountUpdaterJobRequest {
     }
 
     private boolean equalTo(CreateAccountUpdaterJobRequest other) {
-        return deduplicateTokens.equals(other.deduplicateTokens) && merchantId.equals(other.merchantId);
+        return deduplicateTokens.equals(other.deduplicateTokens)
+                && merchantId.equals(other.merchantId)
+                && resultVersion.equals(other.resultVersion);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.deduplicateTokens, this.merchantId);
+        return Objects.hash(this.deduplicateTokens, this.merchantId, this.resultVersion);
     }
 
     @java.lang.Override
@@ -86,6 +100,8 @@ public final class CreateAccountUpdaterJobRequest {
 
         private Optional<String> merchantId = Optional.empty();
 
+        private Optional<CreateAccountUpdaterJobRequestResultVersion> resultVersion = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -94,6 +110,7 @@ public final class CreateAccountUpdaterJobRequest {
         public Builder from(CreateAccountUpdaterJobRequest other) {
             deduplicateTokens(other.getDeduplicateTokens());
             merchantId(other.getMerchantId());
+            resultVersion(other.getResultVersion());
             return this;
         }
 
@@ -125,8 +142,23 @@ public final class CreateAccountUpdaterJobRequest {
             return this;
         }
 
+        /**
+         * <p>Version of the result CSV format. Version '1' returns base columns. Version '1.1' adds new_fingerprint and new_brand columns.</p>
+         */
+        @JsonSetter(value = "result_version", nulls = Nulls.SKIP)
+        public Builder resultVersion(Optional<CreateAccountUpdaterJobRequestResultVersion> resultVersion) {
+            this.resultVersion = resultVersion;
+            return this;
+        }
+
+        public Builder resultVersion(CreateAccountUpdaterJobRequestResultVersion resultVersion) {
+            this.resultVersion = Optional.ofNullable(resultVersion);
+            return this;
+        }
+
         public CreateAccountUpdaterJobRequest build() {
-            return new CreateAccountUpdaterJobRequest(deduplicateTokens, merchantId, additionalProperties);
+            return new CreateAccountUpdaterJobRequest(
+                    deduplicateTokens, merchantId, resultVersion, additionalProperties);
         }
     }
 }

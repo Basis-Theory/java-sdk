@@ -13,7 +13,7 @@ public class BasisTheoryApiClientBuilder {
 
     private Optional<Integer> maxRetries = Optional.empty();
 
-    private String apiKey = System.getenv("BT-API-KEY");
+    private String apiKey = null;
 
     private String correlationId = null;
 
@@ -22,8 +22,7 @@ public class BasisTheoryApiClientBuilder {
     private OkHttpClient httpClient;
 
     /**
-     * Sets apiKey.
-     * Defaults to the BT-API-KEY environment variable.
+     * Sets apiKey
      */
     public BasisTheoryApiClientBuilder apiKey(String apiKey) {
         this.apiKey = apiKey;
@@ -208,7 +207,7 @@ public class BasisTheoryApiClientBuilder {
 
     public BasisTheoryApiClient build() {
         if (apiKey == null) {
-            throw new RuntimeException("Please provide apiKey or set the BT-API-KEY environment variable.");
+            throw new RuntimeException("Please provide apiKey");
         }
         validateConfiguration();
         return new BasisTheoryApiClient(buildClientOptions());
