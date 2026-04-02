@@ -6,6 +6,7 @@ package com.basistheory;
 import com.basistheory.core.ClientOptions;
 import com.basistheory.core.Suppliers;
 import com.basistheory.resources.accountupdater.AsyncAccountUpdaterClient;
+import com.basistheory.resources.agentic.AsyncAgenticClient;
 import com.basistheory.resources.applepay.AsyncApplePayClient;
 import com.basistheory.resources.applicationkeys.AsyncApplicationKeysClient;
 import com.basistheory.resources.applications.AsyncApplicationsClient;
@@ -16,6 +17,7 @@ import com.basistheory.resources.googlepay.AsyncGooglePayClient;
 import com.basistheory.resources.keys.AsyncKeysClient;
 import com.basistheory.resources.logs.AsyncLogsClient;
 import com.basistheory.resources.networktokens.AsyncNetworkTokensClient;
+import com.basistheory.resources.notifications.AsyncNotificationsClient;
 import com.basistheory.resources.permissions.AsyncPermissionsClient;
 import com.basistheory.resources.proxies.AsyncProxiesClient;
 import com.basistheory.resources.reactors.AsyncReactorsClient;
@@ -67,7 +69,11 @@ public class AsyncBasisTheoryApiClient {
 
     protected final Supplier<AsyncWebhooksClient> webhooksClient;
 
+    protected final Supplier<AsyncNotificationsClient> notificationsClient;
+
     protected final Supplier<AsyncAccountUpdaterClient> accountUpdaterClient;
+
+    protected final Supplier<AsyncAgenticClient> agenticClient;
 
     protected final Supplier<AsyncTenantsClient> tenantsClient;
 
@@ -93,7 +99,9 @@ public class AsyncBasisTheoryApiClient {
         this.sessionsClient = Suppliers.memoize(() -> new AsyncSessionsClient(clientOptions));
         this.tokenIntentsClient = Suppliers.memoize(() -> new AsyncTokenIntentsClient(clientOptions));
         this.webhooksClient = Suppliers.memoize(() -> new AsyncWebhooksClient(clientOptions));
+        this.notificationsClient = Suppliers.memoize(() -> new AsyncNotificationsClient(clientOptions));
         this.accountUpdaterClient = Suppliers.memoize(() -> new AsyncAccountUpdaterClient(clientOptions));
+        this.agenticClient = Suppliers.memoize(() -> new AsyncAgenticClient(clientOptions));
         this.tenantsClient = Suppliers.memoize(() -> new AsyncTenantsClient(clientOptions));
         this.threedsClient = Suppliers.memoize(() -> new AsyncThreedsClient(clientOptions));
     }
@@ -170,8 +178,16 @@ public class AsyncBasisTheoryApiClient {
         return this.webhooksClient.get();
     }
 
+    public AsyncNotificationsClient notifications() {
+        return this.notificationsClient.get();
+    }
+
     public AsyncAccountUpdaterClient accountUpdater() {
         return this.accountUpdaterClient.get();
+    }
+
+    public AsyncAgenticClient agentic() {
+        return this.agenticClient.get();
     }
 
     public AsyncTenantsClient tenants() {
