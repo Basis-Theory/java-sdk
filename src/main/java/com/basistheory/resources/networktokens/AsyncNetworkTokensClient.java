@@ -31,6 +31,10 @@ public class AsyncNetworkTokensClient {
         return this.rawClient.create().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<NetworkToken> create(RequestOptions requestOptions) {
+        return this.rawClient.create(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<NetworkToken> create(CreateNetworkTokenRequest request) {
         return this.rawClient.create(request).thenApply(response -> response.body());
     }

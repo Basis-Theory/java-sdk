@@ -29,6 +29,10 @@ public class AsyncSessionClient {
         return this.rawClient.create().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<String> create(RequestOptions requestOptions) {
+        return this.rawClient.create(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<String> create(ApplePaySessionRequest request) {
         return this.rawClient.create(request).thenApply(response -> response.body());
     }

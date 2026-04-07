@@ -32,6 +32,10 @@ public class InvitationsClient {
         return this.rawClient.list().body();
     }
 
+    public SyncPagingIterable<TenantInvitationResponse> list(RequestOptions requestOptions) {
+        return this.rawClient.list(requestOptions).body();
+    }
+
     public SyncPagingIterable<TenantInvitationResponse> list(InvitationsListRequest request) {
         return this.rawClient.list(request).body();
     }

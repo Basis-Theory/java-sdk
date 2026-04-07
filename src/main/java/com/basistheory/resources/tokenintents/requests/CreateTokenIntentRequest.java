@@ -82,6 +82,10 @@ public final class CreateTokenIntentRequest {
 
     public interface _FinalStage {
         CreateTokenIntentRequest build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -119,6 +123,18 @@ public final class CreateTokenIntentRequest {
         @java.lang.Override
         public CreateTokenIntentRequest build() {
             return new CreateTokenIntentRequest(type, data, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

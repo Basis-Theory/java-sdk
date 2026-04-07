@@ -238,5 +238,15 @@ public final class Address {
         public Address build() {
             return new Address(line1, line2, line3, postalCode, city, stateCode, countryCode, additionalProperties);
         }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
+        }
     }
 }

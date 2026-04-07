@@ -5,6 +5,9 @@ package com.basistheory;
 
 import com.basistheory.core.ClientOptions;
 import com.basistheory.core.Environment;
+import com.basistheory.core.LogConfig;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import okhttp3.OkHttpClient;
 
@@ -13,6 +16,8 @@ public class AsyncBasisTheoryApiClientBuilder {
 
     private Optional<Integer> maxRetries = Optional.empty();
 
+    private final Map<String, String> customHeaders = new HashMap<>();
+
     private String apiKey = System.getenv("BT-API-KEY");
 
     private String correlationId = null;
@@ -20,6 +25,8 @@ public class AsyncBasisTheoryApiClientBuilder {
     private Environment environment = Environment.DEFAULT;
 
     private OkHttpClient httpClient;
+
+    private Optional<LogConfig> logging = Optional.empty();
 
     /**
      * Sets apiKey.
@@ -72,6 +79,27 @@ public class AsyncBasisTheoryApiClientBuilder {
         return this;
     }
 
+    /**
+     * Configure logging for the SDK. Silent by default — no log output unless explicitly configured.
+     */
+    public AsyncBasisTheoryApiClientBuilder logging(LogConfig logging) {
+        this.logging = Optional.of(logging);
+        return this;
+    }
+
+    /**
+     * Add a custom header to be sent with all requests.
+     * For headers that need to be computed dynamically or conditionally, use the setAdditional() method override instead.
+     *
+     * @param name The header name
+     * @param value The header value
+     * @return This builder for method chaining
+     */
+    public AsyncBasisTheoryApiClientBuilder addHeader(String name, String value) {
+        this.customHeaders.put(name, value);
+        return this;
+    }
+
     protected ClientOptions buildClientOptions() {
         ClientOptions.Builder builder = ClientOptions.builder();
         setEnvironment(builder);
@@ -80,6 +108,10 @@ public class AsyncBasisTheoryApiClientBuilder {
         setHttpClient(builder);
         setTimeouts(builder);
         setRetries(builder);
+        setLogging(builder);
+        for (Map.Entry<String, String> header : this.customHeaders.entrySet()) {
+            builder.addHeader(header.getKey(), header.getValue());
+        }
         setAdditional(builder);
         return builder.build();
     }
@@ -102,7 +134,7 @@ public class AsyncBasisTheoryApiClientBuilder {
      *
      * Example:
      * <pre>{@code
-     * @Override
+     * &#64;Override
      * protected void setAuthentication(ClientOptions.Builder builder) {
      *     super.setAuthentication(builder); // Keep existing auth
      *     builder.addHeader("X-API-Key", this.apiKey);
@@ -121,7 +153,7 @@ public class AsyncBasisTheoryApiClientBuilder {
      *
      * Example:
      * <pre>{@code
-     * @Override
+     * &#64;Override
      * protected void setCustomHeaders(ClientOptions.Builder builder) {
      *     super.setCustomHeaders(builder); // Keep existing headers
      *     builder.addHeader("X-Trace-ID", generateTraceId());
@@ -171,6 +203,18 @@ public class AsyncBasisTheoryApiClientBuilder {
     }
 
     /**
+     * Sets the logging configuration for the SDK.
+     * Override this method to customize logging behavior.
+     *
+     * @param builder The ClientOptions.Builder to configure
+     */
+    protected void setLogging(ClientOptions.Builder builder) {
+        if (this.logging.isPresent()) {
+            builder.logging(this.logging.get());
+        }
+    }
+
+    /**
      * Override this method to add any additional configuration to the client.
      * This method is called at the end of the configuration chain, allowing you to add
      * custom headers, modify settings, or perform any other client customization.
@@ -179,9 +223,9 @@ public class AsyncBasisTheoryApiClientBuilder {
      *
      * Example:
      * <pre>{@code
-     * @Override
+     * &#64;Override
      * protected void setAdditional(ClientOptions.Builder builder) {
-     *     builder.addHeader("X-Request-ID", () -> UUID.randomUUID().toString());
+     *     builder.addHeader("X-Request-ID", () -&gt; UUID.randomUUID().toString());
      *     builder.addHeader("X-Client-Version", "1.0.0");
      * }
      * }</pre>
@@ -195,7 +239,7 @@ public class AsyncBasisTheoryApiClientBuilder {
      *
      * Example:
      * <pre>{@code
-     * @Override
+     * &#64;Override
      * protected void validateConfiguration() {
      *     super.validateConfiguration(); // Run parent validations
      *     if (tenantId == null || tenantId.isEmpty()) {

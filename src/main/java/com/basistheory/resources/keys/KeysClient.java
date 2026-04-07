@@ -39,6 +39,10 @@ public class KeysClient {
         return this.rawClient.create().body();
     }
 
+    public ClientEncryptionKeyResponse create(RequestOptions requestOptions) {
+        return this.rawClient.create(requestOptions).body();
+    }
+
     public ClientEncryptionKeyResponse create(ClientEncryptionKeyRequest request) {
         return this.rawClient.create(request).body();
     }

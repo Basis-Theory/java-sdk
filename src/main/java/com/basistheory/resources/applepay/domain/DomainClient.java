@@ -56,6 +56,10 @@ public class DomainClient {
         return this.rawClient.registerAll().body();
     }
 
+    public ApplePayDomainRegistrationResponse registerAll(RequestOptions requestOptions) {
+        return this.rawClient.registerAll(requestOptions).body();
+    }
+
     public ApplePayDomainRegistrationResponse registerAll(ApplePayDomainRegistrationListRequest request) {
         return this.rawClient.registerAll(request).body();
     }

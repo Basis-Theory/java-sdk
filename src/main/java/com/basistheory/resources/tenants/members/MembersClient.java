@@ -32,6 +32,10 @@ public class MembersClient {
         return this.rawClient.list().body();
     }
 
+    public TenantMemberResponsePaginatedList list(RequestOptions requestOptions) {
+        return this.rawClient.list(requestOptions).body();
+    }
+
     public TenantMemberResponsePaginatedList list(MembersListRequest request) {
         return this.rawClient.list(request).body();
     }

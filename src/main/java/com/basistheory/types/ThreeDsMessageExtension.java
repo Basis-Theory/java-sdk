@@ -165,5 +165,15 @@ public final class ThreeDsMessageExtension {
         public ThreeDsMessageExtension build() {
             return new ThreeDsMessageExtension(id, name, critical, data, additionalProperties);
         }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
+        }
     }
 }

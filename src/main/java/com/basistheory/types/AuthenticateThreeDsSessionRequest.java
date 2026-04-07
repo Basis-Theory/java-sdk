@@ -213,6 +213,10 @@ public final class AuthenticateThreeDsSessionRequest {
     public interface _FinalStage {
         AuthenticateThreeDsSessionRequest build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage cardBrand(Optional<String> cardBrand);
 
         _FinalStage cardBrand(String cardBrand);
@@ -484,6 +488,18 @@ public final class AuthenticateThreeDsSessionRequest {
                     messageExtensions,
                     metadata,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

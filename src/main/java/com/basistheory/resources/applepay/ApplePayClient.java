@@ -44,6 +44,10 @@ public class ApplePayClient {
         return this.rawClient.create().body();
     }
 
+    public ApplePayCreateResponse create(RequestOptions requestOptions) {
+        return this.rawClient.create(requestOptions).body();
+    }
+
     public ApplePayCreateResponse create(ApplePayCreateRequest request) {
         return this.rawClient.create(request).body();
     }

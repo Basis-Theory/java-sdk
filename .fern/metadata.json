@@ -1,0 +1,11 @@
+{
+  "cliVersion": "4.62.4",
+  "generatorName": "fernapi/fern-java-sdk",
+  "generatorVersion": "4.1.1",
+  "generatorConfig": {
+    "base-exception-class-name": "BasisTheoryException",
+    "package-prefix": "com.basistheory"
+  },
+  "originGitCommit": "9f5087e691fd8b88f869b8b323536001e9f48fc9",
+  "sdkVersion": "0.0.1"
+}

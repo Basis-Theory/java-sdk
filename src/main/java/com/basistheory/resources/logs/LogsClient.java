@@ -32,6 +32,10 @@ public class LogsClient {
         return this.rawClient.list().body();
     }
 
+    public SyncPagingIterable<Log> list(RequestOptions requestOptions) {
+        return this.rawClient.list(requestOptions).body();
+    }
+
     public SyncPagingIterable<Log> list(LogsListRequest request) {
         return this.rawClient.list(request).body();
     }

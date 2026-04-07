@@ -34,6 +34,10 @@ public class AsyncApplicationsClient {
         return this.rawClient.list().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<SyncPagingIterable<Application>> list(RequestOptions requestOptions) {
+        return this.rawClient.list(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<SyncPagingIterable<Application>> list(ApplicationsListRequest request) {
         return this.rawClient.list(request).thenApply(response -> response.body());
     }

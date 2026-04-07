@@ -6,9 +6,9 @@ package com.basistheory.resources.applicationkeys.requests;
 import com.basistheory.core.ObjectMappers;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -35,12 +35,12 @@ public final class ApplicationKeysListRequest {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("id")
+    @JsonIgnore
     public Optional<List<String>> getId() {
         return id;
     }
 
-    @JsonProperty("type")
+    @JsonIgnore
     public Optional<List<String>> getType() {
         return type;
     }
@@ -125,6 +125,16 @@ public final class ApplicationKeysListRequest {
 
         public ApplicationKeysListRequest build() {
             return new ApplicationKeysListRequest(id, type, additionalProperties);
+        }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

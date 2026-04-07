@@ -3,22 +3,81 @@
  */
 package com.basistheory.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum WebhookStatus {
-    ENABLED("enabled"),
+public final class WebhookStatus {
+    public static final WebhookStatus ENABLED = new WebhookStatus(Value.ENABLED, "enabled");
 
-    DISABLED("disabled");
+    public static final WebhookStatus DISABLED = new WebhookStatus(Value.DISABLED, "disabled");
 
-    private final String value;
+    private final Value value;
 
-    WebhookStatus(String value) {
+    private final String string;
+
+    WebhookStatus(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof WebhookStatus && this.string.equals(((WebhookStatus) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case ENABLED:
+                return visitor.visitEnabled();
+            case DISABLED:
+                return visitor.visitDisabled();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static WebhookStatus valueOf(String value) {
+        switch (value) {
+            case "enabled":
+                return ENABLED;
+            case "disabled":
+                return DISABLED;
+            default:
+                return new WebhookStatus(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        ENABLED,
+
+        DISABLED,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitEnabled();
+
+        T visitDisabled();
+
+        T visitUnknown(String unknownType);
     }
 }

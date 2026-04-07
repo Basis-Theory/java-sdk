@@ -6,9 +6,9 @@ package com.basistheory.resources.tokens.requests;
 import com.basistheory.core.ObjectMappers;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -51,32 +51,32 @@ public final class TokensListV2Request {
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("type")
+    @JsonIgnore
     public Optional<String> getType() {
         return type;
     }
 
-    @JsonProperty("container")
+    @JsonIgnore
     public Optional<String> getContainer() {
         return container;
     }
 
-    @JsonProperty("fingerprint")
+    @JsonIgnore
     public Optional<String> getFingerprint() {
         return fingerprint;
     }
 
-    @JsonProperty("metadata")
+    @JsonIgnore
     public Optional<Map<String, Optional<String>>> getMetadata() {
         return metadata;
     }
 
-    @JsonProperty("start")
+    @JsonIgnore
     public Optional<String> getStart() {
         return start;
     }
 
-    @JsonProperty("size")
+    @JsonIgnore
     public Optional<Integer> getSize() {
         return size;
     }
@@ -212,6 +212,16 @@ public final class TokensListV2Request {
 
         public TokensListV2Request build() {
             return new TokensListV2Request(type, container, fingerprint, metadata, start, size, additionalProperties);
+        }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

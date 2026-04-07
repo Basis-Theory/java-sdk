@@ -33,6 +33,10 @@ public class ApplicationsClient {
         return this.rawClient.list().body();
     }
 
+    public SyncPagingIterable<Application> list(RequestOptions requestOptions) {
+        return this.rawClient.list(requestOptions).body();
+    }
+
     public SyncPagingIterable<Application> list(ApplicationsListRequest request) {
         return this.rawClient.list(request).body();
     }

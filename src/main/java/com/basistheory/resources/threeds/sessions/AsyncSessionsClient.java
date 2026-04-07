@@ -34,6 +34,10 @@ public class AsyncSessionsClient {
         return this.rawClient.create().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<CreateThreeDsSessionResponse> create(RequestOptions requestOptions) {
+        return this.rawClient.create(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<CreateThreeDsSessionResponse> create(CreateThreeDsSessionRequest request) {
         return this.rawClient.create(request).thenApply(response -> response.body());
     }

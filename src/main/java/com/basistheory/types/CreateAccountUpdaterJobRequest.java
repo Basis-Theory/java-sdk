@@ -128,5 +128,15 @@ public final class CreateAccountUpdaterJobRequest {
         public CreateAccountUpdaterJobRequest build() {
             return new CreateAccountUpdaterJobRequest(deduplicateTokens, merchantId, additionalProperties);
         }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
+        }
     }
 }

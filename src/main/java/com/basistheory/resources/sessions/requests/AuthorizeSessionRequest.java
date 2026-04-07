@@ -107,6 +107,10 @@ public final class AuthorizeSessionRequest {
     public interface _FinalStage {
         AuthorizeSessionRequest build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage expiresAt(Optional<String> expiresAt);
 
         _FinalStage expiresAt(String expiresAt);
@@ -193,6 +197,18 @@ public final class AuthorizeSessionRequest {
         @java.lang.Override
         public AuthorizeSessionRequest build() {
             return new AuthorizeSessionRequest(nonce, expiresAt, permissions, rules, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

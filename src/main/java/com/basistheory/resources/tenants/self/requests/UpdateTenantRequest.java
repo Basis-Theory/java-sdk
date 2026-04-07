@@ -82,6 +82,10 @@ public final class UpdateTenantRequest {
     public interface _FinalStage {
         UpdateTenantRequest build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage settings(Optional<Map<String, Optional<String>>> settings);
 
         _FinalStage settings(Map<String, Optional<String>> settings);
@@ -128,6 +132,18 @@ public final class UpdateTenantRequest {
         @java.lang.Override
         public UpdateTenantRequest build() {
             return new UpdateTenantRequest(name, settings, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

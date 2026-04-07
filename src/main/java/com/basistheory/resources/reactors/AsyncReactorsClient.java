@@ -43,6 +43,10 @@ public class AsyncReactorsClient {
         return this.rawClient.list().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<SyncPagingIterable<Reactor>> list(RequestOptions requestOptions) {
+        return this.rawClient.list(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<SyncPagingIterable<Reactor>> list(ReactorsListRequest request) {
         return this.rawClient.list(request).thenApply(response -> response.body());
     }
@@ -87,6 +91,10 @@ public class AsyncReactorsClient {
 
     public CompletableFuture<Void> patch(String id) {
         return this.rawClient.patch(id).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<Void> patch(String id, IdempotentRequestOptions requestOptions) {
+        return this.rawClient.patch(id, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<Void> patch(String id, PatchReactorRequest request) {

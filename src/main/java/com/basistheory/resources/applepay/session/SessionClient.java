@@ -28,6 +28,10 @@ public class SessionClient {
         return this.rawClient.create().body();
     }
 
+    public String create(RequestOptions requestOptions) {
+        return this.rawClient.create(requestOptions).body();
+    }
+
     public String create(ApplePaySessionRequest request) {
         return this.rawClient.create(request).body();
     }

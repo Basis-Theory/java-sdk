@@ -30,6 +30,10 @@ public class NetworkTokensClient {
         return this.rawClient.create().body();
     }
 
+    public NetworkToken create(RequestOptions requestOptions) {
+        return this.rawClient.create(requestOptions).body();
+    }
+
     public NetworkToken create(CreateNetworkTokenRequest request) {
         return this.rawClient.create(request).body();
     }

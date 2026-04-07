@@ -121,6 +121,10 @@ public final class CreateReactorRequest {
     public interface _FinalStage {
         CreateReactorRequest build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage application(Optional<Application> application);
 
         _FinalStage application(Application application);
@@ -217,6 +221,18 @@ public final class CreateReactorRequest {
         @java.lang.Override
         public CreateReactorRequest build() {
             return new CreateReactorRequest(name, code, application, configuration, runtime, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

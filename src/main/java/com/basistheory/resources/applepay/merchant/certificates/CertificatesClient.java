@@ -45,6 +45,10 @@ public class CertificatesClient {
         return this.rawClient.create(merchantId).body();
     }
 
+    public ApplePayMerchantCertificates create(String merchantId, RequestOptions requestOptions) {
+        return this.rawClient.create(merchantId, requestOptions).body();
+    }
+
     public ApplePayMerchantCertificates create(String merchantId, ApplePayMerchantCertificatesRegisterRequest request) {
         return this.rawClient.create(merchantId, request).body();
     }

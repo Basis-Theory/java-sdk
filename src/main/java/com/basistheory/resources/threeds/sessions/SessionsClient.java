@@ -33,6 +33,10 @@ public class SessionsClient {
         return this.rawClient.create().body();
     }
 
+    public CreateThreeDsSessionResponse create(RequestOptions requestOptions) {
+        return this.rawClient.create(requestOptions).body();
+    }
+
     public CreateThreeDsSessionResponse create(CreateThreeDsSessionRequest request) {
         return this.rawClient.create(request).body();
     }

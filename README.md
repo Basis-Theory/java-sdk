@@ -8,6 +8,7 @@ The BasisTheory Java library provides convenient access to the BasisTheory APIs 
 ## Table of Contents
 
 - [Documentation](#documentation)
+- [Reference](#reference)
 - [Usage](#usage)
 - [Environments](#environments)
 - [Base Url](#base-url)
@@ -16,12 +17,18 @@ The BasisTheory Java library provides convenient access to the BasisTheory APIs 
   - [Custom Client](#custom-client)
   - [Retries](#retries)
   - [Timeouts](#timeouts)
+  - [Custom Headers](#custom-headers)
+  - [Access Raw Response Data](#access-raw-response-data)
 - [Contributing](#contributing)
 - [Installation](#installation)
 
 ## Documentation
 
 API reference documentation is available [here](https://api.basistheory.com).
+
+## Reference
+
+A full reference for this library is available [here](https://github.com/Basis-Theory/java-sdk/blob/HEAD/./reference.md).
 
 ## Usage
 
@@ -78,9 +85,9 @@ When the API returns a non-success status code (4xx or 5xx response), an API exc
 ```java
 import com.basistheory.core.BasisTheoryApiApiException;
 
-try {
+try{
     client.tenants().self().get(...);
-} catch (BasisTheoryApiApiException e) {
+} catch (BasisTheoryApiApiException e){
     // Do something with the API exception...
 }
 ```
@@ -89,7 +96,7 @@ try {
 
 ### Custom Client
 
-This SDK is built to work with any instance of `OkHttpClient`. By default, if no client is provided, the SDK will construct one. 
+This SDK is built to work with any instance of `OkHttpClient`. By default, if no client is provided, the SDK will construct one.
 However, you can pass your own client like so:
 
 ```java
@@ -108,7 +115,9 @@ BasisTheoryApiClient client = BasisTheoryApiClient
 
 The SDK is instrumented with automatic retries with exponential backoff. A request will be retried as long
 as the request is deemed retryable and the number of retry attempts has not grown larger than the configured
-retry limit (default: 2).
+retry limit (default: 2). Before defaulting to exponential backoff, the SDK will first attempt to respect
+the `Retry-After` header (as either in seconds or as an HTTP date), and then the `X-RateLimit-Reset` header
+(as a Unix timestamp in epoch seconds); failing both of those, it will fall back to exponential backoff.
 
 A request is deemed retryable when any of the following HTTP status codes is returned:
 
@@ -130,6 +139,29 @@ BasisTheoryApiClient client = BasisTheoryApiClient
 ### Timeouts
 
 The SDK defaults to a 60 second timeout. You can configure this with a timeout option at the client or request level.
+```java
+import com.basistheory.BasisTheoryApiClient;
+import com.basistheory.core.RequestOptions;
+
+// Client level
+BasisTheoryApiClient client = BasisTheoryApiClient
+    .builder()
+    .timeout(60)
+    .build();
+
+// Request level
+client.tenants().self().get(
+    ...,
+    RequestOptions
+        .builder()
+        .timeout(60)
+        .build()
+);
+```
+
+### Custom Headers
+
+The SDK allows you to add custom headers to requests. You can configure headers at the client level or at the request level.
 
 ```java
 import com.basistheory.BasisTheoryApiClient;
@@ -138,17 +170,32 @@ import com.basistheory.core.RequestOptions;
 // Client level
 BasisTheoryApiClient client = BasisTheoryApiClient
     .builder()
-    .timeout(10)
+    .addHeader("X-Custom-Header", "custom-value")
+    .addHeader("X-Request-Id", "abc-123")
     .build();
+;
 
 // Request level
 client.tenants().self().get(
     ...,
     RequestOptions
         .builder()
-        .timeout(10)
+        .addHeader("X-Request-Header", "request-value")
         .build()
 );
+```
+
+### Access Raw Response Data
+
+The SDK provides access to raw response data, including headers, through the `withRawResponse()` method.
+The `withRawResponse()` method returns a raw client that wraps all responses with `body()` and `headers()` methods.
+(A normal client's `response` is identical to a raw client's `response.body()`.)
+
+```java
+BasisTheoryApiHttpResponse response = client.tenants().self().withRawResponse().get(...);
+
+System.out.println(response.body());
+System.out.println(response.headers().get("X-My-Header"));
 ```
 
 ## Contributing
@@ -183,3 +230,4 @@ Add the dependency in your `pom.xml` file:
   <version>0.0.1</version>
 </dependency>
 ```
+

@@ -47,6 +47,10 @@ public class AsyncCertificatesClient {
         return this.rawClient.create(merchantId).thenApply(response -> response.body());
     }
 
+    public CompletableFuture<ApplePayMerchantCertificates> create(String merchantId, RequestOptions requestOptions) {
+        return this.rawClient.create(merchantId, requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<ApplePayMerchantCertificates> create(
             String merchantId, ApplePayMerchantCertificatesRegisterRequest request) {
         return this.rawClient.create(merchantId, request).thenApply(response -> response.body());

@@ -120,5 +120,15 @@ public final class AccountUpdaterRealTimeResponse {
         public AccountUpdaterRealTimeResponse build() {
             return new AccountUpdaterRealTimeResponse(newToken, resultCode, additionalProperties);
         }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
+        }
     }
 }

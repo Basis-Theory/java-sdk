@@ -40,6 +40,10 @@ public class AsyncKeysClient {
         return this.rawClient.create().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<ClientEncryptionKeyResponse> create(RequestOptions requestOptions) {
+        return this.rawClient.create(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<ClientEncryptionKeyResponse> create(ClientEncryptionKeyRequest request) {
         return this.rawClient.create(request).thenApply(response -> response.body());
     }

@@ -95,6 +95,10 @@ public final class UpdateApplicationRequest {
     public interface _FinalStage {
         UpdateApplicationRequest build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage permissions(Optional<List<String>> permissions);
 
         _FinalStage permissions(List<String> permissions);
@@ -161,6 +165,18 @@ public final class UpdateApplicationRequest {
         @java.lang.Override
         public UpdateApplicationRequest build() {
             return new UpdateApplicationRequest(name, permissions, rules, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

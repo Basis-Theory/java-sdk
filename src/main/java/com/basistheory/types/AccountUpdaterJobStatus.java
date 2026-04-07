@@ -3,26 +3,103 @@
  */
 package com.basistheory.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum AccountUpdaterJobStatus {
-    PENDING("pending"),
+public final class AccountUpdaterJobStatus {
+    public static final AccountUpdaterJobStatus FAILED = new AccountUpdaterJobStatus(Value.FAILED, "failed");
 
-    PROCESSING("processing"),
+    public static final AccountUpdaterJobStatus COMPLETED = new AccountUpdaterJobStatus(Value.COMPLETED, "completed");
 
-    COMPLETED("completed"),
+    public static final AccountUpdaterJobStatus PENDING = new AccountUpdaterJobStatus(Value.PENDING, "pending");
 
-    FAILED("failed");
+    public static final AccountUpdaterJobStatus PROCESSING =
+            new AccountUpdaterJobStatus(Value.PROCESSING, "processing");
 
-    private final String value;
+    private final Value value;
 
-    AccountUpdaterJobStatus(String value) {
+    private final String string;
+
+    AccountUpdaterJobStatus(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof AccountUpdaterJobStatus
+                        && this.string.equals(((AccountUpdaterJobStatus) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case FAILED:
+                return visitor.visitFailed();
+            case COMPLETED:
+                return visitor.visitCompleted();
+            case PENDING:
+                return visitor.visitPending();
+            case PROCESSING:
+                return visitor.visitProcessing();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static AccountUpdaterJobStatus valueOf(String value) {
+        switch (value) {
+            case "failed":
+                return FAILED;
+            case "completed":
+                return COMPLETED;
+            case "pending":
+                return PENDING;
+            case "processing":
+                return PROCESSING;
+            default:
+                return new AccountUpdaterJobStatus(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        PENDING,
+
+        PROCESSING,
+
+        COMPLETED,
+
+        FAILED,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitPending();
+
+        T visitProcessing();
+
+        T visitCompleted();
+
+        T visitFailed();
+
+        T visitUnknown(String unknownType);
     }
 }

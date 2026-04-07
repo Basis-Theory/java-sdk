@@ -139,5 +139,15 @@ public final class SearchTokensRequestV2 {
         public SearchTokensRequestV2 build() {
             return new SearchTokensRequestV2(query, start, size, additionalProperties);
         }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
+        }
     }
 }

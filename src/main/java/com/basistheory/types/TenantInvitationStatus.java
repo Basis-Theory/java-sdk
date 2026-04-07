@@ -3,22 +3,82 @@
  */
 package com.basistheory.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum TenantInvitationStatus {
-    PENDING("PENDING"),
+public final class TenantInvitationStatus {
+    public static final TenantInvitationStatus EXPIRED = new TenantInvitationStatus(Value.EXPIRED, "EXPIRED");
 
-    EXPIRED("EXPIRED");
+    public static final TenantInvitationStatus PENDING = new TenantInvitationStatus(Value.PENDING, "PENDING");
 
-    private final String value;
+    private final Value value;
 
-    TenantInvitationStatus(String value) {
+    private final String string;
+
+    TenantInvitationStatus(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof TenantInvitationStatus
+                        && this.string.equals(((TenantInvitationStatus) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case EXPIRED:
+                return visitor.visitExpired();
+            case PENDING:
+                return visitor.visitPending();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static TenantInvitationStatus valueOf(String value) {
+        switch (value) {
+            case "EXPIRED":
+                return EXPIRED;
+            case "PENDING":
+                return PENDING;
+            default:
+                return new TenantInvitationStatus(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        PENDING,
+
+        EXPIRED,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitPending();
+
+        T visitExpired();
+
+        T visitUnknown(String unknownType);
     }
 }

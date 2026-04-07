@@ -33,6 +33,10 @@ public class AsyncMembersClient {
         return this.rawClient.list().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<TenantMemberResponsePaginatedList> list(RequestOptions requestOptions) {
+        return this.rawClient.list(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<TenantMemberResponsePaginatedList> list(MembersListRequest request) {
         return this.rawClient.list(request).thenApply(response -> response.body());
     }

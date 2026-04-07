@@ -30,6 +30,10 @@ public class PermissionsClient {
         return this.rawClient.list().body();
     }
 
+    public List<Permission> list(RequestOptions requestOptions) {
+        return this.rawClient.list(requestOptions).body();
+    }
+
     public List<Permission> list(PermissionsListRequest request) {
         return this.rawClient.list(request).body();
     }
