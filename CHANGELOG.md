@@ -1,3 +1,11 @@
+## [5.5.0](https://github.com/Basis-Theory/java-sdk/compare/5.4.0...5.5.0) (2026-04-08)
+
+
+### Features
+
+* Add Agentic ([#114](https://github.com/Basis-Theory/java-sdk/issues/114)) ([f0e91f3](https://github.com/Basis-Theory/java-sdk/commit/f0e91f35f0f2481fe62d83efaf6d01abcfc6c158))
+
+
 ## [5.4.0](https://github.com/Basis-Theory/java-sdk/compare/5.3.0...5.4.0) (2026-03-31)
 
 
