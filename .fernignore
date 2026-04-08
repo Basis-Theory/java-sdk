@@ -7,4 +7,5 @@
 build.gradle
 CHANGELOG.md
 
+src/test/java/com/basistheory/AgenticTests.java
 src/test/java/com/basistheory/TestClient.java
