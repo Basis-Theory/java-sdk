@@ -64,6 +64,8 @@ public class AsyncBasisTheoryApiClient {
 
     protected final Supplier<AsyncSessionsClient> sessionsClient;
 
+    protected final Supplier<AsyncTenantsClient> tenantsClient;
+
     protected final Supplier<AsyncTokenIntentsClient> tokenIntentsClient;
 
     protected final Supplier<AsyncWebhooksClient> webhooksClient;
@@ -71,8 +73,6 @@ public class AsyncBasisTheoryApiClient {
     protected final Supplier<AsyncAccountUpdaterClient> accountUpdaterClient;
 
     protected final Supplier<AsyncAgenticClient> agenticClient;
-
-    protected final Supplier<AsyncTenantsClient> tenantsClient;
 
     protected final Supplier<AsyncThreedsClient> threedsClient;
 
@@ -94,11 +94,11 @@ public class AsyncBasisTheoryApiClient {
         this.reactorsClient = Suppliers.memoize(() -> new AsyncReactorsClient(clientOptions));
         this.rolesClient = Suppliers.memoize(() -> new AsyncRolesClient(clientOptions));
         this.sessionsClient = Suppliers.memoize(() -> new AsyncSessionsClient(clientOptions));
+        this.tenantsClient = Suppliers.memoize(() -> new AsyncTenantsClient(clientOptions));
         this.tokenIntentsClient = Suppliers.memoize(() -> new AsyncTokenIntentsClient(clientOptions));
         this.webhooksClient = Suppliers.memoize(() -> new AsyncWebhooksClient(clientOptions));
         this.accountUpdaterClient = Suppliers.memoize(() -> new AsyncAccountUpdaterClient(clientOptions));
         this.agenticClient = Suppliers.memoize(() -> new AsyncAgenticClient(clientOptions));
-        this.tenantsClient = Suppliers.memoize(() -> new AsyncTenantsClient(clientOptions));
         this.threedsClient = Suppliers.memoize(() -> new AsyncThreedsClient(clientOptions));
     }
 
@@ -166,6 +166,10 @@ public class AsyncBasisTheoryApiClient {
         return this.sessionsClient.get();
     }
 
+    public AsyncTenantsClient tenants() {
+        return this.tenantsClient.get();
+    }
+
     public AsyncTokenIntentsClient tokenIntents() {
         return this.tokenIntentsClient.get();
     }
@@ -180,10 +184,6 @@ public class AsyncBasisTheoryApiClient {
 
     public AsyncAgenticClient agentic() {
         return this.agenticClient.get();
-    }
-
-    public AsyncTenantsClient tenants() {
-        return this.tenantsClient.get();
     }
 
     public AsyncThreedsClient threeds() {

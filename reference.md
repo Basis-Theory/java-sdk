@@ -3339,6 +3339,52 @@ client.sessions().authorize(
 </dl>
 </details>
 
+## Tenants
+<details><summary><code>client.tenants.ownerTransfer(request) -> TenantMemberResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.tenants().ownerTransfer(
+    TransferTenantOwnerRequest
+        .builder()
+        .memberId("member_id")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**memberId:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## TokenIntents
 <details><summary><code>client.tokenIntents.get(id) -> TokenIntent</code></summary>
 <dl>
@@ -6065,6 +6111,8 @@ client.applePay().merchant().certificates().create(
     "merchantId",
     ApplePayMerchantCertificatesRegisterRequest
         .builder()
+        .paymentProcessorCertificateData("payment_processor_certificate_data")
+        .paymentProcessorCertificatePassword("payment_processor_certificate_password")
         .build()
 );
 ```
@@ -6105,7 +6153,7 @@ client.applePay().merchant().certificates().create(
 <dl>
 <dd>
 
-**paymentProcessorCertificateData:** `Optional<String>` 
+**paymentProcessorCertificateData:** `String` 
     
 </dd>
 </dl>
@@ -6113,7 +6161,7 @@ client.applePay().merchant().certificates().create(
 <dl>
 <dd>
 
-**paymentProcessorCertificatePassword:** `Optional<String>` 
+**paymentProcessorCertificatePassword:** `String` 
     
 </dd>
 </dl>

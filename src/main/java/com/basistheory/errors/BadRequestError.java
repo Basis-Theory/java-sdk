@@ -4,21 +4,20 @@
 package com.basistheory.errors;
 
 import com.basistheory.core.BasisTheoryApiApiException;
-import com.basistheory.types.ValidationProblemDetails;
 import okhttp3.Response;
 
 public final class BadRequestError extends BasisTheoryApiApiException {
     /**
      * The body of the response that triggered the exception.
      */
-    private final ValidationProblemDetails body;
+    private final Object body;
 
-    public BadRequestError(ValidationProblemDetails body) {
+    public BadRequestError(Object body) {
         super("BadRequestError", 400, body);
         this.body = body;
     }
 
-    public BadRequestError(ValidationProblemDetails body, Response rawResponse) {
+    public BadRequestError(Object body, Response rawResponse) {
         super("BadRequestError", 400, body, rawResponse);
         this.body = body;
     }
@@ -27,7 +26,7 @@ public final class BadRequestError extends BasisTheoryApiApiException {
      * @return the body
      */
     @java.lang.Override
-    public ValidationProblemDetails body() {
+    public Object body() {
         return this.body;
     }
 }

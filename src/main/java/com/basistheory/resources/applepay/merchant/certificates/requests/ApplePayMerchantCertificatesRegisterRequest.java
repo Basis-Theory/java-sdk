@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ApplePayMerchantCertificatesRegisterRequest.Builder.class)
@@ -24,9 +25,9 @@ public final class ApplePayMerchantCertificatesRegisterRequest {
 
     private final Optional<String> merchantCertificatePassword;
 
-    private final Optional<String> paymentProcessorCertificateData;
+    private final String paymentProcessorCertificateData;
 
-    private final Optional<String> paymentProcessorCertificatePassword;
+    private final String paymentProcessorCertificatePassword;
 
     private final Optional<String> domain;
 
@@ -35,8 +36,8 @@ public final class ApplePayMerchantCertificatesRegisterRequest {
     private ApplePayMerchantCertificatesRegisterRequest(
             Optional<String> merchantCertificateData,
             Optional<String> merchantCertificatePassword,
-            Optional<String> paymentProcessorCertificateData,
-            Optional<String> paymentProcessorCertificatePassword,
+            String paymentProcessorCertificateData,
+            String paymentProcessorCertificatePassword,
             Optional<String> domain,
             Map<String, Object> additionalProperties) {
         this.merchantCertificateData = merchantCertificateData;
@@ -58,12 +59,12 @@ public final class ApplePayMerchantCertificatesRegisterRequest {
     }
 
     @JsonProperty("payment_processor_certificate_data")
-    public Optional<String> getPaymentProcessorCertificateData() {
+    public String getPaymentProcessorCertificateData() {
         return paymentProcessorCertificateData;
     }
 
     @JsonProperty("payment_processor_certificate_password")
-    public Optional<String> getPaymentProcessorCertificatePassword() {
+    public String getPaymentProcessorCertificatePassword() {
         return paymentProcessorCertificatePassword;
     }
 
@@ -107,27 +108,56 @@ public final class ApplePayMerchantCertificatesRegisterRequest {
         return ObjectMappers.stringify(this);
     }
 
-    public static Builder builder() {
+    public static PaymentProcessorCertificateDataStage builder() {
         return new Builder();
     }
 
+    public interface PaymentProcessorCertificateDataStage {
+        PaymentProcessorCertificatePasswordStage paymentProcessorCertificateData(
+                @NotNull String paymentProcessorCertificateData);
+
+        Builder from(ApplePayMerchantCertificatesRegisterRequest other);
+    }
+
+    public interface PaymentProcessorCertificatePasswordStage {
+        _FinalStage paymentProcessorCertificatePassword(@NotNull String paymentProcessorCertificatePassword);
+    }
+
+    public interface _FinalStage {
+        ApplePayMerchantCertificatesRegisterRequest build();
+
+        _FinalStage merchantCertificateData(Optional<String> merchantCertificateData);
+
+        _FinalStage merchantCertificateData(String merchantCertificateData);
+
+        _FinalStage merchantCertificatePassword(Optional<String> merchantCertificatePassword);
+
+        _FinalStage merchantCertificatePassword(String merchantCertificatePassword);
+
+        _FinalStage domain(Optional<String> domain);
+
+        _FinalStage domain(String domain);
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder {
-        private Optional<String> merchantCertificateData = Optional.empty();
+    public static final class Builder
+            implements PaymentProcessorCertificateDataStage, PaymentProcessorCertificatePasswordStage, _FinalStage {
+        private String paymentProcessorCertificateData;
+
+        private String paymentProcessorCertificatePassword;
+
+        private Optional<String> domain = Optional.empty();
 
         private Optional<String> merchantCertificatePassword = Optional.empty();
 
-        private Optional<String> paymentProcessorCertificateData = Optional.empty();
-
-        private Optional<String> paymentProcessorCertificatePassword = Optional.empty();
-
-        private Optional<String> domain = Optional.empty();
+        private Optional<String> merchantCertificateData = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
+        @java.lang.Override
         public Builder from(ApplePayMerchantCertificatesRegisterRequest other) {
             merchantCertificateData(other.getMerchantCertificateData());
             merchantCertificatePassword(other.getMerchantCertificatePassword());
@@ -137,61 +167,63 @@ public final class ApplePayMerchantCertificatesRegisterRequest {
             return this;
         }
 
-        @JsonSetter(value = "merchant_certificate_data", nulls = Nulls.SKIP)
-        public Builder merchantCertificateData(Optional<String> merchantCertificateData) {
-            this.merchantCertificateData = merchantCertificateData;
+        @java.lang.Override
+        @JsonSetter("payment_processor_certificate_data")
+        public PaymentProcessorCertificatePasswordStage paymentProcessorCertificateData(
+                @NotNull String paymentProcessorCertificateData) {
+            this.paymentProcessorCertificateData = Objects.requireNonNull(
+                    paymentProcessorCertificateData, "paymentProcessorCertificateData must not be null");
             return this;
         }
 
-        public Builder merchantCertificateData(String merchantCertificateData) {
-            this.merchantCertificateData = Optional.ofNullable(merchantCertificateData);
+        @java.lang.Override
+        @JsonSetter("payment_processor_certificate_password")
+        public _FinalStage paymentProcessorCertificatePassword(@NotNull String paymentProcessorCertificatePassword) {
+            this.paymentProcessorCertificatePassword = Objects.requireNonNull(
+                    paymentProcessorCertificatePassword, "paymentProcessorCertificatePassword must not be null");
             return this;
         }
 
-        @JsonSetter(value = "merchant_certificate_password", nulls = Nulls.SKIP)
-        public Builder merchantCertificatePassword(Optional<String> merchantCertificatePassword) {
-            this.merchantCertificatePassword = merchantCertificatePassword;
-            return this;
-        }
-
-        public Builder merchantCertificatePassword(String merchantCertificatePassword) {
-            this.merchantCertificatePassword = Optional.ofNullable(merchantCertificatePassword);
-            return this;
-        }
-
-        @JsonSetter(value = "payment_processor_certificate_data", nulls = Nulls.SKIP)
-        public Builder paymentProcessorCertificateData(Optional<String> paymentProcessorCertificateData) {
-            this.paymentProcessorCertificateData = paymentProcessorCertificateData;
-            return this;
-        }
-
-        public Builder paymentProcessorCertificateData(String paymentProcessorCertificateData) {
-            this.paymentProcessorCertificateData = Optional.ofNullable(paymentProcessorCertificateData);
-            return this;
-        }
-
-        @JsonSetter(value = "payment_processor_certificate_password", nulls = Nulls.SKIP)
-        public Builder paymentProcessorCertificatePassword(Optional<String> paymentProcessorCertificatePassword) {
-            this.paymentProcessorCertificatePassword = paymentProcessorCertificatePassword;
-            return this;
-        }
-
-        public Builder paymentProcessorCertificatePassword(String paymentProcessorCertificatePassword) {
-            this.paymentProcessorCertificatePassword = Optional.ofNullable(paymentProcessorCertificatePassword);
-            return this;
-        }
-
-        @JsonSetter(value = "domain", nulls = Nulls.SKIP)
-        public Builder domain(Optional<String> domain) {
-            this.domain = domain;
-            return this;
-        }
-
-        public Builder domain(String domain) {
+        @java.lang.Override
+        public _FinalStage domain(String domain) {
             this.domain = Optional.ofNullable(domain);
             return this;
         }
 
+        @java.lang.Override
+        @JsonSetter(value = "domain", nulls = Nulls.SKIP)
+        public _FinalStage domain(Optional<String> domain) {
+            this.domain = domain;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage merchantCertificatePassword(String merchantCertificatePassword) {
+            this.merchantCertificatePassword = Optional.ofNullable(merchantCertificatePassword);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "merchant_certificate_password", nulls = Nulls.SKIP)
+        public _FinalStage merchantCertificatePassword(Optional<String> merchantCertificatePassword) {
+            this.merchantCertificatePassword = merchantCertificatePassword;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage merchantCertificateData(String merchantCertificateData) {
+            this.merchantCertificateData = Optional.ofNullable(merchantCertificateData);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "merchant_certificate_data", nulls = Nulls.SKIP)
+        public _FinalStage merchantCertificateData(Optional<String> merchantCertificateData) {
+            this.merchantCertificateData = merchantCertificateData;
+            return this;
+        }
+
+        @java.lang.Override
         public ApplePayMerchantCertificatesRegisterRequest build() {
             return new ApplePayMerchantCertificatesRegisterRequest(
                     merchantCertificateData,

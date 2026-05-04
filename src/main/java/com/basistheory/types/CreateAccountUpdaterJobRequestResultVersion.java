@@ -8,7 +8,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum CreateAccountUpdaterJobRequestResultVersion {
     ONE("1"),
 
-    ONE_1("1.1");
+    ONE_1("1.1"),
+
+    ONE_2("1.2");
 
     private final String value;
 

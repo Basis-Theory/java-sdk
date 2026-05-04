@@ -30,6 +30,16 @@ public final class AgenticCard {
 
     private final Optional<Integer> expirationYear;
 
+    private final Optional<String> funding;
+
+    private final Optional<String> issuer;
+
+    private final Optional<String> issuerCountry;
+
+    private final Optional<String> segment;
+
+    private final Optional<String> type;
+
     private final Optional<CardDisplay> display;
 
     private final Map<String, Object> additionalProperties;
@@ -40,6 +50,11 @@ public final class AgenticCard {
             Optional<String> last4,
             Optional<Integer> expirationMonth,
             Optional<Integer> expirationYear,
+            Optional<String> funding,
+            Optional<String> issuer,
+            Optional<String> issuerCountry,
+            Optional<String> segment,
+            Optional<String> type,
             Optional<CardDisplay> display,
             Map<String, Object> additionalProperties) {
         this.brand = brand;
@@ -47,6 +62,11 @@ public final class AgenticCard {
         this.last4 = last4;
         this.expirationMonth = expirationMonth;
         this.expirationYear = expirationYear;
+        this.funding = funding;
+        this.issuer = issuer;
+        this.issuerCountry = issuerCountry;
+        this.segment = segment;
+        this.type = type;
         this.display = display;
         this.additionalProperties = additionalProperties;
     }
@@ -76,6 +96,46 @@ public final class AgenticCard {
         return expirationYear;
     }
 
+    /**
+     * @return Card funding type (e.g. credit, debit, prepaid)
+     */
+    @JsonProperty("funding")
+    public Optional<String> getFunding() {
+        return funding;
+    }
+
+    /**
+     * @return Card issuer name
+     */
+    @JsonProperty("issuer")
+    public Optional<String> getIssuer() {
+        return issuer;
+    }
+
+    /**
+     * @return Card issuer country code
+     */
+    @JsonProperty("issuer_country")
+    public Optional<String> getIssuerCountry() {
+        return issuerCountry;
+    }
+
+    /**
+     * @return Card segment (e.g. consumer, commercial)
+     */
+    @JsonProperty("segment")
+    public Optional<String> getSegment() {
+        return segment;
+    }
+
+    /**
+     * @return Card type
+     */
+    @JsonProperty("type")
+    public Optional<String> getType() {
+        return type;
+    }
+
     @JsonProperty("display")
     public Optional<CardDisplay> getDisplay() {
         return display;
@@ -98,12 +158,28 @@ public final class AgenticCard {
                 && last4.equals(other.last4)
                 && expirationMonth.equals(other.expirationMonth)
                 && expirationYear.equals(other.expirationYear)
+                && funding.equals(other.funding)
+                && issuer.equals(other.issuer)
+                && issuerCountry.equals(other.issuerCountry)
+                && segment.equals(other.segment)
+                && type.equals(other.type)
                 && display.equals(other.display);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.brand, this.bin, this.last4, this.expirationMonth, this.expirationYear, this.display);
+        return Objects.hash(
+                this.brand,
+                this.bin,
+                this.last4,
+                this.expirationMonth,
+                this.expirationYear,
+                this.funding,
+                this.issuer,
+                this.issuerCountry,
+                this.segment,
+                this.type,
+                this.display);
     }
 
     @java.lang.Override
@@ -127,6 +203,16 @@ public final class AgenticCard {
 
         private Optional<Integer> expirationYear = Optional.empty();
 
+        private Optional<String> funding = Optional.empty();
+
+        private Optional<String> issuer = Optional.empty();
+
+        private Optional<String> issuerCountry = Optional.empty();
+
+        private Optional<String> segment = Optional.empty();
+
+        private Optional<String> type = Optional.empty();
+
         private Optional<CardDisplay> display = Optional.empty();
 
         @JsonAnySetter
@@ -140,6 +226,11 @@ public final class AgenticCard {
             last4(other.getLast4());
             expirationMonth(other.getExpirationMonth());
             expirationYear(other.getExpirationYear());
+            funding(other.getFunding());
+            issuer(other.getIssuer());
+            issuerCountry(other.getIssuerCountry());
+            segment(other.getSegment());
+            type(other.getType());
             display(other.getDisplay());
             return this;
         }
@@ -199,6 +290,76 @@ public final class AgenticCard {
             return this;
         }
 
+        /**
+         * <p>Card funding type (e.g. credit, debit, prepaid)</p>
+         */
+        @JsonSetter(value = "funding", nulls = Nulls.SKIP)
+        public Builder funding(Optional<String> funding) {
+            this.funding = funding;
+            return this;
+        }
+
+        public Builder funding(String funding) {
+            this.funding = Optional.ofNullable(funding);
+            return this;
+        }
+
+        /**
+         * <p>Card issuer name</p>
+         */
+        @JsonSetter(value = "issuer", nulls = Nulls.SKIP)
+        public Builder issuer(Optional<String> issuer) {
+            this.issuer = issuer;
+            return this;
+        }
+
+        public Builder issuer(String issuer) {
+            this.issuer = Optional.ofNullable(issuer);
+            return this;
+        }
+
+        /**
+         * <p>Card issuer country code</p>
+         */
+        @JsonSetter(value = "issuer_country", nulls = Nulls.SKIP)
+        public Builder issuerCountry(Optional<String> issuerCountry) {
+            this.issuerCountry = issuerCountry;
+            return this;
+        }
+
+        public Builder issuerCountry(String issuerCountry) {
+            this.issuerCountry = Optional.ofNullable(issuerCountry);
+            return this;
+        }
+
+        /**
+         * <p>Card segment (e.g. consumer, commercial)</p>
+         */
+        @JsonSetter(value = "segment", nulls = Nulls.SKIP)
+        public Builder segment(Optional<String> segment) {
+            this.segment = segment;
+            return this;
+        }
+
+        public Builder segment(String segment) {
+            this.segment = Optional.ofNullable(segment);
+            return this;
+        }
+
+        /**
+         * <p>Card type</p>
+         */
+        @JsonSetter(value = "type", nulls = Nulls.SKIP)
+        public Builder type(Optional<String> type) {
+            this.type = type;
+            return this;
+        }
+
+        public Builder type(String type) {
+            this.type = Optional.ofNullable(type);
+            return this;
+        }
+
         @JsonSetter(value = "display", nulls = Nulls.SKIP)
         public Builder display(Optional<CardDisplay> display) {
             this.display = display;
@@ -211,7 +372,19 @@ public final class AgenticCard {
         }
 
         public AgenticCard build() {
-            return new AgenticCard(brand, bin, last4, expirationMonth, expirationYear, display, additionalProperties);
+            return new AgenticCard(
+                    brand,
+                    bin,
+                    last4,
+                    expirationMonth,
+                    expirationYear,
+                    funding,
+                    issuer,
+                    issuerCountry,
+                    segment,
+                    type,
+                    display,
+                    additionalProperties);
         }
     }
 }
