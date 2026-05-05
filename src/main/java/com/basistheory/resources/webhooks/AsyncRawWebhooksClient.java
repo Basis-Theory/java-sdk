@@ -18,7 +18,6 @@ import com.basistheory.errors.UnprocessableEntityError;
 import com.basistheory.resources.webhooks.requests.CreateWebhookRequest;
 import com.basistheory.resources.webhooks.requests.UpdateWebhookRequest;
 import com.basistheory.types.ProblemDetails;
-import com.basistheory.types.ValidationProblemDetails;
 import com.basistheory.types.Webhook;
 import com.basistheory.types.WebhookList;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -222,8 +221,7 @@ public class AsyncRawWebhooksClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, ValidationProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 401:
@@ -304,8 +302,7 @@ public class AsyncRawWebhooksClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, ValidationProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 401:
@@ -387,8 +384,7 @@ public class AsyncRawWebhooksClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, ValidationProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 401:
@@ -473,8 +469,7 @@ public class AsyncRawWebhooksClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, ValidationProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 401:

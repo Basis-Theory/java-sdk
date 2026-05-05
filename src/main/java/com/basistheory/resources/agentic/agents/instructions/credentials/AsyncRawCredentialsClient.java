@@ -19,7 +19,6 @@ import com.basistheory.errors.UnprocessableEntityError;
 import com.basistheory.resources.agentic.agents.instructions.credentials.requests.GetCredentialsRequest;
 import com.basistheory.types.Credentials;
 import com.basistheory.types.ProblemDetails;
-import com.basistheory.types.ValidationProblemDetails;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
@@ -96,8 +95,7 @@ public class AsyncRawCredentialsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, ValidationProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 401:

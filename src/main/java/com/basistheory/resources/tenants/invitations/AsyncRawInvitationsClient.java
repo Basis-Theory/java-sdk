@@ -22,7 +22,6 @@ import com.basistheory.resources.tenants.invitations.requests.InvitationsListReq
 import com.basistheory.types.ProblemDetails;
 import com.basistheory.types.TenantInvitationResponse;
 import com.basistheory.types.TenantInvitationResponsePaginatedList;
-import com.basistheory.types.ValidationProblemDetails;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import java.util.Collections;
@@ -200,8 +199,7 @@ public class AsyncRawInvitationsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, ValidationProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 401:
@@ -276,8 +274,7 @@ public class AsyncRawInvitationsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, ValidationProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 401:

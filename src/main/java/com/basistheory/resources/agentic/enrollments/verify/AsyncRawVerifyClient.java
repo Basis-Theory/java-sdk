@@ -22,7 +22,6 @@ import com.basistheory.resources.agentic.enrollments.verify.requests.SelectMetho
 import com.basistheory.resources.agentic.enrollments.verify.requests.SubmitOtpRequest;
 import com.basistheory.types.ProblemDetails;
 import com.basistheory.types.StartVerificationRequest;
-import com.basistheory.types.ValidationProblemDetails;
 import com.basistheory.types.VerificationResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
@@ -98,8 +97,7 @@ public class AsyncRawVerifyClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, ValidationProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 401:
@@ -208,8 +206,7 @@ public class AsyncRawVerifyClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, ValidationProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 401:
@@ -313,8 +310,7 @@ public class AsyncRawVerifyClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, ValidationProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 401:
@@ -425,8 +421,7 @@ public class AsyncRawVerifyClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, ValidationProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 401:

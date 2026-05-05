@@ -24,6 +24,8 @@ import java.util.Optional;
 public final class Enrollment {
     private final Optional<String> id;
 
+    private final Optional<String> tokenId;
+
     private final Optional<EnrollmentProvider> provider;
 
     private final Optional<EnrollmentStatus> status;
@@ -38,6 +40,7 @@ public final class Enrollment {
 
     private Enrollment(
             Optional<String> id,
+            Optional<String> tokenId,
             Optional<EnrollmentProvider> provider,
             Optional<EnrollmentStatus> status,
             Optional<AgenticCard> card,
@@ -45,6 +48,7 @@ public final class Enrollment {
             Optional<OffsetDateTime> createdAt,
             Map<String, Object> additionalProperties) {
         this.id = id;
+        this.tokenId = tokenId;
         this.provider = provider;
         this.status = status;
         this.card = card;
@@ -56,6 +60,14 @@ public final class Enrollment {
     @JsonProperty("id")
     public Optional<String> getId() {
         return id;
+    }
+
+    /**
+     * @return Basis Theory card token ID used for enrollment
+     */
+    @JsonProperty("token_id")
+    public Optional<String> getTokenId() {
+        return tokenId;
     }
 
     @JsonProperty("provider")
@@ -96,6 +108,7 @@ public final class Enrollment {
 
     private boolean equalTo(Enrollment other) {
         return id.equals(other.id)
+                && tokenId.equals(other.tokenId)
                 && provider.equals(other.provider)
                 && status.equals(other.status)
                 && card.equals(other.card)
@@ -105,7 +118,8 @@ public final class Enrollment {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.id, this.provider, this.status, this.card, this.agentIds, this.createdAt);
+        return Objects.hash(
+                this.id, this.tokenId, this.provider, this.status, this.card, this.agentIds, this.createdAt);
     }
 
     @java.lang.Override
@@ -120,6 +134,8 @@ public final class Enrollment {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
         private Optional<String> id = Optional.empty();
+
+        private Optional<String> tokenId = Optional.empty();
 
         private Optional<EnrollmentProvider> provider = Optional.empty();
 
@@ -138,6 +154,7 @@ public final class Enrollment {
 
         public Builder from(Enrollment other) {
             id(other.getId());
+            tokenId(other.getTokenId());
             provider(other.getProvider());
             status(other.getStatus());
             card(other.getCard());
@@ -154,6 +171,20 @@ public final class Enrollment {
 
         public Builder id(String id) {
             this.id = Optional.ofNullable(id);
+            return this;
+        }
+
+        /**
+         * <p>Basis Theory card token ID used for enrollment</p>
+         */
+        @JsonSetter(value = "token_id", nulls = Nulls.SKIP)
+        public Builder tokenId(Optional<String> tokenId) {
+            this.tokenId = tokenId;
+            return this;
+        }
+
+        public Builder tokenId(String tokenId) {
+            this.tokenId = Optional.ofNullable(tokenId);
             return this;
         }
 
@@ -213,7 +244,7 @@ public final class Enrollment {
         }
 
         public Enrollment build() {
-            return new Enrollment(id, provider, status, card, agentIds, createdAt, additionalProperties);
+            return new Enrollment(id, tokenId, provider, status, card, agentIds, createdAt, additionalProperties);
         }
     }
 }

@@ -146,12 +146,6 @@ public class RawCertificatesClient {
         }
     }
 
-    public BasisTheoryApiHttpResponse<ApplePayMerchantCertificates> create(String merchantId) {
-        return create(
-                merchantId,
-                ApplePayMerchantCertificatesRegisterRequest.builder().build());
-    }
-
     public BasisTheoryApiHttpResponse<ApplePayMerchantCertificates> create(
             String merchantId, ApplePayMerchantCertificatesRegisterRequest request) {
         return create(merchantId, request, null);

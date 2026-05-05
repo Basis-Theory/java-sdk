@@ -20,7 +20,6 @@ import com.basistheory.resources.agentic.agents.instructions.verify.requests.Sub
 import com.basistheory.types.Instruction;
 import com.basistheory.types.ProblemDetails;
 import com.basistheory.types.StartVerificationRequest;
-import com.basistheory.types.ValidationProblemDetails;
 import com.basistheory.types.VerificationResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
@@ -90,8 +89,7 @@ public class RawVerifyClient {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ValidationProblemDetails.class),
-                                response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                     case 401:
                         throw new UnauthorizedError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
@@ -175,8 +173,7 @@ public class RawVerifyClient {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ValidationProblemDetails.class),
-                                response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                     case 401:
                         throw new UnauthorizedError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),

@@ -19,7 +19,6 @@ import com.basistheory.resources.applepay.requests.ApplePayCreateRequest;
 import com.basistheory.types.ApplePayCreateResponse;
 import com.basistheory.types.ApplePayToken;
 import com.basistheory.types.ProblemDetails;
-import com.basistheory.types.ValidationProblemDetails;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import okhttp3.Headers;
@@ -81,8 +80,7 @@ public class RawApplePayClient {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ValidationProblemDetails.class),
-                                response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                     case 401:
                         throw new UnauthorizedError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),

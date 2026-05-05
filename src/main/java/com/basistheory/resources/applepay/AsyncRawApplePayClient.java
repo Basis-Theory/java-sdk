@@ -19,7 +19,6 @@ import com.basistheory.resources.applepay.requests.ApplePayCreateRequest;
 import com.basistheory.types.ApplePayCreateResponse;
 import com.basistheory.types.ApplePayToken;
 import com.basistheory.types.ProblemDetails;
-import com.basistheory.types.ValidationProblemDetails;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
@@ -90,8 +89,7 @@ public class AsyncRawApplePayClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, ValidationProblemDetails.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                             case 401:
