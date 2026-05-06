@@ -56,7 +56,7 @@ public final class CreateAccountUpdaterJobRequest {
     }
 
     /**
-     * @return Version of the result CSV format. Version '1' returns base columns. Version '1.1' adds new_fingerprint and new_brand columns.
+     * @return Version of the result CSV format. Version '1' returns base columns. Version '1.1' adds new_fingerprint and new_brand columns. Version '1.2' adds the new_last4 column on top of 1.1.
      */
     @JsonProperty("result_version")
     public Optional<CreateAccountUpdaterJobRequestResultVersion> getResultVersion() {
@@ -143,7 +143,7 @@ public final class CreateAccountUpdaterJobRequest {
         }
 
         /**
-         * <p>Version of the result CSV format. Version '1' returns base columns. Version '1.1' adds new_fingerprint and new_brand columns.</p>
+         * <p>Version of the result CSV format. Version '1' returns base columns. Version '1.1' adds new_fingerprint and new_brand columns. Version '1.2' adds the new_last4 column on top of 1.1.</p>
          */
         @JsonSetter(value = "result_version", nulls = Nulls.SKIP)
         public Builder resultVersion(Optional<CreateAccountUpdaterJobRequestResultVersion> resultVersion) {

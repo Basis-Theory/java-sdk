@@ -3339,6 +3339,52 @@ client.sessions().authorize(
 </dl>
 </details>
 
+## Tenants
+<details><summary><code>client.tenants.ownerTransfer(request) -> TenantMemberResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.tenants().ownerTransfer(
+    TransferTenantOwnerRequest
+        .builder()
+        .memberId("member_id")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**memberId:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## TokenIntents
 <details><summary><code>client.tokenIntents.get(id) -> TokenIntent</code></summary>
 <dl>
@@ -6065,6 +6111,8 @@ client.applePay().merchant().certificates().create(
     "merchantId",
     ApplePayMerchantCertificatesRegisterRequest
         .builder()
+        .paymentProcessorCertificateData("payment_processor_certificate_data")
+        .paymentProcessorCertificatePassword("payment_processor_certificate_password")
         .build()
 );
 ```
@@ -6105,7 +6153,7 @@ client.applePay().merchant().certificates().create(
 <dl>
 <dd>
 
-**paymentProcessorCertificateData:** `Optional<String>` 
+**paymentProcessorCertificateData:** `String` 
     
 </dd>
 </dl>
@@ -6113,7 +6161,7 @@ client.applePay().merchant().certificates().create(
 <dl>
 <dd>
 
-**paymentProcessorCertificatePassword:** `Optional<String>` 
+**paymentProcessorCertificatePassword:** `String` 
     
 </dd>
 </dl>
@@ -7055,6 +7103,385 @@ client.tenants().members().delete("memberId");
 <dd>
 
 **memberId:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Tenants Merchants
+<details><summary><code>client.tenants.merchants.list(tenantId) -> TenantMerchantPaginatedList</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.tenants().merchants().list(
+    "tenantId",
+    MerchantsListRequest
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**tenantId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**page:** `Optional<Integer>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**start:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**size:** `Optional<Integer>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tenants.merchants.create(tenantId, request) -> TenantMerchant</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.tenants().merchants().create(
+    "tenantId",
+    TenantMerchantRequest
+        .builder()
+        .name("name")
+        .details(
+            MerchantDetails
+                .builder()
+                .build()
+        )
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**tenantId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `TenantMerchantRequest` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tenants.merchants.get(tenantId, merchantId) -> TenantMerchant</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.tenants().merchants().get("tenantId", "merchantId");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**tenantId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**merchantId:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tenants.merchants.delete(tenantId, merchantId) -> TenantMerchant</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.tenants().merchants().delete("tenantId", "merchantId");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**tenantId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**merchantId:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tenants.merchants.update(tenantId, merchantId, request) -> TenantMerchant</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.tenants().merchants().update(
+    "tenantId",
+    "merchantId",
+    TenantMerchantRequest
+        .builder()
+        .name("name")
+        .details(
+            MerchantDetails
+                .builder()
+                .build()
+        )
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**tenantId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**merchantId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `TenantMerchantRequest` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tenants.merchants.requestOnboarding(tenantId, merchantId, request) -> TenantMerchant</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.tenants().merchants().requestOnboarding(
+    "tenantId",
+    "merchantId",
+    ServiceOnboardingRequest
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**tenantId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**merchantId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**accountUpdater:** `Optional<List<String>>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**networkToken:** `Optional<List<String>>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agenticCommerce:** `Optional<List<String>>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**cardNetworkInfo:** `Optional<CardNetworkInfo>` 
     
 </dd>
 </dl>

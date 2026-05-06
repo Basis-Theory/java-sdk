@@ -39,6 +39,12 @@ public final class ApplePayToken {
 
     private final Optional<OffsetDateTime> modifiedAt;
 
+    private final Optional<String> transactionId;
+
+    private final Optional<String> paymentDataType;
+
+    private final Optional<String> deviceManufacturerIdentifier;
+
     private final Optional<CardDetails> card;
 
     private final Optional<Object> data;
@@ -59,6 +65,9 @@ public final class ApplePayToken {
             Optional<OffsetDateTime> createdAt,
             Optional<String> modifiedBy,
             Optional<OffsetDateTime> modifiedAt,
+            Optional<String> transactionId,
+            Optional<String> paymentDataType,
+            Optional<String> deviceManufacturerIdentifier,
             Optional<CardDetails> card,
             Optional<Object> data,
             Optional<Authentication> authentication,
@@ -73,6 +82,9 @@ public final class ApplePayToken {
         this.createdAt = createdAt;
         this.modifiedBy = modifiedBy;
         this.modifiedAt = modifiedAt;
+        this.transactionId = transactionId;
+        this.paymentDataType = paymentDataType;
+        this.deviceManufacturerIdentifier = deviceManufacturerIdentifier;
         this.card = card;
         this.data = data;
         this.authentication = authentication;
@@ -125,6 +137,21 @@ public final class ApplePayToken {
         return modifiedAt;
     }
 
+    @JsonProperty("transaction_id")
+    public Optional<String> getTransactionId() {
+        return transactionId;
+    }
+
+    @JsonProperty("payment_data_type")
+    public Optional<String> getPaymentDataType() {
+        return paymentDataType;
+    }
+
+    @JsonProperty("device_manufacturer_identifier")
+    public Optional<String> getDeviceManufacturerIdentifier() {
+        return deviceManufacturerIdentifier;
+    }
+
     @JsonProperty("card")
     public Optional<CardDetails> getCard() {
         return card;
@@ -166,6 +193,9 @@ public final class ApplePayToken {
                 && createdAt.equals(other.createdAt)
                 && modifiedBy.equals(other.modifiedBy)
                 && modifiedAt.equals(other.modifiedAt)
+                && transactionId.equals(other.transactionId)
+                && paymentDataType.equals(other.paymentDataType)
+                && deviceManufacturerIdentifier.equals(other.deviceManufacturerIdentifier)
                 && card.equals(other.card)
                 && data.equals(other.data)
                 && authentication.equals(other.authentication)
@@ -184,6 +214,9 @@ public final class ApplePayToken {
                 this.createdAt,
                 this.modifiedBy,
                 this.modifiedAt,
+                this.transactionId,
+                this.paymentDataType,
+                this.deviceManufacturerIdentifier,
                 this.card,
                 this.data,
                 this.authentication,
@@ -219,6 +252,12 @@ public final class ApplePayToken {
 
         private Optional<OffsetDateTime> modifiedAt = Optional.empty();
 
+        private Optional<String> transactionId = Optional.empty();
+
+        private Optional<String> paymentDataType = Optional.empty();
+
+        private Optional<String> deviceManufacturerIdentifier = Optional.empty();
+
         private Optional<CardDetails> card = Optional.empty();
 
         private Optional<Object> data = Optional.empty();
@@ -242,6 +281,9 @@ public final class ApplePayToken {
             createdAt(other.getCreatedAt());
             modifiedBy(other.getModifiedBy());
             modifiedAt(other.getModifiedAt());
+            transactionId(other.getTransactionId());
+            paymentDataType(other.getPaymentDataType());
+            deviceManufacturerIdentifier(other.getDeviceManufacturerIdentifier());
             card(other.getCard());
             data(other.getData());
             authentication(other.getAuthentication());
@@ -348,6 +390,39 @@ public final class ApplePayToken {
             return this;
         }
 
+        @JsonSetter(value = "transaction_id", nulls = Nulls.SKIP)
+        public Builder transactionId(Optional<String> transactionId) {
+            this.transactionId = transactionId;
+            return this;
+        }
+
+        public Builder transactionId(String transactionId) {
+            this.transactionId = Optional.ofNullable(transactionId);
+            return this;
+        }
+
+        @JsonSetter(value = "payment_data_type", nulls = Nulls.SKIP)
+        public Builder paymentDataType(Optional<String> paymentDataType) {
+            this.paymentDataType = paymentDataType;
+            return this;
+        }
+
+        public Builder paymentDataType(String paymentDataType) {
+            this.paymentDataType = Optional.ofNullable(paymentDataType);
+            return this;
+        }
+
+        @JsonSetter(value = "device_manufacturer_identifier", nulls = Nulls.SKIP)
+        public Builder deviceManufacturerIdentifier(Optional<String> deviceManufacturerIdentifier) {
+            this.deviceManufacturerIdentifier = deviceManufacturerIdentifier;
+            return this;
+        }
+
+        public Builder deviceManufacturerIdentifier(String deviceManufacturerIdentifier) {
+            this.deviceManufacturerIdentifier = Optional.ofNullable(deviceManufacturerIdentifier);
+            return this;
+        }
+
         @JsonSetter(value = "card", nulls = Nulls.SKIP)
         public Builder card(Optional<CardDetails> card) {
             this.card = card;
@@ -403,6 +478,9 @@ public final class ApplePayToken {
                     createdAt,
                     modifiedBy,
                     modifiedAt,
+                    transactionId,
+                    paymentDataType,
+                    deviceManufacturerIdentifier,
                     card,
                     data,
                     authentication,

@@ -32,6 +32,10 @@ public final class ConfirmationEntry {
 
     private final Optional<Boolean> mandatesCompleted;
 
+    private final Optional<String> amount;
+
+    private final Optional<String> currencyCode;
+
     private final Map<String, Object> additionalProperties;
 
     private ConfirmationEntry(
@@ -40,12 +44,16 @@ public final class ConfirmationEntry {
             TransactionType transactionType,
             Optional<OffsetDateTime> transactionTimestamp,
             Optional<Boolean> mandatesCompleted,
+            Optional<String> amount,
+            Optional<String> currencyCode,
             Map<String, Object> additionalProperties) {
         this.transactionReferenceId = transactionReferenceId;
         this.transactionStatus = transactionStatus;
         this.transactionType = transactionType;
         this.transactionTimestamp = transactionTimestamp;
         this.mandatesCompleted = mandatesCompleted;
+        this.amount = amount;
+        this.currencyCode = currencyCode;
         this.additionalProperties = additionalProperties;
     }
 
@@ -74,6 +82,22 @@ public final class ConfirmationEntry {
         return mandatesCompleted;
     }
 
+    /**
+     * @return Transaction amount for Visa confirmation
+     */
+    @JsonProperty("amount")
+    public Optional<String> getAmount() {
+        return amount;
+    }
+
+    /**
+     * @return ISO 4217 currency code (e.g. USD)
+     */
+    @JsonProperty("currency_code")
+    public Optional<String> getCurrencyCode() {
+        return currencyCode;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -90,7 +114,9 @@ public final class ConfirmationEntry {
                 && transactionStatus.equals(other.transactionStatus)
                 && transactionType.equals(other.transactionType)
                 && transactionTimestamp.equals(other.transactionTimestamp)
-                && mandatesCompleted.equals(other.mandatesCompleted);
+                && mandatesCompleted.equals(other.mandatesCompleted)
+                && amount.equals(other.amount)
+                && currencyCode.equals(other.currencyCode);
     }
 
     @java.lang.Override
@@ -100,7 +126,9 @@ public final class ConfirmationEntry {
                 this.transactionStatus,
                 this.transactionType,
                 this.transactionTimestamp,
-                this.mandatesCompleted);
+                this.mandatesCompleted,
+                this.amount,
+                this.currencyCode);
     }
 
     @java.lang.Override
@@ -136,6 +164,20 @@ public final class ConfirmationEntry {
         _FinalStage mandatesCompleted(Optional<Boolean> mandatesCompleted);
 
         _FinalStage mandatesCompleted(Boolean mandatesCompleted);
+
+        /**
+         * <p>Transaction amount for Visa confirmation</p>
+         */
+        _FinalStage amount(Optional<String> amount);
+
+        _FinalStage amount(String amount);
+
+        /**
+         * <p>ISO 4217 currency code (e.g. USD)</p>
+         */
+        _FinalStage currencyCode(Optional<String> currencyCode);
+
+        _FinalStage currencyCode(String currencyCode);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -143,6 +185,10 @@ public final class ConfirmationEntry {
         private TransactionStatus transactionStatus;
 
         private TransactionType transactionType;
+
+        private Optional<String> currencyCode = Optional.empty();
+
+        private Optional<String> amount = Optional.empty();
 
         private Optional<Boolean> mandatesCompleted = Optional.empty();
 
@@ -162,6 +208,8 @@ public final class ConfirmationEntry {
             transactionType(other.getTransactionType());
             transactionTimestamp(other.getTransactionTimestamp());
             mandatesCompleted(other.getMandatesCompleted());
+            amount(other.getAmount());
+            currencyCode(other.getCurrencyCode());
             return this;
         }
 
@@ -176,6 +224,46 @@ public final class ConfirmationEntry {
         @JsonSetter("transaction_type")
         public _FinalStage transactionType(@NotNull TransactionType transactionType) {
             this.transactionType = Objects.requireNonNull(transactionType, "transactionType must not be null");
+            return this;
+        }
+
+        /**
+         * <p>ISO 4217 currency code (e.g. USD)</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage currencyCode(String currencyCode) {
+            this.currencyCode = Optional.ofNullable(currencyCode);
+            return this;
+        }
+
+        /**
+         * <p>ISO 4217 currency code (e.g. USD)</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "currency_code", nulls = Nulls.SKIP)
+        public _FinalStage currencyCode(Optional<String> currencyCode) {
+            this.currencyCode = currencyCode;
+            return this;
+        }
+
+        /**
+         * <p>Transaction amount for Visa confirmation</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage amount(String amount) {
+            this.amount = Optional.ofNullable(amount);
+            return this;
+        }
+
+        /**
+         * <p>Transaction amount for Visa confirmation</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "amount", nulls = Nulls.SKIP)
+        public _FinalStage amount(Optional<String> amount) {
+            this.amount = amount;
             return this;
         }
 
@@ -226,6 +314,8 @@ public final class ConfirmationEntry {
                     transactionType,
                     transactionTimestamp,
                     mandatesCompleted,
+                    amount,
+                    currencyCode,
                     additionalProperties);
         }
     }
