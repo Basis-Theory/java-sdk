@@ -187,12 +187,6 @@ public class AsyncRawCertificatesClient {
         return future;
     }
 
-    public CompletableFuture<BasisTheoryApiHttpResponse<ApplePayMerchantCertificates>> create(String merchantId) {
-        return create(
-                merchantId,
-                ApplePayMerchantCertificatesRegisterRequest.builder().build());
-    }
-
     public CompletableFuture<BasisTheoryApiHttpResponse<ApplePayMerchantCertificates>> create(
             String merchantId, ApplePayMerchantCertificatesRegisterRequest request) {
         return create(merchantId, request, null);

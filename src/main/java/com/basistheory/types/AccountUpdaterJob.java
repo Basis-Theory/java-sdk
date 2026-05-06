@@ -43,6 +43,8 @@ public final class AccountUpdaterJob {
 
     private final Optional<Map<String, Integer>> results;
 
+    private final Optional<String> downloadUrl;
+
     private final Map<String, Object> additionalProperties;
 
     private AccountUpdaterJob(
@@ -56,6 +58,7 @@ public final class AccountUpdaterJob {
             Optional<List<String>> errors,
             Optional<Integer> requests,
             Optional<Map<String, Integer>> results,
+            Optional<String> downloadUrl,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.tenantId = tenantId;
@@ -67,6 +70,7 @@ public final class AccountUpdaterJob {
         this.errors = errors;
         this.requests = requests;
         this.results = results;
+        this.downloadUrl = downloadUrl;
         this.additionalProperties = additionalProperties;
     }
 
@@ -144,6 +148,14 @@ public final class AccountUpdaterJob {
         return results;
     }
 
+    /**
+     * @return Pre-signed URL for downloading the job results CSV. Only present on completed jobs.
+     */
+    @JsonProperty("downloadUrl")
+    public Optional<String> getDownloadUrl() {
+        return downloadUrl;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -165,7 +177,8 @@ public final class AccountUpdaterJob {
                 && expiresAt.equals(other.expiresAt)
                 && errors.equals(other.errors)
                 && requests.equals(other.requests)
-                && results.equals(other.results);
+                && results.equals(other.results)
+                && downloadUrl.equals(other.downloadUrl);
     }
 
     @java.lang.Override
@@ -180,7 +193,8 @@ public final class AccountUpdaterJob {
                 this.expiresAt,
                 this.errors,
                 this.requests,
-                this.results);
+                this.results,
+                this.downloadUrl);
     }
 
     @java.lang.Override
@@ -260,6 +274,13 @@ public final class AccountUpdaterJob {
         _FinalStage results(Optional<Map<String, Integer>> results);
 
         _FinalStage results(Map<String, Integer> results);
+
+        /**
+         * <p>Pre-signed URL for downloading the job results CSV. Only present on completed jobs.</p>
+         */
+        _FinalStage downloadUrl(Optional<String> downloadUrl);
+
+        _FinalStage downloadUrl(String downloadUrl);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -282,6 +303,8 @@ public final class AccountUpdaterJob {
         private String createdBy;
 
         private OffsetDateTime createdAt;
+
+        private Optional<String> downloadUrl = Optional.empty();
 
         private Optional<Map<String, Integer>> results = Optional.empty();
 
@@ -308,6 +331,7 @@ public final class AccountUpdaterJob {
             errors(other.getErrors());
             requests(other.getRequests());
             results(other.getResults());
+            downloadUrl(other.getDownloadUrl());
             return this;
         }
 
@@ -370,6 +394,26 @@ public final class AccountUpdaterJob {
         @JsonSetter("createdAt")
         public _FinalStage createdAt(@NotNull OffsetDateTime createdAt) {
             this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Pre-signed URL for downloading the job results CSV. Only present on completed jobs.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage downloadUrl(String downloadUrl) {
+            this.downloadUrl = Optional.ofNullable(downloadUrl);
+            return this;
+        }
+
+        /**
+         * <p>Pre-signed URL for downloading the job results CSV. Only present on completed jobs.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "downloadUrl", nulls = Nulls.SKIP)
+        public _FinalStage downloadUrl(Optional<String> downloadUrl) {
+            this.downloadUrl = downloadUrl;
             return this;
         }
 
@@ -466,6 +510,7 @@ public final class AccountUpdaterJob {
                     errors,
                     requests,
                     results,
+                    downloadUrl,
                     additionalProperties);
         }
     }

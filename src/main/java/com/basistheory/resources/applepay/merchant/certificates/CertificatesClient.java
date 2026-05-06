@@ -41,10 +41,6 @@ public class CertificatesClient {
         this.rawClient.delete(merchantId, id, requestOptions).body();
     }
 
-    public ApplePayMerchantCertificates create(String merchantId) {
-        return this.rawClient.create(merchantId).body();
-    }
-
     public ApplePayMerchantCertificates create(String merchantId, ApplePayMerchantCertificatesRegisterRequest request) {
         return this.rawClient.create(merchantId, request).body();
     }
