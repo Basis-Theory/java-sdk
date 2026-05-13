@@ -7,6 +7,7 @@ import com.basistheory.core.BasisTheoryApiApiException;
 import com.basistheory.core.BasisTheoryApiHttpResponse;
 import com.basistheory.core.BasisTheoryException;
 import com.basistheory.core.ClientOptions;
+import com.basistheory.core.MediaTypes;
 import com.basistheory.core.ObjectMappers;
 import com.basistheory.core.QueryStringMapper;
 import com.basistheory.core.RequestOptions;
@@ -14,6 +15,7 @@ import com.basistheory.errors.ForbiddenError;
 import com.basistheory.errors.NotFoundError;
 import com.basistheory.errors.UnauthorizedError;
 import com.basistheory.errors.UnprocessableEntityError;
+import com.basistheory.resources.accountupdater.jobs.requests.CreateAccountUpdaterJobRequest;
 import com.basistheory.resources.accountupdater.jobs.requests.JobsListRequest;
 import com.basistheory.types.AccountUpdaterJob;
 import com.basistheory.types.AccountUpdaterJobList;
@@ -209,21 +211,38 @@ public class AsyncRawJobsClient {
      * Returns the created account updater batch job
      */
     public CompletableFuture<BasisTheoryApiHttpResponse<AccountUpdaterJob>> create() {
-        return create(null);
+        return create(CreateAccountUpdaterJobRequest.builder().build());
     }
 
     /**
      * Returns the created account updater batch job
      */
-    public CompletableFuture<BasisTheoryApiHttpResponse<AccountUpdaterJob>> create(RequestOptions requestOptions) {
+    public CompletableFuture<BasisTheoryApiHttpResponse<AccountUpdaterJob>> create(
+            CreateAccountUpdaterJobRequest request) {
+        return create(request, null);
+    }
+
+    /**
+     * Returns the created account updater batch job
+     */
+    public CompletableFuture<BasisTheoryApiHttpResponse<AccountUpdaterJob>> create(
+            CreateAccountUpdaterJobRequest request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("account-updater/jobs")
                 .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new BasisTheoryException("Failed to serialize request", e);
+        }
         Request okhttpRequest = new Request.Builder()
                 .url(httpUrl)
-                .method("POST", RequestBody.create("", null))
+                .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();

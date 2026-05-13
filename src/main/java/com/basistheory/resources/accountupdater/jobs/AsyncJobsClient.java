@@ -5,6 +5,7 @@ package com.basistheory.resources.accountupdater.jobs;
 
 import com.basistheory.core.ClientOptions;
 import com.basistheory.core.RequestOptions;
+import com.basistheory.resources.accountupdater.jobs.requests.CreateAccountUpdaterJobRequest;
 import com.basistheory.resources.accountupdater.jobs.requests.JobsListRequest;
 import com.basistheory.types.AccountUpdaterJob;
 import com.basistheory.types.AccountUpdaterJobList;
@@ -72,7 +73,15 @@ public class AsyncJobsClient {
     /**
      * Returns the created account updater batch job
      */
-    public CompletableFuture<AccountUpdaterJob> create(RequestOptions requestOptions) {
-        return this.rawClient.create(requestOptions).thenApply(response -> response.body());
+    public CompletableFuture<AccountUpdaterJob> create(CreateAccountUpdaterJobRequest request) {
+        return this.rawClient.create(request).thenApply(response -> response.body());
+    }
+
+    /**
+     * Returns the created account updater batch job
+     */
+    public CompletableFuture<AccountUpdaterJob> create(
+            CreateAccountUpdaterJobRequest request, RequestOptions requestOptions) {
+        return this.rawClient.create(request, requestOptions).thenApply(response -> response.body());
     }
 }
