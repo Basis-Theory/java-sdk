@@ -1,3 +1,11 @@
+## [5.8.0](https://github.com/Basis-Theory/java-sdk/compare/5.7.0...5.8.0) (2026-05-15)
+
+
+### Features
+
+* **SDK:** remove additionalProperties on AgenticCard ([0d75410](https://github.com/Basis-Theory/java-sdk/commit/0d754104aeba6f5af7103ba6749d34f1d0cf4fba))
+
+
 ## [5.7.0](https://github.com/Basis-Theory/java-sdk/compare/5.6.0...5.7.0) (2026-05-15)
 
 
