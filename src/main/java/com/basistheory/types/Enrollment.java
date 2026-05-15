@@ -34,6 +34,10 @@ public final class Enrollment {
 
     private final Optional<List<String>> agentIds;
 
+    private final Optional<String> walletName;
+
+    private final Optional<EnrollmentType> type;
+
     private final Optional<OffsetDateTime> createdAt;
 
     private final Map<String, Object> additionalProperties;
@@ -45,6 +49,8 @@ public final class Enrollment {
             Optional<EnrollmentStatus> status,
             Optional<AgenticCard> card,
             Optional<List<String>> agentIds,
+            Optional<String> walletName,
+            Optional<EnrollmentType> type,
             Optional<OffsetDateTime> createdAt,
             Map<String, Object> additionalProperties) {
         this.id = id;
@@ -53,6 +59,8 @@ public final class Enrollment {
         this.status = status;
         this.card = card;
         this.agentIds = agentIds;
+        this.walletName = walletName;
+        this.type = type;
         this.createdAt = createdAt;
         this.additionalProperties = additionalProperties;
     }
@@ -90,6 +98,22 @@ public final class Enrollment {
         return agentIds;
     }
 
+    /**
+     * @return Display label shown to the cardholder during Mastercard managed-authentication challenges.
+     */
+    @JsonProperty("wallet_name")
+    public Optional<String> getWalletName() {
+        return walletName;
+    }
+
+    /**
+     * @return Enrollment type — <code>agentic</code> (default) for agent-driven payments, <code>autofill</code> for direct credential autofill.
+     */
+    @JsonProperty("type")
+    public Optional<EnrollmentType> getType() {
+        return type;
+    }
+
     @JsonProperty("created_at")
     public Optional<OffsetDateTime> getCreatedAt() {
         return createdAt;
@@ -113,13 +137,23 @@ public final class Enrollment {
                 && status.equals(other.status)
                 && card.equals(other.card)
                 && agentIds.equals(other.agentIds)
+                && walletName.equals(other.walletName)
+                && type.equals(other.type)
                 && createdAt.equals(other.createdAt);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.id, this.tokenId, this.provider, this.status, this.card, this.agentIds, this.createdAt);
+                this.id,
+                this.tokenId,
+                this.provider,
+                this.status,
+                this.card,
+                this.agentIds,
+                this.walletName,
+                this.type,
+                this.createdAt);
     }
 
     @java.lang.Override
@@ -145,6 +179,10 @@ public final class Enrollment {
 
         private Optional<List<String>> agentIds = Optional.empty();
 
+        private Optional<String> walletName = Optional.empty();
+
+        private Optional<EnrollmentType> type = Optional.empty();
+
         private Optional<OffsetDateTime> createdAt = Optional.empty();
 
         @JsonAnySetter
@@ -159,6 +197,8 @@ public final class Enrollment {
             status(other.getStatus());
             card(other.getCard());
             agentIds(other.getAgentIds());
+            walletName(other.getWalletName());
+            type(other.getType());
             createdAt(other.getCreatedAt());
             return this;
         }
@@ -232,6 +272,34 @@ public final class Enrollment {
             return this;
         }
 
+        /**
+         * <p>Display label shown to the cardholder during Mastercard managed-authentication challenges.</p>
+         */
+        @JsonSetter(value = "wallet_name", nulls = Nulls.SKIP)
+        public Builder walletName(Optional<String> walletName) {
+            this.walletName = walletName;
+            return this;
+        }
+
+        public Builder walletName(String walletName) {
+            this.walletName = Optional.ofNullable(walletName);
+            return this;
+        }
+
+        /**
+         * <p>Enrollment type — <code>agentic</code> (default) for agent-driven payments, <code>autofill</code> for direct credential autofill.</p>
+         */
+        @JsonSetter(value = "type", nulls = Nulls.SKIP)
+        public Builder type(Optional<EnrollmentType> type) {
+            this.type = type;
+            return this;
+        }
+
+        public Builder type(EnrollmentType type) {
+            this.type = Optional.ofNullable(type);
+            return this;
+        }
+
         @JsonSetter(value = "created_at", nulls = Nulls.SKIP)
         public Builder createdAt(Optional<OffsetDateTime> createdAt) {
             this.createdAt = createdAt;
@@ -244,7 +312,8 @@ public final class Enrollment {
         }
 
         public Enrollment build() {
-            return new Enrollment(id, tokenId, provider, status, card, agentIds, createdAt, additionalProperties);
+            return new Enrollment(
+                    id, tokenId, provider, status, card, agentIds, walletName, type, createdAt, additionalProperties);
         }
     }
 }

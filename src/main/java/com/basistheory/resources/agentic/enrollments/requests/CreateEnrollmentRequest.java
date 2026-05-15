@@ -4,6 +4,7 @@
 package com.basistheory.resources.agentic.enrollments.requests;
 
 import com.basistheory.core.ObjectMappers;
+import com.basistheory.resources.agentic.enrollments.types.CreateEnrollmentRequestType;
 import com.basistheory.types.Consumer;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -31,6 +32,10 @@ public final class CreateEnrollmentRequest {
 
     private final Optional<List<String>> agentIds;
 
+    private final Optional<String> walletName;
+
+    private final Optional<CreateEnrollmentRequestType> type;
+
     private final Map<String, Object> additionalProperties;
 
     private CreateEnrollmentRequest(
@@ -38,11 +43,15 @@ public final class CreateEnrollmentRequest {
             Consumer consumer,
             Optional<String> agentId,
             Optional<List<String>> agentIds,
+            Optional<String> walletName,
+            Optional<CreateEnrollmentRequestType> type,
             Map<String, Object> additionalProperties) {
         this.tokenId = tokenId;
         this.consumer = consumer;
         this.agentId = agentId;
         this.agentIds = agentIds;
+        this.walletName = walletName;
+        this.type = type;
         this.additionalProperties = additionalProperties;
     }
 
@@ -72,6 +81,24 @@ public final class CreateEnrollmentRequest {
         return agentIds;
     }
 
+    /**
+     * @return Display label shown to the cardholder during Mastercard managed-authentication challenges. Defaults to &quot;Agent Wallet&quot; when not provided.
+     */
+    @JsonProperty("wallet_name")
+    public Optional<String> getWalletName() {
+        return walletName;
+    }
+
+    /**
+     * @return Enrollment type. <code>agentic</code> (default) enrolls the card for agent-driven payments and requires verification.
+     * <code>autofill</code> enrolls the card for direct autofill credential retrieval, skips verification, and is currently
+     * available to test tenants only.
+     */
+    @JsonProperty("type")
+    public Optional<CreateEnrollmentRequestType> getType() {
+        return type;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -87,12 +114,14 @@ public final class CreateEnrollmentRequest {
         return tokenId.equals(other.tokenId)
                 && consumer.equals(other.consumer)
                 && agentId.equals(other.agentId)
-                && agentIds.equals(other.agentIds);
+                && agentIds.equals(other.agentIds)
+                && walletName.equals(other.walletName)
+                && type.equals(other.type);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.tokenId, this.consumer, this.agentId, this.agentIds);
+        return Objects.hash(this.tokenId, this.consumer, this.agentId, this.agentIds, this.walletName, this.type);
     }
 
     @java.lang.Override
@@ -130,6 +159,22 @@ public final class CreateEnrollmentRequest {
         _FinalStage agentIds(Optional<List<String>> agentIds);
 
         _FinalStage agentIds(List<String> agentIds);
+
+        /**
+         * <p>Display label shown to the cardholder during Mastercard managed-authentication challenges. Defaults to &quot;Agent Wallet&quot; when not provided.</p>
+         */
+        _FinalStage walletName(Optional<String> walletName);
+
+        _FinalStage walletName(String walletName);
+
+        /**
+         * <p>Enrollment type. <code>agentic</code> (default) enrolls the card for agent-driven payments and requires verification.
+         * <code>autofill</code> enrolls the card for direct autofill credential retrieval, skips verification, and is currently
+         * available to test tenants only.</p>
+         */
+        _FinalStage type(Optional<CreateEnrollmentRequestType> type);
+
+        _FinalStage type(CreateEnrollmentRequestType type);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -137,6 +182,10 @@ public final class CreateEnrollmentRequest {
         private String tokenId;
 
         private Consumer consumer;
+
+        private Optional<CreateEnrollmentRequestType> type = Optional.empty();
+
+        private Optional<String> walletName = Optional.empty();
 
         private Optional<List<String>> agentIds = Optional.empty();
 
@@ -153,6 +202,8 @@ public final class CreateEnrollmentRequest {
             consumer(other.getConsumer());
             agentId(other.getAgentId());
             agentIds(other.getAgentIds());
+            walletName(other.getWalletName());
+            type(other.getType());
             return this;
         }
 
@@ -167,6 +218,50 @@ public final class CreateEnrollmentRequest {
         @JsonSetter("consumer")
         public _FinalStage consumer(@NotNull Consumer consumer) {
             this.consumer = Objects.requireNonNull(consumer, "consumer must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Enrollment type. <code>agentic</code> (default) enrolls the card for agent-driven payments and requires verification.
+         * <code>autofill</code> enrolls the card for direct autofill credential retrieval, skips verification, and is currently
+         * available to test tenants only.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage type(CreateEnrollmentRequestType type) {
+            this.type = Optional.ofNullable(type);
+            return this;
+        }
+
+        /**
+         * <p>Enrollment type. <code>agentic</code> (default) enrolls the card for agent-driven payments and requires verification.
+         * <code>autofill</code> enrolls the card for direct autofill credential retrieval, skips verification, and is currently
+         * available to test tenants only.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "type", nulls = Nulls.SKIP)
+        public _FinalStage type(Optional<CreateEnrollmentRequestType> type) {
+            this.type = type;
+            return this;
+        }
+
+        /**
+         * <p>Display label shown to the cardholder during Mastercard managed-authentication challenges. Defaults to &quot;Agent Wallet&quot; when not provided.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage walletName(String walletName) {
+            this.walletName = Optional.ofNullable(walletName);
+            return this;
+        }
+
+        /**
+         * <p>Display label shown to the cardholder during Mastercard managed-authentication challenges. Defaults to &quot;Agent Wallet&quot; when not provided.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "wallet_name", nulls = Nulls.SKIP)
+        public _FinalStage walletName(Optional<String> walletName) {
+            this.walletName = walletName;
             return this;
         }
 
@@ -212,7 +307,8 @@ public final class CreateEnrollmentRequest {
 
         @java.lang.Override
         public CreateEnrollmentRequest build() {
-            return new CreateEnrollmentRequest(tokenId, consumer, agentId, agentIds, additionalProperties);
+            return new CreateEnrollmentRequest(
+                    tokenId, consumer, agentId, agentIds, walletName, type, additionalProperties);
         }
     }
 }
