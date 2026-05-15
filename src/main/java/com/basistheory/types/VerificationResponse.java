@@ -23,6 +23,8 @@ import java.util.Optional;
 public final class VerificationResponse {
     private final Optional<VerificationResponseStatus> status;
 
+    private final Optional<VerificationResponseRedirect> redirect;
+
     private final Optional<List<VerificationResponseMethodsItem>> methods;
 
     private final Optional<VerificationResponsePasskeyContext> passkeyContext;
@@ -35,12 +37,14 @@ public final class VerificationResponse {
 
     private VerificationResponse(
             Optional<VerificationResponseStatus> status,
+            Optional<VerificationResponseRedirect> redirect,
             Optional<List<VerificationResponseMethodsItem>> methods,
             Optional<VerificationResponsePasskeyContext> passkeyContext,
             Optional<VerificationResponseBrand> brand,
             Optional<Map<String, Object>> authContext,
             Map<String, Object> additionalProperties) {
         this.status = status;
+        this.redirect = redirect;
         this.methods = methods;
         this.passkeyContext = passkeyContext;
         this.brand = brand;
@@ -51,6 +55,14 @@ public final class VerificationResponse {
     @JsonProperty("status")
     public Optional<VerificationResponseStatus> getStatus() {
         return status;
+    }
+
+    /**
+     * @return Present when status is redirect_required (Mastercard Managed Authentication). The cardholder must be redirected to <code>redirect.uri</code> to complete authentication; once they return via the hosted callback the SDK can call <code>/verify/complete</code> (enrollment) or <code>/verify/passkey</code> (instruction) to finalise.
+     */
+    @JsonProperty("redirect")
+    public Optional<VerificationResponseRedirect> getRedirect() {
+        return redirect;
     }
 
     @JsonProperty("methods")
@@ -95,6 +107,7 @@ public final class VerificationResponse {
 
     private boolean equalTo(VerificationResponse other) {
         return status.equals(other.status)
+                && redirect.equals(other.redirect)
                 && methods.equals(other.methods)
                 && passkeyContext.equals(other.passkeyContext)
                 && brand.equals(other.brand)
@@ -103,7 +116,8 @@ public final class VerificationResponse {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.status, this.methods, this.passkeyContext, this.brand, this.authContext);
+        return Objects.hash(
+                this.status, this.redirect, this.methods, this.passkeyContext, this.brand, this.authContext);
     }
 
     @java.lang.Override
@@ -118,6 +132,8 @@ public final class VerificationResponse {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
         private Optional<VerificationResponseStatus> status = Optional.empty();
+
+        private Optional<VerificationResponseRedirect> redirect = Optional.empty();
 
         private Optional<List<VerificationResponseMethodsItem>> methods = Optional.empty();
 
@@ -134,6 +150,7 @@ public final class VerificationResponse {
 
         public Builder from(VerificationResponse other) {
             status(other.getStatus());
+            redirect(other.getRedirect());
             methods(other.getMethods());
             passkeyContext(other.getPasskeyContext());
             brand(other.getBrand());
@@ -149,6 +166,20 @@ public final class VerificationResponse {
 
         public Builder status(VerificationResponseStatus status) {
             this.status = Optional.ofNullable(status);
+            return this;
+        }
+
+        /**
+         * <p>Present when status is redirect_required (Mastercard Managed Authentication). The cardholder must be redirected to <code>redirect.uri</code> to complete authentication; once they return via the hosted callback the SDK can call <code>/verify/complete</code> (enrollment) or <code>/verify/passkey</code> (instruction) to finalise.</p>
+         */
+        @JsonSetter(value = "redirect", nulls = Nulls.SKIP)
+        public Builder redirect(Optional<VerificationResponseRedirect> redirect) {
+            this.redirect = redirect;
+            return this;
+        }
+
+        public Builder redirect(VerificationResponseRedirect redirect) {
+            this.redirect = Optional.ofNullable(redirect);
             return this;
         }
 
@@ -206,7 +237,8 @@ public final class VerificationResponse {
         }
 
         public VerificationResponse build() {
-            return new VerificationResponse(status, methods, passkeyContext, brand, authContext, additionalProperties);
+            return new VerificationResponse(
+                    status, redirect, methods, passkeyContext, brand, authContext, additionalProperties);
         }
     }
 }

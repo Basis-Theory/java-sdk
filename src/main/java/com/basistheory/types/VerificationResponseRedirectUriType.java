@@ -5,24 +5,14 @@ package com.basistheory.types;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum VerificationResponseStatus {
-    APPROVED("approved"),
+public enum VerificationResponseRedirectUriType {
+    WEB_URI("WEB_URI"),
 
-    CHALLENGE("challenge"),
-
-    OTP_SENT("otp_sent"),
-
-    DEVICE_BOUND("device_bound"),
-
-    PASSKEY_REQUIRED("passkey_required"),
-
-    REDIRECT_REQUIRED("redirect_required"),
-
-    VERIFIED("verified");
+    APP_URI("APP_URI");
 
     private final String value;
 
-    VerificationResponseStatus(String value) {
+    VerificationResponseRedirectUriType(String value) {
         this.value = value;
     }
 

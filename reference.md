@@ -4542,6 +4542,26 @@ client.agentic().enrollments().create(
     
 </dd>
 </dl>
+
+<dl>
+<dd>
+
+**walletName:** `Optional<String>` — Display label shown to the cardholder during Mastercard managed-authentication challenges. Defaults to "Agent Wallet" when not provided.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**type:** `Optional<CreateEnrollmentRequestType>` 
+
+Enrollment type. `agentic` (default) enrolls the card for agent-driven payments and requires verification.
+`autofill` enrolls the card for direct autofill credential retrieval, skips verification, and is currently
+available to test tenants only.
+    
+</dd>
+</dl>
 </dd>
 </dl>
 

@@ -27,6 +27,8 @@ public final class Instruction {
 
     private final Optional<InstructionStatus> status;
 
+    private final Optional<InstructionType> type;
+
     private final Optional<Amount> amount;
 
     private final Optional<String> description;
@@ -43,6 +45,7 @@ public final class Instruction {
             Optional<String> id,
             Optional<String> enrollmentId,
             Optional<InstructionStatus> status,
+            Optional<InstructionType> type,
             Optional<Amount> amount,
             Optional<String> description,
             Optional<OffsetDateTime> expiresAt,
@@ -52,6 +55,7 @@ public final class Instruction {
         this.id = id;
         this.enrollmentId = enrollmentId;
         this.status = status;
+        this.type = type;
         this.amount = amount;
         this.description = description;
         this.expiresAt = expiresAt;
@@ -73,6 +77,16 @@ public final class Instruction {
     @JsonProperty("status")
     public Optional<InstructionStatus> getStatus() {
         return status;
+    }
+
+    /**
+     * @return Inherited from the parent enrollment. <code>agentic</code> instructions require cardholder
+     * verification before credentials can be retrieved; <code>autofill</code> instructions are
+     * auto-approved on creation and credentials can be retrieved immediately.
+     */
+    @JsonProperty("type")
+    public Optional<InstructionType> getType() {
+        return type;
     }
 
     @JsonProperty("amount")
@@ -115,6 +129,7 @@ public final class Instruction {
         return id.equals(other.id)
                 && enrollmentId.equals(other.enrollmentId)
                 && status.equals(other.status)
+                && type.equals(other.type)
                 && amount.equals(other.amount)
                 && description.equals(other.description)
                 && expiresAt.equals(other.expiresAt)
@@ -128,6 +143,7 @@ public final class Instruction {
                 this.id,
                 this.enrollmentId,
                 this.status,
+                this.type,
                 this.amount,
                 this.description,
                 this.expiresAt,
@@ -152,6 +168,8 @@ public final class Instruction {
 
         private Optional<InstructionStatus> status = Optional.empty();
 
+        private Optional<InstructionType> type = Optional.empty();
+
         private Optional<Amount> amount = Optional.empty();
 
         private Optional<String> description = Optional.empty();
@@ -171,6 +189,7 @@ public final class Instruction {
             id(other.getId());
             enrollmentId(other.getEnrollmentId());
             status(other.getStatus());
+            type(other.getType());
             amount(other.getAmount());
             description(other.getDescription());
             expiresAt(other.getExpiresAt());
@@ -209,6 +228,22 @@ public final class Instruction {
 
         public Builder status(InstructionStatus status) {
             this.status = Optional.ofNullable(status);
+            return this;
+        }
+
+        /**
+         * <p>Inherited from the parent enrollment. <code>agentic</code> instructions require cardholder
+         * verification before credentials can be retrieved; <code>autofill</code> instructions are
+         * auto-approved on creation and credentials can be retrieved immediately.</p>
+         */
+        @JsonSetter(value = "type", nulls = Nulls.SKIP)
+        public Builder type(Optional<InstructionType> type) {
+            this.type = type;
+            return this;
+        }
+
+        public Builder type(InstructionType type) {
+            this.type = Optional.ofNullable(type);
             return this;
         }
 
@@ -272,6 +307,7 @@ public final class Instruction {
                     id,
                     enrollmentId,
                     status,
+                    type,
                     amount,
                     description,
                     expiresAt,
