@@ -1,3 +1,11 @@
+## [5.7.0](https://github.com/Basis-Theory/java-sdk/compare/5.6.0...5.7.0) (2026-05-15)
+
+
+### Features
+
+* **SDK:** update accountUpdatedJob request ([8180547](https://github.com/Basis-Theory/java-sdk/commit/8180547ee01c1475b1e73b1becbf079d643cd1f6))
+
+
 ## [5.6.0](https://github.com/Basis-Theory/java-sdk/compare/5.5.0...5.6.0) (2026-05-06)
 
 
