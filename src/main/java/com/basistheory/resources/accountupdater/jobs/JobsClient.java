@@ -5,6 +5,7 @@ package com.basistheory.resources.accountupdater.jobs;
 
 import com.basistheory.core.ClientOptions;
 import com.basistheory.core.RequestOptions;
+import com.basistheory.resources.accountupdater.jobs.requests.CreateAccountUpdaterJobRequest;
 import com.basistheory.resources.accountupdater.jobs.requests.JobsListRequest;
 import com.basistheory.types.AccountUpdaterJob;
 import com.basistheory.types.AccountUpdaterJobList;
@@ -71,7 +72,14 @@ public class JobsClient {
     /**
      * Returns the created account updater batch job
      */
-    public AccountUpdaterJob create(RequestOptions requestOptions) {
-        return this.rawClient.create(requestOptions).body();
+    public AccountUpdaterJob create(CreateAccountUpdaterJobRequest request) {
+        return this.rawClient.create(request).body();
+    }
+
+    /**
+     * Returns the created account updater batch job
+     */
+    public AccountUpdaterJob create(CreateAccountUpdaterJobRequest request, RequestOptions requestOptions) {
+        return this.rawClient.create(request, requestOptions).body();
     }
 }
