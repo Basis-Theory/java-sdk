@@ -10,10 +10,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -21,13 +23,17 @@ import org.jetbrains.annotations.NotNull;
 public final class CreateTokenIntentRequest {
     private final String type;
 
-    private final Object data;
+    private final Optional<Object> data;
+
+    private final Optional<String> encrypted;
 
     private final Map<String, Object> additionalProperties;
 
-    private CreateTokenIntentRequest(String type, Object data, Map<String, Object> additionalProperties) {
+    private CreateTokenIntentRequest(
+            String type, Optional<Object> data, Optional<String> encrypted, Map<String, Object> additionalProperties) {
         this.type = type;
         this.data = data;
+        this.encrypted = encrypted;
         this.additionalProperties = additionalProperties;
     }
 
@@ -37,8 +43,13 @@ public final class CreateTokenIntentRequest {
     }
 
     @JsonProperty("data")
-    public Object getData() {
+    public Optional<Object> getData() {
         return data;
+    }
+
+    @JsonProperty("encrypted")
+    public Optional<String> getEncrypted() {
+        return encrypted;
     }
 
     @java.lang.Override
@@ -53,12 +64,12 @@ public final class CreateTokenIntentRequest {
     }
 
     private boolean equalTo(CreateTokenIntentRequest other) {
-        return type.equals(other.type) && data.equals(other.data);
+        return type.equals(other.type) && data.equals(other.data) && encrypted.equals(other.encrypted);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.type, this.data);
+        return Objects.hash(this.type, this.data, this.encrypted);
     }
 
     @java.lang.Override
@@ -71,24 +82,30 @@ public final class CreateTokenIntentRequest {
     }
 
     public interface TypeStage {
-        DataStage type(@NotNull String type);
+        _FinalStage type(@NotNull String type);
 
         Builder from(CreateTokenIntentRequest other);
     }
 
-    public interface DataStage {
-        _FinalStage data(Object data);
-    }
-
     public interface _FinalStage {
         CreateTokenIntentRequest build();
+
+        _FinalStage data(Optional<Object> data);
+
+        _FinalStage data(Object data);
+
+        _FinalStage encrypted(Optional<String> encrypted);
+
+        _FinalStage encrypted(String encrypted);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements TypeStage, DataStage, _FinalStage {
+    public static final class Builder implements TypeStage, _FinalStage {
         private String type;
 
-        private Object data;
+        private Optional<String> encrypted = Optional.empty();
+
+        private Optional<Object> data = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -99,26 +116,46 @@ public final class CreateTokenIntentRequest {
         public Builder from(CreateTokenIntentRequest other) {
             type(other.getType());
             data(other.getData());
+            encrypted(other.getEncrypted());
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("type")
-        public DataStage type(@NotNull String type) {
+        public _FinalStage type(@NotNull String type) {
             this.type = Objects.requireNonNull(type, "type must not be null");
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("data")
+        public _FinalStage encrypted(String encrypted) {
+            this.encrypted = Optional.ofNullable(encrypted);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "encrypted", nulls = Nulls.SKIP)
+        public _FinalStage encrypted(Optional<String> encrypted) {
+            this.encrypted = encrypted;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage data(Object data) {
+            this.data = Optional.ofNullable(data);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "data", nulls = Nulls.SKIP)
+        public _FinalStage data(Optional<Object> data) {
             this.data = data;
             return this;
         }
 
         @java.lang.Override
         public CreateTokenIntentRequest build() {
-            return new CreateTokenIntentRequest(type, data, additionalProperties);
+            return new CreateTokenIntentRequest(type, data, encrypted, additionalProperties);
         }
     }
 }

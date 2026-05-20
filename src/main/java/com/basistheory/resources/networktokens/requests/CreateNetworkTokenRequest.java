@@ -28,6 +28,10 @@ public final class CreateNetworkTokenRequest {
 
     private final Optional<String> tokenIntentId;
 
+    private final Optional<Integer> expirationMonth;
+
+    private final Optional<Integer> expirationYear;
+
     private final Optional<CardholderInfo> cardholderInfo;
 
     private final Optional<String> merchantId;
@@ -38,12 +42,16 @@ public final class CreateNetworkTokenRequest {
             Optional<Card> data,
             Optional<String> tokenId,
             Optional<String> tokenIntentId,
+            Optional<Integer> expirationMonth,
+            Optional<Integer> expirationYear,
             Optional<CardholderInfo> cardholderInfo,
             Optional<String> merchantId,
             Map<String, Object> additionalProperties) {
         this.data = data;
         this.tokenId = tokenId;
         this.tokenIntentId = tokenIntentId;
+        this.expirationMonth = expirationMonth;
+        this.expirationYear = expirationYear;
         this.cardholderInfo = cardholderInfo;
         this.merchantId = merchantId;
         this.additionalProperties = additionalProperties;
@@ -62,6 +70,16 @@ public final class CreateNetworkTokenRequest {
     @JsonProperty("token_intent_id")
     public Optional<String> getTokenIntentId() {
         return tokenIntentId;
+    }
+
+    @JsonProperty("expiration_month")
+    public Optional<Integer> getExpirationMonth() {
+        return expirationMonth;
+    }
+
+    @JsonProperty("expiration_year")
+    public Optional<Integer> getExpirationYear() {
+        return expirationYear;
     }
 
     @JsonProperty("cardholder_info")
@@ -89,13 +107,22 @@ public final class CreateNetworkTokenRequest {
         return data.equals(other.data)
                 && tokenId.equals(other.tokenId)
                 && tokenIntentId.equals(other.tokenIntentId)
+                && expirationMonth.equals(other.expirationMonth)
+                && expirationYear.equals(other.expirationYear)
                 && cardholderInfo.equals(other.cardholderInfo)
                 && merchantId.equals(other.merchantId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.data, this.tokenId, this.tokenIntentId, this.cardholderInfo, this.merchantId);
+        return Objects.hash(
+                this.data,
+                this.tokenId,
+                this.tokenIntentId,
+                this.expirationMonth,
+                this.expirationYear,
+                this.cardholderInfo,
+                this.merchantId);
     }
 
     @java.lang.Override
@@ -115,6 +142,10 @@ public final class CreateNetworkTokenRequest {
 
         private Optional<String> tokenIntentId = Optional.empty();
 
+        private Optional<Integer> expirationMonth = Optional.empty();
+
+        private Optional<Integer> expirationYear = Optional.empty();
+
         private Optional<CardholderInfo> cardholderInfo = Optional.empty();
 
         private Optional<String> merchantId = Optional.empty();
@@ -128,6 +159,8 @@ public final class CreateNetworkTokenRequest {
             data(other.getData());
             tokenId(other.getTokenId());
             tokenIntentId(other.getTokenIntentId());
+            expirationMonth(other.getExpirationMonth());
+            expirationYear(other.getExpirationYear());
             cardholderInfo(other.getCardholderInfo());
             merchantId(other.getMerchantId());
             return this;
@@ -166,6 +199,28 @@ public final class CreateNetworkTokenRequest {
             return this;
         }
 
+        @JsonSetter(value = "expiration_month", nulls = Nulls.SKIP)
+        public Builder expirationMonth(Optional<Integer> expirationMonth) {
+            this.expirationMonth = expirationMonth;
+            return this;
+        }
+
+        public Builder expirationMonth(Integer expirationMonth) {
+            this.expirationMonth = Optional.ofNullable(expirationMonth);
+            return this;
+        }
+
+        @JsonSetter(value = "expiration_year", nulls = Nulls.SKIP)
+        public Builder expirationYear(Optional<Integer> expirationYear) {
+            this.expirationYear = expirationYear;
+            return this;
+        }
+
+        public Builder expirationYear(Integer expirationYear) {
+            this.expirationYear = Optional.ofNullable(expirationYear);
+            return this;
+        }
+
         @JsonSetter(value = "cardholder_info", nulls = Nulls.SKIP)
         public Builder cardholderInfo(Optional<CardholderInfo> cardholderInfo) {
             this.cardholderInfo = cardholderInfo;
@@ -190,7 +245,14 @@ public final class CreateNetworkTokenRequest {
 
         public CreateNetworkTokenRequest build() {
             return new CreateNetworkTokenRequest(
-                    data, tokenId, tokenIntentId, cardholderInfo, merchantId, additionalProperties);
+                    data,
+                    tokenId,
+                    tokenIntentId,
+                    expirationMonth,
+                    expirationYear,
+                    cardholderInfo,
+                    merchantId,
+                    additionalProperties);
         }
     }
 }

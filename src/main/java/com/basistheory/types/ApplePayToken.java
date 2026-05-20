@@ -53,6 +53,8 @@ public final class ApplePayToken {
 
     private final Optional<String> fingerprint;
 
+    private final Optional<String> ingestSource;
+
     private final Map<String, Object> additionalProperties;
 
     private ApplePayToken(
@@ -72,6 +74,7 @@ public final class ApplePayToken {
             Optional<Object> data,
             Optional<Authentication> authentication,
             Optional<String> fingerprint,
+            Optional<String> ingestSource,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.type = type;
@@ -89,6 +92,7 @@ public final class ApplePayToken {
         this.data = data;
         this.authentication = authentication;
         this.fingerprint = fingerprint;
+        this.ingestSource = ingestSource;
         this.additionalProperties = additionalProperties;
     }
 
@@ -172,6 +176,11 @@ public final class ApplePayToken {
         return fingerprint;
     }
 
+    @JsonProperty("ingest_source")
+    public Optional<String> getIngestSource() {
+        return ingestSource;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -199,7 +208,8 @@ public final class ApplePayToken {
                 && card.equals(other.card)
                 && data.equals(other.data)
                 && authentication.equals(other.authentication)
-                && fingerprint.equals(other.fingerprint);
+                && fingerprint.equals(other.fingerprint)
+                && ingestSource.equals(other.ingestSource);
     }
 
     @java.lang.Override
@@ -220,7 +230,8 @@ public final class ApplePayToken {
                 this.card,
                 this.data,
                 this.authentication,
-                this.fingerprint);
+                this.fingerprint,
+                this.ingestSource);
     }
 
     @java.lang.Override
@@ -266,6 +277,8 @@ public final class ApplePayToken {
 
         private Optional<String> fingerprint = Optional.empty();
 
+        private Optional<String> ingestSource = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -288,6 +301,7 @@ public final class ApplePayToken {
             data(other.getData());
             authentication(other.getAuthentication());
             fingerprint(other.getFingerprint());
+            ingestSource(other.getIngestSource());
             return this;
         }
 
@@ -467,6 +481,17 @@ public final class ApplePayToken {
             return this;
         }
 
+        @JsonSetter(value = "ingest_source", nulls = Nulls.SKIP)
+        public Builder ingestSource(Optional<String> ingestSource) {
+            this.ingestSource = ingestSource;
+            return this;
+        }
+
+        public Builder ingestSource(String ingestSource) {
+            this.ingestSource = Optional.ofNullable(ingestSource);
+            return this;
+        }
+
         public ApplePayToken build() {
             return new ApplePayToken(
                     id,
@@ -485,6 +510,7 @@ public final class ApplePayToken {
                     data,
                     authentication,
                     fingerprint,
+                    ingestSource,
                     additionalProperties);
         }
     }
