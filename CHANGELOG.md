@@ -1,3 +1,15 @@
+## [6.0.0](https://github.com/Basis-Theory/java-sdk/compare/5.8.0...6.0.0) (2026-05-20)
+
+
+### ⚠ BREAKING CHANGES
+
+* Regenerated SDK types for token intent create after data became optional and encrypted was added as an alternative payload field.
+
+### Features
+
+* update Vault API spec ([cc57b56](https://github.com/Basis-Theory/java-sdk/commit/cc57b5637413352cfe43dab15a75a9a1bc4976c6))
+
+
 ## [5.8.0](https://github.com/Basis-Theory/java-sdk/compare/5.7.0...5.8.0) (2026-05-15)
 
 
