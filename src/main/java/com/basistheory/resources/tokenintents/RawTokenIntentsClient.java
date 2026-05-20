@@ -14,6 +14,7 @@ import com.basistheory.errors.BadRequestError;
 import com.basistheory.errors.ForbiddenError;
 import com.basistheory.errors.NotFoundError;
 import com.basistheory.errors.UnauthorizedError;
+import com.basistheory.errors.UnprocessableEntityError;
 import com.basistheory.resources.tokenintents.requests.CreateTokenIntentRequest;
 import com.basistheory.types.CreateTokenIntentResponse;
 import com.basistheory.types.ProblemDetails;
@@ -191,6 +192,10 @@ public class RawTokenIntentsClient {
                                 response);
                     case 403:
                         throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                response);
+                    case 422:
+                        throw new UnprocessableEntityError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
                                 response);
                 }

@@ -1887,6 +1887,22 @@ client.networkTokens().create(
 <dl>
 <dd>
 
+**expirationMonth:** `Optional<Integer>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**expirationYear:** `Optional<Integer>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **cardholderInfo:** `Optional<CardholderInfo>` 
     
 </dd>
@@ -3482,10 +3498,7 @@ client.tokenIntents().delete("id");
 client.tokenIntents().create(
     CreateTokenIntentRequest
         .builder()
-        .type("x")
-        .data(new 
-            HashMap<String, Object>() {{put("key", "value");
-            }})
+        .type("type")
         .build()
 );
 ```
@@ -3510,7 +3523,15 @@ client.tokenIntents().create(
 <dl>
 <dd>
 
-**data:** `Object` 
+**data:** `Optional<Object>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**encrypted:** `Optional<String>` 
     
 </dd>
 </dl>

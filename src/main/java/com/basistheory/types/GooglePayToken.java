@@ -47,6 +47,10 @@ public final class GooglePayToken {
 
     private final Optional<String> fingerprint;
 
+    private final Optional<String> type;
+
+    private final Optional<String> ingestSource;
+
     private final Map<String, Object> additionalProperties;
 
     private GooglePayToken(
@@ -63,6 +67,8 @@ public final class GooglePayToken {
             Optional<TokenAuthentication> authentication,
             Optional<TokenServiceProviderDetails> details,
             Optional<String> fingerprint,
+            Optional<String> type,
+            Optional<String> ingestSource,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.tenantId = tenantId;
@@ -77,6 +83,8 @@ public final class GooglePayToken {
         this.authentication = authentication;
         this.details = details;
         this.fingerprint = fingerprint;
+        this.type = type;
+        this.ingestSource = ingestSource;
         this.additionalProperties = additionalProperties;
     }
 
@@ -145,6 +153,16 @@ public final class GooglePayToken {
         return fingerprint;
     }
 
+    @JsonProperty("type")
+    public Optional<String> getType() {
+        return type;
+    }
+
+    @JsonProperty("ingest_source")
+    public Optional<String> getIngestSource() {
+        return ingestSource;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -169,7 +187,9 @@ public final class GooglePayToken {
                 && data.equals(other.data)
                 && authentication.equals(other.authentication)
                 && details.equals(other.details)
-                && fingerprint.equals(other.fingerprint);
+                && fingerprint.equals(other.fingerprint)
+                && type.equals(other.type)
+                && ingestSource.equals(other.ingestSource);
     }
 
     @java.lang.Override
@@ -187,7 +207,9 @@ public final class GooglePayToken {
                 this.data,
                 this.authentication,
                 this.details,
-                this.fingerprint);
+                this.fingerprint,
+                this.type,
+                this.ingestSource);
     }
 
     @java.lang.Override
@@ -227,6 +249,10 @@ public final class GooglePayToken {
 
         private Optional<String> fingerprint = Optional.empty();
 
+        private Optional<String> type = Optional.empty();
+
+        private Optional<String> ingestSource = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -246,6 +272,8 @@ public final class GooglePayToken {
             authentication(other.getAuthentication());
             details(other.getDetails());
             fingerprint(other.getFingerprint());
+            type(other.getType());
+            ingestSource(other.getIngestSource());
             return this;
         }
 
@@ -392,6 +420,28 @@ public final class GooglePayToken {
             return this;
         }
 
+        @JsonSetter(value = "type", nulls = Nulls.SKIP)
+        public Builder type(Optional<String> type) {
+            this.type = type;
+            return this;
+        }
+
+        public Builder type(String type) {
+            this.type = Optional.ofNullable(type);
+            return this;
+        }
+
+        @JsonSetter(value = "ingest_source", nulls = Nulls.SKIP)
+        public Builder ingestSource(Optional<String> ingestSource) {
+            this.ingestSource = ingestSource;
+            return this;
+        }
+
+        public Builder ingestSource(String ingestSource) {
+            this.ingestSource = Optional.ofNullable(ingestSource);
+            return this;
+        }
+
         public GooglePayToken build() {
             return new GooglePayToken(
                     id,
@@ -407,6 +457,8 @@ public final class GooglePayToken {
                     authentication,
                     details,
                     fingerprint,
+                    type,
+                    ingestSource,
                     additionalProperties);
         }
     }
