@@ -1,3 +1,11 @@
+## [6.1.0](https://github.com/Basis-Theory/java-sdk/compare/6.0.0...6.1.0) (2026-06-01)
+
+
+### Features
+
+* Add network token account endpoint ([109b2f4](https://github.com/Basis-Theory/java-sdk/commit/109b2f40adb185e327d4e963216799e265691da1))
+
+
 ## [6.0.0](https://github.com/Basis-Theory/java-sdk/compare/5.8.0...6.0.0) (2026-05-20)
 
 
