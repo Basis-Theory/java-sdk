@@ -107,6 +107,7 @@ public final class TestClient {
             } catch (NotFoundError e) {
                 assertTrue(true);
             }
+            tokenId = null;
         } finally {
             // Best-effort cleanup; delete proxies and reactors before their backing application.
             // Each delete is isolated so one failure neither blocks the others nor masks a test failure.
