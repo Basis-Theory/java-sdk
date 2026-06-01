@@ -58,50 +58,78 @@ public final class TestClient {
         String cardNumber = "6011000990139424";
         TokensClient tokensClient = new TokensClient(privateClientOptions());
 
-        String tokenId = createToken(tokensClient, cardNumber);
-        getAndValidateCardNumber(tokensClient, tokenId, cardNumber);
-
-        // Update currently does not support correct `Content-Type` header for PATCH command
-        String updateCardNumber = "4242424242424242";
-        updateToken(tokensClient, tokenId, updateCardNumber);
-        getAndValidateCardNumber(tokensClient, tokenId, updateCardNumber);
-
         ApplicationsClient applicationsClient = new ApplicationsClient(managementClientOptions());
-        String applicationId = createApplication(applicationsClient);
-
-        // Proxies
         ProxiesClient proxyClient = new ProxiesClient(managementClientOptions());
-        Proxy proxy = createProxy(proxyClient, applicationId);
-        String proxyId = proxy.getId().get();
-        patchProxy(proxyClient, applicationId, proxyId);
-        proxyClient.delete(proxyId);
-
-        // Reactors
         ReactorsClient reactorsManagementClient = new ReactorsClient(managementClientOptions());
-        Reactor reactor = reactorsManagementClient.create(CreateReactorRequest.builder()
-                .name("(Deletable) java-SDK-" + UUID.randomUUID())
-                .code("module.exports = function (req) {return {raw: req.args}}")
-                .application(Application.builder().id(applicationId).build())
-                .build()
-        );
-        String reactorId = reactor.getId().get();
-        reactorsManagementClient.patch(reactorId, PatchReactorRequest.builder()
-                .name("(Deletable) java-SDK-" + UUID.randomUUID())
-                .code("module.exports = function (req) {return {raw: req.args}}")
-                .application(Application.builder().id(applicationId).build())
-                .build()
-        );
-        react(new ReactorsClient(privateClientOptions()), reactorId);
-        reactorsManagementClient.delete(reactorId);
 
-        applicationsClient.delete(applicationId);
+        // Track every created resource so teardown can clean up even if a later step throws.
+        String tokenId = null;
+        String applicationId = null;
+        String proxyId = null;
+        String reactorId = null;
 
-        tokensClient.delete(tokenId);
         try {
-            tokensClient.get(tokenId);
-            fail("Should have raised NotFoundError");
-        } catch (NotFoundError e) {
-            assertTrue(true);
+            tokenId = createToken(tokensClient, cardNumber);
+            getAndValidateCardNumber(tokensClient, tokenId, cardNumber);
+
+            // Update currently does not support correct `Content-Type` header for PATCH command
+            String updateCardNumber = "4242424242424242";
+            updateToken(tokensClient, tokenId, updateCardNumber);
+            getAndValidateCardNumber(tokensClient, tokenId, updateCardNumber);
+
+            applicationId = createApplication(applicationsClient);
+
+            // Proxies
+            Proxy proxy = createProxy(proxyClient, applicationId);
+            proxyId = proxy.getId().get();
+            patchProxy(proxyClient, applicationId, proxyId);
+
+            // Reactors
+            Reactor reactor = reactorsManagementClient.create(CreateReactorRequest.builder()
+                    .name("(Deletable) java-SDK-" + UUID.randomUUID())
+                    .code("module.exports = function (req) {return {raw: req.args}}")
+                    .application(Application.builder().id(applicationId).build())
+                    .build()
+            );
+            reactorId = reactor.getId().get();
+            reactorsManagementClient.patch(reactorId, PatchReactorRequest.builder()
+                    .name("(Deletable) java-SDK-" + UUID.randomUUID())
+                    .code("module.exports = function (req) {return {raw: req.args}}")
+                    .application(Application.builder().id(applicationId).build())
+                    .build()
+            );
+            react(new ReactorsClient(privateClientOptions()), reactorId);
+
+            tokensClient.delete(tokenId);
+            try {
+                tokensClient.get(tokenId);
+                fail("Should have raised NotFoundError");
+            } catch (NotFoundError e) {
+                assertTrue(true);
+            }
+        } finally {
+            // Best-effort cleanup; delete proxies and reactors before their backing application.
+            // Each delete is isolated so one failure neither blocks the others nor masks a test failure.
+            deleteQuietly("proxy", proxyId, proxyClient::delete);
+            deleteQuietly("reactor", reactorId, reactorsManagementClient::delete);
+            deleteQuietly("application", applicationId, applicationsClient::delete);
+            deleteQuietly("token", tokenId, tokensClient::delete);
+        }
+    }
+
+    @FunctionalInterface
+    private interface ResourceDeleter {
+        void delete(String id);
+    }
+
+    private static void deleteQuietly(String resourceType, String id, ResourceDeleter deleter) {
+        if (id == null) {
+            return;
+        }
+        try {
+            deleter.delete(id);
+        } catch (Exception e) {
+            System.out.println("Failed to clean up " + resourceType + " " + id + ": " + e.getMessage());
         }
     }
 
