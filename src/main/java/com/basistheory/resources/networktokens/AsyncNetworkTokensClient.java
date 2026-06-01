@@ -5,19 +5,25 @@ package com.basistheory.resources.networktokens;
 
 import com.basistheory.core.ClientOptions;
 import com.basistheory.core.RequestOptions;
+import com.basistheory.core.Suppliers;
+import com.basistheory.resources.networktokens.account.AsyncAccountClient;
 import com.basistheory.resources.networktokens.requests.CreateNetworkTokenRequest;
 import com.basistheory.types.NetworkToken;
 import com.basistheory.types.NetworkTokenCryptogram;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
 
 public class AsyncNetworkTokensClient {
     protected final ClientOptions clientOptions;
 
     private final AsyncRawNetworkTokensClient rawClient;
 
+    protected final Supplier<AsyncAccountClient> accountClient;
+
     public AsyncNetworkTokensClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
         this.rawClient = new AsyncRawNetworkTokensClient(clientOptions);
+        this.accountClient = Suppliers.memoize(() -> new AsyncAccountClient(clientOptions));
     }
 
     /**
@@ -77,5 +83,9 @@ public class AsyncNetworkTokensClient {
 
     public CompletableFuture<NetworkToken> resume(String id, RequestOptions requestOptions) {
         return this.rawClient.resume(id, requestOptions).thenApply(response -> response.body());
+    }
+
+    public AsyncAccountClient account() {
+        return this.accountClient.get();
     }
 }

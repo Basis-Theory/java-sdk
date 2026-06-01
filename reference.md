@@ -16,6 +16,19 @@
 client.applications().list(
     ApplicationsListRequest
         .builder()
+        .id(
+            new ArrayList<Optional<String>>(
+                Arrays.asList("id")
+            )
+        )
+        .type(
+            new ArrayList<Optional<String>>(
+                Arrays.asList("type")
+            )
+        )
+        .page(1)
+        .start("start")
+        .size(1)
         .build()
 );
 ```
@@ -347,6 +360,16 @@ client.applicationKeys().list(
     "id",
     ApplicationKeysListRequest
         .builder()
+        .id(
+            new ArrayList<Optional<String>>(
+                Arrays.asList("id")
+            )
+        )
+        .type(
+            new ArrayList<Optional<String>>(
+                Arrays.asList("type")
+            )
+        )
         .build()
 );
 ```
@@ -1327,6 +1350,11 @@ client.tokens().create(
 client.tokens().listV2(
     TokensListV2Request
         .builder()
+        .type("type")
+        .container("container")
+        .fingerprint("fingerprint")
+        .start("start")
+        .size(1)
         .build()
 );
 ```
@@ -1729,6 +1757,13 @@ client.keys().delete("id");
 client.logs().list(
     LogsListRequest
         .builder()
+        .entityType("entity_type")
+        .entityId("entity_id")
+        .startDate(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .endDate(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .page(1)
+        .start("start")
+        .size(1)
         .build()
 );
 ```
@@ -2140,6 +2175,7 @@ client.networkTokens().resume("id");
 client.permissions().list(
     PermissionsListRequest
         .builder()
+        .applicationType("application_type")
         .build()
 );
 ```
@@ -2185,6 +2221,15 @@ client.permissions().list(
 client.proxies().list(
     ProxiesListRequest
         .builder()
+        .id(
+            new ArrayList<Optional<String>>(
+                Arrays.asList("id")
+            )
+        )
+        .name("name")
+        .page(1)
+        .start("start")
+        .size(1)
         .build()
 );
 ```
@@ -2744,6 +2789,15 @@ client.proxies().patch(
 client.reactors().list(
     ReactorsListRequest
         .builder()
+        .id(
+            new ArrayList<Optional<String>>(
+                Arrays.asList("id")
+            )
+        )
+        .name("name")
+        .page(1)
+        .start("start")
+        .size(1)
         .build()
 );
 ```
@@ -4002,6 +4056,8 @@ Returns a list of account updater batch jobs
 client.accountUpdater().jobs().list(
     JobsListRequest
         .builder()
+        .size(1)
+        .start("start")
         .build()
 );
 ```
@@ -4446,6 +4502,8 @@ List all enrollments for the current tenant with cursor-based pagination.
 client.agentic().enrollments().list(
     EnrollmentsListRequest
         .builder()
+        .limit(1)
+        .cursor("cursor")
         .build()
 );
 ```
@@ -4771,6 +4829,9 @@ client.agentic().agents().instructions().list(
     "agent_id",
     InstructionsListRequest
         .builder()
+        .enrollmentId("enrollment_id")
+        .limit(1)
+        .cursor("cursor")
         .build()
 );
 ```
@@ -6581,6 +6642,47 @@ client.googlePay().merchant().certificates().create(
 </dl>
 </details>
 
+## NetworkTokens Account
+<details><summary><code>client.networkTokens.account.get(id) -> NetworkTokenAccount</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.networkTokens().account().get("id");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Reactors Results
 <details><summary><code>client.reactors.results.get(id, requestId) -> Object</code></summary>
 <dl>
@@ -6802,6 +6904,10 @@ client.tenants().connections().delete();
 client.tenants().invitations().list(
     InvitationsListRequest
         .builder()
+        .status(TenantInvitationStatus.PENDING)
+        .page(1)
+        .start("start")
+        .size(1)
         .build()
 );
 ```
@@ -7044,6 +7150,14 @@ client.tenants().invitations().delete("invitationId");
 client.tenants().members().list(
     MembersListRequest
         .builder()
+        .userId(
+            new ArrayList<Optional<String>>(
+                Arrays.asList("user_id")
+            )
+        )
+        .page(1)
+        .start("start")
+        .size(1)
         .build()
 );
 ```
@@ -7208,6 +7322,9 @@ client.tenants().merchants().list(
     "tenantId",
     MerchantsListRequest
         .builder()
+        .page(1)
+        .start("start")
+        .size(1)
         .build()
 );
 ```
