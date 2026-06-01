@@ -5,18 +5,24 @@ package com.basistheory.resources.networktokens;
 
 import com.basistheory.core.ClientOptions;
 import com.basistheory.core.RequestOptions;
+import com.basistheory.core.Suppliers;
+import com.basistheory.resources.networktokens.account.AccountClient;
 import com.basistheory.resources.networktokens.requests.CreateNetworkTokenRequest;
 import com.basistheory.types.NetworkToken;
 import com.basistheory.types.NetworkTokenCryptogram;
+import java.util.function.Supplier;
 
 public class NetworkTokensClient {
     protected final ClientOptions clientOptions;
 
     private final RawNetworkTokensClient rawClient;
 
+    protected final Supplier<AccountClient> accountClient;
+
     public NetworkTokensClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
         this.rawClient = new RawNetworkTokensClient(clientOptions);
+        this.accountClient = Suppliers.memoize(() -> new AccountClient(clientOptions));
     }
 
     /**
@@ -76,5 +82,9 @@ public class NetworkTokensClient {
 
     public NetworkToken resume(String id, RequestOptions requestOptions) {
         return this.rawClient.resume(id, requestOptions).body();
+    }
+
+    public AccountClient account() {
+        return this.accountClient.get();
     }
 }
