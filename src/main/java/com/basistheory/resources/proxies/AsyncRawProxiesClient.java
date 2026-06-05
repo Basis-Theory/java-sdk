@@ -54,6 +54,11 @@ public class AsyncRawProxiesClient {
         return list(ProxiesListRequest.builder().build());
     }
 
+    public CompletableFuture<BasisTheoryApiHttpResponse<SyncPagingIterable<Proxy>>> list(
+            RequestOptions requestOptions) {
+        return list(ProxiesListRequest.builder().build(), requestOptions);
+    }
+
     public CompletableFuture<BasisTheoryApiHttpResponse<SyncPagingIterable<Proxy>>> list(ProxiesListRequest request) {
         return list(request, null);
     }
@@ -82,6 +87,11 @@ public class AsyncRawProxiesClient {
         if (request.getId().isPresent()) {
             QueryStringMapper.addQueryParameter(httpUrl, "id", request.getId().get(), true);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -97,9 +107,10 @@ public class AsyncRawProxiesClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         ProxyPaginatedList parsedResponse =
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ProxyPaginatedList.class);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProxyPaginatedList.class);
                         int newPageNumber = request.getPage()
                                 .map((Integer page) -> page + 1)
                                 .orElse(1);
@@ -109,7 +120,7 @@ public class AsyncRawProxiesClient {
                                 .build();
                         List<Proxy> result = parsedResponse.getData().orElse(Collections.emptyList());
                         future.complete(new BasisTheoryApiHttpResponse<>(
-                                new SyncPagingIterable<Proxy>(true, result, () -> {
+                                new SyncPagingIterable<Proxy>(true, result, parsedResponse, () -> {
                                     try {
                                         return list(nextRequest, requestOptions)
                                                 .get()
@@ -121,7 +132,6 @@ public class AsyncRawProxiesClient {
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 401:
@@ -143,11 +153,9 @@ public class AsyncRawProxiesClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BasisTheoryApiApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BasisTheoryException("Network error executing HTTP request", e));
@@ -168,10 +176,14 @@ public class AsyncRawProxiesClient {
 
     public CompletableFuture<BasisTheoryApiHttpResponse<Proxy>> create(
             CreateProxyRequest request, IdempotentRequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("proxies")
-                .build();
+                .addPathSegments("proxies");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -180,7 +192,7 @@ public class AsyncRawProxiesClient {
             throw new BasisTheoryException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -195,12 +207,12 @@ public class AsyncRawProxiesClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BasisTheoryApiHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Proxy.class), response));
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Proxy.class), response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -223,11 +235,9 @@ public class AsyncRawProxiesClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BasisTheoryApiApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BasisTheoryException("Network error executing HTTP request", e));
@@ -247,13 +257,17 @@ public class AsyncRawProxiesClient {
     }
 
     public CompletableFuture<BasisTheoryApiHttpResponse<Proxy>> get(String id, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("proxies")
-                .addPathSegment(id)
-                .build();
+                .addPathSegment(id);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Accept", "application/json")
@@ -267,12 +281,12 @@ public class AsyncRawProxiesClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BasisTheoryApiHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Proxy.class), response));
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Proxy.class), response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 401:
@@ -294,11 +308,9 @@ public class AsyncRawProxiesClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BasisTheoryApiApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BasisTheoryException("Network error executing HTTP request", e));
@@ -319,11 +331,15 @@ public class AsyncRawProxiesClient {
 
     public CompletableFuture<BasisTheoryApiHttpResponse<Proxy>> update(
             String id, UpdateProxyRequest request, IdempotentRequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("proxies")
-                .addPathSegment(id)
-                .build();
+                .addPathSegment(id);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -332,7 +348,7 @@ public class AsyncRawProxiesClient {
             throw new BasisTheoryException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("PUT", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -347,12 +363,12 @@ public class AsyncRawProxiesClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BasisTheoryApiHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Proxy.class), response));
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Proxy.class), response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -380,11 +396,9 @@ public class AsyncRawProxiesClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BasisTheoryApiApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BasisTheoryException("Network error executing HTTP request", e));
@@ -404,13 +418,17 @@ public class AsyncRawProxiesClient {
     }
 
     public CompletableFuture<BasisTheoryApiHttpResponse<Void>> delete(String id, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("proxies")
-                .addPathSegment(id)
-                .build();
+                .addPathSegment(id);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("DELETE", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Accept", "application/json")
@@ -450,11 +468,9 @@ public class AsyncRawProxiesClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BasisTheoryApiApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BasisTheoryException("Network error executing HTTP request", e));
@@ -473,17 +489,26 @@ public class AsyncRawProxiesClient {
         return patch(id, PatchProxyRequest.builder().build());
     }
 
+    public CompletableFuture<BasisTheoryApiHttpResponse<Void>> patch(
+            String id, IdempotentRequestOptions requestOptions) {
+        return patch(id, PatchProxyRequest.builder().build(), requestOptions);
+    }
+
     public CompletableFuture<BasisTheoryApiHttpResponse<Void>> patch(String id, PatchProxyRequest request) {
         return patch(id, request, null);
     }
 
     public CompletableFuture<BasisTheoryApiHttpResponse<Void>> patch(
             String id, PatchProxyRequest request, IdempotentRequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("proxies")
-                .addPathSegment(id)
-                .build();
+                .addPathSegment(id);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -493,7 +518,7 @@ public class AsyncRawProxiesClient {
             throw new BasisTheoryException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("PATCH", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/merge-patch+json")
@@ -540,11 +565,9 @@ public class AsyncRawProxiesClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BasisTheoryApiApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BasisTheoryException("Network error executing HTTP request", e));

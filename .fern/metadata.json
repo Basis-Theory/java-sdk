@@ -1,0 +1,17 @@
+{
+  "cliVersion": "5.43.0",
+  "generatorName": "fernapi/fern-java-sdk",
+  "generatorVersion": "4.8.12",
+  "generatorConfig": {
+    "base-exception-class-name": "BasisTheoryException",
+    "package-prefix": "com.basistheory",
+    "enable-forward-compatible-enums": false,
+    "retry-status-codes": "legacy"
+  },
+  "originGitCommit": "653a1ac274c3a576a2273f9bff9371eb0d555ad2",
+  "originGitCommitIsDirty": false,
+  "invokedBy": "ci",
+  "requestedVersion": "0.0.1",
+  "ciProvider": "github",
+  "sdkVersion": "0.0.1"
+}

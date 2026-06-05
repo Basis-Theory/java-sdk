@@ -34,6 +34,10 @@ public class ProxiesClient {
         return this.rawClient.list().body();
     }
 
+    public SyncPagingIterable<Proxy> list(RequestOptions requestOptions) {
+        return this.rawClient.list(requestOptions).body();
+    }
+
     public SyncPagingIterable<Proxy> list(ProxiesListRequest request) {
         return this.rawClient.list(request).body();
     }
@@ -76,6 +80,10 @@ public class ProxiesClient {
 
     public void patch(String id) {
         this.rawClient.patch(id).body();
+    }
+
+    public void patch(String id, IdempotentRequestOptions requestOptions) {
+        this.rawClient.patch(id, requestOptions).body();
     }
 
     public void patch(String id, PatchProxyRequest request) {

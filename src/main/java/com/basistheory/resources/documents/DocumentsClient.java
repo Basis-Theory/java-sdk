@@ -10,8 +10,10 @@ import com.basistheory.resources.documents.data.DataClient;
 import com.basistheory.resources.documents.requests.DocumentsUploadRequest;
 import com.basistheory.types.Document;
 import java.io.File;
+import java.io.InputStream;
 import java.util.Optional;
 import java.util.function.Supplier;
+import okhttp3.MediaType;
 
 public class DocumentsClient {
     protected final ClientOptions clientOptions;
@@ -37,12 +39,40 @@ public class DocumentsClient {
         return this.rawClient.upload(document).body();
     }
 
+    public Document upload(Optional<File> document, RequestOptions requestOptions) {
+        return this.rawClient.upload(document, requestOptions).body();
+    }
+
     public Document upload(Optional<File> document, DocumentsUploadRequest request) {
         return this.rawClient.upload(document, request).body();
     }
 
     public Document upload(Optional<File> document, DocumentsUploadRequest request, RequestOptions requestOptions) {
         return this.rawClient.upload(document, request, requestOptions).body();
+    }
+
+    public Document upload(Optional<File> document, InputStream stream, String filename) {
+        return this.rawClient.upload(document, stream, filename).body();
+    }
+
+    public Document upload(Optional<File> document, InputStream stream, String filename, MediaType mediaType) {
+        return this.rawClient.upload(document, stream, filename, mediaType).body();
+    }
+
+    public Document upload(
+            Optional<File> document, InputStream stream, String filename, RequestOptions requestOptions) {
+        return this.rawClient.upload(document, stream, filename, requestOptions).body();
+    }
+
+    public Document upload(
+            Optional<File> document,
+            InputStream stream,
+            String filename,
+            MediaType mediaType,
+            RequestOptions requestOptions) {
+        return this.rawClient
+                .upload(document, stream, filename, mediaType, requestOptions)
+                .body();
     }
 
     public Document get(String id) {

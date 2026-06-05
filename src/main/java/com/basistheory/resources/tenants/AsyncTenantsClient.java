@@ -4,24 +4,18 @@
 package com.basistheory.resources.tenants;
 
 import com.basistheory.core.ClientOptions;
-import com.basistheory.core.RequestOptions;
 import com.basistheory.core.Suppliers;
 import com.basistheory.resources.tenants.connections.AsyncConnectionsClient;
 import com.basistheory.resources.tenants.invitations.AsyncInvitationsClient;
 import com.basistheory.resources.tenants.members.AsyncMembersClient;
 import com.basistheory.resources.tenants.merchants.AsyncMerchantsClient;
 import com.basistheory.resources.tenants.owner.AsyncOwnerClient;
-import com.basistheory.resources.tenants.requests.TransferTenantOwnerRequest;
 import com.basistheory.resources.tenants.securitycontact.AsyncSecurityContactClient;
 import com.basistheory.resources.tenants.self.AsyncSelfClient;
-import com.basistheory.types.TenantMemberResponse;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 public class AsyncTenantsClient {
     protected final ClientOptions clientOptions;
-
-    private final AsyncRawTenantsClient rawClient;
 
     protected final Supplier<AsyncSecurityContactClient> securityContactClient;
 
@@ -39,7 +33,6 @@ public class AsyncTenantsClient {
 
     public AsyncTenantsClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
-        this.rawClient = new AsyncRawTenantsClient(clientOptions);
         this.securityContactClient = Suppliers.memoize(() -> new AsyncSecurityContactClient(clientOptions));
         this.connectionsClient = Suppliers.memoize(() -> new AsyncConnectionsClient(clientOptions));
         this.invitationsClient = Suppliers.memoize(() -> new AsyncInvitationsClient(clientOptions));
@@ -47,22 +40,6 @@ public class AsyncTenantsClient {
         this.merchantsClient = Suppliers.memoize(() -> new AsyncMerchantsClient(clientOptions));
         this.ownerClient = Suppliers.memoize(() -> new AsyncOwnerClient(clientOptions));
         this.selfClient = Suppliers.memoize(() -> new AsyncSelfClient(clientOptions));
-    }
-
-    /**
-     * Get responses with HTTP metadata like headers
-     */
-    public AsyncRawTenantsClient withRawResponse() {
-        return this.rawClient;
-    }
-
-    public CompletableFuture<TenantMemberResponse> ownerTransfer(TransferTenantOwnerRequest request) {
-        return this.rawClient.ownerTransfer(request).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<TenantMemberResponse> ownerTransfer(
-            TransferTenantOwnerRequest request, RequestOptions requestOptions) {
-        return this.rawClient.ownerTransfer(request, requestOptions).thenApply(response -> response.body());
     }
 
     public AsyncSecurityContactClient securityContact() {

@@ -82,6 +82,13 @@ public class VerifyClient {
     /**
      * Complete the verification flow (e.g. after passkey creation). Body is optional — Visa sends empty body, Mastercard sends assurance_data.
      */
+    public VerificationResponse complete(String enrollmentId, RequestOptions requestOptions) {
+        return this.rawClient.complete(enrollmentId, requestOptions).body();
+    }
+
+    /**
+     * Complete the verification flow (e.g. after passkey creation). Body is optional — Visa sends empty body, Mastercard sends assurance_data.
+     */
     public VerificationResponse complete(String enrollmentId, CompleteVerificationRequest request) {
         return this.rawClient.complete(enrollmentId, request).body();
     }

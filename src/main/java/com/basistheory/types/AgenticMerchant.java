@@ -113,6 +113,10 @@ public final class AgenticMerchant {
     public interface _FinalStage {
         AgenticMerchant build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage categoryCode(Optional<String> categoryCode);
 
         _FinalStage categoryCode(String categoryCode);
@@ -179,6 +183,18 @@ public final class AgenticMerchant {
         @java.lang.Override
         public AgenticMerchant build() {
             return new AgenticMerchant(name, url, countryCode, categoryCode, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

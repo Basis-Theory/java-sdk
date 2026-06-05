@@ -36,11 +36,11 @@ public class AsyncConnectionsClient {
         return this.rawClient.create(request, requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<CreateTenantConnectionResponse> delete() {
+    public CompletableFuture<Void> delete() {
         return this.rawClient.delete().thenApply(response -> response.body());
     }
 
-    public CompletableFuture<CreateTenantConnectionResponse> delete(RequestOptions requestOptions) {
+    public CompletableFuture<Void> delete(RequestOptions requestOptions) {
         return this.rawClient.delete(requestOptions).thenApply(response -> response.body());
     }
 }

@@ -91,5 +91,15 @@ public final class PermissionsListRequest {
         public PermissionsListRequest build() {
             return new PermissionsListRequest(applicationType, additionalProperties);
         }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
+        }
     }
 }

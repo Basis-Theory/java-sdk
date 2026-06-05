@@ -215,5 +215,15 @@ public final class Agent {
         public Agent build() {
             return new Agent(id, name, status, enrollmentIds, instanceDetails, createdAt, additionalProperties);
         }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
+        }
     }
 }

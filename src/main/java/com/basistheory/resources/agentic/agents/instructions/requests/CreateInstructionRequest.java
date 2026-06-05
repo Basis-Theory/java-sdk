@@ -158,6 +158,10 @@ public final class CreateInstructionRequest {
     public interface _FinalStage {
         CreateInstructionRequest build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage assuranceData(Optional<Map<String, Object>> assuranceData);
 
         _FinalStage assuranceData(Map<String, Object> assuranceData);
@@ -283,6 +287,18 @@ public final class CreateInstructionRequest {
                     recurring,
                     instanceDetails,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

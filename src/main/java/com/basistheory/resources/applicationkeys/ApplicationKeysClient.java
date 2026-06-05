@@ -31,6 +31,10 @@ public class ApplicationKeysClient {
         return this.rawClient.list(id).body();
     }
 
+    public List<ApplicationKey> list(String id, RequestOptions requestOptions) {
+        return this.rawClient.list(id, requestOptions).body();
+    }
+
     public List<ApplicationKey> list(String id, ApplicationKeysListRequest request) {
         return this.rawClient.list(id, request).body();
     }

@@ -31,6 +31,10 @@ public class AsyncPermissionsClient {
         return this.rawClient.list().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<List<Permission>> list(RequestOptions requestOptions) {
+        return this.rawClient.list(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<List<Permission>> list(PermissionsListRequest request) {
         return this.rawClient.list(request).thenApply(response -> response.body());
     }

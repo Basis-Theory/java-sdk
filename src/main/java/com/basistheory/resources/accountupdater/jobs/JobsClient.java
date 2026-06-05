@@ -51,6 +51,13 @@ public class JobsClient {
     /**
      * Returns a list of account updater batch jobs
      */
+    public AccountUpdaterJobList list(RequestOptions requestOptions) {
+        return this.rawClient.list(requestOptions).body();
+    }
+
+    /**
+     * Returns a list of account updater batch jobs
+     */
     public AccountUpdaterJobList list(JobsListRequest request) {
         return this.rawClient.list(request).body();
     }
@@ -67,6 +74,13 @@ public class JobsClient {
      */
     public AccountUpdaterJob create() {
         return this.rawClient.create().body();
+    }
+
+    /**
+     * Returns the created account updater batch job
+     */
+    public AccountUpdaterJob create(RequestOptions requestOptions) {
+        return this.rawClient.create(requestOptions).body();
     }
 
     /**

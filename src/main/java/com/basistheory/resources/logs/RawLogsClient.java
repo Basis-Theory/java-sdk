@@ -43,6 +43,10 @@ public class RawLogsClient {
         return list(LogsListRequest.builder().build());
     }
 
+    public BasisTheoryApiHttpResponse<SyncPagingIterable<Log>> list(RequestOptions requestOptions) {
+        return list(LogsListRequest.builder().build(), requestOptions);
+    }
+
     public BasisTheoryApiHttpResponse<SyncPagingIterable<Log>> list(LogsListRequest request) {
         return list(request, null);
     }
@@ -80,6 +84,11 @@ public class RawLogsClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "size", request.getSize().get(), false);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -92,9 +101,10 @@ public class RawLogsClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 LogPaginatedList parsedResponse =
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), LogPaginatedList.class);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, LogPaginatedList.class);
                 int newPageNumber =
                         request.getPage().map((Integer page) -> page + 1).orElse(1);
                 LogsListRequest nextRequest = LogsListRequest.builder()
@@ -103,11 +113,11 @@ public class RawLogsClient {
                         .build();
                 List<Log> result = parsedResponse.getData().orElse(Collections.emptyList());
                 return new BasisTheoryApiHttpResponse<>(
-                        new SyncPagingIterable<Log>(true, result, () -> list(nextRequest, requestOptions)
-                                .body()),
+                        new SyncPagingIterable<Log>(
+                                true, result, parsedResponse, () -> list(nextRequest, requestOptions)
+                                        .body()),
                         response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -126,11 +136,9 @@ public class RawLogsClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BasisTheoryApiApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BasisTheoryException("Network error executing HTTP request", e);
         }
@@ -141,12 +149,16 @@ public class RawLogsClient {
     }
 
     public BasisTheoryApiHttpResponse<List<LogEntityType>> getEntityTypes(RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("logs/entity-types")
-                .build();
+                .addPathSegments("logs/entity-types");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Accept", "application/json")
@@ -157,13 +169,13 @@ public class RawLogsClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BasisTheoryApiHttpResponse<>(
                         ObjectMappers.JSON_MAPPER.readValue(
-                                responseBody.string(), new TypeReference<List<LogEntityType>>() {}),
+                                responseBodyString, new TypeReference<List<LogEntityType>>() {}),
                         response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 401:
@@ -178,11 +190,9 @@ public class RawLogsClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BasisTheoryApiApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BasisTheoryException("Network error executing HTTP request", e);
         }

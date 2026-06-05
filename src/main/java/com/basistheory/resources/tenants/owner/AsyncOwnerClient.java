@@ -4,7 +4,9 @@
 package com.basistheory.resources.tenants.owner;
 
 import com.basistheory.core.ClientOptions;
+import com.basistheory.core.IdempotentRequestOptions;
 import com.basistheory.core.RequestOptions;
+import com.basistheory.resources.tenants.owner.requests.TransferTenantOwnerRequest;
 import com.basistheory.types.TenantMemberResponse;
 import java.util.concurrent.CompletableFuture;
 
@@ -31,5 +33,14 @@ public class AsyncOwnerClient {
 
     public CompletableFuture<TenantMemberResponse> get(RequestOptions requestOptions) {
         return this.rawClient.get(requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<TenantMemberResponse> transfer(TransferTenantOwnerRequest request) {
+        return this.rawClient.transfer(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<TenantMemberResponse> transfer(
+            TransferTenantOwnerRequest request, IdempotentRequestOptions requestOptions) {
+        return this.rawClient.transfer(request, requestOptions).thenApply(response -> response.body());
     }
 }

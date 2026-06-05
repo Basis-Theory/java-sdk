@@ -6,10 +6,10 @@ package com.basistheory.resources.tenants.members;
 import com.basistheory.core.ClientOptions;
 import com.basistheory.core.IdempotentRequestOptions;
 import com.basistheory.core.RequestOptions;
+import com.basistheory.core.pagination.SyncPagingIterable;
 import com.basistheory.resources.tenants.members.requests.MembersListRequest;
 import com.basistheory.resources.tenants.members.requests.UpdateTenantMemberRequest;
 import com.basistheory.types.TenantMemberResponse;
-import com.basistheory.types.TenantMemberResponsePaginatedList;
 
 public class MembersClient {
     protected final ClientOptions clientOptions;
@@ -28,15 +28,19 @@ public class MembersClient {
         return this.rawClient;
     }
 
-    public TenantMemberResponsePaginatedList list() {
+    public SyncPagingIterable<TenantMemberResponse> list() {
         return this.rawClient.list().body();
     }
 
-    public TenantMemberResponsePaginatedList list(MembersListRequest request) {
+    public SyncPagingIterable<TenantMemberResponse> list(RequestOptions requestOptions) {
+        return this.rawClient.list(requestOptions).body();
+    }
+
+    public SyncPagingIterable<TenantMemberResponse> list(MembersListRequest request) {
         return this.rawClient.list(request).body();
     }
 
-    public TenantMemberResponsePaginatedList list(MembersListRequest request, RequestOptions requestOptions) {
+    public SyncPagingIterable<TenantMemberResponse> list(MembersListRequest request, RequestOptions requestOptions) {
         return this.rawClient.list(request, requestOptions).body();
     }
 

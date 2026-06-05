@@ -11,6 +11,7 @@ import com.basistheory.core.IdempotentRequestOptions;
 import com.basistheory.core.ObjectMappers;
 import com.basistheory.core.QueryStringMapper;
 import com.basistheory.core.RequestOptions;
+import com.basistheory.core.pagination.SyncPagingIterable;
 import com.basistheory.errors.ForbiddenError;
 import com.basistheory.errors.NotFoundError;
 import com.basistheory.errors.UnauthorizedError;
@@ -22,7 +23,10 @@ import com.basistheory.types.TenantMemberResponse;
 import com.basistheory.types.TenantMemberResponsePaginatedList;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Headers;
@@ -42,16 +46,21 @@ public class AsyncRawMembersClient {
         this.clientOptions = clientOptions;
     }
 
-    public CompletableFuture<BasisTheoryApiHttpResponse<TenantMemberResponsePaginatedList>> list() {
+    public CompletableFuture<BasisTheoryApiHttpResponse<SyncPagingIterable<TenantMemberResponse>>> list() {
         return list(MembersListRequest.builder().build());
     }
 
-    public CompletableFuture<BasisTheoryApiHttpResponse<TenantMemberResponsePaginatedList>> list(
+    public CompletableFuture<BasisTheoryApiHttpResponse<SyncPagingIterable<TenantMemberResponse>>> list(
+            RequestOptions requestOptions) {
+        return list(MembersListRequest.builder().build(), requestOptions);
+    }
+
+    public CompletableFuture<BasisTheoryApiHttpResponse<SyncPagingIterable<TenantMemberResponse>>> list(
             MembersListRequest request) {
         return list(request, null);
     }
 
-    public CompletableFuture<BasisTheoryApiHttpResponse<TenantMemberResponsePaginatedList>> list(
+    public CompletableFuture<BasisTheoryApiHttpResponse<SyncPagingIterable<TenantMemberResponse>>> list(
             MembersListRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -72,6 +81,11 @@ public class AsyncRawMembersClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "user_id", request.getUserId().get(), true);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -82,20 +96,38 @@ public class AsyncRawMembersClient {
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
             client = clientOptions.httpClientWithTimeout(requestOptions);
         }
-        CompletableFuture<BasisTheoryApiHttpResponse<TenantMemberResponsePaginatedList>> future =
+        CompletableFuture<BasisTheoryApiHttpResponse<SyncPagingIterable<TenantMemberResponse>>> future =
                 new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
+                        TenantMemberResponsePaginatedList parsedResponse = ObjectMappers.JSON_MAPPER.readValue(
+                                responseBodyString, TenantMemberResponsePaginatedList.class);
+                        int newPageNumber = request.getPage()
+                                .map((Integer page) -> page + 1)
+                                .orElse(1);
+                        MembersListRequest nextRequest = MembersListRequest.builder()
+                                .from(request)
+                                .page(newPageNumber)
+                                .build();
+                        List<TenantMemberResponse> result =
+                                parsedResponse.getData().orElse(Collections.emptyList());
                         future.complete(new BasisTheoryApiHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), TenantMemberResponsePaginatedList.class),
+                                new SyncPagingIterable<TenantMemberResponse>(true, result, parsedResponse, () -> {
+                                    try {
+                                        return list(nextRequest, requestOptions)
+                                                .get()
+                                                .body();
+                                    } catch (InterruptedException | ExecutionException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                }),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 401:
@@ -112,11 +144,9 @@ public class AsyncRawMembersClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BasisTheoryApiApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BasisTheoryException("Network error executing HTTP request", e));
@@ -138,11 +168,15 @@ public class AsyncRawMembersClient {
 
     public CompletableFuture<BasisTheoryApiHttpResponse<TenantMemberResponse>> update(
             String memberId, UpdateTenantMemberRequest request, IdempotentRequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("tenants/self/members")
-                .addPathSegment(memberId)
-                .build();
+                .addPathSegment(memberId);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -152,7 +186,7 @@ public class AsyncRawMembersClient {
             throw new BasisTheoryException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("PUT", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json-patch+json")
@@ -167,13 +201,13 @@ public class AsyncRawMembersClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BasisTheoryApiHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), TenantMemberResponse.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TenantMemberResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 401:
@@ -195,11 +229,9 @@ public class AsyncRawMembersClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BasisTheoryApiApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BasisTheoryException("Network error executing HTTP request", e));
@@ -219,13 +251,17 @@ public class AsyncRawMembersClient {
     }
 
     public CompletableFuture<BasisTheoryApiHttpResponse<Void>> delete(String memberId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("tenants/self/members")
-                .addPathSegment(memberId)
-                .build();
+                .addPathSegment(memberId);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("DELETE", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Accept", "application/json")
@@ -270,11 +306,9 @@ public class AsyncRawMembersClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BasisTheoryApiApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BasisTheoryException("Network error executing HTTP request", e));

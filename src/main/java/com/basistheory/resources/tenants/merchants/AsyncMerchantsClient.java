@@ -33,6 +33,10 @@ public class AsyncMerchantsClient {
         return this.rawClient.list(tenantId).thenApply(response -> response.body());
     }
 
+    public CompletableFuture<SyncPagingIterable<TenantMerchant>> list(String tenantId, RequestOptions requestOptions) {
+        return this.rawClient.list(tenantId, requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<SyncPagingIterable<TenantMerchant>> list(String tenantId, MerchantsListRequest request) {
         return this.rawClient.list(tenantId, request).thenApply(response -> response.body());
     }
@@ -80,6 +84,13 @@ public class AsyncMerchantsClient {
 
     public CompletableFuture<TenantMerchant> requestOnboarding(String tenantId, String merchantId) {
         return this.rawClient.requestOnboarding(tenantId, merchantId).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<TenantMerchant> requestOnboarding(
+            String tenantId, String merchantId, RequestOptions requestOptions) {
+        return this.rawClient
+                .requestOnboarding(tenantId, merchantId, requestOptions)
+                .thenApply(response -> response.body());
     }
 
     public CompletableFuture<TenantMerchant> requestOnboarding(

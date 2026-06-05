@@ -52,6 +52,13 @@ public class AsyncJobsClient {
     /**
      * Returns a list of account updater batch jobs
      */
+    public CompletableFuture<AccountUpdaterJobList> list(RequestOptions requestOptions) {
+        return this.rawClient.list(requestOptions).thenApply(response -> response.body());
+    }
+
+    /**
+     * Returns a list of account updater batch jobs
+     */
     public CompletableFuture<AccountUpdaterJobList> list(JobsListRequest request) {
         return this.rawClient.list(request).thenApply(response -> response.body());
     }
@@ -68,6 +75,13 @@ public class AsyncJobsClient {
      */
     public CompletableFuture<AccountUpdaterJob> create() {
         return this.rawClient.create().thenApply(response -> response.body());
+    }
+
+    /**
+     * Returns the created account updater batch job
+     */
+    public CompletableFuture<AccountUpdaterJob> create(RequestOptions requestOptions) {
+        return this.rawClient.create(requestOptions).thenApply(response -> response.body());
     }
 
     /**

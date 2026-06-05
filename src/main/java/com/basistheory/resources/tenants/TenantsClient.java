@@ -4,23 +4,18 @@
 package com.basistheory.resources.tenants;
 
 import com.basistheory.core.ClientOptions;
-import com.basistheory.core.RequestOptions;
 import com.basistheory.core.Suppliers;
 import com.basistheory.resources.tenants.connections.ConnectionsClient;
 import com.basistheory.resources.tenants.invitations.InvitationsClient;
 import com.basistheory.resources.tenants.members.MembersClient;
 import com.basistheory.resources.tenants.merchants.MerchantsClient;
 import com.basistheory.resources.tenants.owner.OwnerClient;
-import com.basistheory.resources.tenants.requests.TransferTenantOwnerRequest;
 import com.basistheory.resources.tenants.securitycontact.SecurityContactClient;
 import com.basistheory.resources.tenants.self.SelfClient;
-import com.basistheory.types.TenantMemberResponse;
 import java.util.function.Supplier;
 
 public class TenantsClient {
     protected final ClientOptions clientOptions;
-
-    private final RawTenantsClient rawClient;
 
     protected final Supplier<SecurityContactClient> securityContactClient;
 
@@ -38,7 +33,6 @@ public class TenantsClient {
 
     public TenantsClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
-        this.rawClient = new RawTenantsClient(clientOptions);
         this.securityContactClient = Suppliers.memoize(() -> new SecurityContactClient(clientOptions));
         this.connectionsClient = Suppliers.memoize(() -> new ConnectionsClient(clientOptions));
         this.invitationsClient = Suppliers.memoize(() -> new InvitationsClient(clientOptions));
@@ -46,21 +40,6 @@ public class TenantsClient {
         this.merchantsClient = Suppliers.memoize(() -> new MerchantsClient(clientOptions));
         this.ownerClient = Suppliers.memoize(() -> new OwnerClient(clientOptions));
         this.selfClient = Suppliers.memoize(() -> new SelfClient(clientOptions));
-    }
-
-    /**
-     * Get responses with HTTP metadata like headers
-     */
-    public RawTenantsClient withRawResponse() {
-        return this.rawClient;
-    }
-
-    public TenantMemberResponse ownerTransfer(TransferTenantOwnerRequest request) {
-        return this.rawClient.ownerTransfer(request).body();
-    }
-
-    public TenantMemberResponse ownerTransfer(TransferTenantOwnerRequest request, RequestOptions requestOptions) {
-        return this.rawClient.ownerTransfer(request, requestOptions).body();
     }
 
     public SecurityContactClient securityContact() {

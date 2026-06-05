@@ -48,6 +48,11 @@ public class RawMerchantsClient {
     }
 
     public BasisTheoryApiHttpResponse<SyncPagingIterable<TenantMerchant>> list(
+            String tenantId, RequestOptions requestOptions) {
+        return list(tenantId, MerchantsListRequest.builder().build(), requestOptions);
+    }
+
+    public BasisTheoryApiHttpResponse<SyncPagingIterable<TenantMerchant>> list(
             String tenantId, MerchantsListRequest request) {
         return list(tenantId, request, null);
     }
@@ -71,6 +76,11 @@ public class RawMerchantsClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "size", request.getSize().get(), false);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -83,9 +93,10 @@ public class RawMerchantsClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 TenantMerchantPaginatedList parsedResponse =
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), TenantMerchantPaginatedList.class);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TenantMerchantPaginatedList.class);
                 int newPageNumber =
                         request.getPage().map((Integer page) -> page + 1).orElse(1);
                 MerchantsListRequest nextRequest = MerchantsListRequest.builder()
@@ -95,11 +106,10 @@ public class RawMerchantsClient {
                 List<TenantMerchant> result = parsedResponse.getData().orElse(Collections.emptyList());
                 return new BasisTheoryApiHttpResponse<>(
                         new SyncPagingIterable<TenantMerchant>(
-                                true, result, () -> list(tenantId, nextRequest, requestOptions)
+                                true, result, parsedResponse, () -> list(tenantId, nextRequest, requestOptions)
                                         .body()),
                         response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 401:
@@ -113,11 +123,9 @@ public class RawMerchantsClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BasisTheoryApiApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BasisTheoryException("Network error executing HTTP request", e);
         }
@@ -129,12 +137,16 @@ public class RawMerchantsClient {
 
     public BasisTheoryApiHttpResponse<TenantMerchant> create(
             String tenantId, TenantMerchantRequest request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("tenants")
                 .addPathSegment(tenantId)
-                .addPathSegments("merchants")
-                .build();
+                .addPathSegments("merchants");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -143,7 +155,7 @@ public class RawMerchantsClient {
             throw new BasisTheoryException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -155,11 +167,11 @@ public class RawMerchantsClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BasisTheoryApiHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), TenantMerchant.class), response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TenantMerchant.class), response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 401:
@@ -177,11 +189,9 @@ public class RawMerchantsClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BasisTheoryApiApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BasisTheoryException("Network error executing HTTP request", e);
         }
@@ -193,15 +203,19 @@ public class RawMerchantsClient {
 
     public BasisTheoryApiHttpResponse<TenantMerchant> get(
             String tenantId, String merchantId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("tenants")
                 .addPathSegment(tenantId)
                 .addPathSegments("merchants")
-                .addPathSegment(merchantId)
-                .build();
+                .addPathSegment(merchantId);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Accept", "application/json")
@@ -212,11 +226,11 @@ public class RawMerchantsClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BasisTheoryApiHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), TenantMerchant.class), response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TenantMerchant.class), response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 401:
@@ -230,11 +244,9 @@ public class RawMerchantsClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BasisTheoryApiApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BasisTheoryException("Network error executing HTTP request", e);
         }
@@ -246,15 +258,19 @@ public class RawMerchantsClient {
 
     public BasisTheoryApiHttpResponse<TenantMerchant> delete(
             String tenantId, String merchantId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("tenants")
                 .addPathSegment(tenantId)
                 .addPathSegments("merchants")
-                .addPathSegment(merchantId)
-                .build();
+                .addPathSegment(merchantId);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("DELETE", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Accept", "application/json")
@@ -265,11 +281,11 @@ public class RawMerchantsClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BasisTheoryApiHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), TenantMerchant.class), response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TenantMerchant.class), response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 401:
@@ -287,11 +303,9 @@ public class RawMerchantsClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BasisTheoryApiApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BasisTheoryException("Network error executing HTTP request", e);
         }
@@ -304,13 +318,17 @@ public class RawMerchantsClient {
 
     public BasisTheoryApiHttpResponse<TenantMerchant> update(
             String tenantId, String merchantId, TenantMerchantRequest request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("tenants")
                 .addPathSegment(tenantId)
                 .addPathSegments("merchants")
-                .addPathSegment(merchantId)
-                .build();
+                .addPathSegment(merchantId);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -319,7 +337,7 @@ public class RawMerchantsClient {
             throw new BasisTheoryException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("PATCH", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -331,11 +349,11 @@ public class RawMerchantsClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BasisTheoryApiHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), TenantMerchant.class), response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TenantMerchant.class), response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 401:
@@ -353,11 +371,9 @@ public class RawMerchantsClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BasisTheoryApiApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BasisTheoryException("Network error executing HTTP request", e);
         }
@@ -369,20 +385,30 @@ public class RawMerchantsClient {
     }
 
     public BasisTheoryApiHttpResponse<TenantMerchant> requestOnboarding(
+            String tenantId, String merchantId, RequestOptions requestOptions) {
+        return requestOnboarding(
+                tenantId, merchantId, ServiceOnboardingRequest.builder().build(), requestOptions);
+    }
+
+    public BasisTheoryApiHttpResponse<TenantMerchant> requestOnboarding(
             String tenantId, String merchantId, ServiceOnboardingRequest request) {
         return requestOnboarding(tenantId, merchantId, request, null);
     }
 
     public BasisTheoryApiHttpResponse<TenantMerchant> requestOnboarding(
             String tenantId, String merchantId, ServiceOnboardingRequest request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("tenants")
                 .addPathSegment(tenantId)
                 .addPathSegments("merchants")
                 .addPathSegment(merchantId)
-                .addPathSegments("services")
-                .build();
+                .addPathSegments("services");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -391,7 +417,7 @@ public class RawMerchantsClient {
             throw new BasisTheoryException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -403,11 +429,11 @@ public class RawMerchantsClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BasisTheoryApiHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), TenantMerchant.class), response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TenantMerchant.class), response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -433,11 +459,9 @@ public class RawMerchantsClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BasisTheoryApiApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BasisTheoryException("Network error executing HTTP request", e);
         }

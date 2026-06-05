@@ -95,6 +95,10 @@ public final class BankVerificationRequest {
     public interface _FinalStage {
         BankVerificationRequest build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage countryCode(Optional<String> countryCode);
 
         _FinalStage countryCode(String countryCode);
@@ -161,6 +165,18 @@ public final class BankVerificationRequest {
         @java.lang.Override
         public BankVerificationRequest build() {
             return new BankVerificationRequest(tokenId, countryCode, routingNumber, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

@@ -37,6 +37,10 @@ public class AsyncGooglePayClient {
         return this.rawClient.create().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<GooglePayCreateResponse> create(RequestOptions requestOptions) {
+        return this.rawClient.create(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<GooglePayCreateResponse> create(GooglePayCreateRequest request) {
         return this.rawClient.create(request).thenApply(response -> response.body());
     }

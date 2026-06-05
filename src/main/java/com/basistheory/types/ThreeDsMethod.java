@@ -116,5 +116,15 @@ public final class ThreeDsMethod {
         public ThreeDsMethod build() {
             return new ThreeDsMethod(methodUrl, methodCompletionIndicator, additionalProperties);
         }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
+        }
     }
 }

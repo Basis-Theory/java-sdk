@@ -44,6 +44,13 @@ public class AsyncEnrollmentsClient {
     /**
      * List all enrollments for the current tenant with cursor-based pagination.
      */
+    public CompletableFuture<SyncPagingIterable<Enrollment>> list(RequestOptions requestOptions) {
+        return this.rawClient.list(requestOptions).thenApply(response -> response.body());
+    }
+
+    /**
+     * List all enrollments for the current tenant with cursor-based pagination.
+     */
     public CompletableFuture<SyncPagingIterable<Enrollment>> list(EnrollmentsListRequest request) {
         return this.rawClient.list(request).thenApply(response -> response.body());
     }

@@ -59,10 +59,14 @@ public class AsyncRawTokensClient {
 
     public CompletableFuture<BasisTheoryApiHttpResponse<Object>> detokenize(
             Object request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("detokenize")
-                .build();
+                .addPathSegments("detokenize");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -71,7 +75,7 @@ public class AsyncRawTokensClient {
             throw new BasisTheoryException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -86,12 +90,12 @@ public class AsyncRawTokensClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BasisTheoryApiHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Object.class), response));
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -119,11 +123,9 @@ public class AsyncRawTokensClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BasisTheoryApiApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BasisTheoryException("Network error executing HTTP request", e));
@@ -144,10 +146,14 @@ public class AsyncRawTokensClient {
 
     public CompletableFuture<BasisTheoryApiHttpResponse<Object>> tokenize(
             Object request, IdempotentRequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("tokenize")
-                .build();
+                .addPathSegments("tokenize");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -156,7 +162,7 @@ public class AsyncRawTokensClient {
             throw new BasisTheoryException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -171,12 +177,12 @@ public class AsyncRawTokensClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BasisTheoryApiHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Object.class), response));
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -204,11 +210,9 @@ public class AsyncRawTokensClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BasisTheoryApiApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BasisTheoryException("Network error executing HTTP request", e));
@@ -228,13 +232,17 @@ public class AsyncRawTokensClient {
     }
 
     public CompletableFuture<BasisTheoryApiHttpResponse<Token>> get(String id, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("tokens")
-                .addPathSegment(id)
-                .build();
+                .addPathSegment(id);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Accept", "application/json")
@@ -248,12 +256,12 @@ public class AsyncRawTokensClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BasisTheoryApiHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Token.class), response));
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Token.class), response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 401:
@@ -275,11 +283,9 @@ public class AsyncRawTokensClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BasisTheoryApiApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BasisTheoryException("Network error executing HTTP request", e));
@@ -299,13 +305,17 @@ public class AsyncRawTokensClient {
     }
 
     public CompletableFuture<BasisTheoryApiHttpResponse<Void>> delete(String id, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("tokens")
-                .addPathSegment(id)
-                .build();
+                .addPathSegment(id);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("DELETE", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Accept", "application/json")
@@ -351,11 +361,9 @@ public class AsyncRawTokensClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BasisTheoryApiApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BasisTheoryException("Network error executing HTTP request", e));
@@ -374,17 +382,26 @@ public class AsyncRawTokensClient {
         return update(id, UpdateTokenRequest.builder().build());
     }
 
+    public CompletableFuture<BasisTheoryApiHttpResponse<Token>> update(
+            String id, IdempotentRequestOptions requestOptions) {
+        return update(id, UpdateTokenRequest.builder().build(), requestOptions);
+    }
+
     public CompletableFuture<BasisTheoryApiHttpResponse<Token>> update(String id, UpdateTokenRequest request) {
         return update(id, request, null);
     }
 
     public CompletableFuture<BasisTheoryApiHttpResponse<Token>> update(
             String id, UpdateTokenRequest request, IdempotentRequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("tokens")
-                .addPathSegment(id)
-                .build();
+                .addPathSegment(id);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -394,7 +411,7 @@ public class AsyncRawTokensClient {
             throw new BasisTheoryException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("PATCH", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/merge-patch+json")
@@ -409,12 +426,12 @@ public class AsyncRawTokensClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BasisTheoryApiHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Token.class), response));
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Token.class), response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -447,11 +464,9 @@ public class AsyncRawTokensClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BasisTheoryApiApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BasisTheoryException("Network error executing HTTP request", e));
@@ -470,16 +485,24 @@ public class AsyncRawTokensClient {
         return create(CreateTokenRequest.builder().build());
     }
 
+    public CompletableFuture<BasisTheoryApiHttpResponse<Token>> create(IdempotentRequestOptions requestOptions) {
+        return create(CreateTokenRequest.builder().build(), requestOptions);
+    }
+
     public CompletableFuture<BasisTheoryApiHttpResponse<Token>> create(CreateTokenRequest request) {
         return create(request, null);
     }
 
     public CompletableFuture<BasisTheoryApiHttpResponse<Token>> create(
             CreateTokenRequest request, IdempotentRequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("tokens")
-                .build();
+                .addPathSegments("tokens");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -488,7 +511,7 @@ public class AsyncRawTokensClient {
             throw new BasisTheoryException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -503,12 +526,12 @@ public class AsyncRawTokensClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BasisTheoryApiHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Token.class), response));
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Token.class), response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -536,11 +559,9 @@ public class AsyncRawTokensClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BasisTheoryApiApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BasisTheoryException("Network error executing HTTP request", e));
@@ -557,6 +578,11 @@ public class AsyncRawTokensClient {
 
     public CompletableFuture<BasisTheoryApiHttpResponse<SyncPagingIterable<Token>>> listV2() {
         return listV2(TokensListV2Request.builder().build());
+    }
+
+    public CompletableFuture<BasisTheoryApiHttpResponse<SyncPagingIterable<Token>>> listV2(
+            RequestOptions requestOptions) {
+        return listV2(TokensListV2Request.builder().build(), requestOptions);
     }
 
     public CompletableFuture<BasisTheoryApiHttpResponse<SyncPagingIterable<Token>>> listV2(
@@ -593,6 +619,11 @@ public class AsyncRawTokensClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "size", request.getSize().get(), false);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -608,9 +639,10 @@ public class AsyncRawTokensClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
-                        TokenCursorPaginatedList parsedResponse = ObjectMappers.JSON_MAPPER.readValue(
-                                responseBody.string(), TokenCursorPaginatedList.class);
+                        TokenCursorPaginatedList parsedResponse =
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TokenCursorPaginatedList.class);
                         Optional<String> startingAfter =
                                 parsedResponse.getPagination().flatMap(CursorPagination::getNext);
                         TokensListV2Request nextRequest = TokensListV2Request.builder()
@@ -619,7 +651,7 @@ public class AsyncRawTokensClient {
                                 .build();
                         List<Token> result = parsedResponse.getData().orElse(Collections.emptyList());
                         future.complete(new BasisTheoryApiHttpResponse<>(
-                                new SyncPagingIterable<Token>(startingAfter.isPresent(), result, () -> {
+                                new SyncPagingIterable<Token>(startingAfter.isPresent(), result, parsedResponse, () -> {
                                     try {
                                         return listV2(nextRequest, requestOptions)
                                                 .get()
@@ -631,7 +663,6 @@ public class AsyncRawTokensClient {
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 401:
@@ -648,11 +679,9 @@ public class AsyncRawTokensClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BasisTheoryApiApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BasisTheoryException("Network error executing HTTP request", e));
@@ -672,16 +701,25 @@ public class AsyncRawTokensClient {
     }
 
     public CompletableFuture<BasisTheoryApiHttpResponse<SyncPagingIterable<Token>>> searchV2(
+            IdempotentRequestOptions requestOptions) {
+        return searchV2(SearchTokensRequestV2.builder().build(), requestOptions);
+    }
+
+    public CompletableFuture<BasisTheoryApiHttpResponse<SyncPagingIterable<Token>>> searchV2(
             SearchTokensRequestV2 request) {
         return searchV2(request, null);
     }
 
     public CompletableFuture<BasisTheoryApiHttpResponse<SyncPagingIterable<Token>>> searchV2(
             SearchTokensRequestV2 request, IdempotentRequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("v2/tokens/search")
-                .build();
+                .addPathSegments("v2/tokens/search");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -690,7 +728,7 @@ public class AsyncRawTokensClient {
             throw new BasisTheoryException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -705,9 +743,10 @@ public class AsyncRawTokensClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
-                        TokenCursorPaginatedList parsedResponse = ObjectMappers.JSON_MAPPER.readValue(
-                                responseBody.string(), TokenCursorPaginatedList.class);
+                        TokenCursorPaginatedList parsedResponse =
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TokenCursorPaginatedList.class);
                         Optional<String> startingAfter =
                                 parsedResponse.getPagination().flatMap(CursorPagination::getNext);
                         SearchTokensRequestV2 nextRequest = SearchTokensRequestV2.builder()
@@ -716,7 +755,7 @@ public class AsyncRawTokensClient {
                                 .build();
                         List<Token> result = parsedResponse.getData().orElse(Collections.emptyList());
                         future.complete(new BasisTheoryApiHttpResponse<>(
-                                new SyncPagingIterable<Token>(startingAfter.isPresent(), result, () -> {
+                                new SyncPagingIterable<Token>(startingAfter.isPresent(), result, parsedResponse, () -> {
                                     try {
                                         return searchV2(nextRequest, requestOptions)
                                                 .get()
@@ -728,7 +767,6 @@ public class AsyncRawTokensClient {
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -751,11 +789,9 @@ public class AsyncRawTokensClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BasisTheoryApiApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BasisTheoryException("Network error executing HTTP request", e));

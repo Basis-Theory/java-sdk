@@ -35,6 +35,10 @@ public class AsyncProxiesClient {
         return this.rawClient.list().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<SyncPagingIterable<Proxy>> list(RequestOptions requestOptions) {
+        return this.rawClient.list(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<SyncPagingIterable<Proxy>> list(ProxiesListRequest request) {
         return this.rawClient.list(request).thenApply(response -> response.body());
     }
@@ -79,6 +83,10 @@ public class AsyncProxiesClient {
 
     public CompletableFuture<Void> patch(String id) {
         return this.rawClient.patch(id).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<Void> patch(String id, IdempotentRequestOptions requestOptions) {
+        return this.rawClient.patch(id, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<Void> patch(String id, PatchProxyRequest request) {

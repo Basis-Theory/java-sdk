@@ -33,6 +33,10 @@ public class AsyncLogsClient {
         return this.rawClient.list().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<SyncPagingIterable<Log>> list(RequestOptions requestOptions) {
+        return this.rawClient.list(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<SyncPagingIterable<Log>> list(LogsListRequest request) {
         return this.rawClient.list(request).thenApply(response -> response.body());
     }

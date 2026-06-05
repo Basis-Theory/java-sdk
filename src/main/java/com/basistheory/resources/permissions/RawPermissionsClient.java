@@ -39,6 +39,10 @@ public class RawPermissionsClient {
         return list(PermissionsListRequest.builder().build());
     }
 
+    public BasisTheoryApiHttpResponse<List<Permission>> list(RequestOptions requestOptions) {
+        return list(PermissionsListRequest.builder().build(), requestOptions);
+    }
+
     public BasisTheoryApiHttpResponse<List<Permission>> list(PermissionsListRequest request) {
         return list(request, null);
     }
@@ -52,6 +56,11 @@ public class RawPermissionsClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "application_type", request.getApplicationType().get(), false);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -64,13 +73,13 @@ public class RawPermissionsClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BasisTheoryApiHttpResponse<>(
                         ObjectMappers.JSON_MAPPER.readValue(
-                                responseBody.string(), new TypeReference<List<Permission>>() {}),
+                                responseBodyString, new TypeReference<List<Permission>>() {}),
                         response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -89,11 +98,9 @@ public class RawPermissionsClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BasisTheoryApiApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BasisTheoryException("Network error executing HTTP request", e);
         }

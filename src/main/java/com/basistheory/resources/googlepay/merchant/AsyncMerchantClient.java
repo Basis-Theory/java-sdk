@@ -52,6 +52,10 @@ public class AsyncMerchantClient {
         return this.rawClient.create().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<GooglePayMerchant> create(RequestOptions requestOptions) {
+        return this.rawClient.create(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<GooglePayMerchant> create(GooglePayMerchantRegisterRequest request) {
         return this.rawClient.create(request).thenApply(response -> response.body());
     }

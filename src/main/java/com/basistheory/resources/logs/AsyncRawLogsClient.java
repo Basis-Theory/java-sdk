@@ -48,6 +48,10 @@ public class AsyncRawLogsClient {
         return list(LogsListRequest.builder().build());
     }
 
+    public CompletableFuture<BasisTheoryApiHttpResponse<SyncPagingIterable<Log>>> list(RequestOptions requestOptions) {
+        return list(LogsListRequest.builder().build(), requestOptions);
+    }
+
     public CompletableFuture<BasisTheoryApiHttpResponse<SyncPagingIterable<Log>>> list(LogsListRequest request) {
         return list(request, null);
     }
@@ -85,6 +89,11 @@ public class AsyncRawLogsClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "size", request.getSize().get(), false);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -100,9 +109,10 @@ public class AsyncRawLogsClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         LogPaginatedList parsedResponse =
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), LogPaginatedList.class);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, LogPaginatedList.class);
                         int newPageNumber = request.getPage()
                                 .map((Integer page) -> page + 1)
                                 .orElse(1);
@@ -112,7 +122,7 @@ public class AsyncRawLogsClient {
                                 .build();
                         List<Log> result = parsedResponse.getData().orElse(Collections.emptyList());
                         future.complete(new BasisTheoryApiHttpResponse<>(
-                                new SyncPagingIterable<Log>(true, result, () -> {
+                                new SyncPagingIterable<Log>(true, result, parsedResponse, () -> {
                                     try {
                                         return list(nextRequest, requestOptions)
                                                 .get()
@@ -124,7 +134,6 @@ public class AsyncRawLogsClient {
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -147,11 +156,9 @@ public class AsyncRawLogsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BasisTheoryApiApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BasisTheoryException("Network error executing HTTP request", e));
@@ -172,12 +179,16 @@ public class AsyncRawLogsClient {
 
     public CompletableFuture<BasisTheoryApiHttpResponse<List<LogEntityType>>> getEntityTypes(
             RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("logs/entity-types")
-                .build();
+                .addPathSegments("logs/entity-types");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Accept", "application/json")
@@ -191,14 +202,14 @@ public class AsyncRawLogsClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BasisTheoryApiHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), new TypeReference<List<LogEntityType>>() {}),
+                                        responseBodyString, new TypeReference<List<LogEntityType>>() {}),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 401:
@@ -215,11 +226,9 @@ public class AsyncRawLogsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BasisTheoryApiApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BasisTheoryException("Network error executing HTTP request", e));

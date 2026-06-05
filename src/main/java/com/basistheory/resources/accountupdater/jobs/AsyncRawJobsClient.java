@@ -53,13 +53,17 @@ public class AsyncRawJobsClient {
      */
     public CompletableFuture<BasisTheoryApiHttpResponse<AccountUpdaterJob>> get(
             String id, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("account-updater/jobs")
-                .addPathSegment(id)
-                .build();
+                .addPathSegment(id);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Accept", "application/json")
@@ -73,13 +77,13 @@ public class AsyncRawJobsClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BasisTheoryApiHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), AccountUpdaterJob.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, AccountUpdaterJob.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 401:
@@ -101,11 +105,9 @@ public class AsyncRawJobsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BasisTheoryApiApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BasisTheoryException("Network error executing HTTP request", e));
@@ -125,6 +127,13 @@ public class AsyncRawJobsClient {
      */
     public CompletableFuture<BasisTheoryApiHttpResponse<AccountUpdaterJobList>> list() {
         return list(JobsListRequest.builder().build());
+    }
+
+    /**
+     * Returns a list of account updater batch jobs
+     */
+    public CompletableFuture<BasisTheoryApiHttpResponse<AccountUpdaterJobList>> list(RequestOptions requestOptions) {
+        return list(JobsListRequest.builder().build(), requestOptions);
     }
 
     /**
@@ -150,6 +159,11 @@ public class AsyncRawJobsClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "start", request.getStart().get(), false);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -165,13 +179,13 @@ public class AsyncRawJobsClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BasisTheoryApiHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), AccountUpdaterJobList.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, AccountUpdaterJobList.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 401:
@@ -188,11 +202,9 @@ public class AsyncRawJobsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BasisTheoryApiApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BasisTheoryException("Network error executing HTTP request", e));
@@ -217,6 +229,13 @@ public class AsyncRawJobsClient {
     /**
      * Returns the created account updater batch job
      */
+    public CompletableFuture<BasisTheoryApiHttpResponse<AccountUpdaterJob>> create(RequestOptions requestOptions) {
+        return create(CreateAccountUpdaterJobRequest.builder().build(), requestOptions);
+    }
+
+    /**
+     * Returns the created account updater batch job
+     */
     public CompletableFuture<BasisTheoryApiHttpResponse<AccountUpdaterJob>> create(
             CreateAccountUpdaterJobRequest request) {
         return create(request, null);
@@ -227,10 +246,14 @@ public class AsyncRawJobsClient {
      */
     public CompletableFuture<BasisTheoryApiHttpResponse<AccountUpdaterJob>> create(
             CreateAccountUpdaterJobRequest request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("account-updater/jobs")
-                .build();
+                .addPathSegments("account-updater/jobs");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -239,7 +262,7 @@ public class AsyncRawJobsClient {
             throw new BasisTheoryException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -254,13 +277,13 @@ public class AsyncRawJobsClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BasisTheoryApiHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), AccountUpdaterJob.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, AccountUpdaterJob.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 401:
@@ -282,11 +305,9 @@ public class AsyncRawJobsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BasisTheoryApiApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BasisTheoryException("Network error executing HTTP request", e));

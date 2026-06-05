@@ -15,7 +15,7 @@ import com.basistheory.errors.BadRequestError;
 import com.basistheory.errors.ForbiddenError;
 import com.basistheory.errors.UnauthorizedError;
 import com.basistheory.resources.enrichments.requests.BankVerificationRequest;
-import com.basistheory.resources.enrichments.requests.EnrichmentsGetCardDetailsRequest;
+import com.basistheory.resources.enrichments.requests.EnrichmentsCardDetailsRequest;
 import com.basistheory.types.BankVerificationResponse;
 import com.basistheory.types.CardDetailsResponse;
 import com.basistheory.types.ProblemDetails;
@@ -43,10 +43,14 @@ public class RawEnrichmentsClient {
 
     public BasisTheoryApiHttpResponse<BankVerificationResponse> bankAccountVerify(
             BankVerificationRequest request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("enrichments/bank-account-verify")
-                .build();
+                .addPathSegments("enrichments/bank-account-verify");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -55,7 +59,7 @@ public class RawEnrichmentsClient {
             throw new BasisTheoryException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -67,12 +71,12 @@ public class RawEnrichmentsClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BasisTheoryApiHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), BankVerificationResponse.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, BankVerificationResponse.class),
                         response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -91,26 +95,29 @@ public class RawEnrichmentsClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BasisTheoryApiApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BasisTheoryException("Network error executing HTTP request", e);
         }
     }
 
-    public BasisTheoryApiHttpResponse<CardDetailsResponse> getcarddetails(EnrichmentsGetCardDetailsRequest request) {
-        return getcarddetails(request, null);
+    public BasisTheoryApiHttpResponse<CardDetailsResponse> cardDetails(EnrichmentsCardDetailsRequest request) {
+        return cardDetails(request, null);
     }
 
-    public BasisTheoryApiHttpResponse<CardDetailsResponse> getcarddetails(
-            EnrichmentsGetCardDetailsRequest request, RequestOptions requestOptions) {
+    public BasisTheoryApiHttpResponse<CardDetailsResponse> cardDetails(
+            EnrichmentsCardDetailsRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("enrichments/card-details");
         QueryStringMapper.addQueryParameter(httpUrl, "bin", request.getBin(), false);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -123,12 +130,11 @@ public class RawEnrichmentsClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BasisTheoryApiHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CardDetailsResponse.class),
-                        response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, CardDetailsResponse.class), response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 401:
@@ -143,11 +149,9 @@ public class RawEnrichmentsClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BasisTheoryApiApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BasisTheoryException("Network error executing HTTP request", e);
         }

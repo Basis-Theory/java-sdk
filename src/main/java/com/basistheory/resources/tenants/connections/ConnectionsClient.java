@@ -35,11 +35,11 @@ public class ConnectionsClient {
         return this.rawClient.create(request, requestOptions).body();
     }
 
-    public CreateTenantConnectionResponse delete() {
-        return this.rawClient.delete().body();
+    public void delete() {
+        this.rawClient.delete().body();
     }
 
-    public CreateTenantConnectionResponse delete(RequestOptions requestOptions) {
-        return this.rawClient.delete(requestOptions).body();
+    public void delete(RequestOptions requestOptions) {
+        this.rawClient.delete(requestOptions).body();
     }
 }

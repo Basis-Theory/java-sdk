@@ -83,6 +83,10 @@ public final class EnrollmentList {
     public interface _FinalStage {
         EnrollmentList build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage data(List<Enrollment> data);
 
         _FinalStage addData(Enrollment data);
@@ -117,7 +121,9 @@ public final class EnrollmentList {
 
         @java.lang.Override
         public _FinalStage addAllData(List<Enrollment> data) {
-            this.data.addAll(data);
+            if (data != null) {
+                this.data.addAll(data);
+            }
             return this;
         }
 
@@ -131,13 +137,27 @@ public final class EnrollmentList {
         @JsonSetter(value = "data", nulls = Nulls.SKIP)
         public _FinalStage data(List<Enrollment> data) {
             this.data.clear();
-            this.data.addAll(data);
+            if (data != null) {
+                this.data.addAll(data);
+            }
             return this;
         }
 
         @java.lang.Override
         public EnrollmentList build() {
             return new EnrollmentList(pagination, data, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

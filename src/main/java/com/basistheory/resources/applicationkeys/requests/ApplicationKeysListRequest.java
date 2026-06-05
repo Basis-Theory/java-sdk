@@ -22,22 +22,22 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ApplicationKeysListRequest.Builder.class)
 public final class ApplicationKeysListRequest {
-    private final Optional<List<String>> id;
+    private final Optional<List<String>> keyId;
 
     private final Optional<List<String>> type;
 
     private final Map<String, Object> additionalProperties;
 
     private ApplicationKeysListRequest(
-            Optional<List<String>> id, Optional<List<String>> type, Map<String, Object> additionalProperties) {
-        this.id = id;
+            Optional<List<String>> keyId, Optional<List<String>> type, Map<String, Object> additionalProperties) {
+        this.keyId = keyId;
         this.type = type;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("id")
-    public Optional<List<String>> getId() {
-        return id;
+    public Optional<List<String>> getKeyId() {
+        return keyId;
     }
 
     @JsonProperty("type")
@@ -57,12 +57,12 @@ public final class ApplicationKeysListRequest {
     }
 
     private boolean equalTo(ApplicationKeysListRequest other) {
-        return id.equals(other.id) && type.equals(other.type);
+        return keyId.equals(other.keyId) && type.equals(other.type);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.id, this.type);
+        return Objects.hash(this.keyId, this.type);
     }
 
     @java.lang.Override
@@ -76,7 +76,7 @@ public final class ApplicationKeysListRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<List<String>> id = Optional.empty();
+        private Optional<List<String>> keyId = Optional.empty();
 
         private Optional<List<String>> type = Optional.empty();
 
@@ -86,24 +86,24 @@ public final class ApplicationKeysListRequest {
         private Builder() {}
 
         public Builder from(ApplicationKeysListRequest other) {
-            id(other.getId());
+            keyId(other.getKeyId());
             type(other.getType());
             return this;
         }
 
         @JsonSetter(value = "id", nulls = Nulls.SKIP)
-        public Builder id(Optional<List<String>> id) {
-            this.id = id;
+        public Builder keyId(Optional<List<String>> keyId) {
+            this.keyId = keyId;
             return this;
         }
 
-        public Builder id(List<String> id) {
-            this.id = Optional.ofNullable(id);
+        public Builder keyId(List<String> keyId) {
+            this.keyId = Optional.ofNullable(keyId);
             return this;
         }
 
-        public Builder id(String id) {
-            this.id = Optional.of(Collections.singletonList(id));
+        public Builder keyId(String keyId) {
+            this.keyId = Optional.of(Collections.singletonList(keyId));
             return this;
         }
 
@@ -124,7 +124,17 @@ public final class ApplicationKeysListRequest {
         }
 
         public ApplicationKeysListRequest build() {
-            return new ApplicationKeysListRequest(id, type, additionalProperties);
+            return new ApplicationKeysListRequest(keyId, type, additionalProperties);
+        }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

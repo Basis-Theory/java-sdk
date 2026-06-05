@@ -201,5 +201,15 @@ public final class ApplicationsListRequest {
         public ApplicationsListRequest build() {
             return new ApplicationsListRequest(id, type, page, start, size, additionalProperties);
         }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
+        }
     }
 }

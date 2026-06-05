@@ -15,7 +15,7 @@ import com.basistheory.errors.BadRequestError;
 import com.basistheory.errors.ForbiddenError;
 import com.basistheory.errors.UnauthorizedError;
 import com.basistheory.resources.enrichments.requests.BankVerificationRequest;
-import com.basistheory.resources.enrichments.requests.EnrichmentsGetCardDetailsRequest;
+import com.basistheory.resources.enrichments.requests.EnrichmentsCardDetailsRequest;
 import com.basistheory.types.BankVerificationResponse;
 import com.basistheory.types.CardDetailsResponse;
 import com.basistheory.types.ProblemDetails;
@@ -48,10 +48,14 @@ public class AsyncRawEnrichmentsClient {
 
     public CompletableFuture<BasisTheoryApiHttpResponse<BankVerificationResponse>> bankAccountVerify(
             BankVerificationRequest request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("enrichments/bank-account-verify")
-                .build();
+                .addPathSegments("enrichments/bank-account-verify");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -60,7 +64,7 @@ public class AsyncRawEnrichmentsClient {
             throw new BasisTheoryException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -75,14 +79,13 @@ public class AsyncRawEnrichmentsClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BasisTheoryApiHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), BankVerificationResponse.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, BankVerificationResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -105,11 +108,9 @@ public class AsyncRawEnrichmentsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BasisTheoryApiApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BasisTheoryException("Network error executing HTTP request", e));
@@ -124,17 +125,22 @@ public class AsyncRawEnrichmentsClient {
         return future;
     }
 
-    public CompletableFuture<BasisTheoryApiHttpResponse<CardDetailsResponse>> getcarddetails(
-            EnrichmentsGetCardDetailsRequest request) {
-        return getcarddetails(request, null);
+    public CompletableFuture<BasisTheoryApiHttpResponse<CardDetailsResponse>> cardDetails(
+            EnrichmentsCardDetailsRequest request) {
+        return cardDetails(request, null);
     }
 
-    public CompletableFuture<BasisTheoryApiHttpResponse<CardDetailsResponse>> getcarddetails(
-            EnrichmentsGetCardDetailsRequest request, RequestOptions requestOptions) {
+    public CompletableFuture<BasisTheoryApiHttpResponse<CardDetailsResponse>> cardDetails(
+            EnrichmentsCardDetailsRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("enrichments/card-details");
         QueryStringMapper.addQueryParameter(httpUrl, "bin", request.getBin(), false);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -150,13 +156,13 @@ public class AsyncRawEnrichmentsClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BasisTheoryApiHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CardDetailsResponse.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, CardDetailsResponse.class),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 401:
@@ -173,11 +179,9 @@ public class AsyncRawEnrichmentsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BasisTheoryApiApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BasisTheoryException("Network error executing HTTP request", e));

@@ -127,6 +127,10 @@ public final class MppSource {
     public interface _FinalStage {
         MppSource build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         /**
          * <p>Token ID (required for token, network_token, apple_pay, google_pay)</p>
          */
@@ -273,6 +277,18 @@ public final class MppSource {
         @java.lang.Override
         public MppSource build() {
             return new MppSource(type, id, enrollmentId, consumer, agentId, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

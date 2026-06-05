@@ -6,7 +6,7 @@ package com.basistheory.resources.enrichments;
 import com.basistheory.core.ClientOptions;
 import com.basistheory.core.RequestOptions;
 import com.basistheory.resources.enrichments.requests.BankVerificationRequest;
-import com.basistheory.resources.enrichments.requests.EnrichmentsGetCardDetailsRequest;
+import com.basistheory.resources.enrichments.requests.EnrichmentsCardDetailsRequest;
 import com.basistheory.types.BankVerificationResponse;
 import com.basistheory.types.CardDetailsResponse;
 
@@ -35,11 +35,11 @@ public class EnrichmentsClient {
         return this.rawClient.bankAccountVerify(request, requestOptions).body();
     }
 
-    public CardDetailsResponse getcarddetails(EnrichmentsGetCardDetailsRequest request) {
-        return this.rawClient.getcarddetails(request).body();
+    public CardDetailsResponse cardDetails(EnrichmentsCardDetailsRequest request) {
+        return this.rawClient.cardDetails(request).body();
     }
 
-    public CardDetailsResponse getcarddetails(EnrichmentsGetCardDetailsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.getcarddetails(request, requestOptions).body();
+    public CardDetailsResponse cardDetails(EnrichmentsCardDetailsRequest request, RequestOptions requestOptions) {
+        return this.rawClient.cardDetails(request, requestOptions).body();
     }
 }

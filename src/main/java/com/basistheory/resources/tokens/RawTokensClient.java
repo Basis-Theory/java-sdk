@@ -53,10 +53,14 @@ public class RawTokensClient {
     }
 
     public BasisTheoryApiHttpResponse<Object> detokenize(Object request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("detokenize")
-                .build();
+                .addPathSegments("detokenize");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -65,7 +69,7 @@ public class RawTokensClient {
             throw new BasisTheoryException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -77,11 +81,11 @@ public class RawTokensClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BasisTheoryApiHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Object.class), response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -104,11 +108,9 @@ public class RawTokensClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BasisTheoryApiApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BasisTheoryException("Network error executing HTTP request", e);
         }
@@ -119,10 +121,14 @@ public class RawTokensClient {
     }
 
     public BasisTheoryApiHttpResponse<Object> tokenize(Object request, IdempotentRequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("tokenize")
-                .build();
+                .addPathSegments("tokenize");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -131,7 +137,7 @@ public class RawTokensClient {
             throw new BasisTheoryException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -143,11 +149,11 @@ public class RawTokensClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BasisTheoryApiHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Object.class), response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -170,11 +176,9 @@ public class RawTokensClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BasisTheoryApiApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BasisTheoryException("Network error executing HTTP request", e);
         }
@@ -185,13 +189,17 @@ public class RawTokensClient {
     }
 
     public BasisTheoryApiHttpResponse<Token> get(String id, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("tokens")
-                .addPathSegment(id)
-                .build();
+                .addPathSegment(id);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Accept", "application/json")
@@ -202,11 +210,11 @@ public class RawTokensClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BasisTheoryApiHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Token.class), response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Token.class), response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 401:
@@ -224,11 +232,9 @@ public class RawTokensClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BasisTheoryApiApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BasisTheoryException("Network error executing HTTP request", e);
         }
@@ -239,13 +245,17 @@ public class RawTokensClient {
     }
 
     public BasisTheoryApiHttpResponse<Void> delete(String id, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("tokens")
-                .addPathSegment(id)
-                .build();
+                .addPathSegment(id);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("DELETE", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Accept", "application/json")
@@ -281,11 +291,9 @@ public class RawTokensClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BasisTheoryApiApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BasisTheoryException("Network error executing HTTP request", e);
         }
@@ -295,17 +303,25 @@ public class RawTokensClient {
         return update(id, UpdateTokenRequest.builder().build());
     }
 
+    public BasisTheoryApiHttpResponse<Token> update(String id, IdempotentRequestOptions requestOptions) {
+        return update(id, UpdateTokenRequest.builder().build(), requestOptions);
+    }
+
     public BasisTheoryApiHttpResponse<Token> update(String id, UpdateTokenRequest request) {
         return update(id, request, null);
     }
 
     public BasisTheoryApiHttpResponse<Token> update(
             String id, UpdateTokenRequest request, IdempotentRequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("tokens")
-                .addPathSegment(id)
-                .build();
+                .addPathSegment(id);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -315,7 +331,7 @@ public class RawTokensClient {
             throw new BasisTheoryException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("PATCH", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/merge-patch+json")
@@ -327,11 +343,11 @@ public class RawTokensClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BasisTheoryApiHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Token.class), response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Token.class), response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -357,11 +373,9 @@ public class RawTokensClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BasisTheoryApiApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BasisTheoryException("Network error executing HTTP request", e);
         }
@@ -371,16 +385,24 @@ public class RawTokensClient {
         return create(CreateTokenRequest.builder().build());
     }
 
+    public BasisTheoryApiHttpResponse<Token> create(IdempotentRequestOptions requestOptions) {
+        return create(CreateTokenRequest.builder().build(), requestOptions);
+    }
+
     public BasisTheoryApiHttpResponse<Token> create(CreateTokenRequest request) {
         return create(request, null);
     }
 
     public BasisTheoryApiHttpResponse<Token> create(
             CreateTokenRequest request, IdempotentRequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("tokens")
-                .build();
+                .addPathSegments("tokens");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -389,7 +411,7 @@ public class RawTokensClient {
             throw new BasisTheoryException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -401,11 +423,11 @@ public class RawTokensClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BasisTheoryApiHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Token.class), response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Token.class), response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -428,11 +450,9 @@ public class RawTokensClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BasisTheoryApiApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BasisTheoryException("Network error executing HTTP request", e);
         }
@@ -440,6 +460,10 @@ public class RawTokensClient {
 
     public BasisTheoryApiHttpResponse<SyncPagingIterable<Token>> listV2() {
         return listV2(TokensListV2Request.builder().build());
+    }
+
+    public BasisTheoryApiHttpResponse<SyncPagingIterable<Token>> listV2(RequestOptions requestOptions) {
+        return listV2(TokensListV2Request.builder().build(), requestOptions);
     }
 
     public BasisTheoryApiHttpResponse<SyncPagingIterable<Token>> listV2(TokensListV2Request request) {
@@ -475,6 +499,11 @@ public class RawTokensClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "size", request.getSize().get(), false);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -487,9 +516,10 @@ public class RawTokensClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 TokenCursorPaginatedList parsedResponse =
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), TokenCursorPaginatedList.class);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TokenCursorPaginatedList.class);
                 Optional<String> startingAfter = parsedResponse.getPagination().flatMap(CursorPagination::getNext);
                 TokensListV2Request nextRequest = TokensListV2Request.builder()
                         .from(request)
@@ -497,12 +527,11 @@ public class RawTokensClient {
                         .build();
                 List<Token> result = parsedResponse.getData().orElse(Collections.emptyList());
                 return new BasisTheoryApiHttpResponse<>(
-                        new SyncPagingIterable<Token>(
-                                startingAfter.isPresent(), result, () -> listV2(nextRequest, requestOptions)
-                                        .body()),
+                        new SyncPagingIterable<Token>(startingAfter.isPresent(), result, parsedResponse, () -> listV2(
+                                        nextRequest, requestOptions)
+                                .body()),
                         response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 401:
@@ -517,11 +546,9 @@ public class RawTokensClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BasisTheoryApiApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BasisTheoryException("Network error executing HTTP request", e);
         }
@@ -531,16 +558,24 @@ public class RawTokensClient {
         return searchV2(SearchTokensRequestV2.builder().build());
     }
 
+    public BasisTheoryApiHttpResponse<SyncPagingIterable<Token>> searchV2(IdempotentRequestOptions requestOptions) {
+        return searchV2(SearchTokensRequestV2.builder().build(), requestOptions);
+    }
+
     public BasisTheoryApiHttpResponse<SyncPagingIterable<Token>> searchV2(SearchTokensRequestV2 request) {
         return searchV2(request, null);
     }
 
     public BasisTheoryApiHttpResponse<SyncPagingIterable<Token>> searchV2(
             SearchTokensRequestV2 request, IdempotentRequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("v2/tokens/search")
-                .build();
+                .addPathSegments("v2/tokens/search");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -549,7 +584,7 @@ public class RawTokensClient {
             throw new BasisTheoryException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -561,9 +596,10 @@ public class RawTokensClient {
         }
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 TokenCursorPaginatedList parsedResponse =
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), TokenCursorPaginatedList.class);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TokenCursorPaginatedList.class);
                 Optional<String> startingAfter = parsedResponse.getPagination().flatMap(CursorPagination::getNext);
                 SearchTokensRequestV2 nextRequest = SearchTokensRequestV2.builder()
                         .from(request)
@@ -571,12 +607,11 @@ public class RawTokensClient {
                         .build();
                 List<Token> result = parsedResponse.getData().orElse(Collections.emptyList());
                 return new BasisTheoryApiHttpResponse<>(
-                        new SyncPagingIterable<Token>(
-                                startingAfter.isPresent(), result, () -> searchV2(nextRequest, requestOptions)
-                                        .body()),
+                        new SyncPagingIterable<Token>(startingAfter.isPresent(), result, parsedResponse, () -> searchV2(
+                                        nextRequest, requestOptions)
+                                .body()),
                         response);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
                     case 400:
@@ -595,11 +630,9 @@ public class RawTokensClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
             throw new BasisTheoryApiApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
         } catch (IOException e) {
             throw new BasisTheoryException("Network error executing HTTP request", e);
         }
