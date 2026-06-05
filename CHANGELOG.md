@@ -1,3 +1,52 @@
+## [7.0.0](https://github.com/Basis-Theory/java-sdk/compare/6.1.0...7.0.0) (2026-06-05)
+
+
+### ⚠ BREAKING CHANGES
+
+* See below.
+
+**1.  — key filter renamed uid=1001(runner) gid=1001(runner) groups=1001(runner),4(adm),100(users),118(docker),999(systemd-journal) → **
+The query parameter used to filter by application-key id was renamed to avoid colliding with the path uid=1001(runner) gid=1001(runner) groups=1001(runner),4(adm),100(users),118(docker),999(systemd-journal). Update the request builder:
+
+The getter changed correspondingly ( → ).
+
+**2.  — now returns **
+The  success response no longer returns a body. Remove any code reading the old  return value.
+
+
+**3.  — now paginated**
+The return type changed from  to . Iterate the pager instead of reading the list off a wrapper object:
+
+
+**4.  — method renamed**
+Renamed from the auto-derived  to ; the request type was likewise renamed  → .
+
+
+**5. Tenant owner transfer — moved and renamed**
+The transfer-owner call moved off  and onto the  sub-resource, and it now accepts an idempotency key.
+
+
+**6. Pagination class constructors gained an  parameter**
+, , and both  constructors now take an extra  argument (inserted before the supplier). These types are created internally and returned from / methods, so **idiomatic consumers are not affected** — iteration (, , , ) is unchanged, and the generic arity is unchanged ( is still single-arg, so explicit type annotations still compile). This break only reaches code that constructs or subclasses a page type by hand, which is not an expected usage. A new additive  accessor exposes pagination metadata / cursor tokens.
+
+### Behavioral changes (no code change required)
+
+- **Retry timing now honors server hints.** Retries read the  and  response headers, apply ±20% jitter, and cap backoff at 60s, replacing the old fixed exponential backoff. The default  is unchanged (2). You'll see different retry *timing*, and retried requests respect server-specified delays.
+- **** now serializes the body via the object mapper instead of emitting the raw object — different  output.  and  accessors are unchanged.
+- **Error-body parsing hardened** — unmapped error responses parse through a dedicated path and an empty response body no longer NPEs.
+- **Webhook / WebhookList builders are now null-tolerant** —  /  /  no longer throw on .
+- **A logging interceptor is always installed but silent by default** — no output unless you opt in via .
+
+### Features
+
+* Major Updates ([add87eb](https://github.com/Basis-Theory/java-sdk/commit/add87eb9d1a1dade1e46f4b3a0d98e8d43d87fc0))
+
+
+### Tests
+
+* ensure canary tests clean up created resources on failure ([#128](https://github.com/Basis-Theory/java-sdk/issues/128)) ([3e4ff0c](https://github.com/Basis-Theory/java-sdk/commit/3e4ff0c4294226c2a7bcac13ba2cd46eb6d6ed2e))
+
+
 ## [6.1.0](https://github.com/Basis-Theory/java-sdk/compare/6.0.0...6.1.0) (2026-06-01)
 
 
