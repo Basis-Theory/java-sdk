@@ -121,6 +121,10 @@ public final class GetCredentialsRequest {
     public interface _FinalStage {
         GetCredentialsRequest build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage products(Optional<List<Product>> products);
 
         _FinalStage products(List<Product> products);
@@ -228,6 +232,18 @@ public final class GetCredentialsRequest {
         public GetCredentialsRequest build() {
             return new GetCredentialsRequest(
                     products, merchant, amount, deliveryMethod, shippingAddress, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

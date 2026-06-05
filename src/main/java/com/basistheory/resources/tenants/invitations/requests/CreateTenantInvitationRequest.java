@@ -82,6 +82,10 @@ public final class CreateTenantInvitationRequest {
     public interface _FinalStage {
         CreateTenantInvitationRequest build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage role(Optional<String> role);
 
         _FinalStage role(String role);
@@ -128,6 +132,18 @@ public final class CreateTenantInvitationRequest {
         @java.lang.Override
         public CreateTenantInvitationRequest build() {
             return new CreateTenantInvitationRequest(email, role, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

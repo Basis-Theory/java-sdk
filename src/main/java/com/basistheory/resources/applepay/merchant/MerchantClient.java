@@ -51,6 +51,10 @@ public class MerchantClient {
         return this.rawClient.create().body();
     }
 
+    public ApplePayMerchant create(RequestOptions requestOptions) {
+        return this.rawClient.create(requestOptions).body();
+    }
+
     public ApplePayMerchant create(ApplePayMerchantRegisterRequest request) {
         return this.rawClient.create(request).body();
     }

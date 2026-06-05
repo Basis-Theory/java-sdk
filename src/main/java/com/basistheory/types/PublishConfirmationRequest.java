@@ -82,7 +82,9 @@ public final class PublishConfirmationRequest {
         @JsonSetter(value = "confirmation_data", nulls = Nulls.SKIP)
         public Builder confirmationData(List<ConfirmationEntry> confirmationData) {
             this.confirmationData.clear();
-            this.confirmationData.addAll(confirmationData);
+            if (confirmationData != null) {
+                this.confirmationData.addAll(confirmationData);
+            }
             return this;
         }
 
@@ -92,12 +94,24 @@ public final class PublishConfirmationRequest {
         }
 
         public Builder addAllConfirmationData(List<ConfirmationEntry> confirmationData) {
-            this.confirmationData.addAll(confirmationData);
+            if (confirmationData != null) {
+                this.confirmationData.addAll(confirmationData);
+            }
             return this;
         }
 
         public PublishConfirmationRequest build() {
             return new PublishConfirmationRequest(confirmationData, additionalProperties);
+        }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

@@ -115,12 +115,16 @@ public final class SubmitPasskeyRequest {
         @JsonSetter(value = "assurance_data", nulls = Nulls.SKIP)
         public Builder assuranceData(Map<String, Object> assuranceData) {
             this.assuranceData.clear();
-            this.assuranceData.putAll(assuranceData);
+            if (assuranceData != null) {
+                this.assuranceData.putAll(assuranceData);
+            }
             return this;
         }
 
         public Builder putAllAssuranceData(Map<String, Object> assuranceData) {
-            this.assuranceData.putAll(assuranceData);
+            if (assuranceData != null) {
+                this.assuranceData.putAll(assuranceData);
+            }
             return this;
         }
 
@@ -153,6 +157,16 @@ public final class SubmitPasskeyRequest {
 
         public SubmitPasskeyRequest build() {
             return new SubmitPasskeyRequest(assuranceData, srcCorrelationId, flowId, additionalProperties);
+        }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

@@ -32,6 +32,10 @@ public class MerchantsClient {
         return this.rawClient.list(tenantId).body();
     }
 
+    public SyncPagingIterable<TenantMerchant> list(String tenantId, RequestOptions requestOptions) {
+        return this.rawClient.list(tenantId, requestOptions).body();
+    }
+
     public SyncPagingIterable<TenantMerchant> list(String tenantId, MerchantsListRequest request) {
         return this.rawClient.list(tenantId, request).body();
     }
@@ -78,6 +82,12 @@ public class MerchantsClient {
 
     public TenantMerchant requestOnboarding(String tenantId, String merchantId) {
         return this.rawClient.requestOnboarding(tenantId, merchantId).body();
+    }
+
+    public TenantMerchant requestOnboarding(String tenantId, String merchantId, RequestOptions requestOptions) {
+        return this.rawClient
+                .requestOnboarding(tenantId, merchantId, requestOptions)
+                .body();
     }
 
     public TenantMerchant requestOnboarding(String tenantId, String merchantId, ServiceOnboardingRequest request) {

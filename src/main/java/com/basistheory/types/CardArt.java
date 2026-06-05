@@ -141,5 +141,15 @@ public final class CardArt {
         public CardArt build() {
             return new CardArt(backgroundColor, logo, cardImage, additionalProperties);
         }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
+        }
     }
 }

@@ -6,10 +6,10 @@ package com.basistheory.resources.tenants.members;
 import com.basistheory.core.ClientOptions;
 import com.basistheory.core.IdempotentRequestOptions;
 import com.basistheory.core.RequestOptions;
+import com.basistheory.core.pagination.SyncPagingIterable;
 import com.basistheory.resources.tenants.members.requests.MembersListRequest;
 import com.basistheory.resources.tenants.members.requests.UpdateTenantMemberRequest;
 import com.basistheory.types.TenantMemberResponse;
-import com.basistheory.types.TenantMemberResponsePaginatedList;
 import java.util.concurrent.CompletableFuture;
 
 public class AsyncMembersClient {
@@ -29,15 +29,19 @@ public class AsyncMembersClient {
         return this.rawClient;
     }
 
-    public CompletableFuture<TenantMemberResponsePaginatedList> list() {
+    public CompletableFuture<SyncPagingIterable<TenantMemberResponse>> list() {
         return this.rawClient.list().thenApply(response -> response.body());
     }
 
-    public CompletableFuture<TenantMemberResponsePaginatedList> list(MembersListRequest request) {
+    public CompletableFuture<SyncPagingIterable<TenantMemberResponse>> list(RequestOptions requestOptions) {
+        return this.rawClient.list(requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<SyncPagingIterable<TenantMemberResponse>> list(MembersListRequest request) {
         return this.rawClient.list(request).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<TenantMemberResponsePaginatedList> list(
+    public CompletableFuture<SyncPagingIterable<TenantMemberResponse>> list(
             MembersListRequest request, RequestOptions requestOptions) {
         return this.rawClient.list(request, requestOptions).thenApply(response -> response.body());
     }

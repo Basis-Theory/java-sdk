@@ -60,6 +60,10 @@ public class AgentsClient {
         return this.rawClient.update(agentId).body();
     }
 
+    public Agent update(String agentId, RequestOptions requestOptions) {
+        return this.rawClient.update(agentId, requestOptions).body();
+    }
+
     public Agent update(String agentId, UpdateAgentRequest request) {
         return this.rawClient.update(agentId, request).body();
     }

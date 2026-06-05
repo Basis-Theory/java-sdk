@@ -97,6 +97,10 @@ public final class CreateAgentRequest {
     public interface _FinalStage {
         CreateAgentRequest build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage enrollmentIds(Optional<List<String>> enrollmentIds);
 
         _FinalStage enrollmentIds(List<String> enrollmentIds);
@@ -163,6 +167,18 @@ public final class CreateAgentRequest {
         @java.lang.Override
         public CreateAgentRequest build() {
             return new CreateAgentRequest(name, enrollmentIds, instanceDetails, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

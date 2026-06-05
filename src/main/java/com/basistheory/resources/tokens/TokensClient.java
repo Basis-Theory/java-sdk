@@ -66,6 +66,10 @@ public class TokensClient {
         return this.rawClient.update(id).body();
     }
 
+    public Token update(String id, IdempotentRequestOptions requestOptions) {
+        return this.rawClient.update(id, requestOptions).body();
+    }
+
     public Token update(String id, UpdateTokenRequest request) {
         return this.rawClient.update(id, request).body();
     }
@@ -76,6 +80,10 @@ public class TokensClient {
 
     public Token create() {
         return this.rawClient.create().body();
+    }
+
+    public Token create(IdempotentRequestOptions requestOptions) {
+        return this.rawClient.create(requestOptions).body();
     }
 
     public Token create(CreateTokenRequest request) {
@@ -90,6 +98,10 @@ public class TokensClient {
         return this.rawClient.listV2().body();
     }
 
+    public SyncPagingIterable<Token> listV2(RequestOptions requestOptions) {
+        return this.rawClient.listV2(requestOptions).body();
+    }
+
     public SyncPagingIterable<Token> listV2(TokensListV2Request request) {
         return this.rawClient.listV2(request).body();
     }
@@ -100,6 +112,10 @@ public class TokensClient {
 
     public SyncPagingIterable<Token> searchV2() {
         return this.rawClient.searchV2().body();
+    }
+
+    public SyncPagingIterable<Token> searchV2(IdempotentRequestOptions requestOptions) {
+        return this.rawClient.searchV2(requestOptions).body();
     }
 
     public SyncPagingIterable<Token> searchV2(SearchTokensRequestV2 request) {

@@ -4,7 +4,9 @@
 package com.basistheory.resources.tenants.owner;
 
 import com.basistheory.core.ClientOptions;
+import com.basistheory.core.IdempotentRequestOptions;
 import com.basistheory.core.RequestOptions;
+import com.basistheory.resources.tenants.owner.requests.TransferTenantOwnerRequest;
 import com.basistheory.types.TenantMemberResponse;
 
 public class OwnerClient {
@@ -30,5 +32,13 @@ public class OwnerClient {
 
     public TenantMemberResponse get(RequestOptions requestOptions) {
         return this.rawClient.get(requestOptions).body();
+    }
+
+    public TenantMemberResponse transfer(TransferTenantOwnerRequest request) {
+        return this.rawClient.transfer(request).body();
+    }
+
+    public TenantMemberResponse transfer(TransferTenantOwnerRequest request, IdempotentRequestOptions requestOptions) {
+        return this.rawClient.transfer(request, requestOptions).body();
     }
 }

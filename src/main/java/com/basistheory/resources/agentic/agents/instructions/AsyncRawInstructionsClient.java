@@ -60,6 +60,14 @@ public class AsyncRawInstructionsClient {
      * List all purchase instructions for an agent with cursor-based pagination and optional enrollment filter.
      */
     public CompletableFuture<BasisTheoryApiHttpResponse<SyncPagingIterable<Instruction>>> list(
+            String agentId, RequestOptions requestOptions) {
+        return list(agentId, InstructionsListRequest.builder().build(), requestOptions);
+    }
+
+    /**
+     * List all purchase instructions for an agent with cursor-based pagination and optional enrollment filter.
+     */
+    public CompletableFuture<BasisTheoryApiHttpResponse<SyncPagingIterable<Instruction>>> list(
             String agentId, InstructionsListRequest request) {
         return list(agentId, request, null);
     }
@@ -86,6 +94,11 @@ public class AsyncRawInstructionsClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "cursor", request.getCursor().get(), false);
         }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -102,9 +115,10 @@ public class AsyncRawInstructionsClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         InstructionList parsedResponse =
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), InstructionList.class);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, InstructionList.class);
                         Optional<String> startingAfter =
                                 parsedResponse.getPagination().getNextCursor();
                         InstructionsListRequest nextRequest = InstructionsListRequest.builder()
@@ -113,19 +127,19 @@ public class AsyncRawInstructionsClient {
                                 .build();
                         List<Instruction> result = parsedResponse.getData();
                         future.complete(new BasisTheoryApiHttpResponse<>(
-                                new SyncPagingIterable<Instruction>(startingAfter.isPresent(), result, () -> {
-                                    try {
-                                        return list(agentId, nextRequest, requestOptions)
-                                                .get()
-                                                .body();
-                                    } catch (InterruptedException | ExecutionException e) {
-                                        throw new RuntimeException(e);
-                                    }
-                                }),
+                                new SyncPagingIterable<Instruction>(
+                                        startingAfter.isPresent(), result, parsedResponse, () -> {
+                                            try {
+                                                return list(agentId, nextRequest, requestOptions)
+                                                        .get()
+                                                        .body();
+                                            } catch (InterruptedException | ExecutionException e) {
+                                                throw new RuntimeException(e);
+                                            }
+                                        }),
                                 response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 401:
@@ -152,11 +166,9 @@ public class AsyncRawInstructionsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BasisTheoryApiApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BasisTheoryException("Network error executing HTTP request", e));
@@ -184,12 +196,16 @@ public class AsyncRawInstructionsClient {
      */
     public CompletableFuture<BasisTheoryApiHttpResponse<Instruction>> create(
             String agentId, CreateInstructionRequest request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("agentic/agents")
                 .addPathSegment(agentId)
-                .addPathSegments("instructions")
-                .build();
+                .addPathSegments("instructions");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -198,7 +214,7 @@ public class AsyncRawInstructionsClient {
             throw new BasisTheoryException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -213,13 +229,12 @@ public class AsyncRawInstructionsClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BasisTheoryApiHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Instruction.class),
-                                response));
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Instruction.class), response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -257,11 +272,9 @@ public class AsyncRawInstructionsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BasisTheoryApiApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BasisTheoryException("Network error executing HTTP request", e));
@@ -282,15 +295,19 @@ public class AsyncRawInstructionsClient {
 
     public CompletableFuture<BasisTheoryApiHttpResponse<Instruction>> get(
             String agentId, String instructionId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("agentic/agents")
                 .addPathSegment(agentId)
                 .addPathSegments("instructions")
-                .addPathSegment(instructionId)
-                .build();
+                .addPathSegment(instructionId);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Accept", "application/json")
@@ -304,13 +321,12 @@ public class AsyncRawInstructionsClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BasisTheoryApiHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Instruction.class),
-                                response));
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Instruction.class), response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 401:
@@ -337,11 +353,9 @@ public class AsyncRawInstructionsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BasisTheoryApiApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BasisTheoryException("Network error executing HTTP request", e));
@@ -362,15 +376,19 @@ public class AsyncRawInstructionsClient {
 
     public CompletableFuture<BasisTheoryApiHttpResponse<Void>> delete(
             String agentId, String instructionId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("agentic/agents")
                 .addPathSegment(agentId)
                 .addPathSegments("instructions")
-                .addPathSegment(instructionId)
-                .build();
+                .addPathSegment(instructionId);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("DELETE", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Accept", "application/json")
@@ -415,11 +433,9 @@ public class AsyncRawInstructionsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BasisTheoryApiApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BasisTheoryException("Network error executing HTTP request", e));
@@ -439,19 +455,28 @@ public class AsyncRawInstructionsClient {
     }
 
     public CompletableFuture<BasisTheoryApiHttpResponse<Instruction>> update(
+            String agentId, String instructionId, RequestOptions requestOptions) {
+        return update(agentId, instructionId, UpdateInstructionRequest.builder().build(), requestOptions);
+    }
+
+    public CompletableFuture<BasisTheoryApiHttpResponse<Instruction>> update(
             String agentId, String instructionId, UpdateInstructionRequest request) {
         return update(agentId, instructionId, request, null);
     }
 
     public CompletableFuture<BasisTheoryApiHttpResponse<Instruction>> update(
             String agentId, String instructionId, UpdateInstructionRequest request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("agentic/agents")
                 .addPathSegment(agentId)
                 .addPathSegments("instructions")
-                .addPathSegment(instructionId)
-                .build();
+                .addPathSegment(instructionId);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
@@ -460,7 +485,7 @@ public class AsyncRawInstructionsClient {
             throw new BasisTheoryException("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .url(httpUrl.build())
                 .method("PATCH", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
@@ -475,13 +500,12 @@ public class AsyncRawInstructionsClient {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BasisTheoryApiHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Instruction.class),
-                                response));
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Instruction.class), response));
                         return;
                     }
-                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
                         switch (response.code()) {
                             case 400:
@@ -519,11 +543,9 @@ public class AsyncRawInstructionsClient {
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
                     }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
                     future.completeExceptionally(new BasisTheoryApiApiException(
-                            "Error with status code " + response.code(),
-                            response.code(),
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                            response));
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
                     return;
                 } catch (IOException e) {
                     future.completeExceptionally(new BasisTheoryException("Network error executing HTTP request", e));

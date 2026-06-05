@@ -81,6 +81,10 @@ public final class Amount {
     public interface _FinalStage {
         Amount build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage currency(Optional<String> currency);
 
         _FinalStage currency(String currency);
@@ -127,6 +131,18 @@ public final class Amount {
         @java.lang.Override
         public Amount build() {
             return new Amount(value, currency, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

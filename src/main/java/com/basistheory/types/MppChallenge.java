@@ -191,6 +191,10 @@ public final class MppChallenge {
     public interface _FinalStage {
         MppChallenge build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         _FinalStage acceptedNetworks(List<String> acceptedNetworks);
 
         _FinalStage addAcceptedNetworks(String acceptedNetworks);
@@ -356,7 +360,9 @@ public final class MppChallenge {
 
         @java.lang.Override
         public _FinalStage addAllAcceptedNetworks(List<String> acceptedNetworks) {
-            this.acceptedNetworks.addAll(acceptedNetworks);
+            if (acceptedNetworks != null) {
+                this.acceptedNetworks.addAll(acceptedNetworks);
+            }
             return this;
         }
 
@@ -370,7 +376,9 @@ public final class MppChallenge {
         @JsonSetter(value = "accepted_networks", nulls = Nulls.SKIP)
         public _FinalStage acceptedNetworks(List<String> acceptedNetworks) {
             this.acceptedNetworks.clear();
-            this.acceptedNetworks.addAll(acceptedNetworks);
+            if (acceptedNetworks != null) {
+                this.acceptedNetworks.addAll(acceptedNetworks);
+            }
             return this;
         }
 
@@ -387,6 +395,18 @@ public final class MppChallenge {
                     jwksUri,
                     kid,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

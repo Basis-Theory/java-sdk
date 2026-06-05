@@ -17,13 +17,13 @@ import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = EnrichmentsGetCardDetailsRequest.Builder.class)
-public final class EnrichmentsGetCardDetailsRequest {
+@JsonDeserialize(builder = EnrichmentsCardDetailsRequest.Builder.class)
+public final class EnrichmentsCardDetailsRequest {
     private final String bin;
 
     private final Map<String, Object> additionalProperties;
 
-    private EnrichmentsGetCardDetailsRequest(String bin, Map<String, Object> additionalProperties) {
+    private EnrichmentsCardDetailsRequest(String bin, Map<String, Object> additionalProperties) {
         this.bin = bin;
         this.additionalProperties = additionalProperties;
     }
@@ -36,7 +36,7 @@ public final class EnrichmentsGetCardDetailsRequest {
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof EnrichmentsGetCardDetailsRequest && equalTo((EnrichmentsGetCardDetailsRequest) other);
+        return other instanceof EnrichmentsCardDetailsRequest && equalTo((EnrichmentsCardDetailsRequest) other);
     }
 
     @JsonAnyGetter
@@ -44,7 +44,7 @@ public final class EnrichmentsGetCardDetailsRequest {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(EnrichmentsGetCardDetailsRequest other) {
+    private boolean equalTo(EnrichmentsCardDetailsRequest other) {
         return bin.equals(other.bin);
     }
 
@@ -65,11 +65,15 @@ public final class EnrichmentsGetCardDetailsRequest {
     public interface BinStage {
         _FinalStage bin(@NotNull String bin);
 
-        Builder from(EnrichmentsGetCardDetailsRequest other);
+        Builder from(EnrichmentsCardDetailsRequest other);
     }
 
     public interface _FinalStage {
-        EnrichmentsGetCardDetailsRequest build();
+        EnrichmentsCardDetailsRequest build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -82,7 +86,7 @@ public final class EnrichmentsGetCardDetailsRequest {
         private Builder() {}
 
         @java.lang.Override
-        public Builder from(EnrichmentsGetCardDetailsRequest other) {
+        public Builder from(EnrichmentsCardDetailsRequest other) {
             bin(other.getBin());
             return this;
         }
@@ -95,8 +99,20 @@ public final class EnrichmentsGetCardDetailsRequest {
         }
 
         @java.lang.Override
-        public EnrichmentsGetCardDetailsRequest build() {
-            return new EnrichmentsGetCardDetailsRequest(bin, additionalProperties);
+        public EnrichmentsCardDetailsRequest build() {
+            return new EnrichmentsCardDetailsRequest(bin, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

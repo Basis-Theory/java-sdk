@@ -109,6 +109,10 @@ public final class EncryptionJwk {
 
     public interface _FinalStage {
         EncryptionJwk build();
+
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -156,6 +160,18 @@ public final class EncryptionJwk {
         @java.lang.Override
         public EncryptionJwk build() {
             return new EncryptionJwk(kid, n, e, additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

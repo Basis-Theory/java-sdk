@@ -36,6 +36,10 @@ public class GooglePayClient {
         return this.rawClient.create().body();
     }
 
+    public GooglePayCreateResponse create(RequestOptions requestOptions) {
+        return this.rawClient.create(requestOptions).body();
+    }
+
     public GooglePayCreateResponse create(GooglePayCreateRequest request) {
         return this.rawClient.create(request).body();
     }

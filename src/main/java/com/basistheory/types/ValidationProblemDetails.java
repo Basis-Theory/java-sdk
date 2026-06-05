@@ -214,5 +214,15 @@ public final class ValidationProblemDetails {
         public ValidationProblemDetails build() {
             return new ValidationProblemDetails(errors, type, title, status, detail, instance, additionalProperties);
         }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
+        }
     }
 }

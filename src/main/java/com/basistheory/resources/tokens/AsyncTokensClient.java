@@ -67,6 +67,10 @@ public class AsyncTokensClient {
         return this.rawClient.update(id).thenApply(response -> response.body());
     }
 
+    public CompletableFuture<Token> update(String id, IdempotentRequestOptions requestOptions) {
+        return this.rawClient.update(id, requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<Token> update(String id, UpdateTokenRequest request) {
         return this.rawClient.update(id, request).thenApply(response -> response.body());
     }
@@ -78,6 +82,10 @@ public class AsyncTokensClient {
 
     public CompletableFuture<Token> create() {
         return this.rawClient.create().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<Token> create(IdempotentRequestOptions requestOptions) {
+        return this.rawClient.create(requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<Token> create(CreateTokenRequest request) {
@@ -92,6 +100,10 @@ public class AsyncTokensClient {
         return this.rawClient.listV2().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<SyncPagingIterable<Token>> listV2(RequestOptions requestOptions) {
+        return this.rawClient.listV2(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<SyncPagingIterable<Token>> listV2(TokensListV2Request request) {
         return this.rawClient.listV2(request).thenApply(response -> response.body());
     }
@@ -103,6 +115,10 @@ public class AsyncTokensClient {
 
     public CompletableFuture<SyncPagingIterable<Token>> searchV2() {
         return this.rawClient.searchV2().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<SyncPagingIterable<Token>> searchV2(IdempotentRequestOptions requestOptions) {
+        return this.rawClient.searchV2(requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<SyncPagingIterable<Token>> searchV2(SearchTokensRequestV2 request) {

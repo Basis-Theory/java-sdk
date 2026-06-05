@@ -48,6 +48,13 @@ public class InstructionsClient {
     /**
      * List all purchase instructions for an agent with cursor-based pagination and optional enrollment filter.
      */
+    public SyncPagingIterable<Instruction> list(String agentId, RequestOptions requestOptions) {
+        return this.rawClient.list(agentId, requestOptions).body();
+    }
+
+    /**
+     * List all purchase instructions for an agent with cursor-based pagination and optional enrollment filter.
+     */
     public SyncPagingIterable<Instruction> list(String agentId, InstructionsListRequest request) {
         return this.rawClient.list(agentId, request).body();
     }
@@ -92,6 +99,10 @@ public class InstructionsClient {
 
     public Instruction update(String agentId, String instructionId) {
         return this.rawClient.update(agentId, instructionId).body();
+    }
+
+    public Instruction update(String agentId, String instructionId, RequestOptions requestOptions) {
+        return this.rawClient.update(agentId, instructionId, requestOptions).body();
     }
 
     public Instruction update(String agentId, String instructionId, UpdateInstructionRequest request) {

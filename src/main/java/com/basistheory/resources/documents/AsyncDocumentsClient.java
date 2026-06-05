@@ -10,9 +10,11 @@ import com.basistheory.resources.documents.data.AsyncDataClient;
 import com.basistheory.resources.documents.requests.DocumentsUploadRequest;
 import com.basistheory.types.Document;
 import java.io.File;
+import java.io.InputStream;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
+import okhttp3.MediaType;
 
 public class AsyncDocumentsClient {
     protected final ClientOptions clientOptions;
@@ -38,6 +40,10 @@ public class AsyncDocumentsClient {
         return this.rawClient.upload(document).thenApply(response -> response.body());
     }
 
+    public CompletableFuture<Document> upload(Optional<File> document, RequestOptions requestOptions) {
+        return this.rawClient.upload(document, requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<Document> upload(Optional<File> document, DocumentsUploadRequest request) {
         return this.rawClient.upload(document, request).thenApply(response -> response.body());
     }
@@ -45,6 +51,31 @@ public class AsyncDocumentsClient {
     public CompletableFuture<Document> upload(
             Optional<File> document, DocumentsUploadRequest request, RequestOptions requestOptions) {
         return this.rawClient.upload(document, request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<Document> upload(Optional<File> document, InputStream stream, String filename) {
+        return this.rawClient.upload(document, stream, filename).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<Document> upload(
+            Optional<File> document, InputStream stream, String filename, MediaType mediaType) {
+        return this.rawClient.upload(document, stream, filename, mediaType).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<Document> upload(
+            Optional<File> document, InputStream stream, String filename, RequestOptions requestOptions) {
+        return this.rawClient.upload(document, stream, filename, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<Document> upload(
+            Optional<File> document,
+            InputStream stream,
+            String filename,
+            MediaType mediaType,
+            RequestOptions requestOptions) {
+        return this.rawClient
+                .upload(document, stream, filename, mediaType, requestOptions)
+                .thenApply(response -> response.body());
     }
 
     public CompletableFuture<Document> get(String id) {

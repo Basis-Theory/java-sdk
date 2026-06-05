@@ -49,6 +49,13 @@ public class AsyncInstructionsClient {
     /**
      * List all purchase instructions for an agent with cursor-based pagination and optional enrollment filter.
      */
+    public CompletableFuture<SyncPagingIterable<Instruction>> list(String agentId, RequestOptions requestOptions) {
+        return this.rawClient.list(agentId, requestOptions).thenApply(response -> response.body());
+    }
+
+    /**
+     * List all purchase instructions for an agent with cursor-based pagination and optional enrollment filter.
+     */
     public CompletableFuture<SyncPagingIterable<Instruction>> list(String agentId, InstructionsListRequest request) {
         return this.rawClient.list(agentId, request).thenApply(response -> response.body());
     }
@@ -94,6 +101,10 @@ public class AsyncInstructionsClient {
 
     public CompletableFuture<Instruction> update(String agentId, String instructionId) {
         return this.rawClient.update(agentId, instructionId).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<Instruction> update(String agentId, String instructionId, RequestOptions requestOptions) {
+        return this.rawClient.update(agentId, instructionId, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<Instruction> update(

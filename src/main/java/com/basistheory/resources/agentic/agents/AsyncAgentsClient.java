@@ -61,6 +61,10 @@ public class AsyncAgentsClient {
         return this.rawClient.update(agentId).thenApply(response -> response.body());
     }
 
+    public CompletableFuture<Agent> update(String agentId, RequestOptions requestOptions) {
+        return this.rawClient.update(agentId, requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<Agent> update(String agentId, UpdateAgentRequest request) {
         return this.rawClient.update(agentId, request).thenApply(response -> response.body());
     }

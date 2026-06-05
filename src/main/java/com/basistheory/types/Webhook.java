@@ -216,6 +216,10 @@ public final class Webhook {
     public interface _FinalStage {
         Webhook build();
 
+        _FinalStage additionalProperty(String key, Object value);
+
+        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
         /**
          * <p>The email address to use for management notification events. Ie: webhook disabled</p>
          */
@@ -368,7 +372,9 @@ public final class Webhook {
 
         @java.lang.Override
         public _FinalStage addAllEvents(List<String> events) {
-            this.events.addAll(events);
+            if (events != null) {
+                this.events.addAll(events);
+            }
             return this;
         }
 
@@ -382,7 +388,9 @@ public final class Webhook {
         @JsonSetter(value = "events", nulls = Nulls.SKIP)
         public _FinalStage events(List<String> events) {
             this.events.clear();
-            this.events.addAll(events);
+            if (events != null) {
+                this.events.addAll(events);
+            }
             return this;
         }
 
@@ -421,6 +429,18 @@ public final class Webhook {
                     modifiedBy,
                     modifiedAt,
                     additionalProperties);
+        }
+
+        @java.lang.Override
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        @java.lang.Override
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
         }
     }
 }

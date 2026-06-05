@@ -58,6 +58,10 @@ public class AsyncDomainClient {
         return this.rawClient.registerAll().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<ApplePayDomainRegistrationResponse> registerAll(RequestOptions requestOptions) {
+        return this.rawClient.registerAll(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<ApplePayDomainRegistrationResponse> registerAll(
             ApplePayDomainRegistrationListRequest request) {
         return this.rawClient.registerAll(request).thenApply(response -> response.body());

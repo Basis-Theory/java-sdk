@@ -43,6 +43,13 @@ public class EnrollmentsClient {
     /**
      * List all enrollments for the current tenant with cursor-based pagination.
      */
+    public SyncPagingIterable<Enrollment> list(RequestOptions requestOptions) {
+        return this.rawClient.list(requestOptions).body();
+    }
+
+    /**
+     * List all enrollments for the current tenant with cursor-based pagination.
+     */
     public SyncPagingIterable<Enrollment> list(EnrollmentsListRequest request) {
         return this.rawClient.list(request).body();
     }

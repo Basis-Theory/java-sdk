@@ -51,6 +51,10 @@ public class MerchantClient {
         return this.rawClient.create().body();
     }
 
+    public GooglePayMerchant create(RequestOptions requestOptions) {
+        return this.rawClient.create(requestOptions).body();
+    }
+
     public GooglePayMerchant create(GooglePayMerchantRegisterRequest request) {
         return this.rawClient.create(request).body();
     }

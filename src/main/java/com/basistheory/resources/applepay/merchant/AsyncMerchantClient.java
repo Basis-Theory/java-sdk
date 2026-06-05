@@ -52,6 +52,10 @@ public class AsyncMerchantClient {
         return this.rawClient.create().thenApply(response -> response.body());
     }
 
+    public CompletableFuture<ApplePayMerchant> create(RequestOptions requestOptions) {
+        return this.rawClient.create(requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<ApplePayMerchant> create(ApplePayMerchantRegisterRequest request) {
         return this.rawClient.create(request).thenApply(response -> response.body());
     }

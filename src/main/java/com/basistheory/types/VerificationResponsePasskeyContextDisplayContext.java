@@ -115,5 +115,15 @@ public final class VerificationResponsePasskeyContextDisplayContext {
         public VerificationResponsePasskeyContextDisplayContext build() {
             return new VerificationResponsePasskeyContextDisplayContext(cardLast4, cardBrand, additionalProperties);
         }
+
+        public Builder additionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+            return this;
+        }
+
+        public Builder additionalProperties(Map<String, Object> additionalProperties) {
+            this.additionalProperties.putAll(additionalProperties);
+            return this;
+        }
     }
 }
