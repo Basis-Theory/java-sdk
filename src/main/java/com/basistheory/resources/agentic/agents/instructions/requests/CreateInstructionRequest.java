@@ -4,6 +4,7 @@
 package com.basistheory.resources.agentic.agents.instructions.requests;
 
 import com.basistheory.core.ObjectMappers;
+import com.basistheory.resources.agentic.agents.instructions.types.CreateInstructionRequestMpp;
 import com.basistheory.types.Amount;
 import com.basistheory.types.InstanceDetails;
 import com.basistheory.types.Recurring;
@@ -39,6 +40,10 @@ public final class CreateInstructionRequest {
 
     private final Optional<InstanceDetails> instanceDetails;
 
+    private final Optional<String> networkBusinessProfile;
+
+    private final Optional<CreateInstructionRequestMpp> mpp;
+
     private final Map<String, Object> additionalProperties;
 
     private CreateInstructionRequest(
@@ -49,6 +54,8 @@ public final class CreateInstructionRequest {
             Optional<Map<String, Object>> assuranceData,
             Optional<Recurring> recurring,
             Optional<InstanceDetails> instanceDetails,
+            Optional<String> networkBusinessProfile,
+            Optional<CreateInstructionRequestMpp> mpp,
             Map<String, Object> additionalProperties) {
         this.enrollmentId = enrollmentId;
         this.amount = amount;
@@ -57,6 +64,8 @@ public final class CreateInstructionRequest {
         this.assuranceData = assuranceData;
         this.recurring = recurring;
         this.instanceDetails = instanceDetails;
+        this.networkBusinessProfile = networkBusinessProfile;
+        this.mpp = mpp;
         this.additionalProperties = additionalProperties;
     }
 
@@ -95,6 +104,27 @@ public final class CreateInstructionRequest {
         return instanceDetails;
     }
 
+    /**
+     * @return Stripe network business profile identifier (<code>profile_...</code>) of the seller allowed to use the
+     * shared payment token. Maps to Stripe's <code>seller_details[network_business_profile]</code>.
+     * Only valid for <code>spt</code> (Stripe) enrollments; required unless an MPP challenge with Stripe
+     * network details is provided.
+     */
+    @JsonProperty("network_business_profile")
+    public Optional<String> getNetworkBusinessProfile() {
+        return networkBusinessProfile;
+    }
+
+    /**
+     * @return MPP mode — provide the merchant's MPP challenge to receive an MPP credential from the
+     * credentials endpoint instead of a raw shared payment token ID. The challenge must carry
+     * Stripe values (<code>method: stripe</code>). Only valid for <code>spt</code> (Stripe) enrollments.
+     */
+    @JsonProperty("mpp")
+    public Optional<CreateInstructionRequestMpp> getMpp() {
+        return mpp;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -113,7 +143,9 @@ public final class CreateInstructionRequest {
                 && expiresAt.equals(other.expiresAt)
                 && assuranceData.equals(other.assuranceData)
                 && recurring.equals(other.recurring)
-                && instanceDetails.equals(other.instanceDetails);
+                && instanceDetails.equals(other.instanceDetails)
+                && networkBusinessProfile.equals(other.networkBusinessProfile)
+                && mpp.equals(other.mpp);
     }
 
     @java.lang.Override
@@ -125,7 +157,9 @@ public final class CreateInstructionRequest {
                 this.expiresAt,
                 this.assuranceData,
                 this.recurring,
-                this.instanceDetails);
+                this.instanceDetails,
+                this.networkBusinessProfile,
+                this.mpp);
     }
 
     @java.lang.Override
@@ -173,6 +207,25 @@ public final class CreateInstructionRequest {
         _FinalStage instanceDetails(Optional<InstanceDetails> instanceDetails);
 
         _FinalStage instanceDetails(InstanceDetails instanceDetails);
+
+        /**
+         * <p>Stripe network business profile identifier (<code>profile_...</code>) of the seller allowed to use the
+         * shared payment token. Maps to Stripe's <code>seller_details[network_business_profile]</code>.
+         * Only valid for <code>spt</code> (Stripe) enrollments; required unless an MPP challenge with Stripe
+         * network details is provided.</p>
+         */
+        _FinalStage networkBusinessProfile(Optional<String> networkBusinessProfile);
+
+        _FinalStage networkBusinessProfile(String networkBusinessProfile);
+
+        /**
+         * <p>MPP mode — provide the merchant's MPP challenge to receive an MPP credential from the
+         * credentials endpoint instead of a raw shared payment token ID. The challenge must carry
+         * Stripe values (<code>method: stripe</code>). Only valid for <code>spt</code> (Stripe) enrollments.</p>
+         */
+        _FinalStage mpp(Optional<CreateInstructionRequestMpp> mpp);
+
+        _FinalStage mpp(CreateInstructionRequestMpp mpp);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -185,6 +238,10 @@ public final class CreateInstructionRequest {
         private String description;
 
         private OffsetDateTime expiresAt;
+
+        private Optional<CreateInstructionRequestMpp> mpp = Optional.empty();
+
+        private Optional<String> networkBusinessProfile = Optional.empty();
 
         private Optional<InstanceDetails> instanceDetails = Optional.empty();
 
@@ -206,6 +263,8 @@ public final class CreateInstructionRequest {
             assuranceData(other.getAssuranceData());
             recurring(other.getRecurring());
             instanceDetails(other.getInstanceDetails());
+            networkBusinessProfile(other.getNetworkBusinessProfile());
+            mpp(other.getMpp());
             return this;
         }
 
@@ -234,6 +293,56 @@ public final class CreateInstructionRequest {
         @JsonSetter("expires_at")
         public _FinalStage expiresAt(@NotNull OffsetDateTime expiresAt) {
             this.expiresAt = Objects.requireNonNull(expiresAt, "expiresAt must not be null");
+            return this;
+        }
+
+        /**
+         * <p>MPP mode — provide the merchant's MPP challenge to receive an MPP credential from the
+         * credentials endpoint instead of a raw shared payment token ID. The challenge must carry
+         * Stripe values (<code>method: stripe</code>). Only valid for <code>spt</code> (Stripe) enrollments.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage mpp(CreateInstructionRequestMpp mpp) {
+            this.mpp = Optional.ofNullable(mpp);
+            return this;
+        }
+
+        /**
+         * <p>MPP mode — provide the merchant's MPP challenge to receive an MPP credential from the
+         * credentials endpoint instead of a raw shared payment token ID. The challenge must carry
+         * Stripe values (<code>method: stripe</code>). Only valid for <code>spt</code> (Stripe) enrollments.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "mpp", nulls = Nulls.SKIP)
+        public _FinalStage mpp(Optional<CreateInstructionRequestMpp> mpp) {
+            this.mpp = mpp;
+            return this;
+        }
+
+        /**
+         * <p>Stripe network business profile identifier (<code>profile_...</code>) of the seller allowed to use the
+         * shared payment token. Maps to Stripe's <code>seller_details[network_business_profile]</code>.
+         * Only valid for <code>spt</code> (Stripe) enrollments; required unless an MPP challenge with Stripe
+         * network details is provided.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage networkBusinessProfile(String networkBusinessProfile) {
+            this.networkBusinessProfile = Optional.ofNullable(networkBusinessProfile);
+            return this;
+        }
+
+        /**
+         * <p>Stripe network business profile identifier (<code>profile_...</code>) of the seller allowed to use the
+         * shared payment token. Maps to Stripe's <code>seller_details[network_business_profile]</code>.
+         * Only valid for <code>spt</code> (Stripe) enrollments; required unless an MPP challenge with Stripe
+         * network details is provided.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "network_business_profile", nulls = Nulls.SKIP)
+        public _FinalStage networkBusinessProfile(Optional<String> networkBusinessProfile) {
+            this.networkBusinessProfile = networkBusinessProfile;
             return this;
         }
 
@@ -286,6 +395,8 @@ public final class CreateInstructionRequest {
                     assuranceData,
                     recurring,
                     instanceDetails,
+                    networkBusinessProfile,
+                    mpp,
                     additionalProperties);
         }
 

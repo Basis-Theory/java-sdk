@@ -36,6 +36,8 @@ public final class CreateEnrollmentRequest {
 
     private final Optional<CreateEnrollmentRequestType> type;
 
+    private final Optional<String> provider;
+
     private final Map<String, Object> additionalProperties;
 
     private CreateEnrollmentRequest(
@@ -45,6 +47,7 @@ public final class CreateEnrollmentRequest {
             Optional<List<String>> agentIds,
             Optional<String> walletName,
             Optional<CreateEnrollmentRequestType> type,
+            Optional<String> provider,
             Map<String, Object> additionalProperties) {
         this.tokenId = tokenId;
         this.consumer = consumer;
@@ -52,6 +55,7 @@ public final class CreateEnrollmentRequest {
         this.agentIds = agentIds;
         this.walletName = walletName;
         this.type = type;
+        this.provider = provider;
         this.additionalProperties = additionalProperties;
     }
 
@@ -93,10 +97,20 @@ public final class CreateEnrollmentRequest {
      * @return Enrollment type. <code>agentic</code> (default) enrolls the card for agent-driven payments and requires verification.
      * <code>autofill</code> enrolls the card for direct autofill credential retrieval, skips verification, and is currently
      * available to test tenants only.
+     * <code>spt</code> enrolls the card for shared payment tokens, requires <code>provider</code> to be set, skips verification, and
+     * activates immediately.
      */
     @JsonProperty("type")
     public Optional<CreateEnrollmentRequestType> getType() {
         return type;
+    }
+
+    /**
+     * @return Token provider for <code>spt</code> enrollments. Required when <code>type</code> is <code>spt</code>; not allowed otherwise.
+     */
+    @JsonProperty("provider")
+    public Optional<String> getProvider() {
+        return provider;
     }
 
     @java.lang.Override
@@ -116,12 +130,14 @@ public final class CreateEnrollmentRequest {
                 && agentId.equals(other.agentId)
                 && agentIds.equals(other.agentIds)
                 && walletName.equals(other.walletName)
-                && type.equals(other.type);
+                && type.equals(other.type)
+                && provider.equals(other.provider);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.tokenId, this.consumer, this.agentId, this.agentIds, this.walletName, this.type);
+        return Objects.hash(
+                this.tokenId, this.consumer, this.agentId, this.agentIds, this.walletName, this.type, this.provider);
     }
 
     @java.lang.Override
@@ -174,11 +190,20 @@ public final class CreateEnrollmentRequest {
         /**
          * <p>Enrollment type. <code>agentic</code> (default) enrolls the card for agent-driven payments and requires verification.
          * <code>autofill</code> enrolls the card for direct autofill credential retrieval, skips verification, and is currently
-         * available to test tenants only.</p>
+         * available to test tenants only.
+         * <code>spt</code> enrolls the card for shared payment tokens, requires <code>provider</code> to be set, skips verification, and
+         * activates immediately.</p>
          */
         _FinalStage type(Optional<CreateEnrollmentRequestType> type);
 
         _FinalStage type(CreateEnrollmentRequestType type);
+
+        /**
+         * <p>Token provider for <code>spt</code> enrollments. Required when <code>type</code> is <code>spt</code>; not allowed otherwise.</p>
+         */
+        _FinalStage provider(Optional<String> provider);
+
+        _FinalStage provider(String provider);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -186,6 +211,8 @@ public final class CreateEnrollmentRequest {
         private String tokenId;
 
         private Consumer consumer;
+
+        private Optional<String> provider = Optional.empty();
 
         private Optional<CreateEnrollmentRequestType> type = Optional.empty();
 
@@ -208,6 +235,7 @@ public final class CreateEnrollmentRequest {
             agentIds(other.getAgentIds());
             walletName(other.getWalletName());
             type(other.getType());
+            provider(other.getProvider());
             return this;
         }
 
@@ -226,9 +254,31 @@ public final class CreateEnrollmentRequest {
         }
 
         /**
+         * <p>Token provider for <code>spt</code> enrollments. Required when <code>type</code> is <code>spt</code>; not allowed otherwise.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage provider(String provider) {
+            this.provider = Optional.ofNullable(provider);
+            return this;
+        }
+
+        /**
+         * <p>Token provider for <code>spt</code> enrollments. Required when <code>type</code> is <code>spt</code>; not allowed otherwise.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "provider", nulls = Nulls.SKIP)
+        public _FinalStage provider(Optional<String> provider) {
+            this.provider = provider;
+            return this;
+        }
+
+        /**
          * <p>Enrollment type. <code>agentic</code> (default) enrolls the card for agent-driven payments and requires verification.
          * <code>autofill</code> enrolls the card for direct autofill credential retrieval, skips verification, and is currently
-         * available to test tenants only.</p>
+         * available to test tenants only.
+         * <code>spt</code> enrolls the card for shared payment tokens, requires <code>provider</code> to be set, skips verification, and
+         * activates immediately.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -240,7 +290,9 @@ public final class CreateEnrollmentRequest {
         /**
          * <p>Enrollment type. <code>agentic</code> (default) enrolls the card for agent-driven payments and requires verification.
          * <code>autofill</code> enrolls the card for direct autofill credential retrieval, skips verification, and is currently
-         * available to test tenants only.</p>
+         * available to test tenants only.
+         * <code>spt</code> enrolls the card for shared payment tokens, requires <code>provider</code> to be set, skips verification, and
+         * activates immediately.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "type", nulls = Nulls.SKIP)
@@ -312,7 +364,7 @@ public final class CreateEnrollmentRequest {
         @java.lang.Override
         public CreateEnrollmentRequest build() {
             return new CreateEnrollmentRequest(
-                    tokenId, consumer, agentId, agentIds, walletName, type, additionalProperties);
+                    tokenId, consumer, agentId, agentIds, walletName, type, provider, additionalProperties);
         }
 
         @java.lang.Override

@@ -28,6 +28,20 @@ public class CredentialsClient {
     /**
      * Retrieve payment credentials (card number, expiration, CVC) for a purchase instruction.
      */
+    public Credentials create(String agentId, String instructionId) {
+        return this.rawClient.create(agentId, instructionId).body();
+    }
+
+    /**
+     * Retrieve payment credentials (card number, expiration, CVC) for a purchase instruction.
+     */
+    public Credentials create(String agentId, String instructionId, RequestOptions requestOptions) {
+        return this.rawClient.create(agentId, instructionId, requestOptions).body();
+    }
+
+    /**
+     * Retrieve payment credentials (card number, expiration, CVC) for a purchase instruction.
+     */
     public Credentials create(String agentId, String instructionId, GetCredentialsRequest request) {
         return this.rawClient.create(agentId, instructionId, request).body();
     }

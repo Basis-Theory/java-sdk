@@ -8,7 +8,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum InstructionType {
     AGENTIC("agentic"),
 
-    AUTOFILL("autofill");
+    AUTOFILL("autofill"),
+
+    SPT("spt");
 
     private final String value;
 

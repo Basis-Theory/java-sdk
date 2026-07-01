@@ -10,9 +10,13 @@ public enum EnrollmentProvider {
 
     MASTERCARD("mastercard"),
 
+    STRIPE("stripe"),
+
     VISA_MOCK("visa-mock"),
 
-    MASTERCARD_MOCK("mastercard-mock");
+    MASTERCARD_MOCK("mastercard-mock"),
+
+    STRIPE_MOCK("stripe-mock");
 
     private final String value;
 

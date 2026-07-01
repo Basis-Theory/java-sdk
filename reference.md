@@ -4577,6 +4577,16 @@ client.agentic().enrollments().create(
 Enrollment type. `agentic` (default) enrolls the card for agent-driven payments and requires verification.
 `autofill` enrolls the card for direct autofill credential retrieval, skips verification, and is currently
 available to test tenants only.
+`spt` enrolls the card for shared payment tokens, requires `provider` to be set, skips verification, and
+activates immediately.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**provider:** `Optional<String>` — Token provider for `spt` enrollments. Required when `type` is `spt`; not allowed otherwise.
     
 </dd>
 </dl>
@@ -4939,6 +4949,31 @@ client.agentic().agents().instructions().create(
     
 </dd>
 </dl>
+
+<dl>
+<dd>
+
+**networkBusinessProfile:** `Optional<String>` 
+
+Stripe network business profile identifier (`profile_...`) of the seller allowed to use the
+shared payment token. Maps to Stripe's `seller_details[network_business_profile]`.
+Only valid for `spt` (Stripe) enrollments; required unless an MPP challenge with Stripe
+network details is provided.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**mpp:** `Optional<CreateInstructionRequestMpp>` 
+
+MPP mode — provide the merchant's MPP challenge to receive an MPP credential from the
+credentials endpoint instead of a raw shared payment token ID. The challenge must carry
+Stripe values (`method: stripe`). Only valid for `spt` (Stripe) enrollments.
+    
+</dd>
+</dl>
 </dd>
 </dl>
 
@@ -5154,14 +5189,6 @@ client.agentic().agents().instructions().credentials().create(
     "instruction_id",
     GetCredentialsRequest
         .builder()
-        .merchant(
-            AgenticMerchant
-                .builder()
-                .name("name")
-                .url("url")
-                .countryCode("country_code")
-                .build()
-        )
         .build()
 );
 ```
@@ -5202,7 +5229,10 @@ client.agentic().agents().instructions().credentials().create(
 <dl>
 <dd>
 
-**merchant:** `AgenticMerchant` 
+**merchant:** `Optional<AgenticMerchant>` 
+
+Required for card (Visa/Mastercard) instructions unless provided at instruction
+creation. Not used for `spt` instructions.
     
 </dd>
 </dl>

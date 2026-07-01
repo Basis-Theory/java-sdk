@@ -44,6 +44,21 @@ public class AsyncRawCredentialsClient {
     /**
      * Retrieve payment credentials (card number, expiration, CVC) for a purchase instruction.
      */
+    public CompletableFuture<BasisTheoryApiHttpResponse<Credentials>> create(String agentId, String instructionId) {
+        return create(agentId, instructionId, GetCredentialsRequest.builder().build());
+    }
+
+    /**
+     * Retrieve payment credentials (card number, expiration, CVC) for a purchase instruction.
+     */
+    public CompletableFuture<BasisTheoryApiHttpResponse<Credentials>> create(
+            String agentId, String instructionId, RequestOptions requestOptions) {
+        return create(agentId, instructionId, GetCredentialsRequest.builder().build(), requestOptions);
+    }
+
+    /**
+     * Retrieve payment credentials (card number, expiration, CVC) for a purchase instruction.
+     */
     public CompletableFuture<BasisTheoryApiHttpResponse<Credentials>> create(
             String agentId, String instructionId, GetCredentialsRequest request) {
         return create(agentId, instructionId, request, null);
