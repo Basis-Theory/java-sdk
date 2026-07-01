@@ -217,8 +217,11 @@ public final class TestClient {
              client.create(GooglePayCreateRequest.builder().googlePaymentData(googlePayToken).build());
              fail("Should have thrown exception");
          } catch (UnprocessableEntityError e) {
-             System.out.println(">>> GOOGLEPAY_DETAIL >>> " + e.body().getDetail().orElse("<none>"));
-             assertTrue(e.body().getDetail().isPresent(), "Expected exception body to contain a detail");
+             String detail = e.body().getDetail()
+                     .orElseThrow(() -> new RuntimeException("No detail in error"));
+             assertTrue(
+                     detail.contains("Failed to process the Google Pay token"),
+                     "Expected exception body to contain \"Failed to process the Google Pay token\"; Actual: " + detail);
          }
      }
 
