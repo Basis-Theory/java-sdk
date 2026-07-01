@@ -156,19 +156,32 @@ public final class TestClient {
     @Test
     public void shouldSupportPaginationOnListV2() {
         TokensClient tokensClient = new TokensClient(privateClientOptions());
-        int pageSize = 3;
-        SyncPagingIterable<Token> tokens = tokensClient.listV2(TokensListV2Request.builder()
-                .size(pageSize)
-                .build());
+        String cardNumber = "6011000990139424";
+        int pageSize = 1;
 
-        int count = 0;
-        for (Token token : tokens) {
-            count++;
-            if (count > pageSize) {
-                break;
+        List<String> seededTokenIds = new ArrayList<>();
+        try {
+            for (int i = 0; i <= pageSize; i++) {
+                seededTokenIds.add(createToken(tokensClient, cardNumber));
+            }
+
+            SyncPagingIterable<Token> tokens = tokensClient.listV2(TokensListV2Request.builder()
+                    .size(pageSize)
+                    .build());
+
+            int count = 0;
+            for (Token token : tokens) {
+                count++;
+                if (count > pageSize) {
+                    break;
+                }
+            }
+            assertTrue(count > pageSize, "Expected pagination to span more than one page of size " + pageSize);
+        } finally {
+            for (String tokenId : seededTokenIds) {
+                deleteQuietly("token", tokenId, tokensClient::delete);
             }
         }
-        assertTrue(count > pageSize);
     }
 
     @Test
@@ -204,6 +217,7 @@ public final class TestClient {
              client.create(GooglePayCreateRequest.builder().googlePaymentData(googlePayToken).build());
              fail("Should have thrown exception");
          } catch (UnprocessableEntityError e) {
+             System.out.println(">>> GOOGLEPAY_DETAIL >>> " + e.body().getDetail().orElse("<none>"));
              assertTrue(e.body().getDetail().isPresent(), "Expected exception body to contain a detail");
          }
      }
