@@ -154,7 +154,7 @@ public final class TestClient {
     }
 
     @Test
-    public void shouldSupportPaginationOnListV2() {
+    public void shouldSupportPaginationOnListV2() throws InterruptedException {
         TokensClient tokensClient = new TokensClient(privateClientOptions());
         String cardNumber = "6011000990139424";
         int pageSize = 1;
@@ -165,15 +165,22 @@ public final class TestClient {
                 seededTokenIds.add(createToken(tokensClient, cardNumber));
             }
 
-            SyncPagingIterable<Token> tokens = tokensClient.listV2(TokensListV2Request.builder()
-                    .size(pageSize)
-                    .build());
-
+            // The list endpoint is eventually consistent, so freshly created tokens are not
+            // immediately queryable. Retry until enough are visible to span more than one page.
             int count = 0;
-            for (Token token : tokens) {
-                count++;
-                if (count > pageSize) {
-                    break;
+            for (int attempt = 0; attempt < 10 && count <= pageSize; attempt++) {
+                if (attempt > 0) {
+                    Thread.sleep(1000);
+                }
+                SyncPagingIterable<Token> tokens = tokensClient.listV2(TokensListV2Request.builder()
+                        .size(pageSize)
+                        .build());
+                count = 0;
+                for (Token token : tokens) {
+                    count++;
+                    if (count > pageSize) {
+                        break;
+                    }
                 }
             }
             assertTrue(count > pageSize, "Expected pagination to span more than one page of size " + pageSize);
