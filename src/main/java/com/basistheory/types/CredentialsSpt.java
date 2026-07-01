@@ -18,27 +18,26 @@ import java.util.Objects;
 import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = GooglePayTokenizeResponse.Builder.class)
-public final class GooglePayTokenizeResponse {
-    private final Optional<CreateTokenIntentResponse> tokenIntent;
+@JsonDeserialize(builder = CredentialsSpt.Builder.class)
+public final class CredentialsSpt {
+    private final Optional<String> id;
 
     private final Map<String, Object> additionalProperties;
 
-    private GooglePayTokenizeResponse(
-            Optional<CreateTokenIntentResponse> tokenIntent, Map<String, Object> additionalProperties) {
-        this.tokenIntent = tokenIntent;
+    private CredentialsSpt(Optional<String> id, Map<String, Object> additionalProperties) {
+        this.id = id;
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("token_intent")
-    public Optional<CreateTokenIntentResponse> getTokenIntent() {
-        return tokenIntent;
+    @JsonProperty("id")
+    public Optional<String> getId() {
+        return id;
     }
 
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof GooglePayTokenizeResponse && equalTo((GooglePayTokenizeResponse) other);
+        return other instanceof CredentialsSpt && equalTo((CredentialsSpt) other);
     }
 
     @JsonAnyGetter
@@ -46,13 +45,13 @@ public final class GooglePayTokenizeResponse {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(GooglePayTokenizeResponse other) {
-        return tokenIntent.equals(other.tokenIntent);
+    private boolean equalTo(CredentialsSpt other) {
+        return id.equals(other.id);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.tokenIntent);
+        return Objects.hash(this.id);
     }
 
     @java.lang.Override
@@ -66,31 +65,31 @@ public final class GooglePayTokenizeResponse {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<CreateTokenIntentResponse> tokenIntent = Optional.empty();
+        private Optional<String> id = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        public Builder from(GooglePayTokenizeResponse other) {
-            tokenIntent(other.getTokenIntent());
+        public Builder from(CredentialsSpt other) {
+            id(other.getId());
             return this;
         }
 
-        @JsonSetter(value = "token_intent", nulls = Nulls.SKIP)
-        public Builder tokenIntent(Optional<CreateTokenIntentResponse> tokenIntent) {
-            this.tokenIntent = tokenIntent;
+        @JsonSetter(value = "id", nulls = Nulls.SKIP)
+        public Builder id(Optional<String> id) {
+            this.id = id;
             return this;
         }
 
-        public Builder tokenIntent(CreateTokenIntentResponse tokenIntent) {
-            this.tokenIntent = Optional.ofNullable(tokenIntent);
+        public Builder id(String id) {
+            this.id = Optional.ofNullable(id);
             return this;
         }
 
-        public GooglePayTokenizeResponse build() {
-            return new GooglePayTokenizeResponse(tokenIntent, additionalProperties);
+        public CredentialsSpt build() {
+            return new CredentialsSpt(id, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

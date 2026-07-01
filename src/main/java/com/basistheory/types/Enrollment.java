@@ -107,7 +107,7 @@ public final class Enrollment {
     }
 
     /**
-     * @return Enrollment type — <code>agentic</code> (default) for agent-driven payments, <code>autofill</code> for direct credential autofill.
+     * @return Enrollment type — <code>agentic</code> (default) for agent-driven payments, <code>autofill</code> for direct credential autofill, <code>spt</code> for shared payment tokens.
      */
     @JsonProperty("type")
     public Optional<EnrollmentType> getType() {
@@ -287,7 +287,7 @@ public final class Enrollment {
         }
 
         /**
-         * <p>Enrollment type — <code>agentic</code> (default) for agent-driven payments, <code>autofill</code> for direct credential autofill.</p>
+         * <p>Enrollment type — <code>agentic</code> (default) for agent-driven payments, <code>autofill</code> for direct credential autofill, <code>spt</code> for shared payment tokens.</p>
          */
         @JsonSetter(value = "type", nulls = Nulls.SKIP)
         public Builder type(Optional<EnrollmentType> type) {

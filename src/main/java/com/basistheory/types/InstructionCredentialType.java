@@ -5,16 +5,16 @@ package com.basistheory.types;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum EnrollmentType {
-    AGENTIC("agentic"),
+public enum InstructionCredentialType {
+    CARD("card"),
 
-    AUTOFILL("autofill"),
+    SPT("spt"),
 
-    SPT("spt");
+    MPP("mpp");
 
     private final String value;
 
-    EnrollmentType(String value) {
+    InstructionCredentialType(String value) {
         this.value = value;
     }
 

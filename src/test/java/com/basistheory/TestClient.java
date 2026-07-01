@@ -154,21 +154,41 @@ public final class TestClient {
     }
 
     @Test
-    public void shouldSupportPaginationOnListV2() {
+    public void shouldSupportPaginationOnListV2() throws InterruptedException {
         TokensClient tokensClient = new TokensClient(privateClientOptions());
-        int pageSize = 3;
-        SyncPagingIterable<Token> tokens = tokensClient.listV2(TokensListV2Request.builder()
-                .size(pageSize)
-                .build());
+        String cardNumber = "6011000990139424";
+        int pageSize = 1;
 
-        int count = 0;
-        for (Token token : tokens) {
-            count++;
-            if (count > pageSize) {
-                break;
+        List<String> seededTokenIds = new ArrayList<>();
+        try {
+            for (int i = 0; i <= pageSize; i++) {
+                seededTokenIds.add(createToken(tokensClient, cardNumber));
+            }
+
+            // The list endpoint is eventually consistent, so freshly created tokens are not
+            // immediately queryable. Retry until enough are visible to span more than one page.
+            int count = 0;
+            for (int attempt = 0; attempt < 10 && count <= pageSize; attempt++) {
+                if (attempt > 0) {
+                    Thread.sleep(1000);
+                }
+                SyncPagingIterable<Token> tokens = tokensClient.listV2(TokensListV2Request.builder()
+                        .size(pageSize)
+                        .build());
+                count = 0;
+                for (Token token : tokens) {
+                    count++;
+                    if (count > pageSize) {
+                        break;
+                    }
+                }
+            }
+            assertTrue(count > pageSize, "Expected pagination to span more than one page of size " + pageSize);
+        } finally {
+            for (String tokenId : seededTokenIds) {
+                deleteQuietly("token", tokenId, tokensClient::delete);
             }
         }
-        assertTrue(count > pageSize);
     }
 
     @Test
@@ -204,10 +224,11 @@ public final class TestClient {
              client.create(GooglePayCreateRequest.builder().googlePaymentData(googlePayToken).build());
              fail("Should have thrown exception");
          } catch (UnprocessableEntityError e) {
-             assertTrue(true);
-             assertTrue(e.body().getDetail()
-                     .orElseThrow(() -> new RuntimeException("No detail in error"))
-                     .contains("Failed to decrypt Google payment request"), "Expected exception body to contain \"expired intermediateSigningKey\"; Actual: " + e.body().getDetail().get());
+             String detail = e.body().getDetail()
+                     .orElseThrow(() -> new RuntimeException("No detail in error"));
+             assertTrue(
+                     detail.contains("Failed to process the Google Pay token"),
+                     "Expected exception body to contain \"Failed to process the Google Pay token\"; Actual: " + detail);
          }
      }
 

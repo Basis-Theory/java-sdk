@@ -22,14 +22,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = GetCredentialsRequest.Builder.class)
 public final class GetCredentialsRequest {
     private final Optional<List<Product>> products;
 
-    private final AgenticMerchant merchant;
+    private final Optional<AgenticMerchant> merchant;
 
     private final Optional<Amount> amount;
 
@@ -41,7 +40,7 @@ public final class GetCredentialsRequest {
 
     private GetCredentialsRequest(
             Optional<List<Product>> products,
-            AgenticMerchant merchant,
+            Optional<AgenticMerchant> merchant,
             Optional<Amount> amount,
             Optional<DeliveryMethod> deliveryMethod,
             Optional<ShippingAddress> shippingAddress,
@@ -59,8 +58,12 @@ public final class GetCredentialsRequest {
         return products;
     }
 
+    /**
+     * @return Required for card (Visa/Mastercard) instructions unless provided at instruction
+     * creation. Not used for <code>spt</code> instructions.
+     */
     @JsonProperty("merchant")
-    public AgenticMerchant getMerchant() {
+    public Optional<AgenticMerchant> getMerchant() {
         return merchant;
     }
 
@@ -108,58 +111,27 @@ public final class GetCredentialsRequest {
         return ObjectMappers.stringify(this);
     }
 
-    public static MerchantStage builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public interface MerchantStage {
-        _FinalStage merchant(@NotNull AgenticMerchant merchant);
-
-        Builder from(GetCredentialsRequest other);
-    }
-
-    public interface _FinalStage {
-        GetCredentialsRequest build();
-
-        _FinalStage additionalProperty(String key, Object value);
-
-        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
-
-        _FinalStage products(Optional<List<Product>> products);
-
-        _FinalStage products(List<Product> products);
-
-        _FinalStage amount(Optional<Amount> amount);
-
-        _FinalStage amount(Amount amount);
-
-        _FinalStage deliveryMethod(Optional<DeliveryMethod> deliveryMethod);
-
-        _FinalStage deliveryMethod(DeliveryMethod deliveryMethod);
-
-        _FinalStage shippingAddress(Optional<ShippingAddress> shippingAddress);
-
-        _FinalStage shippingAddress(ShippingAddress shippingAddress);
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements MerchantStage, _FinalStage {
-        private AgenticMerchant merchant;
+    public static final class Builder {
+        private Optional<List<Product>> products = Optional.empty();
 
-        private Optional<ShippingAddress> shippingAddress = Optional.empty();
-
-        private Optional<DeliveryMethod> deliveryMethod = Optional.empty();
+        private Optional<AgenticMerchant> merchant = Optional.empty();
 
         private Optional<Amount> amount = Optional.empty();
 
-        private Optional<List<Product>> products = Optional.empty();
+        private Optional<DeliveryMethod> deliveryMethod = Optional.empty();
+
+        private Optional<ShippingAddress> shippingAddress = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        @java.lang.Override
         public Builder from(GetCredentialsRequest other) {
             products(other.getProducts());
             merchant(other.getMerchant());
@@ -169,78 +141,75 @@ public final class GetCredentialsRequest {
             return this;
         }
 
-        @java.lang.Override
-        @JsonSetter("merchant")
-        public _FinalStage merchant(@NotNull AgenticMerchant merchant) {
-            this.merchant = Objects.requireNonNull(merchant, "merchant must not be null");
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage shippingAddress(ShippingAddress shippingAddress) {
-            this.shippingAddress = Optional.ofNullable(shippingAddress);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "shipping_address", nulls = Nulls.SKIP)
-        public _FinalStage shippingAddress(Optional<ShippingAddress> shippingAddress) {
-            this.shippingAddress = shippingAddress;
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage deliveryMethod(DeliveryMethod deliveryMethod) {
-            this.deliveryMethod = Optional.ofNullable(deliveryMethod);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "delivery_method", nulls = Nulls.SKIP)
-        public _FinalStage deliveryMethod(Optional<DeliveryMethod> deliveryMethod) {
-            this.deliveryMethod = deliveryMethod;
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage amount(Amount amount) {
-            this.amount = Optional.ofNullable(amount);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "amount", nulls = Nulls.SKIP)
-        public _FinalStage amount(Optional<Amount> amount) {
-            this.amount = amount;
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage products(List<Product> products) {
-            this.products = Optional.ofNullable(products);
-            return this;
-        }
-
-        @java.lang.Override
         @JsonSetter(value = "products", nulls = Nulls.SKIP)
-        public _FinalStage products(Optional<List<Product>> products) {
+        public Builder products(Optional<List<Product>> products) {
             this.products = products;
             return this;
         }
 
-        @java.lang.Override
+        public Builder products(List<Product> products) {
+            this.products = Optional.ofNullable(products);
+            return this;
+        }
+
+        /**
+         * <p>Required for card (Visa/Mastercard) instructions unless provided at instruction
+         * creation. Not used for <code>spt</code> instructions.</p>
+         */
+        @JsonSetter(value = "merchant", nulls = Nulls.SKIP)
+        public Builder merchant(Optional<AgenticMerchant> merchant) {
+            this.merchant = merchant;
+            return this;
+        }
+
+        public Builder merchant(AgenticMerchant merchant) {
+            this.merchant = Optional.ofNullable(merchant);
+            return this;
+        }
+
+        @JsonSetter(value = "amount", nulls = Nulls.SKIP)
+        public Builder amount(Optional<Amount> amount) {
+            this.amount = amount;
+            return this;
+        }
+
+        public Builder amount(Amount amount) {
+            this.amount = Optional.ofNullable(amount);
+            return this;
+        }
+
+        @JsonSetter(value = "delivery_method", nulls = Nulls.SKIP)
+        public Builder deliveryMethod(Optional<DeliveryMethod> deliveryMethod) {
+            this.deliveryMethod = deliveryMethod;
+            return this;
+        }
+
+        public Builder deliveryMethod(DeliveryMethod deliveryMethod) {
+            this.deliveryMethod = Optional.ofNullable(deliveryMethod);
+            return this;
+        }
+
+        @JsonSetter(value = "shipping_address", nulls = Nulls.SKIP)
+        public Builder shippingAddress(Optional<ShippingAddress> shippingAddress) {
+            this.shippingAddress = shippingAddress;
+            return this;
+        }
+
+        public Builder shippingAddress(ShippingAddress shippingAddress) {
+            this.shippingAddress = Optional.ofNullable(shippingAddress);
+            return this;
+        }
+
         public GetCredentialsRequest build() {
             return new GetCredentialsRequest(
                     products, merchant, amount, deliveryMethod, shippingAddress, additionalProperties);
         }
 
-        @java.lang.Override
         public Builder additionalProperty(String key, Object value) {
             this.additionalProperties.put(key, value);
             return this;
         }
 
-        @java.lang.Override
         public Builder additionalProperties(Map<String, Object> additionalProperties) {
             this.additionalProperties.putAll(additionalProperties);
             return this;

@@ -29,6 +29,20 @@ public class AsyncCredentialsClient {
     /**
      * Retrieve payment credentials (card number, expiration, CVC) for a purchase instruction.
      */
+    public CompletableFuture<Credentials> create(String agentId, String instructionId) {
+        return this.rawClient.create(agentId, instructionId).thenApply(response -> response.body());
+    }
+
+    /**
+     * Retrieve payment credentials (card number, expiration, CVC) for a purchase instruction.
+     */
+    public CompletableFuture<Credentials> create(String agentId, String instructionId, RequestOptions requestOptions) {
+        return this.rawClient.create(agentId, instructionId, requestOptions).thenApply(response -> response.body());
+    }
+
+    /**
+     * Retrieve payment credentials (card number, expiration, CVC) for a purchase instruction.
+     */
     public CompletableFuture<Credentials> create(String agentId, String instructionId, GetCredentialsRequest request) {
         return this.rawClient.create(agentId, instructionId, request).thenApply(response -> response.body());
     }

@@ -23,15 +23,23 @@ import java.util.Optional;
 public final class Credentials {
     private final Optional<CredentialsCard> card;
 
+    private final Optional<CredentialsSpt> spt;
+
+    private final Optional<CredentialsMpp> mpp;
+
     private final Optional<OffsetDateTime> expiresAt;
 
     private final Map<String, Object> additionalProperties;
 
     private Credentials(
             Optional<CredentialsCard> card,
+            Optional<CredentialsSpt> spt,
+            Optional<CredentialsMpp> mpp,
             Optional<OffsetDateTime> expiresAt,
             Map<String, Object> additionalProperties) {
         this.card = card;
+        this.spt = spt;
+        this.mpp = mpp;
         this.expiresAt = expiresAt;
         this.additionalProperties = additionalProperties;
     }
@@ -39,6 +47,22 @@ public final class Credentials {
     @JsonProperty("card")
     public Optional<CredentialsCard> getCard() {
         return card;
+    }
+
+    /**
+     * @return Stripe shared payment token (raw mode)
+     */
+    @JsonProperty("spt")
+    public Optional<CredentialsSpt> getSpt() {
+        return spt;
+    }
+
+    /**
+     * @return MPP credential (MPP mode)
+     */
+    @JsonProperty("mpp")
+    public Optional<CredentialsMpp> getMpp() {
+        return mpp;
     }
 
     @JsonProperty("expires_at")
@@ -58,12 +82,15 @@ public final class Credentials {
     }
 
     private boolean equalTo(Credentials other) {
-        return card.equals(other.card) && expiresAt.equals(other.expiresAt);
+        return card.equals(other.card)
+                && spt.equals(other.spt)
+                && mpp.equals(other.mpp)
+                && expiresAt.equals(other.expiresAt);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.card, this.expiresAt);
+        return Objects.hash(this.card, this.spt, this.mpp, this.expiresAt);
     }
 
     @java.lang.Override
@@ -79,6 +106,10 @@ public final class Credentials {
     public static final class Builder {
         private Optional<CredentialsCard> card = Optional.empty();
 
+        private Optional<CredentialsSpt> spt = Optional.empty();
+
+        private Optional<CredentialsMpp> mpp = Optional.empty();
+
         private Optional<OffsetDateTime> expiresAt = Optional.empty();
 
         @JsonAnySetter
@@ -88,6 +119,8 @@ public final class Credentials {
 
         public Builder from(Credentials other) {
             card(other.getCard());
+            spt(other.getSpt());
+            mpp(other.getMpp());
             expiresAt(other.getExpiresAt());
             return this;
         }
@@ -103,6 +136,34 @@ public final class Credentials {
             return this;
         }
 
+        /**
+         * <p>Stripe shared payment token (raw mode)</p>
+         */
+        @JsonSetter(value = "spt", nulls = Nulls.SKIP)
+        public Builder spt(Optional<CredentialsSpt> spt) {
+            this.spt = spt;
+            return this;
+        }
+
+        public Builder spt(CredentialsSpt spt) {
+            this.spt = Optional.ofNullable(spt);
+            return this;
+        }
+
+        /**
+         * <p>MPP credential (MPP mode)</p>
+         */
+        @JsonSetter(value = "mpp", nulls = Nulls.SKIP)
+        public Builder mpp(Optional<CredentialsMpp> mpp) {
+            this.mpp = mpp;
+            return this;
+        }
+
+        public Builder mpp(CredentialsMpp mpp) {
+            this.mpp = Optional.ofNullable(mpp);
+            return this;
+        }
+
         @JsonSetter(value = "expires_at", nulls = Nulls.SKIP)
         public Builder expiresAt(Optional<OffsetDateTime> expiresAt) {
             this.expiresAt = expiresAt;
@@ -115,7 +176,7 @@ public final class Credentials {
         }
 
         public Credentials build() {
-            return new Credentials(card, expiresAt, additionalProperties);
+            return new Credentials(card, spt, mpp, expiresAt, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

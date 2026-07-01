@@ -18,27 +18,29 @@ import java.util.Objects;
 import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = GooglePayTokenizeRequest.Builder.class)
-public final class GooglePayTokenizeRequest {
-    private final Optional<GooglePayMethodToken> googlePaymentMethodToken;
+@JsonDeserialize(builder = CredentialsMpp.Builder.class)
+public final class CredentialsMpp {
+    private final Optional<String> credential;
 
     private final Map<String, Object> additionalProperties;
 
-    private GooglePayTokenizeRequest(
-            Optional<GooglePayMethodToken> googlePaymentMethodToken, Map<String, Object> additionalProperties) {
-        this.googlePaymentMethodToken = googlePaymentMethodToken;
+    private CredentialsMpp(Optional<String> credential, Map<String, Object> additionalProperties) {
+        this.credential = credential;
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("google_payment_method_token")
-    public Optional<GooglePayMethodToken> getGooglePaymentMethodToken() {
-        return googlePaymentMethodToken;
+    /**
+     * @return base64url-encoded MPP credential for the merchant's Stripe charge endpoint
+     */
+    @JsonProperty("credential")
+    public Optional<String> getCredential() {
+        return credential;
     }
 
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof GooglePayTokenizeRequest && equalTo((GooglePayTokenizeRequest) other);
+        return other instanceof CredentialsMpp && equalTo((CredentialsMpp) other);
     }
 
     @JsonAnyGetter
@@ -46,13 +48,13 @@ public final class GooglePayTokenizeRequest {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(GooglePayTokenizeRequest other) {
-        return googlePaymentMethodToken.equals(other.googlePaymentMethodToken);
+    private boolean equalTo(CredentialsMpp other) {
+        return credential.equals(other.credential);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.googlePaymentMethodToken);
+        return Objects.hash(this.credential);
     }
 
     @java.lang.Override
@@ -66,31 +68,34 @@ public final class GooglePayTokenizeRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<GooglePayMethodToken> googlePaymentMethodToken = Optional.empty();
+        private Optional<String> credential = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        public Builder from(GooglePayTokenizeRequest other) {
-            googlePaymentMethodToken(other.getGooglePaymentMethodToken());
+        public Builder from(CredentialsMpp other) {
+            credential(other.getCredential());
             return this;
         }
 
-        @JsonSetter(value = "google_payment_method_token", nulls = Nulls.SKIP)
-        public Builder googlePaymentMethodToken(Optional<GooglePayMethodToken> googlePaymentMethodToken) {
-            this.googlePaymentMethodToken = googlePaymentMethodToken;
+        /**
+         * <p>base64url-encoded MPP credential for the merchant's Stripe charge endpoint</p>
+         */
+        @JsonSetter(value = "credential", nulls = Nulls.SKIP)
+        public Builder credential(Optional<String> credential) {
+            this.credential = credential;
             return this;
         }
 
-        public Builder googlePaymentMethodToken(GooglePayMethodToken googlePaymentMethodToken) {
-            this.googlePaymentMethodToken = Optional.ofNullable(googlePaymentMethodToken);
+        public Builder credential(String credential) {
+            this.credential = Optional.ofNullable(credential);
             return this;
         }
 
-        public GooglePayTokenizeRequest build() {
-            return new GooglePayTokenizeRequest(googlePaymentMethodToken, additionalProperties);
+        public CredentialsMpp build() {
+            return new CredentialsMpp(credential, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

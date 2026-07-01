@@ -29,6 +29,8 @@ public final class Instruction {
 
     private final Optional<InstructionType> type;
 
+    private final Optional<InstructionCredentialType> credentialType;
+
     private final Optional<Amount> amount;
 
     private final Optional<String> description;
@@ -46,6 +48,7 @@ public final class Instruction {
             Optional<String> enrollmentId,
             Optional<InstructionStatus> status,
             Optional<InstructionType> type,
+            Optional<InstructionCredentialType> credentialType,
             Optional<Amount> amount,
             Optional<String> description,
             Optional<OffsetDateTime> expiresAt,
@@ -56,6 +59,7 @@ public final class Instruction {
         this.enrollmentId = enrollmentId;
         this.status = status;
         this.type = type;
+        this.credentialType = credentialType;
         this.amount = amount;
         this.description = description;
         this.expiresAt = expiresAt;
@@ -82,11 +86,22 @@ public final class Instruction {
     /**
      * @return Inherited from the parent enrollment. <code>agentic</code> instructions require cardholder
      * verification before credentials can be retrieved; <code>autofill</code> instructions are
-     * auto-approved on creation and credentials can be retrieved immediately.
+     * auto-approved on creation and credentials can be retrieved immediately; <code>spt</code>
+     * instructions create a shared payment token that is approved on creation.
      */
     @JsonProperty("type")
     public Optional<InstructionType> getType() {
         return type;
+    }
+
+    /**
+     * @return Indicates the shape the credentials endpoint returns for this instruction:
+     * <code>card</code> (Visa/Mastercard virtual card credentials), <code>spt</code> (Stripe shared payment
+     * token ID), or <code>mpp</code> (MPP credential built from the challenge provided at creation).
+     */
+    @JsonProperty("credential_type")
+    public Optional<InstructionCredentialType> getCredentialType() {
+        return credentialType;
     }
 
     @JsonProperty("amount")
@@ -130,6 +145,7 @@ public final class Instruction {
                 && enrollmentId.equals(other.enrollmentId)
                 && status.equals(other.status)
                 && type.equals(other.type)
+                && credentialType.equals(other.credentialType)
                 && amount.equals(other.amount)
                 && description.equals(other.description)
                 && expiresAt.equals(other.expiresAt)
@@ -144,6 +160,7 @@ public final class Instruction {
                 this.enrollmentId,
                 this.status,
                 this.type,
+                this.credentialType,
                 this.amount,
                 this.description,
                 this.expiresAt,
@@ -170,6 +187,8 @@ public final class Instruction {
 
         private Optional<InstructionType> type = Optional.empty();
 
+        private Optional<InstructionCredentialType> credentialType = Optional.empty();
+
         private Optional<Amount> amount = Optional.empty();
 
         private Optional<String> description = Optional.empty();
@@ -190,6 +209,7 @@ public final class Instruction {
             enrollmentId(other.getEnrollmentId());
             status(other.getStatus());
             type(other.getType());
+            credentialType(other.getCredentialType());
             amount(other.getAmount());
             description(other.getDescription());
             expiresAt(other.getExpiresAt());
@@ -234,7 +254,8 @@ public final class Instruction {
         /**
          * <p>Inherited from the parent enrollment. <code>agentic</code> instructions require cardholder
          * verification before credentials can be retrieved; <code>autofill</code> instructions are
-         * auto-approved on creation and credentials can be retrieved immediately.</p>
+         * auto-approved on creation and credentials can be retrieved immediately; <code>spt</code>
+         * instructions create a shared payment token that is approved on creation.</p>
          */
         @JsonSetter(value = "type", nulls = Nulls.SKIP)
         public Builder type(Optional<InstructionType> type) {
@@ -244,6 +265,22 @@ public final class Instruction {
 
         public Builder type(InstructionType type) {
             this.type = Optional.ofNullable(type);
+            return this;
+        }
+
+        /**
+         * <p>Indicates the shape the credentials endpoint returns for this instruction:
+         * <code>card</code> (Visa/Mastercard virtual card credentials), <code>spt</code> (Stripe shared payment
+         * token ID), or <code>mpp</code> (MPP credential built from the challenge provided at creation).</p>
+         */
+        @JsonSetter(value = "credential_type", nulls = Nulls.SKIP)
+        public Builder credentialType(Optional<InstructionCredentialType> credentialType) {
+            this.credentialType = credentialType;
+            return this;
+        }
+
+        public Builder credentialType(InstructionCredentialType credentialType) {
+            this.credentialType = Optional.ofNullable(credentialType);
             return this;
         }
 
@@ -308,6 +345,7 @@ public final class Instruction {
                     enrollmentId,
                     status,
                     type,
+                    credentialType,
                     amount,
                     description,
                     expiresAt,
