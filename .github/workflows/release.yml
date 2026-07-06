@@ -72,6 +72,8 @@ jobs:
           java-version: "11"
           architecture: x64
 
+      # GH Packages publish uses the native GITHUB_TOKEN (packages: write), not an
+      # app token — the app token is only for checkout + the changelog write-back.
       - name: Publish to GH Packages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
