@@ -1,3 +1,11 @@
+### [7.0.2](https://github.com/Basis-Theory/java-sdk/compare/7.0.1...7.0.2) (2026-07-06)
+
+
+### Bug Fixes
+
+* **ENG-11425:** note GH Packages publish uses native GITHUB_TOKEN ([#134](https://github.com/Basis-Theory/java-sdk/issues/134)) ([478e8da](https://github.com/Basis-Theory/java-sdk/commit/478e8daa52381dde37167b349c7a2f8dfe36282a))
+
+
 ## [7.0.0](https://github.com/Basis-Theory/java-sdk/compare/6.1.0...7.0.0) (2026-06-05)
 
 
