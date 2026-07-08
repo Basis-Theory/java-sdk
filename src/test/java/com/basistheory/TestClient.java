@@ -3,6 +3,9 @@
  */
 package com.basistheory;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.basistheory.core.ClientOptions;
 import com.basistheory.core.Environment;
 import com.basistheory.core.IdempotentRequestOptions;
@@ -31,9 +34,6 @@ import com.basistheory.resources.webhooks.requests.CreateWebhookRequest;
 import com.basistheory.resources.webhooks.requests.UpdateWebhookRequest;
 import com.basistheory.types.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.Test;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileWriter;
@@ -41,9 +41,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.Test;
 
 public final class TestClient {
     @Test
@@ -89,15 +88,15 @@ public final class TestClient {
                     .name("(Deletable) java-SDK-" + UUID.randomUUID())
                     .code("module.exports = function (req) {return {raw: req.args}}")
                     .application(Application.builder().id(applicationId).build())
-                    .build()
-            );
+                    .build());
             reactorId = reactor.getId().get();
-            reactorsManagementClient.patch(reactorId, PatchReactorRequest.builder()
-                    .name("(Deletable) java-SDK-" + UUID.randomUUID())
-                    .code("module.exports = function (req) {return {raw: req.args}}")
-                    .application(Application.builder().id(applicationId).build())
-                    .build()
-            );
+            reactorsManagementClient.patch(
+                    reactorId,
+                    PatchReactorRequest.builder()
+                            .name("(Deletable) java-SDK-" + UUID.randomUUID())
+                            .code("module.exports = function (req) {return {raw: req.args}}")
+                            .application(Application.builder().id(applicationId).build())
+                            .build());
             react(new ReactorsClient(privateClientOptions()), reactorId);
 
             tokensClient.delete(tokenId);
@@ -143,12 +142,16 @@ public final class TestClient {
         String firstTokenId = createToken(
                 tokensClient,
                 cardNumber,
-                IdempotentRequestOptions.builder().idempotencyKey(idempotencyKey).build());
+                IdempotentRequestOptions.builder()
+                        .idempotencyKey(idempotencyKey)
+                        .build());
 
         String secondTokenId = createToken(
                 tokensClient,
                 cardNumber,
-                IdempotentRequestOptions.builder().idempotencyKey(idempotencyKey).build());
+                IdempotentRequestOptions.builder()
+                        .idempotencyKey(idempotencyKey)
+                        .build());
 
         assertEquals(firstTokenId, secondTokenId);
     }
@@ -172,9 +175,8 @@ public final class TestClient {
                 if (attempt > 0) {
                     Thread.sleep(1000);
                 }
-                SyncPagingIterable<Token> tokens = tokensClient.listV2(TokensListV2Request.builder()
-                        .size(pageSize)
-                        .build());
+                SyncPagingIterable<Token> tokens = tokensClient.listV2(
+                        TokensListV2Request.builder().size(pageSize).build());
                 count = 0;
                 for (Token token : tokens) {
                     count++;
@@ -198,39 +200,44 @@ public final class TestClient {
         String webhookId = createWebhook(webhooksClient, url);
         getAndAssertWebhookUrl(webhooksClient, webhookId, url);
 
-        Thread.sleep(2000); // Required to avoid error `The webhook subscription is undergoing another concurrent operation. Please wait a few seconds, then try again.`
+        Thread.sleep(
+                2000); // Required to avoid error `The webhook subscription is undergoing another concurrent operation.
+        // Please wait a few seconds, then try again.`
 
         String updatedUrl = "https://fern-test.com/" + UUID.randomUUID();
         updateWebhook(webhooksClient, webhookId, updatedUrl);
         getAndAssertWebhookUrl(webhooksClient, webhookId, updatedUrl);
 
-        Thread.sleep(2000); // Required to avoid error `The webhook subscription is undergoing another concurrent operation. Please wait a few seconds, then try again.`
+        Thread.sleep(
+                2000); // Required to avoid error `The webhook subscription is undergoing another concurrent operation.
+        // Please wait a few seconds, then try again.`
 
         webhooksClient.delete(webhookId);
 
         // This currently does not work due to webhook sending an empty body in 404;
         // Issue eng-7345
-//        ensureWebhookIsRemoved(webhooksClient, webhookId);
+        //        ensureWebhookIsRemoved(webhooksClient, webhookId);
     }
 
-     @Test
-     public void shouldSupportGooglePay() throws JsonProcessingException {
-         GooglePayClient client = new GooglePayClient(privateTestTenantClientOptions());
-         GooglePayMethodToken googlePayToken = ObjectMappers.JSON_MAPPER.readValue(
-             "{\"signature\":\"MEQCIBnz8wKrUi3qrLSn6KSrTcNIo6YcOzrfre7X49S27MrKAiBMF70q7EHe0Bw8uva77pclggSiPMRTFRFl7TZILyACOQ\\u003d\\u003d\",\"intermediateSigningKey\":{\"signedKey\":\"{\\\"keyValue\\\":\\\"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEnK9rrDl5FJalSwcoZD3qB5EYcA/sYVTH2Nbh6y/EZArFvvBRQA1eI3BIv1iZeCkBLd/A2nU1ve7xENoPOfp7+Q\\\\u003d\\\\u003d\\\",\\\"keyExpiration\\\":\\\"1737724267469\\\"}\",\"signatures\":[\"MEQCIHugFzQtVBVNizwkMhG/POcZAmRRXyeiZpt3aFwBzt5cAiBSOY4pfT4tQGWzZjkldbYkpBwWGpSasxRmlt7XPNOaLQ\\u003d\\u003d\"]},\"protocolVersion\":\"ECv2\",\"signedMessage\":\"{\\\"encryptedMessage\\\":\\\"XURDnvPAIhAKT9rARBV9RT0/yVTesT/w0UniXCJflwu2TkE54UnP7ZmWBo0gKjTJIU3j8D1Rntw2Ywr2UDLbZor+UoeZltzZOAv6iAR4MfvCLSzlh3HcjechwqZM8oxSF2iZoD2XrNqOgaYbOY1EaYoLx1JpftZDuTqSDLYa+szsoPjAUgzBO5TJZTDIa3zDNAdK3UtAPwutL1M4pTyuFhUKOC12J3RzZdaGFANbKSc8vdfqnR1hqsvsEt1sWPf2O3yty91klSA7FDckvwlKfRoNyQMDhaDkEvYUi75uxcjCRHE0Jjbj61bZriSTXiG2KWNF2OKpz7l61kgPJxCpK7A7TV3P4pBLwW7DYbRusO6FupLehxOZl9nBpVfApytCZGjaSXT7QfPpxdBv8j2VfKsodOf/dwv2Thrra9a6ZzFWsUz4l7Jbr4MCBLhXH4lSuxKrlA2Rf/CVPTgz8b88cYpEDZyqLJxDstwy74/Nl7Mjc4V7thzmdskAeYSuZXKXyyeo3BHqkguRkeagEwuHiZoem2V4W2qWOF8hYn14KY3cXXNcVA\\\\u003d\\\\u003d\\\",\\\"ephemeralPublicKey\\\":\\\"BHBDKlM3tik4o9leEkHu+875bHbORaCK7dDeXFCRmv4bzWJw/4bsvtBtaBH3SW5JXkE/6pkRYAtjFzQmHMRQYvc\\\\u003d\\\",\\\"tag\\\":\\\"Hle3Oafx5sfUc3U3sCQgV0tRPhCAvPlVLYiqvbPyTYY\\\\u003d\\\"}\"}",
-                 GooglePayMethodToken.class);
+    @Test
+    public void shouldSupportGooglePay() throws JsonProcessingException {
+        GooglePayClient client = new GooglePayClient(privateTestTenantClientOptions());
+        GooglePayMethodToken googlePayToken = ObjectMappers.JSON_MAPPER.readValue(
+                "{\"signature\":\"MEQCIBnz8wKrUi3qrLSn6KSrTcNIo6YcOzrfre7X49S27MrKAiBMF70q7EHe0Bw8uva77pclggSiPMRTFRFl7TZILyACOQ\\u003d\\u003d\",\"intermediateSigningKey\":{\"signedKey\":\"{\\\"keyValue\\\":\\\"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEnK9rrDl5FJalSwcoZD3qB5EYcA/sYVTH2Nbh6y/EZArFvvBRQA1eI3BIv1iZeCkBLd/A2nU1ve7xENoPOfp7+Q\\\\u003d\\\\u003d\\\",\\\"keyExpiration\\\":\\\"1737724267469\\\"}\",\"signatures\":[\"MEQCIHugFzQtVBVNizwkMhG/POcZAmRRXyeiZpt3aFwBzt5cAiBSOY4pfT4tQGWzZjkldbYkpBwWGpSasxRmlt7XPNOaLQ\\u003d\\u003d\"]},\"protocolVersion\":\"ECv2\",\"signedMessage\":\"{\\\"encryptedMessage\\\":\\\"XURDnvPAIhAKT9rARBV9RT0/yVTesT/w0UniXCJflwu2TkE54UnP7ZmWBo0gKjTJIU3j8D1Rntw2Ywr2UDLbZor+UoeZltzZOAv6iAR4MfvCLSzlh3HcjechwqZM8oxSF2iZoD2XrNqOgaYbOY1EaYoLx1JpftZDuTqSDLYa+szsoPjAUgzBO5TJZTDIa3zDNAdK3UtAPwutL1M4pTyuFhUKOC12J3RzZdaGFANbKSc8vdfqnR1hqsvsEt1sWPf2O3yty91klSA7FDckvwlKfRoNyQMDhaDkEvYUi75uxcjCRHE0Jjbj61bZriSTXiG2KWNF2OKpz7l61kgPJxCpK7A7TV3P4pBLwW7DYbRusO6FupLehxOZl9nBpVfApytCZGjaSXT7QfPpxdBv8j2VfKsodOf/dwv2Thrra9a6ZzFWsUz4l7Jbr4MCBLhXH4lSuxKrlA2Rf/CVPTgz8b88cYpEDZyqLJxDstwy74/Nl7Mjc4V7thzmdskAeYSuZXKXyyeo3BHqkguRkeagEwuHiZoem2V4W2qWOF8hYn14KY3cXXNcVA\\\\u003d\\\\u003d\\\",\\\"ephemeralPublicKey\\\":\\\"BHBDKlM3tik4o9leEkHu+875bHbORaCK7dDeXFCRmv4bzWJw/4bsvtBtaBH3SW5JXkE/6pkRYAtjFzQmHMRQYvc\\\\u003d\\\",\\\"tag\\\":\\\"Hle3Oafx5sfUc3U3sCQgV0tRPhCAvPlVLYiqvbPyTYY\\\\u003d\\\"}\"}",
+                GooglePayMethodToken.class);
 
-         try {
-             client.create(GooglePayCreateRequest.builder().googlePaymentData(googlePayToken).build());
-             fail("Should have thrown exception");
-         } catch (UnprocessableEntityError e) {
-             String detail = e.body().getDetail()
-                     .orElseThrow(() -> new RuntimeException("No detail in error"));
-             assertTrue(
-                     detail.contains("Failed to process the Google Pay token"),
-                     "Expected exception body to contain \"Failed to process the Google Pay token\"; Actual: " + detail);
-         }
-     }
+        try {
+            client.create(GooglePayCreateRequest.builder()
+                    .googlePaymentData(googlePayToken)
+                    .build());
+            fail("Should have thrown exception");
+        } catch (UnprocessableEntityError e) {
+            String detail = e.body().getDetail().orElseThrow(() -> new RuntimeException("No detail in error"));
+            assertTrue(
+                    detail.contains("Failed to process the Google Pay token"),
+                    "Expected exception body to contain \"Failed to process the Google Pay token\"; Actual: " + detail);
+        }
+    }
 
     @Test
     public void shouldSupportKeysLifecycle() {
@@ -242,14 +249,16 @@ public final class TestClient {
             String keyId = createdKey.getKeyId().get();
             assertTrue(createdKey.getPublicKeyPem().isPresent(), "Key value should not be null");
 
-            ClientEncryptionKeyMetadataResponse retrievedKey = keysClient.get(keyId).join();
+            ClientEncryptionKeyMetadataResponse retrievedKey =
+                    keysClient.get(keyId).join();
             assertTrue(retrievedKey.getKeyId().isPresent(), "Retrieved key ID should be present");
             assertEquals(keyId, retrievedKey.getKeyId().get(), "Retrieved key ID should match created key ID");
             assertTrue(retrievedKey.getExpiresAt().isPresent(), "Created at timestamp should not be null");
 
             List<ClientEncryptionKeyMetadataResponse> keys = keysClient.list().join();
-            assertTrue(keys.stream().anyMatch(k -> k.getKeyId().get().equals(keyId)), 
-                "Created key should be in the list of keys");
+            assertTrue(
+                    keys.stream().anyMatch(k -> k.getKeyId().get().equals(keyId)),
+                    "Created key should be in the list of keys");
 
             keysClient.delete(keyId).join();
 
@@ -277,8 +286,8 @@ public final class TestClient {
         Map<String, Optional<String>> metadata = new HashMap<>();
         metadata.put("attribute 1", Optional.of("value 1"));
         DocumentsUploadRequest request = DocumentsUploadRequest.builder()
-                .request(CreateDocumentRequest.builder()
-                        .metadata(metadata).build()).build();
+                .request(CreateDocumentRequest.builder().metadata(metadata).build())
+                .build();
         Document uploaded = client.documents().upload(Optional.of(tempFile), request);
 
         // GET info
@@ -340,32 +349,41 @@ public final class TestClient {
 
     @NotNull
     private static String createToken(TokensClient tokensClient, String cardNumber) {
-        IdempotentRequestOptions requestOptions = IdempotentRequestOptions.builder().build();
+        IdempotentRequestOptions requestOptions =
+                IdempotentRequestOptions.builder().build();
         return createToken(tokensClient, cardNumber, requestOptions);
     }
 
     @NotNull
-    private static String createToken(TokensClient tokensClient, String cardNumber, IdempotentRequestOptions requestOptions) {
-        Token token = tokensClient.create(CreateTokenRequest.builder()
-                .data(new HashMap<String, Object>() {{
-                    put("number", cardNumber);
-                    put("expiration_month", 4);
-                    put("expiration_year", 2025);
-                    put("cvc", 123);
-                }})
-                .type("card")
-                .metadata(new HashMap<String, Optional<String>>() {{
-                    put("customer_id", Optional.of("3181"));
-                }})
-                .searchIndexes(Arrays.asList("{{ data.expiration_month }}", "{{ data.number | last4 }}"))
-                .fingerprintExpression("{{ data.number }}")
-                .mask(new HashMap<String, Object>() {{
-                    put("number", "{{ data.number, reveal_last: 4 }}");
-                    put("cvc", "{{ data.cvc }}");
-                }})
-                .deduplicateToken(false)
-                .containers(Arrays.asList("/pci/high/"))
-                .build(),
+    private static String createToken(
+            TokensClient tokensClient, String cardNumber, IdempotentRequestOptions requestOptions) {
+        Token token = tokensClient.create(
+                CreateTokenRequest.builder()
+                        .data(new HashMap<String, Object>() {
+                            {
+                                put("number", cardNumber);
+                                put("expiration_month", 4);
+                                put("expiration_year", 2025);
+                                put("cvc", 123);
+                            }
+                        })
+                        .type("card")
+                        .metadata(new HashMap<String, Optional<String>>() {
+                            {
+                                put("customer_id", Optional.of("3181"));
+                            }
+                        })
+                        .searchIndexes(Arrays.asList("{{ data.expiration_month }}", "{{ data.number | last4 }}"))
+                        .fingerprintExpression("{{ data.number }}")
+                        .mask(new HashMap<String, Object>() {
+                            {
+                                put("number", "{{ data.number, reveal_last: 4 }}");
+                                put("cvc", "{{ data.cvc }}");
+                            }
+                        })
+                        .deduplicateToken(false)
+                        .containers(Arrays.asList("/pci/high/"))
+                        .build(),
                 requestOptions);
         String tokenId = token.getId().get();
         assertNotNull(tokenId);
@@ -373,21 +391,25 @@ public final class TestClient {
     }
 
     private static void updateToken(TokensClient tokensClient, String tokenId, String updateCardNumber) {
-        tokensClient.update(tokenId, UpdateTokenRequest.builder()
-                .data(new HashMap<String, Object>() {{
-                    put("number", updateCardNumber);
-                }})
-                .build());
+        tokensClient.update(
+                tokenId,
+                UpdateTokenRequest.builder()
+                        .data(new HashMap<String, Object>() {
+                            {
+                                put("number", updateCardNumber);
+                            }
+                        })
+                        .build());
     }
 
     private static void getAndValidateCardNumber(TokensClient tokensClient, String tokenId, String cardNumber) {
         Token token = tokensClient.get(tokenId);
-        assertEquals(cardNumber, ((Map)token.getData().get()).get("number"));
+        assertEquals(cardNumber, ((Map) token.getData().get()).get("number"));
     }
 
     @NotNull
     private static String createApplication(ApplicationsClient applicationsClient) {
-        Application application =  applicationsClient.create(CreateApplicationRequest.builder()
+        Application application = applicationsClient.create(CreateApplicationRequest.builder()
                 .name("(Deletable) java-SDK-" + UUID.randomUUID())
                 .type("private")
                 .permissions(Collections.singletonList("token:use"))
@@ -401,30 +423,32 @@ public final class TestClient {
                 .name("(Deletable) java-SDK-" + UUID.randomUUID())
                 .destinationUrl("https://echo.basistheory.com/" + UUID.randomUUID())
                 .application(Application.builder().id(applicationId).build())
-                .build()
-        );
+                .build());
         return proxy;
     }
 
     private static void patchProxy(ProxiesClient proxyClient, String applicationId, String proxyId) {
-        proxyClient.patch(proxyId, PatchProxyRequest.builder()
-                .name("(Deletable) java-SDK-" + UUID.randomUUID())
-                .destinationUrl("https://echo.basistheory.com/" + UUID.randomUUID())
-                .application(Application.builder().id(applicationId).build())
-                .build()
-        );
+        proxyClient.patch(
+                proxyId,
+                PatchProxyRequest.builder()
+                        .name("(Deletable) java-SDK-" + UUID.randomUUID())
+                        .destinationUrl("https://echo.basistheory.com/" + UUID.randomUUID())
+                        .application(Application.builder().id(applicationId).build())
+                        .build());
     }
 
     private static void react(ReactorsClient reactorsClient, String reactorId) {
-        HashMap<String, Object> expected = new HashMap<String, Object>() {{
-            put("Key1", "Key1-" + UUID.randomUUID());
-            put("Key2", "Key2-" + UUID.randomUUID());
-        }};
+        HashMap<String, Object> expected = new HashMap<String, Object>() {
+            {
+                put("Key1", "Key1-" + UUID.randomUUID());
+                put("Key2", "Key2-" + UUID.randomUUID());
+            }
+        };
         Map<String, Object> request = new HashMap<>();
         request.put("args", expected);
         ReactResponse react = reactorsClient.react(reactorId, request);
-        assertEquals(expected.get("Key1"), ((Map)react.getRaw().get()).get("Key1"));
-        assertEquals(expected.get("Key2"), ((Map)react.getRaw().get()).get("Key2"));
+        assertEquals(expected.get("Key1"), ((Map) react.getRaw().get()).get("Key1"));
+        assertEquals(expected.get("Key2"), ((Map) react.getRaw().get()).get("Key2"));
     }
 
     private static String createWebhook(WebhooksClient webhooksClient, String url) {
@@ -432,8 +456,7 @@ public final class TestClient {
                 .name("(Deletable) java-SDK-" + UUID.randomUUID())
                 .url(url)
                 .addEvents("token.created")
-                .build()
-        );
+                .build());
         String webhookId = webhook.getId();
         return webhookId;
     }
@@ -444,13 +467,14 @@ public final class TestClient {
     }
 
     private static void updateWebhook(WebhooksClient webhooksClient, String webhookId, String url) {
-        webhooksClient.update(webhookId, UpdateWebhookRequest.builder()
-                .name("(Deletable) java-SDK-" + UUID.randomUUID())
-                .url(url)
-                .addEvents("token.created")
-                .addEvents("token.updated")
-                .build()
-        );
+        webhooksClient.update(
+                webhookId,
+                UpdateWebhookRequest.builder()
+                        .name("(Deletable) java-SDK-" + UUID.randomUUID())
+                        .url(url)
+                        .addEvents("token.created")
+                        .addEvents("token.updated")
+                        .build());
     }
 
     private static void ensureWebhookIsRemoved(WebhooksClient webhooksClient, String webhookId) {
@@ -461,5 +485,4 @@ public final class TestClient {
             assertTrue(true);
         }
     }
-
 }

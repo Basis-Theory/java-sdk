@@ -2,6 +2,7 @@ package com.basistheory;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.basistheory.core.pagination.SyncPagingIterable;
 import com.basistheory.errors.NotFoundError;
 import com.basistheory.resources.agentic.agents.instructions.credentials.requests.GetCredentialsRequest;
 import com.basistheory.resources.agentic.agents.instructions.requests.CreateInstructionRequest;
@@ -9,7 +10,6 @@ import com.basistheory.resources.agentic.agents.instructions.requests.Instructio
 import com.basistheory.resources.agentic.agents.instructions.requests.UpdateInstructionRequest;
 import com.basistheory.resources.agentic.agents.requests.CreateAgentRequest;
 import com.basistheory.resources.agentic.agents.requests.UpdateAgentRequest;
-import com.basistheory.core.pagination.SyncPagingIterable;
 import com.basistheory.resources.agentic.enrollments.requests.CreateEnrollmentRequest;
 import com.basistheory.resources.agentic.enrollments.verify.requests.SelectMethodRequest;
 import com.basistheory.resources.agentic.enrollments.verify.requests.SubmitOtpRequest;
@@ -30,8 +30,8 @@ public class AgenticTests {
 
     private BasisTheoryApiClient getClient() {
         String apiUrl = System.getenv("BT_API_URL");
-        BasisTheoryApiClientBuilder builder = BasisTheoryApiClient.builder()
-                .apiKey(System.getenv("BT_PVT_TEST_API_KEY"));
+        BasisTheoryApiClientBuilder builder =
+                BasisTheoryApiClient.builder().apiKey(System.getenv("BT_PVT_TEST_API_KEY"));
         if (apiUrl != null && !apiUrl.isEmpty()) {
             builder.url(apiUrl);
         }
@@ -45,10 +45,8 @@ public class AgenticTests {
         data.put("expiration_year", 2030);
         data.put("cvc", 123);
 
-        Token token = client.tokens().create(CreateTokenRequest.builder()
-                .type("card")
-                .data(data)
-                .build());
+        Token token = client.tokens()
+                .create(CreateTokenRequest.builder().type("card").data(data).build());
         assertTrue(token.getId().isPresent());
         return token.getId().get();
     }
@@ -120,10 +118,7 @@ public class AgenticTests {
                             enrollment.getId().get(),
                             SubmitOtpRequest.builder().otpCode("123456").build());
 
-            client.agentic()
-                    .enrollments()
-                    .verify()
-                    .complete(enrollment.getId().get());
+            client.agentic().enrollments().verify().complete(enrollment.getId().get());
         }
 
         return client.agentic().enrollments().get(enrollment.getId().get());
@@ -173,8 +168,9 @@ public class AgenticTests {
         client.agentic().agents().delete(agent.getId().get());
 
         // Verify deleted
-        assertThrows(NotFoundError.class, () ->
-                client.agentic().agents().get(agent.getId().get()));
+        assertThrows(
+                NotFoundError.class,
+                () -> client.agentic().agents().get(agent.getId().get()));
     }
 
     // ========== Enrollments Tests ==========
@@ -201,19 +197,17 @@ public class AgenticTests {
         assertTrue(card.getExpirationYear().isPresent());
 
         // Get enrollment and verify all fields match
-        Enrollment retrieved = client.agentic().enrollments().get(enrollment.getId().get());
+        Enrollment retrieved =
+                client.agentic().enrollments().get(enrollment.getId().get());
         assertEquals(enrollment.getId(), retrieved.getId());
         assertEquals(EnrollmentStatus.ACTIVE, retrieved.getStatus().get());
         assertEquals(enrollment.getProvider(), retrieved.getProvider());
         assertEquals(
-                enrollment.getCard().get().getBrand(),
-                retrieved.getCard().get().getBrand());
+                enrollment.getCard().get().getBrand(), retrieved.getCard().get().getBrand());
         assertEquals(
-                enrollment.getCard().get().getBin(),
-                retrieved.getCard().get().getBin());
+                enrollment.getCard().get().getBin(), retrieved.getCard().get().getBin());
         assertEquals(
-                enrollment.getCard().get().getLast4(),
-                retrieved.getCard().get().getLast4());
+                enrollment.getCard().get().getLast4(), retrieved.getCard().get().getLast4());
         assertEquals(
                 enrollment.getCard().get().getExpirationMonth(),
                 retrieved.getCard().get().getExpirationMonth());
@@ -223,7 +217,8 @@ public class AgenticTests {
         assertEquals(enrollment.getCreatedAt(), retrieved.getCreatedAt());
 
         // List enrollments and verify structure (auto-paginated)
-        SyncPagingIterable<Enrollment> enrollments = client.agentic().enrollments().list();
+        SyncPagingIterable<Enrollment> enrollments =
+                client.agentic().enrollments().list();
         Enrollment listed = null;
         for (Enrollment e : enrollments) {
             if (e.getId().equals(enrollment.getId())) {
@@ -252,11 +247,14 @@ public class AgenticTests {
                 .enrollments()
                 .create(CreateEnrollmentRequest.builder()
                         .tokenId(tokenId)
-                        .consumer(Consumer.builder().email("sdk-test-otp@example.com").build())
+                        .consumer(Consumer.builder()
+                                .email("sdk-test-otp@example.com")
+                                .build())
                         .build());
 
         assertTrue(enrollment.getId().isPresent());
-        assertEquals(EnrollmentStatus.PENDING_VERIFICATION, enrollment.getStatus().get());
+        assertEquals(
+                EnrollmentStatus.PENDING_VERIFICATION, enrollment.getStatus().get());
         assertTrue(enrollment.getProvider().isPresent());
         assertTrue(enrollment.getCreatedAt().isPresent());
 
@@ -320,7 +318,8 @@ public class AgenticTests {
         assertTrue(completeResponse.getStatus().isPresent());
 
         // Verify enrollment is now active with all fields
-        Enrollment completed = client.agentic().enrollments().get(enrollment.getId().get());
+        Enrollment completed =
+                client.agentic().enrollments().get(enrollment.getId().get());
         assertEquals(enrollment.getId(), completed.getId());
         assertEquals(EnrollmentStatus.ACTIVE, completed.getStatus().get());
         assertEquals(enrollment.getProvider(), completed.getProvider());
@@ -373,7 +372,8 @@ public class AgenticTests {
 
         assertTrue(instruction.getId().isPresent());
         assertEquals(enrollment.getId().get(), instruction.getEnrollmentId().get());
-        assertEquals(InstructionStatus.PENDING_VERIFICATION, instruction.getStatus().get());
+        assertEquals(
+                InstructionStatus.PENDING_VERIFICATION, instruction.getStatus().get());
         assertTrue(instruction.getAmount().isPresent());
         assertEquals("25.00", instruction.getAmount().get().getValue());
         assertEquals("USD", instruction.getAmount().get().getCurrency().get());
@@ -418,10 +418,8 @@ public class AgenticTests {
         assertEquals(instruction.getCreatedAt(), updated.getCreatedAt());
 
         // List instructions (auto-paginated)
-        SyncPagingIterable<Instruction> instructions = client.agentic()
-                .agents()
-                .instructions()
-                .list(agent.getId().get());
+        SyncPagingIterable<Instruction> instructions =
+                client.agentic().agents().instructions().list(agent.getId().get());
 
         Instruction listed = null;
         for (Instruction i : instructions) {
@@ -532,7 +530,8 @@ public class AgenticTests {
         // Verify created instruction fields
         assertTrue(instruction.getId().isPresent());
         assertEquals(enrollment.getId().get(), instruction.getEnrollmentId().get());
-        assertEquals(InstructionStatus.PENDING_VERIFICATION, instruction.getStatus().get());
+        assertEquals(
+                InstructionStatus.PENDING_VERIFICATION, instruction.getStatus().get());
         assertEquals("10.00", instruction.getAmount().get().getValue());
         assertEquals("USD", instruction.getAmount().get().getCurrency().get());
         assertTrue(instruction.getExpiresAt().isPresent());
