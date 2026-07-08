@@ -4,7 +4,6 @@
 .github/workflows/release.yml
 .github/workflows/security-scan.yml
 
-build.gradle
 CHANGELOG.md
 
 src/test/java/com/basistheory/AgenticTests.java
