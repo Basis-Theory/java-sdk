@@ -78,8 +78,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NEW_TAG: ${{ needs.cut-tag.outputs.new_tag }}
+          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+          MAVEN_SIGNATURE_SECRET_KEY: ${{ secrets.MAVEN_SIGNATURE_SECRET_KEY }}
+          MAVEN_SIGNATURE_PASSWORD: ${{ secrets.MAVEN_SIGNATURE_PASSWORD }}
         run: |
-          ./gradlew compileJava publish -Pversion="${NEW_TAG}"
+          ./gradlew clean sonatypeCentralUpload -Pversion="${NEW_TAG}"
 
       - name: Commit files
         env:
