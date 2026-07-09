@@ -1,7 +1,7 @@
 # BasisTheory Java Library
 
 [![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=https%3A%2F%2Fgithub.com%2FBasis-Theory%2Fjava-sdk)
-[![Maven Central](https://img.shields.io/maven-central/v/dev.basis-theory/basis-theory-java-sdk)](https://central.sonatype.com/artifact/dev.basis-theory/basis-theory-java-sdk)
+[![Maven Central](https://img.shields.io/maven-central/v/com.basistheory/api-client)](https://central.sonatype.com/artifact/com.basistheory/api-client)
 
 The BasisTheory Java library provides convenient access to the BasisTheory APIs from Java.
 
@@ -223,7 +223,7 @@ Add the dependency in your `build.gradle` file:
 
 ```groovy
 dependencies {
-  implementation 'dev.basis-theory:basis-theory-java-sdk:0.0.1'
+  implementation 'com.basistheory:api-client:0.0.1'
 }
 ```
 
@@ -233,8 +233,8 @@ Add the dependency in your `pom.xml` file:
 
 ```xml
 <dependency>
-  <groupId>dev.basis-theory</groupId>
-  <artifactId>basis-theory-java-sdk</artifactId>
+  <groupId>com.basistheory</groupId>
+  <artifactId>api-client</artifactId>
   <version>0.0.1</version>
 </dependency>
 ```
