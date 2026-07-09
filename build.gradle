@@ -63,10 +63,6 @@ javadocJar {
     archiveBaseName = "api-client"
 }
 
-signing {
-    sign(publishing.publications)
-}
-
 test {
     useJUnitPlatform()
     testLogging {
