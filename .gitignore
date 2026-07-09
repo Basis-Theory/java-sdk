@@ -25,3 +25,5 @@ build
 
 # Fern's generated publish process writes signing secrets here; we don't use that flow, but ignore it so keys never get committed
 gradle.properties
+/publish_key.gpg
+/armored_key.asc

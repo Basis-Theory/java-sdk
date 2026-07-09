@@ -38,7 +38,7 @@ public final class ClientOptions {
         this.headers.putAll(headers);
         this.headers.putAll(new HashMap<String, String>() {
             {
-                put("User-Agent", "dev.basis-theory:basis-theory-java-sdk/0.0.1");
+                put("User-Agent", "com.basistheory:api-client/0.0.1");
                 put("X-Fern-Language", "JAVA");
                 put("X-Fern-SDK-Name", "com.basis-theory.fern:api-sdk");
                 put("X-Fern-SDK-Version", "0.0.1");
