@@ -1,3 +1,11 @@
+### [7.0.3](https://github.com/Basis-Theory/java-sdk/compare/7.0.2...7.0.3) (2026-07-09)
+
+
+### Bug Fixes
+
+* Publish to Maven Central ([cb0532f](https://github.com/Basis-Theory/java-sdk/commit/cb0532f4d583f407180b90abf2afdd903480bd46))
+
+
 ### [7.0.2](https://github.com/Basis-Theory/java-sdk/compare/7.0.1...7.0.2) (2026-07-06)
 
 
