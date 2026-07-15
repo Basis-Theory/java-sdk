@@ -22,7 +22,7 @@ import java.util.Optional;
 public final class PendingReactor {
     private final Optional<String> code;
 
-    private final Optional<Runtime> runtime;
+    private final Optional<ReactorRuntime> runtime;
 
     private final Optional<Map<String, Optional<String>>> configuration;
 
@@ -30,7 +30,7 @@ public final class PendingReactor {
 
     private PendingReactor(
             Optional<String> code,
-            Optional<Runtime> runtime,
+            Optional<ReactorRuntime> runtime,
             Optional<Map<String, Optional<String>>> configuration,
             Map<String, Object> additionalProperties) {
         this.code = code;
@@ -45,7 +45,7 @@ public final class PendingReactor {
     }
 
     @JsonProperty("runtime")
-    public Optional<Runtime> getRuntime() {
+    public Optional<ReactorRuntime> getRuntime() {
         return runtime;
     }
 
@@ -87,7 +87,7 @@ public final class PendingReactor {
     public static final class Builder {
         private Optional<String> code = Optional.empty();
 
-        private Optional<Runtime> runtime = Optional.empty();
+        private Optional<ReactorRuntime> runtime = Optional.empty();
 
         private Optional<Map<String, Optional<String>>> configuration = Optional.empty();
 
@@ -115,12 +115,12 @@ public final class PendingReactor {
         }
 
         @JsonSetter(value = "runtime", nulls = Nulls.SKIP)
-        public Builder runtime(Optional<Runtime> runtime) {
+        public Builder runtime(Optional<ReactorRuntime> runtime) {
             this.runtime = runtime;
             return this;
         }
 
-        public Builder runtime(Runtime runtime) {
+        public Builder runtime(ReactorRuntime runtime) {
             this.runtime = Optional.ofNullable(runtime);
             return this;
         }

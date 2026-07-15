@@ -2913,7 +2913,7 @@ client.reactors().create(
 <dl>
 <dd>
 
-**runtime:** `Optional<Runtime>` 
+**runtime:** `Optional<ReactorRuntime>` 
     
 </dd>
 </dl>
@@ -3040,7 +3040,7 @@ client.reactors().update(
 <dl>
 <dd>
 
-**runtime:** `Optional<Runtime>` 
+**runtime:** `Optional<ReactorRuntime>` 
     
 </dd>
 </dl>
@@ -3165,7 +3165,7 @@ client.reactors().patch(
 <dl>
 <dd>
 
-**runtime:** `Optional<Runtime>` 
+**runtime:** `Optional<ReactorRuntime>` 
     
 </dd>
 </dl>
