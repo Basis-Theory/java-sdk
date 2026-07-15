@@ -12,14 +12,20 @@ generations:
     cli_version: unknown
     generator_versions:
       fernapi/fern-java-sdk: 4.8.12
-current_generation: 678aacf111f6f5b1b63b196d81ac10f5884e4fb3
+  - commit_sha: 393305634b99f81f500ae9849ca10638d0196bec
+    tree_hash: 76f3cd7ad95b7c861d6fea9bec46ade4bea44ff2
+    timestamp: 2026-07-15T18:45:03.744Z
+    cli_version: unknown
+    generator_versions:
+      fernapi/fern-java-sdk: 4.8.12
+current_generation: 393305634b99f81f500ae9849ca10638d0196bec
 patches:
   - id: patch-f4c0cbab
     content_hash: sha256:05d66db8de1d9adc9a58de0d5b6cb487160054c89cdff8134a1a6d1453b11ce7
     original_commit: f4c0cbabaf0c2148e5da4baaca553177d9ed42d6
     original_message: "chore: prepare for Fern maven publishing generation (#135)"
     original_author: Robert Greathouse <robert@basistheory.com>
-    base_generation: 678aacf111f6f5b1b63b196d81ac10f5884e4fb3
+    base_generation: 393305634b99f81f500ae9849ca10638d0196bec
     files:
       - .gitignore
     patch_content: |
@@ -67,3 +73,4 @@ patches:
 
         # Fern's generated publish process writes signing secrets here; we don't use that flow, but ignore it so keys never get committed
         gradle.properties
+    user_owned: true
