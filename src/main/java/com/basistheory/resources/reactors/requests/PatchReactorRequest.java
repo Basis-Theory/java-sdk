@@ -5,7 +5,7 @@ package com.basistheory.resources.reactors.requests;
 
 import com.basistheory.core.ObjectMappers;
 import com.basistheory.types.Application;
-import com.basistheory.types.Runtime;
+import com.basistheory.types.ReactorRuntime;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -30,7 +30,7 @@ public final class PatchReactorRequest {
 
     private final Optional<Map<String, Optional<String>>> configuration;
 
-    private final Optional<Runtime> runtime;
+    private final Optional<ReactorRuntime> runtime;
 
     private final Map<String, Object> additionalProperties;
 
@@ -39,7 +39,7 @@ public final class PatchReactorRequest {
             Optional<Application> application,
             Optional<String> code,
             Optional<Map<String, Optional<String>>> configuration,
-            Optional<Runtime> runtime,
+            Optional<ReactorRuntime> runtime,
             Map<String, Object> additionalProperties) {
         this.name = name;
         this.application = application;
@@ -70,7 +70,7 @@ public final class PatchReactorRequest {
     }
 
     @JsonProperty("runtime")
-    public Optional<Runtime> getRuntime() {
+    public Optional<ReactorRuntime> getRuntime() {
         return runtime;
     }
 
@@ -117,7 +117,7 @@ public final class PatchReactorRequest {
 
         private Optional<Map<String, Optional<String>>> configuration = Optional.empty();
 
-        private Optional<Runtime> runtime = Optional.empty();
+        private Optional<ReactorRuntime> runtime = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -178,12 +178,12 @@ public final class PatchReactorRequest {
         }
 
         @JsonSetter(value = "runtime", nulls = Nulls.SKIP)
-        public Builder runtime(Optional<Runtime> runtime) {
+        public Builder runtime(Optional<ReactorRuntime> runtime) {
             this.runtime = runtime;
             return this;
         }
 
-        public Builder runtime(Runtime runtime) {
+        public Builder runtime(ReactorRuntime runtime) {
             this.runtime = Optional.ofNullable(runtime);
             return this;
         }

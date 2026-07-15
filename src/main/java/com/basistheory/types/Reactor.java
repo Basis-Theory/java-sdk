@@ -45,7 +45,7 @@ public final class Reactor {
 
     private final Optional<Map<String, Optional<String>>> configuration;
 
-    private final Optional<Runtime> runtime;
+    private final Optional<ReactorRuntime> runtime;
 
     private final Optional<RequestedReactor> requested;
 
@@ -64,7 +64,7 @@ public final class Reactor {
             Optional<String> modifiedBy,
             Optional<OffsetDateTime> modifiedAt,
             Optional<Map<String, Optional<String>>> configuration,
-            Optional<Runtime> runtime,
+            Optional<ReactorRuntime> runtime,
             Optional<RequestedReactor> requested,
             Map<String, Object> additionalProperties) {
         this.id = id;
@@ -145,7 +145,7 @@ public final class Reactor {
     }
 
     @JsonProperty("runtime")
-    public Optional<Runtime> getRuntime() {
+    public Optional<ReactorRuntime> getRuntime() {
         return runtime;
     }
 
@@ -236,7 +236,7 @@ public final class Reactor {
 
         private Optional<Map<String, Optional<String>>> configuration = Optional.empty();
 
-        private Optional<Runtime> runtime = Optional.empty();
+        private Optional<ReactorRuntime> runtime = Optional.empty();
 
         private Optional<RequestedReactor> requested = Optional.empty();
 
@@ -396,12 +396,12 @@ public final class Reactor {
         }
 
         @JsonSetter(value = "runtime", nulls = Nulls.SKIP)
-        public Builder runtime(Optional<Runtime> runtime) {
+        public Builder runtime(Optional<ReactorRuntime> runtime) {
             this.runtime = runtime;
             return this;
         }
 
-        public Builder runtime(Runtime runtime) {
+        public Builder runtime(ReactorRuntime runtime) {
             this.runtime = Optional.ofNullable(runtime);
             return this;
         }
