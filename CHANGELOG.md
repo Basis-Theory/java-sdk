@@ -1,3 +1,15 @@
+## [8.0.0](https://github.com/Basis-Theory/java-sdk/compare/7.0.3...8.0.0) (2026-07-15)
+
+
+### ⚠ BREAKING CHANGES
+
+* Reactor request and response models now use ReactorRuntime instead of Runtime for runtime configuration.
+
+### Features
+
+* add async Reactor SDK contract ([7a6e351](https://github.com/Basis-Theory/java-sdk/commit/7a6e351ac43c5acbb9b013494d0ed7935c105ce2))
+
+
 ### [7.0.3](https://github.com/Basis-Theory/java-sdk/compare/7.0.2...7.0.3) (2026-07-09)
 
 
