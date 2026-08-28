@@ -7362,11 +7362,6 @@ client.tenants().merchants().create(
     TenantMerchantRequest
         .builder()
         .name("name")
-        .details(
-            MerchantDetails
-                .builder()
-                .build()
-        )
         .build()
 );
 ```
@@ -7518,11 +7513,6 @@ client.tenants().merchants().update(
     TenantMerchantRequest
         .builder()
         .name("name")
-        .details(
-            MerchantDetails
-                .builder()
-                .build()
-        )
         .build()
 );
 ```

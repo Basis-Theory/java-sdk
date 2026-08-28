@@ -10,10 +10,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -21,11 +23,12 @@ import org.jetbrains.annotations.NotNull;
 public final class TenantMerchantRequest {
     private final String name;
 
-    private final MerchantDetails details;
+    private final Optional<MerchantDetails> details;
 
     private final Map<String, Object> additionalProperties;
 
-    private TenantMerchantRequest(String name, MerchantDetails details, Map<String, Object> additionalProperties) {
+    private TenantMerchantRequest(
+            String name, Optional<MerchantDetails> details, Map<String, Object> additionalProperties) {
         this.name = name;
         this.details = details;
         this.additionalProperties = additionalProperties;
@@ -37,7 +40,7 @@ public final class TenantMerchantRequest {
     }
 
     @JsonProperty("details")
-    public MerchantDetails getDetails() {
+    public Optional<MerchantDetails> getDetails() {
         return details;
     }
 
@@ -71,13 +74,9 @@ public final class TenantMerchantRequest {
     }
 
     public interface NameStage {
-        DetailsStage name(@NotNull String name);
+        _FinalStage name(@NotNull String name);
 
         Builder from(TenantMerchantRequest other);
-    }
-
-    public interface DetailsStage {
-        _FinalStage details(@NotNull MerchantDetails details);
     }
 
     public interface _FinalStage {
@@ -86,13 +85,17 @@ public final class TenantMerchantRequest {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage details(Optional<MerchantDetails> details);
+
+        _FinalStage details(MerchantDetails details);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements NameStage, DetailsStage, _FinalStage {
+    public static final class Builder implements NameStage, _FinalStage {
         private String name;
 
-        private MerchantDetails details;
+        private Optional<MerchantDetails> details = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -108,15 +111,21 @@ public final class TenantMerchantRequest {
 
         @java.lang.Override
         @JsonSetter("name")
-        public DetailsStage name(@NotNull String name) {
+        public _FinalStage name(@NotNull String name) {
             this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("details")
-        public _FinalStage details(@NotNull MerchantDetails details) {
-            this.details = Objects.requireNonNull(details, "details must not be null");
+        public _FinalStage details(MerchantDetails details) {
+            this.details = Optional.ofNullable(details);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "details", nulls = Nulls.SKIP)
+        public _FinalStage details(Optional<MerchantDetails> details) {
+            this.details = details;
             return this;
         }
 
