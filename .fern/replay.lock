@@ -24,5 +24,11 @@ generations:
     cli_version: unknown
     generator_versions:
       fernapi/fern-java-sdk: 4.8.12
-current_generation: 81e381ddbc514b3513a2c5586b8c5f014e40c4f4
+  - commit_sha: bb584ab90af4b935d2b9fd34502822a2e833dd12
+    tree_hash: 977e71ddbd5ee40545a76bb2c0a65ce09355e31a
+    timestamp: 2026-09-11T18:21:30.011Z
+    cli_version: unknown
+    generator_versions:
+      fernapi/fern-java-sdk: 4.8.12
+current_generation: bb584ab90af4b935d2b9fd34502822a2e833dd12
 patches: []
