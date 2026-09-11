@@ -6,9 +6,9 @@ package com.basistheory.core;
 public final class Environment {
     public static final Environment DEFAULT = new Environment("https://api.basistheory.com");
 
-    public static final Environment US = new Environment("https://api.basistheory.com");
+    public static final Environment US = new Environment("https://api.us.basistheory.com");
 
-    public static final Environment EU = new Environment("https://api.basistheory.com");
+    public static final Environment EU = new Environment("https://api.eu.basistheory.com");
 
     public static final Environment TEST = new Environment("https://api.test.basistheory.com");
 
