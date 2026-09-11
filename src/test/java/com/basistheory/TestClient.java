@@ -196,7 +196,13 @@ public final class TestClient {
     @Test
     public void shouldManageWebhookLifecycle() throws InterruptedException {
         WebhooksClient webhooksClient = new WebhooksClient(managementClientOptions());
-        String url = "https://fern-test.com/" + UUID.randomUUID();
+        // A host we own, matching the environment these tests run against. Webhook
+        // creation resolves the destination host and rejects anything unresolvable,
+        // so the previous vendor domain broke the test once it lapsed. A
+        // *.basistheory.com host is not usable here: the same policy rejects Basis
+        // Theory endpoints as webhook destinations. The /anything path is used
+        // because echo does not serve the root, and delivery rejects redirects.
+        String url = "https://echo.flock-dev.com/anything/" + UUID.randomUUID();
         String webhookId = createWebhook(webhooksClient, url);
         getAndAssertWebhookUrl(webhooksClient, webhookId, url);
 
@@ -204,7 +210,7 @@ public final class TestClient {
                 2000); // Required to avoid error `The webhook subscription is undergoing another concurrent operation.
         // Please wait a few seconds, then try again.`
 
-        String updatedUrl = "https://fern-test.com/" + UUID.randomUUID();
+        String updatedUrl = "https://echo.flock-dev.com/anything/" + UUID.randomUUID();
         updateWebhook(webhooksClient, webhookId, updatedUrl);
         getAndAssertWebhookUrl(webhooksClient, webhookId, updatedUrl);
 
