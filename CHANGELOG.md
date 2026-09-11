@@ -1,3 +1,16 @@
+## [8.1.0](https://github.com/Basis-Theory/java-sdk/compare/8.0.0...8.1.0) (2026-09-11)
+
+
+### Features
+
+* **ENG-11715:** resolve US and EU environments to regional hosts ([#141](https://github.com/Basis-Theory/java-sdk/issues/141)) ([46281a0](https://github.com/Basis-Theory/java-sdk/commit/46281a0baa9e397081ba55d59e01ec84c000e93d))
+
+
+### Tests
+
+* **ENG-11715:** point webhook lifecycle test at a host we own ([#140](https://github.com/Basis-Theory/java-sdk/issues/140)) ([87c3342](https://github.com/Basis-Theory/java-sdk/commit/87c33420d9a6f0ffe12729614a2e0b62a9f7472e))
+
+
 ## [8.0.0](https://github.com/Basis-Theory/java-sdk/compare/7.0.3...8.0.0) (2026-07-15)
 
 
