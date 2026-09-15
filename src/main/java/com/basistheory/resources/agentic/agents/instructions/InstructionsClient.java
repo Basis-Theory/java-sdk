@@ -10,9 +10,11 @@ import com.basistheory.core.pagination.SyncPagingIterable;
 import com.basistheory.resources.agentic.agents.instructions.credentials.CredentialsClient;
 import com.basistheory.resources.agentic.agents.instructions.requests.CreateInstructionRequest;
 import com.basistheory.resources.agentic.agents.instructions.requests.InstructionsListRequest;
+import com.basistheory.resources.agentic.agents.instructions.requests.PublishConfirmationRequest;
 import com.basistheory.resources.agentic.agents.instructions.requests.UpdateInstructionRequest;
 import com.basistheory.resources.agentic.agents.instructions.verify.VerifyClient;
 import com.basistheory.types.Instruction;
+import com.basistheory.types.PublishConfirmationResponse;
 import java.util.function.Supplier;
 
 public class InstructionsClient {
@@ -113,6 +115,24 @@ public class InstructionsClient {
             String agentId, String instructionId, UpdateInstructionRequest request, RequestOptions requestOptions) {
         return this.rawClient
                 .update(agentId, instructionId, request, requestOptions)
+                .body();
+    }
+
+    /**
+     * Report the outcome of a transaction back to the card network.
+     */
+    public PublishConfirmationResponse confirmations(
+            String agentId, String instructionId, PublishConfirmationRequest request) {
+        return this.rawClient.confirmations(agentId, instructionId, request).body();
+    }
+
+    /**
+     * Report the outcome of a transaction back to the card network.
+     */
+    public PublishConfirmationResponse confirmations(
+            String agentId, String instructionId, PublishConfirmationRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .confirmations(agentId, instructionId, request, requestOptions)
                 .body();
     }
 

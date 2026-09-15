@@ -6,27 +6,51 @@ package com.basistheory.resources.agentic;
 import com.basistheory.core.ClientOptions;
 import com.basistheory.core.Suppliers;
 import com.basistheory.resources.agentic.agents.AsyncAgentsClient;
+import com.basistheory.resources.agentic.allowances.AsyncAllowancesClient;
 import com.basistheory.resources.agentic.enrollments.AsyncEnrollmentsClient;
+import com.basistheory.resources.agentic.paymentcredentials.AsyncPaymentCredentialsClient;
+import com.basistheory.resources.agentic.paymentmethods.AsyncPaymentMethodsClient;
 import java.util.function.Supplier;
 
 public class AsyncAgenticClient {
     protected final ClientOptions clientOptions;
 
+    protected final Supplier<AsyncEnrollmentsClient> enrollmentsClient;
+
     protected final Supplier<AsyncAgentsClient> agentsClient;
 
-    protected final Supplier<AsyncEnrollmentsClient> enrollmentsClient;
+    protected final Supplier<AsyncPaymentMethodsClient> paymentMethodsClient;
+
+    protected final Supplier<AsyncPaymentCredentialsClient> paymentCredentialsClient;
+
+    protected final Supplier<AsyncAllowancesClient> allowancesClient;
 
     public AsyncAgenticClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
-        this.agentsClient = Suppliers.memoize(() -> new AsyncAgentsClient(clientOptions));
         this.enrollmentsClient = Suppliers.memoize(() -> new AsyncEnrollmentsClient(clientOptions));
+        this.agentsClient = Suppliers.memoize(() -> new AsyncAgentsClient(clientOptions));
+        this.paymentMethodsClient = Suppliers.memoize(() -> new AsyncPaymentMethodsClient(clientOptions));
+        this.paymentCredentialsClient = Suppliers.memoize(() -> new AsyncPaymentCredentialsClient(clientOptions));
+        this.allowancesClient = Suppliers.memoize(() -> new AsyncAllowancesClient(clientOptions));
+    }
+
+    public AsyncEnrollmentsClient enrollments() {
+        return this.enrollmentsClient.get();
     }
 
     public AsyncAgentsClient agents() {
         return this.agentsClient.get();
     }
 
-    public AsyncEnrollmentsClient enrollments() {
-        return this.enrollmentsClient.get();
+    public AsyncPaymentMethodsClient paymentMethods() {
+        return this.paymentMethodsClient.get();
+    }
+
+    public AsyncPaymentCredentialsClient paymentCredentials() {
+        return this.paymentCredentialsClient.get();
+    }
+
+    public AsyncAllowancesClient allowances() {
+        return this.allowancesClient.get();
     }
 }

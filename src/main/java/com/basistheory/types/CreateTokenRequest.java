@@ -47,6 +47,8 @@ public final class CreateTokenRequest {
 
     private final Optional<String> tokenIntentId;
 
+    private final Optional<String> ownerMerchantId;
+
     private final Map<String, Object> additionalProperties;
 
     private CreateTokenRequest(
@@ -63,6 +65,7 @@ public final class CreateTokenRequest {
             Optional<String> expiresAt,
             Optional<List<String>> containers,
             Optional<String> tokenIntentId,
+            Optional<String> ownerMerchantId,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.type = type;
@@ -77,6 +80,7 @@ public final class CreateTokenRequest {
         this.expiresAt = expiresAt;
         this.containers = containers;
         this.tokenIntentId = tokenIntentId;
+        this.ownerMerchantId = ownerMerchantId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -145,6 +149,11 @@ public final class CreateTokenRequest {
         return tokenIntentId;
     }
 
+    @JsonProperty("owner_merchant_id")
+    public Optional<String> getOwnerMerchantId() {
+        return ownerMerchantId;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -169,7 +178,8 @@ public final class CreateTokenRequest {
                 && deduplicateToken.equals(other.deduplicateToken)
                 && expiresAt.equals(other.expiresAt)
                 && containers.equals(other.containers)
-                && tokenIntentId.equals(other.tokenIntentId);
+                && tokenIntentId.equals(other.tokenIntentId)
+                && ownerMerchantId.equals(other.ownerMerchantId);
     }
 
     @java.lang.Override
@@ -187,7 +197,8 @@ public final class CreateTokenRequest {
                 this.deduplicateToken,
                 this.expiresAt,
                 this.containers,
-                this.tokenIntentId);
+                this.tokenIntentId,
+                this.ownerMerchantId);
     }
 
     @java.lang.Override
@@ -227,6 +238,8 @@ public final class CreateTokenRequest {
 
         private Optional<String> tokenIntentId = Optional.empty();
 
+        private Optional<String> ownerMerchantId = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -246,6 +259,7 @@ public final class CreateTokenRequest {
             expiresAt(other.getExpiresAt());
             containers(other.getContainers());
             tokenIntentId(other.getTokenIntentId());
+            ownerMerchantId(other.getOwnerMerchantId());
             return this;
         }
 
@@ -392,6 +406,17 @@ public final class CreateTokenRequest {
             return this;
         }
 
+        @JsonSetter(value = "owner_merchant_id", nulls = Nulls.SKIP)
+        public Builder ownerMerchantId(Optional<String> ownerMerchantId) {
+            this.ownerMerchantId = ownerMerchantId;
+            return this;
+        }
+
+        public Builder ownerMerchantId(String ownerMerchantId) {
+            this.ownerMerchantId = Optional.ofNullable(ownerMerchantId);
+            return this;
+        }
+
         public CreateTokenRequest build() {
             return new CreateTokenRequest(
                     id,
@@ -407,6 +432,7 @@ public final class CreateTokenRequest {
                     expiresAt,
                     containers,
                     tokenIntentId,
+                    ownerMerchantId,
                     additionalProperties);
         }
 

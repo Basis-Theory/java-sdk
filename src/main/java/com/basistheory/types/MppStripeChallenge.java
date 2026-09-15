@@ -23,6 +23,8 @@ import org.jetbrains.annotations.NotNull;
 public final class MppStripeChallenge {
     private final String id;
 
+    private final String method;
+
     private final Optional<String> realm;
 
     private final Optional<String> intent;
@@ -35,12 +37,14 @@ public final class MppStripeChallenge {
 
     private MppStripeChallenge(
             String id,
+            String method,
             Optional<String> realm,
             Optional<String> intent,
             Optional<String> request,
             Optional<String> expires,
             Map<String, Object> additionalProperties) {
         this.id = id;
+        this.method = method;
         this.realm = realm;
         this.intent = intent;
         this.request = request;
@@ -61,7 +65,7 @@ public final class MppStripeChallenge {
      */
     @JsonProperty("method")
     public String getMethod() {
-        return "stripe";
+        return method;
     }
 
     @JsonProperty("realm")
@@ -106,6 +110,7 @@ public final class MppStripeChallenge {
 
     private boolean equalTo(MppStripeChallenge other) {
         return id.equals(other.id)
+                && method.equals(other.method)
                 && realm.equals(other.realm)
                 && intent.equals(other.intent)
                 && request.equals(other.request)
@@ -114,7 +119,7 @@ public final class MppStripeChallenge {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.id, this.realm, this.intent, this.request, this.expires);
+        return Objects.hash(this.id, this.method, this.realm, this.intent, this.request, this.expires);
     }
 
     @java.lang.Override
@@ -130,9 +135,16 @@ public final class MppStripeChallenge {
         /**
          * <p>Challenge identifier issued by the merchant</p>
          */
-        _FinalStage id(@NotNull String id);
+        MethodStage id(@NotNull String id);
 
         Builder from(MppStripeChallenge other);
+    }
+
+    public interface MethodStage {
+        /**
+         * <p>Payment method of the challenge — must be <code>stripe</code></p>
+         */
+        _FinalStage method(@NotNull String method);
     }
 
     public interface _FinalStage {
@@ -169,8 +181,10 @@ public final class MppStripeChallenge {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements IdStage, _FinalStage {
+    public static final class Builder implements IdStage, MethodStage, _FinalStage {
         private String id;
+
+        private String method;
 
         private Optional<String> expires = Optional.empty();
 
@@ -188,6 +202,7 @@ public final class MppStripeChallenge {
         @java.lang.Override
         public Builder from(MppStripeChallenge other) {
             id(other.getId());
+            method(other.getMethod());
             realm(other.getRealm());
             intent(other.getIntent());
             request(other.getRequest());
@@ -202,8 +217,20 @@ public final class MppStripeChallenge {
          */
         @java.lang.Override
         @JsonSetter("id")
-        public _FinalStage id(@NotNull String id) {
+        public MethodStage id(@NotNull String id) {
             this.id = Objects.requireNonNull(id, "id must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Payment method of the challenge — must be <code>stripe</code></p>
+         * <p>Payment method of the challenge — must be <code>stripe</code></p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("method")
+        public _FinalStage method(@NotNull String method) {
+            this.method = Objects.requireNonNull(method, "method must not be null");
             return this;
         }
 
@@ -282,7 +309,7 @@ public final class MppStripeChallenge {
 
         @java.lang.Override
         public MppStripeChallenge build() {
-            return new MppStripeChallenge(id, realm, intent, request, expires, additionalProperties);
+            return new MppStripeChallenge(id, method, realm, intent, request, expires, additionalProperties);
         }
 
         @java.lang.Override

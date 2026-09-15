@@ -6,27 +6,51 @@ package com.basistheory.resources.agentic;
 import com.basistheory.core.ClientOptions;
 import com.basistheory.core.Suppliers;
 import com.basistheory.resources.agentic.agents.AgentsClient;
+import com.basistheory.resources.agentic.allowances.AllowancesClient;
 import com.basistheory.resources.agentic.enrollments.EnrollmentsClient;
+import com.basistheory.resources.agentic.paymentcredentials.PaymentCredentialsClient;
+import com.basistheory.resources.agentic.paymentmethods.PaymentMethodsClient;
 import java.util.function.Supplier;
 
 public class AgenticClient {
     protected final ClientOptions clientOptions;
 
+    protected final Supplier<EnrollmentsClient> enrollmentsClient;
+
     protected final Supplier<AgentsClient> agentsClient;
 
-    protected final Supplier<EnrollmentsClient> enrollmentsClient;
+    protected final Supplier<PaymentMethodsClient> paymentMethodsClient;
+
+    protected final Supplier<PaymentCredentialsClient> paymentCredentialsClient;
+
+    protected final Supplier<AllowancesClient> allowancesClient;
 
     public AgenticClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
-        this.agentsClient = Suppliers.memoize(() -> new AgentsClient(clientOptions));
         this.enrollmentsClient = Suppliers.memoize(() -> new EnrollmentsClient(clientOptions));
+        this.agentsClient = Suppliers.memoize(() -> new AgentsClient(clientOptions));
+        this.paymentMethodsClient = Suppliers.memoize(() -> new PaymentMethodsClient(clientOptions));
+        this.paymentCredentialsClient = Suppliers.memoize(() -> new PaymentCredentialsClient(clientOptions));
+        this.allowancesClient = Suppliers.memoize(() -> new AllowancesClient(clientOptions));
+    }
+
+    public EnrollmentsClient enrollments() {
+        return this.enrollmentsClient.get();
     }
 
     public AgentsClient agents() {
         return this.agentsClient.get();
     }
 
-    public EnrollmentsClient enrollments() {
-        return this.enrollmentsClient.get();
+    public PaymentMethodsClient paymentMethods() {
+        return this.paymentMethodsClient.get();
+    }
+
+    public PaymentCredentialsClient paymentCredentials() {
+        return this.paymentCredentialsClient.get();
+    }
+
+    public AllowancesClient allowances() {
+        return this.allowancesClient.get();
     }
 }

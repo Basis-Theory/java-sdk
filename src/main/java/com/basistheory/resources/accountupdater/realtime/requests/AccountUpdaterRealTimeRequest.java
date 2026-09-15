@@ -6,6 +6,7 @@ package com.basistheory.resources.accountupdater.realtime.requests;
 import com.basistheory.core.ObjectMappers;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -21,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AccountUpdaterRealTimeRequest.Builder.class)
 public final class AccountUpdaterRealTimeRequest {
+    private final Optional<String> btMerchantId;
+
     private final String tokenId;
 
     private final Optional<Integer> expirationYear;
@@ -29,23 +32,37 @@ public final class AccountUpdaterRealTimeRequest {
 
     private final Optional<Boolean> deduplicateToken;
 
+    private final Optional<String> configurationMerchantId;
+
     private final Optional<String> merchantId;
 
     private final Map<String, Object> additionalProperties;
 
     private AccountUpdaterRealTimeRequest(
+            Optional<String> btMerchantId,
             String tokenId,
             Optional<Integer> expirationYear,
             Optional<Integer> expirationMonth,
             Optional<Boolean> deduplicateToken,
+            Optional<String> configurationMerchantId,
             Optional<String> merchantId,
             Map<String, Object> additionalProperties) {
+        this.btMerchantId = btMerchantId;
         this.tokenId = tokenId;
         this.expirationYear = expirationYear;
         this.expirationMonth = expirationMonth;
         this.deduplicateToken = deduplicateToken;
+        this.configurationMerchantId = configurationMerchantId;
         this.merchantId = merchantId;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return Tenant merchant the request acts as. The card token is read within this merchant's scope and the updated token is associated with it. Responds 404 if the merchant does not exist in the tenant.
+     */
+    @JsonIgnore
+    public Optional<String> getBtMerchantId() {
+        return btMerchantId;
     }
 
     /**
@@ -81,7 +98,15 @@ public final class AccountUpdaterRealTimeRequest {
     }
 
     /**
-     * @return Tenant merchant identifier
+     * @return Tenant merchant whose provider configuration is used for this request. Selects configuration only; it does not scope token access or associate the new token with the merchant. Takes precedence over merchant_id; defaults to the BT-MERCHANT-ID header merchant, then the tenant-level configuration.
+     */
+    @JsonProperty("configuration_merchant_id")
+    public Optional<String> getConfigurationMerchantId() {
+        return configurationMerchantId;
+    }
+
+    /**
+     * @return Deprecated: use configuration_merchant_id instead. Legacy alias kept for backward compatibility with lower precedence. Selects configuration only.
      */
     @JsonProperty("merchant_id")
     public Optional<String> getMerchantId() {
@@ -100,17 +125,25 @@ public final class AccountUpdaterRealTimeRequest {
     }
 
     private boolean equalTo(AccountUpdaterRealTimeRequest other) {
-        return tokenId.equals(other.tokenId)
+        return btMerchantId.equals(other.btMerchantId)
+                && tokenId.equals(other.tokenId)
                 && expirationYear.equals(other.expirationYear)
                 && expirationMonth.equals(other.expirationMonth)
                 && deduplicateToken.equals(other.deduplicateToken)
+                && configurationMerchantId.equals(other.configurationMerchantId)
                 && merchantId.equals(other.merchantId);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.tokenId, this.expirationYear, this.expirationMonth, this.deduplicateToken, this.merchantId);
+                this.btMerchantId,
+                this.tokenId,
+                this.expirationYear,
+                this.expirationMonth,
+                this.deduplicateToken,
+                this.configurationMerchantId,
+                this.merchantId);
     }
 
     @java.lang.Override
@@ -139,6 +172,13 @@ public final class AccountUpdaterRealTimeRequest {
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
         /**
+         * <p>Tenant merchant the request acts as. The card token is read within this merchant's scope and the updated token is associated with it. Responds 404 if the merchant does not exist in the tenant.</p>
+         */
+        _FinalStage btMerchantId(Optional<String> btMerchantId);
+
+        _FinalStage btMerchantId(String btMerchantId);
+
+        /**
          * <p>The 4-digit expiration year of the account number. Not required if the card token already stores this value.</p>
          */
         _FinalStage expirationYear(Optional<Integer> expirationYear);
@@ -160,7 +200,14 @@ public final class AccountUpdaterRealTimeRequest {
         _FinalStage deduplicateToken(Boolean deduplicateToken);
 
         /**
-         * <p>Tenant merchant identifier</p>
+         * <p>Tenant merchant whose provider configuration is used for this request. Selects configuration only; it does not scope token access or associate the new token with the merchant. Takes precedence over merchant_id; defaults to the BT-MERCHANT-ID header merchant, then the tenant-level configuration.</p>
+         */
+        _FinalStage configurationMerchantId(Optional<String> configurationMerchantId);
+
+        _FinalStage configurationMerchantId(String configurationMerchantId);
+
+        /**
+         * <p>Deprecated: use configuration_merchant_id instead. Legacy alias kept for backward compatibility with lower precedence. Selects configuration only.</p>
          */
         _FinalStage merchantId(Optional<String> merchantId);
 
@@ -173,11 +220,15 @@ public final class AccountUpdaterRealTimeRequest {
 
         private Optional<String> merchantId = Optional.empty();
 
+        private Optional<String> configurationMerchantId = Optional.empty();
+
         private Optional<Boolean> deduplicateToken = Optional.empty();
 
         private Optional<Integer> expirationMonth = Optional.empty();
 
         private Optional<Integer> expirationYear = Optional.empty();
+
+        private Optional<String> btMerchantId = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -186,10 +237,12 @@ public final class AccountUpdaterRealTimeRequest {
 
         @java.lang.Override
         public Builder from(AccountUpdaterRealTimeRequest other) {
+            btMerchantId(other.getBtMerchantId());
             tokenId(other.getTokenId());
             expirationYear(other.getExpirationYear());
             expirationMonth(other.getExpirationMonth());
             deduplicateToken(other.getDeduplicateToken());
+            configurationMerchantId(other.getConfigurationMerchantId());
             merchantId(other.getMerchantId());
             return this;
         }
@@ -207,7 +260,7 @@ public final class AccountUpdaterRealTimeRequest {
         }
 
         /**
-         * <p>Tenant merchant identifier</p>
+         * <p>Deprecated: use configuration_merchant_id instead. Legacy alias kept for backward compatibility with lower precedence. Selects configuration only.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -217,12 +270,32 @@ public final class AccountUpdaterRealTimeRequest {
         }
 
         /**
-         * <p>Tenant merchant identifier</p>
+         * <p>Deprecated: use configuration_merchant_id instead. Legacy alias kept for backward compatibility with lower precedence. Selects configuration only.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "merchant_id", nulls = Nulls.SKIP)
         public _FinalStage merchantId(Optional<String> merchantId) {
             this.merchantId = merchantId;
+            return this;
+        }
+
+        /**
+         * <p>Tenant merchant whose provider configuration is used for this request. Selects configuration only; it does not scope token access or associate the new token with the merchant. Takes precedence over merchant_id; defaults to the BT-MERCHANT-ID header merchant, then the tenant-level configuration.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage configurationMerchantId(String configurationMerchantId) {
+            this.configurationMerchantId = Optional.ofNullable(configurationMerchantId);
+            return this;
+        }
+
+        /**
+         * <p>Tenant merchant whose provider configuration is used for this request. Selects configuration only; it does not scope token access or associate the new token with the merchant. Takes precedence over merchant_id; defaults to the BT-MERCHANT-ID header merchant, then the tenant-level configuration.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "configuration_merchant_id", nulls = Nulls.SKIP)
+        public _FinalStage configurationMerchantId(Optional<String> configurationMerchantId) {
+            this.configurationMerchantId = configurationMerchantId;
             return this;
         }
 
@@ -286,10 +359,36 @@ public final class AccountUpdaterRealTimeRequest {
             return this;
         }
 
+        /**
+         * <p>Tenant merchant the request acts as. The card token is read within this merchant's scope and the updated token is associated with it. Responds 404 if the merchant does not exist in the tenant.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage btMerchantId(String btMerchantId) {
+            this.btMerchantId = Optional.ofNullable(btMerchantId);
+            return this;
+        }
+
+        /**
+         * <p>Tenant merchant the request acts as. The card token is read within this merchant's scope and the updated token is associated with it. Responds 404 if the merchant does not exist in the tenant.</p>
+         */
+        @java.lang.Override
+        public _FinalStage btMerchantId(Optional<String> btMerchantId) {
+            this.btMerchantId = btMerchantId;
+            return this;
+        }
+
         @java.lang.Override
         public AccountUpdaterRealTimeRequest build() {
             return new AccountUpdaterRealTimeRequest(
-                    tokenId, expirationYear, expirationMonth, deduplicateToken, merchantId, additionalProperties);
+                    btMerchantId,
+                    tokenId,
+                    expirationYear,
+                    expirationMonth,
+                    deduplicateToken,
+                    configurationMerchantId,
+                    merchantId,
+                    additionalProperties);
         }
 
         @java.lang.Override

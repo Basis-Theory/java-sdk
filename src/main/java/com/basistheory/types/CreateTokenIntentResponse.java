@@ -35,6 +35,8 @@ public final class CreateTokenIntentResponse {
 
     private final Optional<OffsetDateTime> expiresAt;
 
+    private final Optional<Object> data;
+
     private final Optional<CardDetails> card;
 
     private final Optional<BankDetails> bank;
@@ -55,6 +57,7 @@ public final class CreateTokenIntentResponse {
             Optional<String> createdBy,
             Optional<OffsetDateTime> createdAt,
             Optional<OffsetDateTime> expiresAt,
+            Optional<Object> data,
             Optional<CardDetails> card,
             Optional<BankDetails> bank,
             Optional<CardDetails> networkToken,
@@ -68,6 +71,7 @@ public final class CreateTokenIntentResponse {
         this.createdBy = createdBy;
         this.createdAt = createdAt;
         this.expiresAt = expiresAt;
+        this.data = data;
         this.card = card;
         this.bank = bank;
         this.networkToken = networkToken;
@@ -109,6 +113,11 @@ public final class CreateTokenIntentResponse {
     @JsonProperty("expires_at")
     public Optional<OffsetDateTime> getExpiresAt() {
         return expiresAt;
+    }
+
+    @JsonProperty("data")
+    public Optional<Object> getData() {
+        return data;
     }
 
     @JsonProperty("card")
@@ -155,6 +164,7 @@ public final class CreateTokenIntentResponse {
                 && createdBy.equals(other.createdBy)
                 && createdAt.equals(other.createdAt)
                 && expiresAt.equals(other.expiresAt)
+                && data.equals(other.data)
                 && card.equals(other.card)
                 && bank.equals(other.bank)
                 && networkToken.equals(other.networkToken)
@@ -172,6 +182,7 @@ public final class CreateTokenIntentResponse {
                 this.createdBy,
                 this.createdAt,
                 this.expiresAt,
+                this.data,
                 this.card,
                 this.bank,
                 this.networkToken,
@@ -204,6 +215,8 @@ public final class CreateTokenIntentResponse {
 
         private Optional<OffsetDateTime> expiresAt = Optional.empty();
 
+        private Optional<Object> data = Optional.empty();
+
         private Optional<CardDetails> card = Optional.empty();
 
         private Optional<BankDetails> bank = Optional.empty();
@@ -227,6 +240,7 @@ public final class CreateTokenIntentResponse {
             createdBy(other.getCreatedBy());
             createdAt(other.getCreatedAt());
             expiresAt(other.getExpiresAt());
+            data(other.getData());
             card(other.getCard());
             bank(other.getBank());
             networkToken(other.getNetworkToken());
@@ -312,6 +326,17 @@ public final class CreateTokenIntentResponse {
             return this;
         }
 
+        @JsonSetter(value = "data", nulls = Nulls.SKIP)
+        public Builder data(Optional<Object> data) {
+            this.data = data;
+            return this;
+        }
+
+        public Builder data(Object data) {
+            this.data = Optional.ofNullable(data);
+            return this;
+        }
+
         @JsonSetter(value = "card", nulls = Nulls.SKIP)
         public Builder card(Optional<CardDetails> card) {
             this.card = card;
@@ -376,6 +401,7 @@ public final class CreateTokenIntentResponse {
                     createdBy,
                     createdAt,
                     expiresAt,
+                    data,
                     card,
                     bank,
                     networkToken,
