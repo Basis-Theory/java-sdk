@@ -36,6 +36,10 @@ public final class CreateNetworkTokenRequest {
 
     private final Optional<String> merchantId;
 
+    private final Optional<String> configurationMerchantId;
+
+    private final Optional<String> ownerMerchantId;
+
     private final Map<String, Object> additionalProperties;
 
     private CreateNetworkTokenRequest(
@@ -46,6 +50,8 @@ public final class CreateNetworkTokenRequest {
             Optional<Integer> expirationYear,
             Optional<CardholderInfo> cardholderInfo,
             Optional<String> merchantId,
+            Optional<String> configurationMerchantId,
+            Optional<String> ownerMerchantId,
             Map<String, Object> additionalProperties) {
         this.data = data;
         this.tokenId = tokenId;
@@ -54,6 +60,8 @@ public final class CreateNetworkTokenRequest {
         this.expirationYear = expirationYear;
         this.cardholderInfo = cardholderInfo;
         this.merchantId = merchantId;
+        this.configurationMerchantId = configurationMerchantId;
+        this.ownerMerchantId = ownerMerchantId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -92,6 +100,16 @@ public final class CreateNetworkTokenRequest {
         return merchantId;
     }
 
+    @JsonProperty("configuration_merchant_id")
+    public Optional<String> getConfigurationMerchantId() {
+        return configurationMerchantId;
+    }
+
+    @JsonProperty("owner_merchant_id")
+    public Optional<String> getOwnerMerchantId() {
+        return ownerMerchantId;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -110,7 +128,9 @@ public final class CreateNetworkTokenRequest {
                 && expirationMonth.equals(other.expirationMonth)
                 && expirationYear.equals(other.expirationYear)
                 && cardholderInfo.equals(other.cardholderInfo)
-                && merchantId.equals(other.merchantId);
+                && merchantId.equals(other.merchantId)
+                && configurationMerchantId.equals(other.configurationMerchantId)
+                && ownerMerchantId.equals(other.ownerMerchantId);
     }
 
     @java.lang.Override
@@ -122,7 +142,9 @@ public final class CreateNetworkTokenRequest {
                 this.expirationMonth,
                 this.expirationYear,
                 this.cardholderInfo,
-                this.merchantId);
+                this.merchantId,
+                this.configurationMerchantId,
+                this.ownerMerchantId);
     }
 
     @java.lang.Override
@@ -150,6 +172,10 @@ public final class CreateNetworkTokenRequest {
 
         private Optional<String> merchantId = Optional.empty();
 
+        private Optional<String> configurationMerchantId = Optional.empty();
+
+        private Optional<String> ownerMerchantId = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -163,6 +189,8 @@ public final class CreateNetworkTokenRequest {
             expirationYear(other.getExpirationYear());
             cardholderInfo(other.getCardholderInfo());
             merchantId(other.getMerchantId());
+            configurationMerchantId(other.getConfigurationMerchantId());
+            ownerMerchantId(other.getOwnerMerchantId());
             return this;
         }
 
@@ -243,6 +271,28 @@ public final class CreateNetworkTokenRequest {
             return this;
         }
 
+        @JsonSetter(value = "configuration_merchant_id", nulls = Nulls.SKIP)
+        public Builder configurationMerchantId(Optional<String> configurationMerchantId) {
+            this.configurationMerchantId = configurationMerchantId;
+            return this;
+        }
+
+        public Builder configurationMerchantId(String configurationMerchantId) {
+            this.configurationMerchantId = Optional.ofNullable(configurationMerchantId);
+            return this;
+        }
+
+        @JsonSetter(value = "owner_merchant_id", nulls = Nulls.SKIP)
+        public Builder ownerMerchantId(Optional<String> ownerMerchantId) {
+            this.ownerMerchantId = ownerMerchantId;
+            return this;
+        }
+
+        public Builder ownerMerchantId(String ownerMerchantId) {
+            this.ownerMerchantId = Optional.ofNullable(ownerMerchantId);
+            return this;
+        }
+
         public CreateNetworkTokenRequest build() {
             return new CreateNetworkTokenRequest(
                     data,
@@ -252,6 +302,8 @@ public final class CreateNetworkTokenRequest {
                     expirationYear,
                     cardholderInfo,
                     merchantId,
+                    configurationMerchantId,
+                    ownerMerchantId,
                     additionalProperties);
         }
 

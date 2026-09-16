@@ -37,6 +37,8 @@ public final class ReactorRuntime {
 
     private final Optional<List<String>> permissions;
 
+    private final Optional<RuntimeLogOptions> logs;
+
     private final Map<String, Object> additionalProperties;
 
     private ReactorRuntime(
@@ -48,6 +50,7 @@ public final class ReactorRuntime {
             Optional<Integer> timeout,
             Optional<String> resources,
             Optional<List<String>> permissions,
+            Optional<RuntimeLogOptions> logs,
             Map<String, Object> additionalProperties) {
         this.async = async;
         this.image = image;
@@ -57,6 +60,7 @@ public final class ReactorRuntime {
         this.timeout = timeout;
         this.resources = resources;
         this.permissions = permissions;
+        this.logs = logs;
         this.additionalProperties = additionalProperties;
     }
 
@@ -100,6 +104,11 @@ public final class ReactorRuntime {
         return permissions;
     }
 
+    @JsonProperty("logs")
+    public Optional<RuntimeLogOptions> getLogs() {
+        return logs;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -119,7 +128,8 @@ public final class ReactorRuntime {
                 && warmConcurrency.equals(other.warmConcurrency)
                 && timeout.equals(other.timeout)
                 && resources.equals(other.resources)
-                && permissions.equals(other.permissions);
+                && permissions.equals(other.permissions)
+                && logs.equals(other.logs);
     }
 
     @java.lang.Override
@@ -132,7 +142,8 @@ public final class ReactorRuntime {
                 this.warmConcurrency,
                 this.timeout,
                 this.resources,
-                this.permissions);
+                this.permissions,
+                this.logs);
     }
 
     @java.lang.Override
@@ -162,6 +173,8 @@ public final class ReactorRuntime {
 
         private Optional<List<String>> permissions = Optional.empty();
 
+        private Optional<RuntimeLogOptions> logs = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -176,6 +189,7 @@ public final class ReactorRuntime {
             timeout(other.getTimeout());
             resources(other.getResources());
             permissions(other.getPermissions());
+            logs(other.getLogs());
             return this;
         }
 
@@ -267,6 +281,17 @@ public final class ReactorRuntime {
             return this;
         }
 
+        @JsonSetter(value = "logs", nulls = Nulls.SKIP)
+        public Builder logs(Optional<RuntimeLogOptions> logs) {
+            this.logs = logs;
+            return this;
+        }
+
+        public Builder logs(RuntimeLogOptions logs) {
+            this.logs = Optional.ofNullable(logs);
+            return this;
+        }
+
         public ReactorRuntime build() {
             return new ReactorRuntime(
                     async,
@@ -277,6 +302,7 @@ public final class ReactorRuntime {
                     timeout,
                     resources,
                     permissions,
+                    logs,
                     additionalProperties);
         }
 

@@ -16,6 +16,7 @@ import com.basistheory.core.pagination.SyncPagingIterable;
 import com.basistheory.errors.BadRequestError;
 import com.basistheory.errors.ForbiddenError;
 import com.basistheory.errors.NotFoundError;
+import com.basistheory.errors.ServiceUnavailableError;
 import com.basistheory.errors.UnauthorizedError;
 import com.basistheory.errors.UnprocessableEntityError;
 import com.basistheory.resources.reactors.requests.CreateReactorRequest;
@@ -524,6 +525,10 @@ public class RawReactorsClient {
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                     case 422:
                         throw new UnprocessableEntityError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
+                                response);
+                    case 503:
+                        throw new ServiceUnavailableError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ProblemDetails.class),
                                 response);
                 }

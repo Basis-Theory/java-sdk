@@ -35,6 +35,8 @@ public final class Runtime {
 
     private final Optional<List<String>> permissions;
 
+    private final Optional<RuntimeLogOptions> logs;
+
     private final Map<String, Object> additionalProperties;
 
     private Runtime(
@@ -45,6 +47,7 @@ public final class Runtime {
             Optional<Integer> timeout,
             Optional<String> resources,
             Optional<List<String>> permissions,
+            Optional<RuntimeLogOptions> logs,
             Map<String, Object> additionalProperties) {
         this.image = image;
         this.dependencies = dependencies;
@@ -53,6 +56,7 @@ public final class Runtime {
         this.timeout = timeout;
         this.resources = resources;
         this.permissions = permissions;
+        this.logs = logs;
         this.additionalProperties = additionalProperties;
     }
 
@@ -91,6 +95,11 @@ public final class Runtime {
         return permissions;
     }
 
+    @JsonProperty("logs")
+    public Optional<RuntimeLogOptions> getLogs() {
+        return logs;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -109,7 +118,8 @@ public final class Runtime {
                 && warmConcurrency.equals(other.warmConcurrency)
                 && timeout.equals(other.timeout)
                 && resources.equals(other.resources)
-                && permissions.equals(other.permissions);
+                && permissions.equals(other.permissions)
+                && logs.equals(other.logs);
     }
 
     @java.lang.Override
@@ -121,7 +131,8 @@ public final class Runtime {
                 this.warmConcurrency,
                 this.timeout,
                 this.resources,
-                this.permissions);
+                this.permissions,
+                this.logs);
     }
 
     @java.lang.Override
@@ -149,6 +160,8 @@ public final class Runtime {
 
         private Optional<List<String>> permissions = Optional.empty();
 
+        private Optional<RuntimeLogOptions> logs = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -162,6 +175,7 @@ public final class Runtime {
             timeout(other.getTimeout());
             resources(other.getResources());
             permissions(other.getPermissions());
+            logs(other.getLogs());
             return this;
         }
 
@@ -242,6 +256,17 @@ public final class Runtime {
             return this;
         }
 
+        @JsonSetter(value = "logs", nulls = Nulls.SKIP)
+        public Builder logs(Optional<RuntimeLogOptions> logs) {
+            this.logs = logs;
+            return this;
+        }
+
+        public Builder logs(RuntimeLogOptions logs) {
+            this.logs = Optional.ofNullable(logs);
+            return this;
+        }
+
         public Runtime build() {
             return new Runtime(
                     image,
@@ -251,6 +276,7 @@ public final class Runtime {
                     timeout,
                     resources,
                     permissions,
+                    logs,
                     additionalProperties);
         }
 

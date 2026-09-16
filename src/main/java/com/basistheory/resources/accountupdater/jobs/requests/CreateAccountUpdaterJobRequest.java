@@ -7,6 +7,7 @@ import com.basistheory.core.ObjectMappers;
 import com.basistheory.resources.accountupdater.jobs.types.CreateAccountUpdaterJobRequestResultVersion;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -21,7 +22,11 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CreateAccountUpdaterJobRequest.Builder.class)
 public final class CreateAccountUpdaterJobRequest {
+    private final Optional<String> btMerchantId;
+
     private final Optional<Boolean> deduplicateTokens;
+
+    private final Optional<String> configurationMerchantId;
 
     private final Optional<String> merchantId;
 
@@ -30,14 +35,26 @@ public final class CreateAccountUpdaterJobRequest {
     private final Map<String, Object> additionalProperties;
 
     private CreateAccountUpdaterJobRequest(
+            Optional<String> btMerchantId,
             Optional<Boolean> deduplicateTokens,
+            Optional<String> configurationMerchantId,
             Optional<String> merchantId,
             Optional<CreateAccountUpdaterJobRequestResultVersion> resultVersion,
             Map<String, Object> additionalProperties) {
+        this.btMerchantId = btMerchantId;
         this.deduplicateTokens = deduplicateTokens;
+        this.configurationMerchantId = configurationMerchantId;
         this.merchantId = merchantId;
         this.resultVersion = resultVersion;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return Tenant merchant the job acts as. Tokens in the file are read within this merchant's scope and new tokens are associated with it. Responds 404 if the merchant does not exist in the tenant.
+     */
+    @JsonIgnore
+    public Optional<String> getBtMerchantId() {
+        return btMerchantId;
     }
 
     /**
@@ -49,7 +66,15 @@ public final class CreateAccountUpdaterJobRequest {
     }
 
     /**
-     * @return Tenant merchant identifier
+     * @return Tenant merchant whose provider configuration is used for this job. Selects configuration only; it does not scope token access or associate tokens with the merchant. Takes precedence over merchant_id; defaults to the BT-MERCHANT-ID header merchant, then the tenant-level configuration.
+     */
+    @JsonProperty("configuration_merchant_id")
+    public Optional<String> getConfigurationMerchantId() {
+        return configurationMerchantId;
+    }
+
+    /**
+     * @return Deprecated: use configuration_merchant_id instead. Legacy alias kept for backward compatibility with lower precedence. Selects configuration only.
      */
     @JsonProperty("merchant_id")
     public Optional<String> getMerchantId() {
@@ -76,14 +101,21 @@ public final class CreateAccountUpdaterJobRequest {
     }
 
     private boolean equalTo(CreateAccountUpdaterJobRequest other) {
-        return deduplicateTokens.equals(other.deduplicateTokens)
+        return btMerchantId.equals(other.btMerchantId)
+                && deduplicateTokens.equals(other.deduplicateTokens)
+                && configurationMerchantId.equals(other.configurationMerchantId)
                 && merchantId.equals(other.merchantId)
                 && resultVersion.equals(other.resultVersion);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.deduplicateTokens, this.merchantId, this.resultVersion);
+        return Objects.hash(
+                this.btMerchantId,
+                this.deduplicateTokens,
+                this.configurationMerchantId,
+                this.merchantId,
+                this.resultVersion);
     }
 
     @java.lang.Override
@@ -97,7 +129,11 @@ public final class CreateAccountUpdaterJobRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<String> btMerchantId = Optional.empty();
+
         private Optional<Boolean> deduplicateTokens = Optional.empty();
+
+        private Optional<String> configurationMerchantId = Optional.empty();
 
         private Optional<String> merchantId = Optional.empty();
 
@@ -109,9 +145,24 @@ public final class CreateAccountUpdaterJobRequest {
         private Builder() {}
 
         public Builder from(CreateAccountUpdaterJobRequest other) {
+            btMerchantId(other.getBtMerchantId());
             deduplicateTokens(other.getDeduplicateTokens());
+            configurationMerchantId(other.getConfigurationMerchantId());
             merchantId(other.getMerchantId());
             resultVersion(other.getResultVersion());
+            return this;
+        }
+
+        /**
+         * <p>Tenant merchant the job acts as. Tokens in the file are read within this merchant's scope and new tokens are associated with it. Responds 404 if the merchant does not exist in the tenant.</p>
+         */
+        public Builder btMerchantId(Optional<String> btMerchantId) {
+            this.btMerchantId = btMerchantId;
+            return this;
+        }
+
+        public Builder btMerchantId(String btMerchantId) {
+            this.btMerchantId = Optional.ofNullable(btMerchantId);
             return this;
         }
 
@@ -130,7 +181,21 @@ public final class CreateAccountUpdaterJobRequest {
         }
 
         /**
-         * <p>Tenant merchant identifier</p>
+         * <p>Tenant merchant whose provider configuration is used for this job. Selects configuration only; it does not scope token access or associate tokens with the merchant. Takes precedence over merchant_id; defaults to the BT-MERCHANT-ID header merchant, then the tenant-level configuration.</p>
+         */
+        @JsonSetter(value = "configuration_merchant_id", nulls = Nulls.SKIP)
+        public Builder configurationMerchantId(Optional<String> configurationMerchantId) {
+            this.configurationMerchantId = configurationMerchantId;
+            return this;
+        }
+
+        public Builder configurationMerchantId(String configurationMerchantId) {
+            this.configurationMerchantId = Optional.ofNullable(configurationMerchantId);
+            return this;
+        }
+
+        /**
+         * <p>Deprecated: use configuration_merchant_id instead. Legacy alias kept for backward compatibility with lower precedence. Selects configuration only.</p>
          */
         @JsonSetter(value = "merchant_id", nulls = Nulls.SKIP)
         public Builder merchantId(Optional<String> merchantId) {
@@ -159,7 +224,12 @@ public final class CreateAccountUpdaterJobRequest {
 
         public CreateAccountUpdaterJobRequest build() {
             return new CreateAccountUpdaterJobRequest(
-                    deduplicateTokens, merchantId, resultVersion, additionalProperties);
+                    btMerchantId,
+                    deduplicateTokens,
+                    configurationMerchantId,
+                    merchantId,
+                    resultVersion,
+                    additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

@@ -10,6 +10,7 @@ import com.basistheory.core.pagination.SyncPagingIterable;
 import com.basistheory.resources.proxies.requests.CreateProxyRequest;
 import com.basistheory.resources.proxies.requests.PatchProxyRequest;
 import com.basistheory.resources.proxies.requests.ProxiesListRequest;
+import com.basistheory.resources.proxies.requests.TransferProxyHostnameRequest;
 import com.basistheory.resources.proxies.requests.UpdateProxyRequest;
 import com.basistheory.types.Proxy;
 
@@ -92,5 +93,14 @@ public class ProxiesClient {
 
     public void patch(String id, PatchProxyRequest request, IdempotentRequestOptions requestOptions) {
         this.rawClient.patch(id, request, requestOptions).body();
+    }
+
+    public void transferHostname(String id, TransferProxyHostnameRequest request) {
+        this.rawClient.transferHostname(id, request).body();
+    }
+
+    public void transferHostname(
+            String id, TransferProxyHostnameRequest request, IdempotentRequestOptions requestOptions) {
+        this.rawClient.transferHostname(id, request, requestOptions).body();
     }
 }
