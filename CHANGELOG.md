@@ -1,3 +1,11 @@
+## [8.2.0](https://github.com/Basis-Theory/java-sdk/compare/8.1.0...8.2.0) (2026-09-16)
+
+
+### Features
+
+* add proxy hostname transfer, runtime log options, and account updater merchant header ([139dd0e](https://github.com/Basis-Theory/java-sdk/commit/139dd0e28d2d4b7c385332dd331aec34fdb9f201))
+
+
 ## [8.1.0](https://github.com/Basis-Theory/java-sdk/compare/8.0.0...8.1.0) (2026-09-11)
 
 
