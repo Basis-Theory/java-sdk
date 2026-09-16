@@ -1943,6 +1943,22 @@ client.networkTokens().create(
     
 </dd>
 </dl>
+
+<dl>
+<dd>
+
+**configurationMerchantId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**ownerMerchantId:** `Optional<String>` 
+    
+</dd>
+</dl>
 </dd>
 </dl>
 
@@ -2752,6 +2768,60 @@ client.proxies().patch(
 <dd>
 
 **disableDetokenization:** `Optional<Boolean>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.proxies.transferHostname(id, request)</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.proxies().transferHostname(
+    "id",
+    TransferProxyHostnameRequest
+        .builder()
+        .proxyHost("proxy_host")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**proxyHost:** `String` 
     
 </dd>
 </dl>
@@ -4079,6 +4149,14 @@ client.accountUpdater().jobs().create(
 <dl>
 <dd>
 
+**btMerchantId:** `Optional<String>` — Tenant merchant the job acts as. Tokens in the file are read within this merchant's scope and new tokens are associated with it. Responds 404 if the merchant does not exist in the tenant.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **deduplicateTokens:** `Optional<Boolean>` — Whether deduplication should be enabled when creating new tokens. Uses the value of the Deduplicate Tokens setting on the tenant if not set.
     
 </dd>
@@ -4087,7 +4165,15 @@ client.accountUpdater().jobs().create(
 <dl>
 <dd>
 
-**merchantId:** `Optional<String>` — Tenant merchant identifier
+**configurationMerchantId:** `Optional<String>` — Tenant merchant whose provider configuration is used for this job. Selects configuration only; it does not scope token access or associate tokens with the merchant. Takes precedence over merchant_id; defaults to the BT-MERCHANT-ID header merchant, then the tenant-level configuration.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**merchantId:** `Optional<String>` — Deprecated: use configuration_merchant_id instead. Legacy alias kept for backward compatibility with lower precedence. Selects configuration only.
     
 </dd>
 </dl>
@@ -4155,6 +4241,14 @@ client.accountUpdater().realTime().invoke(
 <dl>
 <dd>
 
+**btMerchantId:** `Optional<String>` — Tenant merchant the request acts as. The card token is read within this merchant's scope and the updated token is associated with it. Responds 404 if the merchant does not exist in the tenant.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **tokenId:** `String` — Card Token identifier
     
 </dd>
@@ -4187,7 +4281,15 @@ client.accountUpdater().realTime().invoke(
 <dl>
 <dd>
 
-**merchantId:** `Optional<String>` — Tenant merchant identifier
+**configurationMerchantId:** `Optional<String>` — Tenant merchant whose provider configuration is used for this request. Selects configuration only; it does not scope token access or associate the new token with the merchant. Takes precedence over merchant_id; defaults to the BT-MERCHANT-ID header merchant, then the tenant-level configuration.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**merchantId:** `Optional<String>` — Deprecated: use configuration_merchant_id instead. Legacy alias kept for backward compatibility with lower precedence. Selects configuration only.
     
 </dd>
 </dl>

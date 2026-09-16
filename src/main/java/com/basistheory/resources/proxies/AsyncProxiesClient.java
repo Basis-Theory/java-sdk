@@ -10,6 +10,7 @@ import com.basistheory.core.pagination.SyncPagingIterable;
 import com.basistheory.resources.proxies.requests.CreateProxyRequest;
 import com.basistheory.resources.proxies.requests.PatchProxyRequest;
 import com.basistheory.resources.proxies.requests.ProxiesListRequest;
+import com.basistheory.resources.proxies.requests.TransferProxyHostnameRequest;
 import com.basistheory.resources.proxies.requests.UpdateProxyRequest;
 import com.basistheory.types.Proxy;
 import java.util.concurrent.CompletableFuture;
@@ -96,5 +97,14 @@ public class AsyncProxiesClient {
     public CompletableFuture<Void> patch(
             String id, PatchProxyRequest request, IdempotentRequestOptions requestOptions) {
         return this.rawClient.patch(id, request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<Void> transferHostname(String id, TransferProxyHostnameRequest request) {
+        return this.rawClient.transferHostname(id, request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<Void> transferHostname(
+            String id, TransferProxyHostnameRequest request, IdempotentRequestOptions requestOptions) {
+        return this.rawClient.transferHostname(id, request, requestOptions).thenApply(response -> response.body());
     }
 }
