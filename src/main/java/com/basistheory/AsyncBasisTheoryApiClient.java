@@ -13,6 +13,7 @@ import com.basistheory.resources.applications.AsyncApplicationsClient;
 import com.basistheory.resources.applicationtemplates.AsyncApplicationTemplatesClient;
 import com.basistheory.resources.documents.AsyncDocumentsClient;
 import com.basistheory.resources.enrichments.AsyncEnrichmentsClient;
+import com.basistheory.resources.events.AsyncEventsClient;
 import com.basistheory.resources.googlepay.AsyncGooglePayClient;
 import com.basistheory.resources.keys.AsyncKeysClient;
 import com.basistheory.resources.logs.AsyncLogsClient;
@@ -68,6 +69,8 @@ public class AsyncBasisTheoryApiClient {
 
     protected final Supplier<AsyncWebhooksClient> webhooksClient;
 
+    protected final Supplier<AsyncEventsClient> eventsClient;
+
     protected final Supplier<AsyncAccountUpdaterClient> accountUpdaterClient;
 
     protected final Supplier<AsyncAgenticClient> agenticClient;
@@ -96,6 +99,7 @@ public class AsyncBasisTheoryApiClient {
         this.sessionsClient = Suppliers.memoize(() -> new AsyncSessionsClient(clientOptions));
         this.tokenIntentsClient = Suppliers.memoize(() -> new AsyncTokenIntentsClient(clientOptions));
         this.webhooksClient = Suppliers.memoize(() -> new AsyncWebhooksClient(clientOptions));
+        this.eventsClient = Suppliers.memoize(() -> new AsyncEventsClient(clientOptions));
         this.accountUpdaterClient = Suppliers.memoize(() -> new AsyncAccountUpdaterClient(clientOptions));
         this.agenticClient = Suppliers.memoize(() -> new AsyncAgenticClient(clientOptions));
         this.tenantsClient = Suppliers.memoize(() -> new AsyncTenantsClient(clientOptions));
@@ -172,6 +176,10 @@ public class AsyncBasisTheoryApiClient {
 
     public AsyncWebhooksClient webhooks() {
         return this.webhooksClient.get();
+    }
+
+    public AsyncEventsClient events() {
+        return this.eventsClient.get();
     }
 
     public AsyncAccountUpdaterClient accountUpdater() {
