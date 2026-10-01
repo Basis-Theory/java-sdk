@@ -3980,6 +3980,111 @@ client.webhooks().create(
 </dl>
 </details>
 
+## Events
+<details><summary><code>client.events.list() -> SyncPagingIterable&amp;lt;Event&amp;gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Requires event:read. Tenant identity comes from trusted API-key authentication. History is limited by log_history_limit (24 hours by default, at most 30 days). Windows reaching outside the visible history are clamped to it rather than rejected. No secondary failover or portal JWT support. SDK callers supply data.<path> filters as literal keys through the SDK's per-request query-parameter options, not as a filters request field.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.events().list(
+    EventsListRequest
+        .builder()
+        .startDate(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .endDate(OffsetDateTime.parse("2024-01-15T09:30:00Z"))
+        .start("start")
+        .size(1)
+        .type("type")
+        .traceId("trace_id")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**startDate:** `Optional<OffsetDateTime>` — Inclusive timestamp; defaults to 24 hours before end_date, shortened to tenant entitlement. An earlier value is raised to the oldest visible instant. ISO 8601 with timezone, at most millisecond precision. Must not be after end_date.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**endDate:** `Optional<OffsetDateTime>` — Exclusive timestamp; defaults to request time. A future value is lowered to request time. A window with no visible history returns an empty page.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**start:** `Optional<String>` — Opaque cursor from pagination.next. Bound to tenant, filters, window, page size, and configured collection/index generation.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**size:** `Optional<Integer>` — Maximum unique events returned. A short page may have a next cursor.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**type:** `Optional<String>` — Exact event type.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**traceId:** `Optional<String>` — Exact trace ID.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## AccountUpdater Jobs
 <details><summary><code>client.accountUpdater.jobs.get(id) -> AccountUpdaterJob</code></summary>
 <dl>
