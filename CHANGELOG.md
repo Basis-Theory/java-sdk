@@ -1,3 +1,11 @@
+## [8.3.0](https://github.com/Basis-Theory/java-sdk/compare/8.2.0...8.3.0) (2026-10-01)
+
+
+### Features
+
+* add Events listing with cursor pagination ([1347b03](https://github.com/Basis-Theory/java-sdk/commit/1347b03f1ca8834724257856dad77d1a4ae1a9f0))
+
+
 ## [8.2.0](https://github.com/Basis-Theory/java-sdk/compare/8.1.0...8.2.0) (2026-09-16)
 
 
