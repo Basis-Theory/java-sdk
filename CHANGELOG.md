@@ -1,3 +1,11 @@
+## [8.4.0](https://github.com/Basis-Theory/java-sdk/compare/8.3.0...8.4.0) (2026-10-16)
+
+
+### Features
+
+* add Reactor and Proxy runtime log search ([a337966](https://github.com/Basis-Theory/java-sdk/commit/a337966f4d05e8bc494ecd6dd6541d01918a4fad))
+
+
 ## [8.3.0](https://github.com/Basis-Theory/java-sdk/compare/8.2.0...8.3.0) (2026-10-01)
 
 
