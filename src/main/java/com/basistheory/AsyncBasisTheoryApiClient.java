@@ -20,6 +20,8 @@ import com.basistheory.resources.logs.AsyncLogsClient;
 import com.basistheory.resources.networktokens.AsyncNetworkTokensClient;
 import com.basistheory.resources.permissions.AsyncPermissionsClient;
 import com.basistheory.resources.proxies.AsyncProxiesClient;
+import com.basistheory.resources.proxylogs.AsyncProxyLogsClient;
+import com.basistheory.resources.reactorlogs.AsyncReactorLogsClient;
 import com.basistheory.resources.reactors.AsyncReactorsClient;
 import com.basistheory.resources.roles.AsyncRolesClient;
 import com.basistheory.resources.sessions.AsyncSessionsClient;
@@ -69,6 +71,10 @@ public class AsyncBasisTheoryApiClient {
 
     protected final Supplier<AsyncWebhooksClient> webhooksClient;
 
+    protected final Supplier<AsyncReactorLogsClient> reactorLogsClient;
+
+    protected final Supplier<AsyncProxyLogsClient> proxyLogsClient;
+
     protected final Supplier<AsyncEventsClient> eventsClient;
 
     protected final Supplier<AsyncAccountUpdaterClient> accountUpdaterClient;
@@ -99,6 +105,8 @@ public class AsyncBasisTheoryApiClient {
         this.sessionsClient = Suppliers.memoize(() -> new AsyncSessionsClient(clientOptions));
         this.tokenIntentsClient = Suppliers.memoize(() -> new AsyncTokenIntentsClient(clientOptions));
         this.webhooksClient = Suppliers.memoize(() -> new AsyncWebhooksClient(clientOptions));
+        this.reactorLogsClient = Suppliers.memoize(() -> new AsyncReactorLogsClient(clientOptions));
+        this.proxyLogsClient = Suppliers.memoize(() -> new AsyncProxyLogsClient(clientOptions));
         this.eventsClient = Suppliers.memoize(() -> new AsyncEventsClient(clientOptions));
         this.accountUpdaterClient = Suppliers.memoize(() -> new AsyncAccountUpdaterClient(clientOptions));
         this.agenticClient = Suppliers.memoize(() -> new AsyncAgenticClient(clientOptions));
@@ -176,6 +184,14 @@ public class AsyncBasisTheoryApiClient {
 
     public AsyncWebhooksClient webhooks() {
         return this.webhooksClient.get();
+    }
+
+    public AsyncReactorLogsClient reactorLogs() {
+        return this.reactorLogsClient.get();
+    }
+
+    public AsyncProxyLogsClient proxyLogs() {
+        return this.proxyLogsClient.get();
     }
 
     public AsyncEventsClient events() {

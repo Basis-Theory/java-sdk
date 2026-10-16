@@ -28,28 +28,28 @@ public class AsyncEventsClient {
     }
 
     /**
-     * Requires event:read. Tenant identity comes from trusted API-key authentication. History is limited by log_history_limit (24 hours by default, at most 30 days). Windows reaching outside the visible history are clamped to it rather than rejected. No secondary failover or portal JWT support. SDK callers supply data.&lt;path&gt; filters as literal keys through the SDK's per-request query-parameter options, not as a filters request field.
+     * Requires event:read. Tenant identity comes from trusted authentication. History is limited by log_history_limit (24 hours by default, at most 30 days). Windows reaching outside the visible history are clamped to it rather than rejected. No secondary failover. SDK callers supply data.&lt;path&gt; filters as literal keys through the SDK's per-request query-parameter options, not as a filters request field.
      */
     public CompletableFuture<SyncPagingIterable<Event>> list() {
         return this.rawClient.list().thenApply(response -> response.body());
     }
 
     /**
-     * Requires event:read. Tenant identity comes from trusted API-key authentication. History is limited by log_history_limit (24 hours by default, at most 30 days). Windows reaching outside the visible history are clamped to it rather than rejected. No secondary failover or portal JWT support. SDK callers supply data.&lt;path&gt; filters as literal keys through the SDK's per-request query-parameter options, not as a filters request field.
+     * Requires event:read. Tenant identity comes from trusted authentication. History is limited by log_history_limit (24 hours by default, at most 30 days). Windows reaching outside the visible history are clamped to it rather than rejected. No secondary failover. SDK callers supply data.&lt;path&gt; filters as literal keys through the SDK's per-request query-parameter options, not as a filters request field.
      */
     public CompletableFuture<SyncPagingIterable<Event>> list(RequestOptions requestOptions) {
         return this.rawClient.list(requestOptions).thenApply(response -> response.body());
     }
 
     /**
-     * Requires event:read. Tenant identity comes from trusted API-key authentication. History is limited by log_history_limit (24 hours by default, at most 30 days). Windows reaching outside the visible history are clamped to it rather than rejected. No secondary failover or portal JWT support. SDK callers supply data.&lt;path&gt; filters as literal keys through the SDK's per-request query-parameter options, not as a filters request field.
+     * Requires event:read. Tenant identity comes from trusted authentication. History is limited by log_history_limit (24 hours by default, at most 30 days). Windows reaching outside the visible history are clamped to it rather than rejected. No secondary failover. SDK callers supply data.&lt;path&gt; filters as literal keys through the SDK's per-request query-parameter options, not as a filters request field.
      */
     public CompletableFuture<SyncPagingIterable<Event>> list(EventsListRequest request) {
         return this.rawClient.list(request).thenApply(response -> response.body());
     }
 
     /**
-     * Requires event:read. Tenant identity comes from trusted API-key authentication. History is limited by log_history_limit (24 hours by default, at most 30 days). Windows reaching outside the visible history are clamped to it rather than rejected. No secondary failover or portal JWT support. SDK callers supply data.&lt;path&gt; filters as literal keys through the SDK's per-request query-parameter options, not as a filters request field.
+     * Requires event:read. Tenant identity comes from trusted authentication. History is limited by log_history_limit (24 hours by default, at most 30 days). Windows reaching outside the visible history are clamped to it rather than rejected. No secondary failover. SDK callers supply data.&lt;path&gt; filters as literal keys through the SDK's per-request query-parameter options, not as a filters request field.
      */
     public CompletableFuture<SyncPagingIterable<Event>> list(EventsListRequest request, RequestOptions requestOptions) {
         return this.rawClient.list(request, requestOptions).thenApply(response -> response.body());
