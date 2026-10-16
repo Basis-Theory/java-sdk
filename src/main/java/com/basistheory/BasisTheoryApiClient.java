@@ -20,6 +20,8 @@ import com.basistheory.resources.logs.LogsClient;
 import com.basistheory.resources.networktokens.NetworkTokensClient;
 import com.basistheory.resources.permissions.PermissionsClient;
 import com.basistheory.resources.proxies.ProxiesClient;
+import com.basistheory.resources.proxylogs.ProxyLogsClient;
+import com.basistheory.resources.reactorlogs.ReactorLogsClient;
 import com.basistheory.resources.reactors.ReactorsClient;
 import com.basistheory.resources.roles.RolesClient;
 import com.basistheory.resources.sessions.SessionsClient;
@@ -69,6 +71,10 @@ public class BasisTheoryApiClient {
 
     protected final Supplier<WebhooksClient> webhooksClient;
 
+    protected final Supplier<ReactorLogsClient> reactorLogsClient;
+
+    protected final Supplier<ProxyLogsClient> proxyLogsClient;
+
     protected final Supplier<EventsClient> eventsClient;
 
     protected final Supplier<AccountUpdaterClient> accountUpdaterClient;
@@ -99,6 +105,8 @@ public class BasisTheoryApiClient {
         this.sessionsClient = Suppliers.memoize(() -> new SessionsClient(clientOptions));
         this.tokenIntentsClient = Suppliers.memoize(() -> new TokenIntentsClient(clientOptions));
         this.webhooksClient = Suppliers.memoize(() -> new WebhooksClient(clientOptions));
+        this.reactorLogsClient = Suppliers.memoize(() -> new ReactorLogsClient(clientOptions));
+        this.proxyLogsClient = Suppliers.memoize(() -> new ProxyLogsClient(clientOptions));
         this.eventsClient = Suppliers.memoize(() -> new EventsClient(clientOptions));
         this.accountUpdaterClient = Suppliers.memoize(() -> new AccountUpdaterClient(clientOptions));
         this.agenticClient = Suppliers.memoize(() -> new AgenticClient(clientOptions));
@@ -176,6 +184,14 @@ public class BasisTheoryApiClient {
 
     public WebhooksClient webhooks() {
         return this.webhooksClient.get();
+    }
+
+    public ReactorLogsClient reactorLogs() {
+        return this.reactorLogsClient.get();
+    }
+
+    public ProxyLogsClient proxyLogs() {
+        return this.proxyLogsClient.get();
     }
 
     public EventsClient events() {
