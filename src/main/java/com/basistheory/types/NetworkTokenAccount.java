@@ -20,13 +20,33 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = NetworkTokenAccount.Builder.class)
 public final class NetworkTokenAccount {
+    private final Optional<String> shortDescription;
+
+    private final Optional<String> longDescription;
+
     private final Optional<CardArt> cardArt;
 
     private final Map<String, Object> additionalProperties;
 
-    private NetworkTokenAccount(Optional<CardArt> cardArt, Map<String, Object> additionalProperties) {
+    private NetworkTokenAccount(
+            Optional<String> shortDescription,
+            Optional<String> longDescription,
+            Optional<CardArt> cardArt,
+            Map<String, Object> additionalProperties) {
+        this.shortDescription = shortDescription;
+        this.longDescription = longDescription;
         this.cardArt = cardArt;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("short_description")
+    public Optional<String> getShortDescription() {
+        return shortDescription;
+    }
+
+    @JsonProperty("long_description")
+    public Optional<String> getLongDescription() {
+        return longDescription;
     }
 
     @JsonProperty("card_art")
@@ -46,12 +66,14 @@ public final class NetworkTokenAccount {
     }
 
     private boolean equalTo(NetworkTokenAccount other) {
-        return cardArt.equals(other.cardArt);
+        return shortDescription.equals(other.shortDescription)
+                && longDescription.equals(other.longDescription)
+                && cardArt.equals(other.cardArt);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.cardArt);
+        return Objects.hash(this.shortDescription, this.longDescription, this.cardArt);
     }
 
     @java.lang.Override
@@ -65,6 +87,10 @@ public final class NetworkTokenAccount {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<String> shortDescription = Optional.empty();
+
+        private Optional<String> longDescription = Optional.empty();
+
         private Optional<CardArt> cardArt = Optional.empty();
 
         @JsonAnySetter
@@ -73,7 +99,31 @@ public final class NetworkTokenAccount {
         private Builder() {}
 
         public Builder from(NetworkTokenAccount other) {
+            shortDescription(other.getShortDescription());
+            longDescription(other.getLongDescription());
             cardArt(other.getCardArt());
+            return this;
+        }
+
+        @JsonSetter(value = "short_description", nulls = Nulls.SKIP)
+        public Builder shortDescription(Optional<String> shortDescription) {
+            this.shortDescription = shortDescription;
+            return this;
+        }
+
+        public Builder shortDescription(String shortDescription) {
+            this.shortDescription = Optional.ofNullable(shortDescription);
+            return this;
+        }
+
+        @JsonSetter(value = "long_description", nulls = Nulls.SKIP)
+        public Builder longDescription(Optional<String> longDescription) {
+            this.longDescription = longDescription;
+            return this;
+        }
+
+        public Builder longDescription(String longDescription) {
+            this.longDescription = Optional.ofNullable(longDescription);
             return this;
         }
 
@@ -89,7 +139,7 @@ public final class NetworkTokenAccount {
         }
 
         public NetworkTokenAccount build() {
-            return new NetworkTokenAccount(cardArt, additionalProperties);
+            return new NetworkTokenAccount(shortDescription, longDescription, cardArt, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {
