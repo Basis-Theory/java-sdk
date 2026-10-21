@@ -1,3 +1,11 @@
+## [8.5.0](https://github.com/Basis-Theory/java-sdk/compare/8.4.0...8.5.0) (2026-10-21)
+
+
+### Features
+
+* **ENG-13226:** expose network token descriptions in Java SDK ([#146](https://github.com/Basis-Theory/java-sdk/issues/146)) ([fdda32a](https://github.com/Basis-Theory/java-sdk/commit/fdda32a1f0478447ef6fe22e62746c70cb4da4df))
+
+
 ## [8.4.0](https://github.com/Basis-Theory/java-sdk/compare/8.3.0...8.4.0) (2026-10-16)
 
 
