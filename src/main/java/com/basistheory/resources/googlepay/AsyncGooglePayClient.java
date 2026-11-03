@@ -9,6 +9,7 @@ import com.basistheory.core.Suppliers;
 import com.basistheory.resources.googlepay.merchant.AsyncMerchantClient;
 import com.basistheory.resources.googlepay.requests.GooglePayCreateRequest;
 import com.basistheory.types.GooglePayCreateResponse;
+import com.basistheory.types.GooglePayDeleteResponse;
 import com.basistheory.types.GooglePayToken;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
@@ -58,11 +59,11 @@ public class AsyncGooglePayClient {
         return this.rawClient.get(id, requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<String> delete(String id) {
+    public CompletableFuture<GooglePayDeleteResponse> delete(String id) {
         return this.rawClient.delete(id).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<String> delete(String id, RequestOptions requestOptions) {
+    public CompletableFuture<GooglePayDeleteResponse> delete(String id, RequestOptions requestOptions) {
         return this.rawClient.delete(id, requestOptions).thenApply(response -> response.body());
     }
 

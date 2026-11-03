@@ -18,6 +18,7 @@ import com.basistheory.errors.UnauthorizedError;
 import com.basistheory.errors.UnprocessableEntityError;
 import com.basistheory.resources.googlepay.requests.GooglePayCreateRequest;
 import com.basistheory.types.GooglePayCreateResponse;
+import com.basistheory.types.GooglePayDeleteResponse;
 import com.basistheory.types.GooglePayToken;
 import com.basistheory.types.ProblemDetails;
 import com.basistheory.types.ValidationProblemDetails;
@@ -219,11 +220,12 @@ public class AsyncRawGooglePayClient {
         return future;
     }
 
-    public CompletableFuture<BasisTheoryApiHttpResponse<String>> delete(String id) {
+    public CompletableFuture<BasisTheoryApiHttpResponse<GooglePayDeleteResponse>> delete(String id) {
         return delete(id, null);
     }
 
-    public CompletableFuture<BasisTheoryApiHttpResponse<String>> delete(String id, RequestOptions requestOptions) {
+    public CompletableFuture<BasisTheoryApiHttpResponse<GooglePayDeleteResponse>> delete(
+            String id, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("google-pay")
@@ -243,7 +245,7 @@ public class AsyncRawGooglePayClient {
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
             client = clientOptions.httpClientWithTimeout(requestOptions);
         }
-        CompletableFuture<BasisTheoryApiHttpResponse<String>> future = new CompletableFuture<>();
+        CompletableFuture<BasisTheoryApiHttpResponse<GooglePayDeleteResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -251,7 +253,8 @@ public class AsyncRawGooglePayClient {
                     String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BasisTheoryApiHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, String.class), response));
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GooglePayDeleteResponse.class),
+                                response));
                         return;
                     }
                     try {

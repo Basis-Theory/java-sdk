@@ -11,6 +11,7 @@ import com.basistheory.resources.applepay.merchant.MerchantClient;
 import com.basistheory.resources.applepay.requests.ApplePayCreateRequest;
 import com.basistheory.resources.applepay.session.SessionClient;
 import com.basistheory.types.ApplePayCreateResponse;
+import com.basistheory.types.ApplePayDeleteResponse;
 import com.basistheory.types.ApplePayToken;
 import java.util.function.Supplier;
 
@@ -64,11 +65,11 @@ public class ApplePayClient {
         return this.rawClient.get(id, requestOptions).body();
     }
 
-    public String delete(String id) {
+    public ApplePayDeleteResponse delete(String id) {
         return this.rawClient.delete(id).body();
     }
 
-    public String delete(String id, RequestOptions requestOptions) {
+    public ApplePayDeleteResponse delete(String id, RequestOptions requestOptions) {
         return this.rawClient.delete(id, requestOptions).body();
     }
 

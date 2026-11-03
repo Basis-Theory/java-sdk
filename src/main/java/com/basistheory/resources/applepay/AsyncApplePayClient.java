@@ -11,6 +11,7 @@ import com.basistheory.resources.applepay.merchant.AsyncMerchantClient;
 import com.basistheory.resources.applepay.requests.ApplePayCreateRequest;
 import com.basistheory.resources.applepay.session.AsyncSessionClient;
 import com.basistheory.types.ApplePayCreateResponse;
+import com.basistheory.types.ApplePayDeleteResponse;
 import com.basistheory.types.ApplePayToken;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
@@ -66,11 +67,11 @@ public class AsyncApplePayClient {
         return this.rawClient.get(id, requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<String> delete(String id) {
+    public CompletableFuture<ApplePayDeleteResponse> delete(String id) {
         return this.rawClient.delete(id).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<String> delete(String id, RequestOptions requestOptions) {
+    public CompletableFuture<ApplePayDeleteResponse> delete(String id, RequestOptions requestOptions) {
         return this.rawClient.delete(id, requestOptions).thenApply(response -> response.body());
     }
 

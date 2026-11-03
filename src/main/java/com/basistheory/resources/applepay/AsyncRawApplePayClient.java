@@ -17,6 +17,7 @@ import com.basistheory.errors.UnauthorizedError;
 import com.basistheory.errors.UnprocessableEntityError;
 import com.basistheory.resources.applepay.requests.ApplePayCreateRequest;
 import com.basistheory.types.ApplePayCreateResponse;
+import com.basistheory.types.ApplePayDeleteResponse;
 import com.basistheory.types.ApplePayToken;
 import com.basistheory.types.ProblemDetails;
 import com.basistheory.types.ValidationProblemDetails;
@@ -211,11 +212,12 @@ public class AsyncRawApplePayClient {
         return future;
     }
 
-    public CompletableFuture<BasisTheoryApiHttpResponse<String>> delete(String id) {
+    public CompletableFuture<BasisTheoryApiHttpResponse<ApplePayDeleteResponse>> delete(String id) {
         return delete(id, null);
     }
 
-    public CompletableFuture<BasisTheoryApiHttpResponse<String>> delete(String id, RequestOptions requestOptions) {
+    public CompletableFuture<BasisTheoryApiHttpResponse<ApplePayDeleteResponse>> delete(
+            String id, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("apple-pay")
@@ -235,7 +237,7 @@ public class AsyncRawApplePayClient {
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
             client = clientOptions.httpClientWithTimeout(requestOptions);
         }
-        CompletableFuture<BasisTheoryApiHttpResponse<String>> future = new CompletableFuture<>();
+        CompletableFuture<BasisTheoryApiHttpResponse<ApplePayDeleteResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -243,7 +245,8 @@ public class AsyncRawApplePayClient {
                     String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new BasisTheoryApiHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, String.class), response));
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApplePayDeleteResponse.class),
+                                response));
                         return;
                     }
                     try {
