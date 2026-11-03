@@ -18,6 +18,7 @@ import com.basistheory.errors.UnauthorizedError;
 import com.basistheory.errors.UnprocessableEntityError;
 import com.basistheory.resources.googlepay.requests.GooglePayCreateRequest;
 import com.basistheory.types.GooglePayCreateResponse;
+import com.basistheory.types.GooglePayDeleteResponse;
 import com.basistheory.types.GooglePayToken;
 import com.basistheory.types.ProblemDetails;
 import com.basistheory.types.ValidationProblemDetails;
@@ -176,11 +177,11 @@ public class RawGooglePayClient {
         }
     }
 
-    public BasisTheoryApiHttpResponse<String> delete(String id) {
+    public BasisTheoryApiHttpResponse<GooglePayDeleteResponse> delete(String id) {
         return delete(id, null);
     }
 
-    public BasisTheoryApiHttpResponse<String> delete(String id, RequestOptions requestOptions) {
+    public BasisTheoryApiHttpResponse<GooglePayDeleteResponse> delete(String id, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("google-pay")
@@ -205,7 +206,8 @@ public class RawGooglePayClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BasisTheoryApiHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, String.class), response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GooglePayDeleteResponse.class),
+                        response);
             }
             try {
                 switch (response.code()) {

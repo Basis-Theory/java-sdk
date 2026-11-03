@@ -709,7 +709,7 @@ client.applePay().get("id");
 </dl>
 </details>
 
-<details><summary><code>client.applePay.delete(id) -> String</code></summary>
+<details><summary><code>client.applePay.delete(id) -> ApplePayDeleteResponse</code></summary>
 <dl>
 <dd>
 
@@ -850,7 +850,7 @@ client.googlePay().get("id");
 </dl>
 </details>
 
-<details><summary><code>client.googlePay.delete(id) -> String</code></summary>
+<details><summary><code>client.googlePay.delete(id) -> GooglePayDeleteResponse</code></summary>
 <dl>
 <dd>
 

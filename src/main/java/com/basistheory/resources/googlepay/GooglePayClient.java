@@ -9,6 +9,7 @@ import com.basistheory.core.Suppliers;
 import com.basistheory.resources.googlepay.merchant.MerchantClient;
 import com.basistheory.resources.googlepay.requests.GooglePayCreateRequest;
 import com.basistheory.types.GooglePayCreateResponse;
+import com.basistheory.types.GooglePayDeleteResponse;
 import com.basistheory.types.GooglePayToken;
 import java.util.function.Supplier;
 
@@ -56,11 +57,11 @@ public class GooglePayClient {
         return this.rawClient.get(id, requestOptions).body();
     }
 
-    public String delete(String id) {
+    public GooglePayDeleteResponse delete(String id) {
         return this.rawClient.delete(id).body();
     }
 
-    public String delete(String id, RequestOptions requestOptions) {
+    public GooglePayDeleteResponse delete(String id, RequestOptions requestOptions) {
         return this.rawClient.delete(id, requestOptions).body();
     }
 

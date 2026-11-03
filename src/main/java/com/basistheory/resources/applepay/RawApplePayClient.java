@@ -17,6 +17,7 @@ import com.basistheory.errors.UnauthorizedError;
 import com.basistheory.errors.UnprocessableEntityError;
 import com.basistheory.resources.applepay.requests.ApplePayCreateRequest;
 import com.basistheory.types.ApplePayCreateResponse;
+import com.basistheory.types.ApplePayDeleteResponse;
 import com.basistheory.types.ApplePayToken;
 import com.basistheory.types.ProblemDetails;
 import com.basistheory.types.ValidationProblemDetails;
@@ -171,11 +172,11 @@ public class RawApplePayClient {
         }
     }
 
-    public BasisTheoryApiHttpResponse<String> delete(String id) {
+    public BasisTheoryApiHttpResponse<ApplePayDeleteResponse> delete(String id) {
         return delete(id, null);
     }
 
-    public BasisTheoryApiHttpResponse<String> delete(String id, RequestOptions requestOptions) {
+    public BasisTheoryApiHttpResponse<ApplePayDeleteResponse> delete(String id, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("apple-pay")
@@ -200,7 +201,8 @@ public class RawApplePayClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new BasisTheoryApiHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, String.class), response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ApplePayDeleteResponse.class),
+                        response);
             }
             try {
                 switch (response.code()) {
