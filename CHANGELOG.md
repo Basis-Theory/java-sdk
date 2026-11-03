@@ -1,3 +1,16 @@
+## [9.0.0](https://github.com/Basis-Theory/java-sdk/compare/8.5.0...9.0.0) (2026-11-03)
+
+
+### ⚠ BREAKING CHANGES
+
+* **ENG-14143:** applePay.delete and googlePay.delete now return
+ApplePayDeleteResponse and GooglePayDeleteResponse instead of string.
+
+### Features
+
+* **ENG-14143:** return typed objects from applePay.delete and googlePay.delete ([#147](https://github.com/Basis-Theory/java-sdk/issues/147)) ([8174639](https://github.com/Basis-Theory/java-sdk/commit/81746395fb8381a9f629adea194b763726694dee))
+
+
 ## [8.5.0](https://github.com/Basis-Theory/java-sdk/compare/8.4.0...8.5.0) (2026-10-21)
 
 
