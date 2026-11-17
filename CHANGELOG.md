@@ -1,3 +1,11 @@
+## [9.1.0](https://github.com/Basis-Theory/java-sdk/compare/9.0.0...9.1.0) (2026-11-17)
+
+
+### Features
+
+* add runtime.execution_role to Reactors and Proxy code transforms ([#148](https://github.com/Basis-Theory/java-sdk/issues/148)) ([3d7911c](https://github.com/Basis-Theory/java-sdk/commit/3d7911cc32ffcc2efb806a61fa406ec180d0bdba))
+
+
 ## [9.0.0](https://github.com/Basis-Theory/java-sdk/compare/8.5.0...9.0.0) (2026-11-03)
 
 
