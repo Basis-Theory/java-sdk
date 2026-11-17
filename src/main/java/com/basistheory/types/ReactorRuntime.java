@@ -37,6 +37,8 @@ public final class ReactorRuntime {
 
     private final Optional<List<String>> permissions;
 
+    private final Optional<ExecutionRole> executionRole;
+
     private final Optional<RuntimeLogOptions> logs;
 
     private final Map<String, Object> additionalProperties;
@@ -50,6 +52,7 @@ public final class ReactorRuntime {
             Optional<Integer> timeout,
             Optional<String> resources,
             Optional<List<String>> permissions,
+            Optional<ExecutionRole> executionRole,
             Optional<RuntimeLogOptions> logs,
             Map<String, Object> additionalProperties) {
         this.async = async;
@@ -60,6 +63,7 @@ public final class ReactorRuntime {
         this.timeout = timeout;
         this.resources = resources;
         this.permissions = permissions;
+        this.executionRole = executionRole;
         this.logs = logs;
         this.additionalProperties = additionalProperties;
     }
@@ -104,6 +108,11 @@ public final class ReactorRuntime {
         return permissions;
     }
 
+    @JsonProperty("execution_role")
+    public Optional<ExecutionRole> getExecutionRole() {
+        return executionRole;
+    }
+
     @JsonProperty("logs")
     public Optional<RuntimeLogOptions> getLogs() {
         return logs;
@@ -129,6 +138,7 @@ public final class ReactorRuntime {
                 && timeout.equals(other.timeout)
                 && resources.equals(other.resources)
                 && permissions.equals(other.permissions)
+                && executionRole.equals(other.executionRole)
                 && logs.equals(other.logs);
     }
 
@@ -143,6 +153,7 @@ public final class ReactorRuntime {
                 this.timeout,
                 this.resources,
                 this.permissions,
+                this.executionRole,
                 this.logs);
     }
 
@@ -173,6 +184,8 @@ public final class ReactorRuntime {
 
         private Optional<List<String>> permissions = Optional.empty();
 
+        private Optional<ExecutionRole> executionRole = Optional.empty();
+
         private Optional<RuntimeLogOptions> logs = Optional.empty();
 
         @JsonAnySetter
@@ -189,6 +202,7 @@ public final class ReactorRuntime {
             timeout(other.getTimeout());
             resources(other.getResources());
             permissions(other.getPermissions());
+            executionRole(other.getExecutionRole());
             logs(other.getLogs());
             return this;
         }
@@ -281,6 +295,17 @@ public final class ReactorRuntime {
             return this;
         }
 
+        @JsonSetter(value = "execution_role", nulls = Nulls.SKIP)
+        public Builder executionRole(Optional<ExecutionRole> executionRole) {
+            this.executionRole = executionRole;
+            return this;
+        }
+
+        public Builder executionRole(ExecutionRole executionRole) {
+            this.executionRole = Optional.ofNullable(executionRole);
+            return this;
+        }
+
         @JsonSetter(value = "logs", nulls = Nulls.SKIP)
         public Builder logs(Optional<RuntimeLogOptions> logs) {
             this.logs = logs;
@@ -302,6 +327,7 @@ public final class ReactorRuntime {
                     timeout,
                     resources,
                     permissions,
+                    executionRole,
                     logs,
                     additionalProperties);
         }
