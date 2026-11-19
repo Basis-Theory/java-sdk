@@ -1,3 +1,11 @@
+### [9.1.1](https://github.com/Basis-Theory/java-sdk/compare/9.1.0...9.1.1) (2026-11-19)
+
+
+### Bug Fixes
+
+* **ENG-13022:** type network token delete conflicts in Java SDK ([#149](https://github.com/Basis-Theory/java-sdk/issues/149)) ([5b1e9b3](https://github.com/Basis-Theory/java-sdk/commit/5b1e9b3fd04a31aa32d4cae3e0f8aa2df83b5da4))
+
+
 ## [9.1.0](https://github.com/Basis-Theory/java-sdk/compare/9.0.0...9.1.0) (2026-11-17)
 
 
